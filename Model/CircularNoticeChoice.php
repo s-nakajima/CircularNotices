@@ -40,7 +40,7 @@ class CircularNoticeChoice extends CircularNoticesAppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'content_key' => array(
+		'content_id' => array(
 			'notEmpty' => array(
 				'rule' => array('notEmpty'),
 				//'message' => 'Your custom message here',
@@ -61,4 +61,33 @@ class CircularNoticeChoice extends CircularNoticesAppModel {
 			),
 		),
 	);
+
+/**
+ * getReplyType method
+ *
+ * @return array
+ */
+	public function getReplyType()
+	{
+		$selectOption = array(
+			// 記述方式
+			array(
+				'num' => CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT,
+				'label' => __d('circular_notices', 'Reply Type Text')
+			),
+			// 新着順（降順）
+			array(
+				'num' => CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION,
+				'label' => __d('circular_notices', 'Reply Type Selection')
+			),
+			// 回答期限順（降順）
+			array(
+				'num' => CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION,
+				'label' => __d('circular_notices', 'Reply Type Multiple Selection')
+			),
+		);
+
+		return selectOption;
+	}
+
 }

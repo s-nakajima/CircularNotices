@@ -51,7 +51,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'content_key' => array(
+		'content_id' => array(
 			'notEmpty' => array(
 				'rule' => array('notEmpty'),
 				//'message' => 'Your custom message here',
@@ -99,4 +99,77 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 			'order' => ''
 		)
 	);
+
+/**
+ * getCircularNoticeTargetUserCount method
+ *
+ * @param int $circularNoticeContentId circular_notice_content.id
+ * @return array
+ */
+	public function getCircularNoticeTargetUserCount($circularNoticeContentId)
+	{
+		// 条件を設定
+		$conditions = array(
+			'CircularNoticeTargetUser.circular_notice_content_id' => $circularNoticeContentId,
+		);
+
+		// 回覧先件数を取得
+		$circularNoticeTargetCount = $this->find('count', array(
+			'conditions' => $conditions,
+		));
+
+		// 閲覧済件数を取得するため条件を追加
+		$conditions += array(
+			'CircularNoticeTargetUser.read_flag' => true,
+		);
+
+		// 閲覧済件数を取得
+		$circularNoticeReadCount = $this->find('count', array(
+			'conditions' => $conditions,
+		));
+
+		// 回答済件数を取得するため条件を追加
+		$conditions += array(
+			'CircularNoticeTargetUser.reply_flag' => true,
+		);
+
+		// 回答済件数を取得
+		$circularNoticeReplyCount = $this->find('count', array(
+			'conditions' => $conditions,
+		));
+
+		// 配列に詰めて返す
+		return compact('circularNoticeTargetCount', 'circularNoticeReadCount', 'circularNoticeReplyCount');
+	}
+
+/**
+ * getCircularNoticeTargetUserCount method
+ *
+ * @param int $circularNoticeContentId circular_notice_content.id
+ * @param int $userId users.id
+ * @return boolean
+ */
+//	public function isTarget($circularNoticeContentId, $userId)
+//	{
+//		// 条件を設定
+//		$conditions = array(
+//			'CircularNoticeTargetUser.circular_notice_content_id' => $circularNoticeContentId,
+//			'CircularNoticeTargetUser.user_id' => $userId,
+//		);
+//
+//		// 件数を取得
+//		$count = $circularNoticeReplyCount = $this->find('count', array(
+//			'conditions' => $conditions,
+//		));
+//
+//		// 回覧先に含まれていない場合
+//		if($count == 0) {
+//			return false;
+//		}
+//		// 回覧先に含まれている場合
+//		else {
+//			return true;
+//		}
+//	}
+
 }

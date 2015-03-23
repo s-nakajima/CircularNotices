@@ -1,0 +1,245 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: CircularNotices\n"
+"POT-Creation-Date: 2015-03-20 06:31+0000\n"
+"PO-Revision-Date: 2015-03-23 15:07+0900\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 1.7.5\n"
+"Language: ja\n"
+
+#: /View/CircularNotices/edit.ctp:4
+msgid "Edit Circular Notice"
+msgstr ""
+
+#: /View/CircularNotices/edit.ctp:20 /View/CircularNotices/form.ctp:20
+msgid "Submit"
+msgstr ""
+
+#: /View/CircularNotices/edit.ctp:23 /View/CircularNotices/form.ctp:23
+#: /View/CircularNotices/index.ctp:19;66
+msgid "Actions"
+msgstr ""
+
+#: /View/CircularNotices/edit.ctp:26 /View/CircularNotices/form.ctp:26
+#: /View/CircularNotices/index.ctp:46
+msgid "Delete"
+msgstr ""
+
+#: /View/CircularNotices/edit.ctp:26 /View/CircularNotices/form.ctp:26
+#: /View/CircularNotices/index.ctp:46
+msgid "Are you sure you want to delete # %s?"
+msgstr ""
+
+#: /View/CircularNotices/edit.ctp:27 /View/CircularNotices/form.ctp:27
+msgid "List Circular Notices"
+msgstr ""
+
+#: /View/CircularNotices/edit.ctp:28 /View/CircularNotices/form.ctp:28
+#: /View/CircularNotices/index.ctp:69
+msgid "List Blocks"
+msgstr ""
+
+#: /View/CircularNotices/edit.ctp:29 /View/CircularNotices/form.ctp:29
+#: /View/CircularNotices/index.ctp:70
+msgid "New Block"
+msgstr ""
+
+#: /View/CircularNotices/edit.ctp:30 /View/CircularNotices/form.ctp:30
+#: /View/CircularNotices/index.ctp:71
+msgid "List Users"
+msgstr ""
+
+#: /View/CircularNotices/edit.ctp:31 /View/CircularNotices/form.ctp:31
+#: /View/CircularNotices/index.ctp:72
+msgid "New Trackable Creator"
+msgstr ""
+
+#: /View/CircularNotices/form.ctp:4
+msgid "Form Circular Notice"
+msgstr ""
+
+#: /View/CircularNotices/index.ctp:2
+msgid "Circular Notices"
+msgstr ""
+
+#: /View/CircularNotices/index.ctp:44
+msgid "View"
+msgstr ""
+
+#: /View/CircularNotices/index.ctp:45
+msgid "Edit"
+msgstr ""
+
+#: /View/CircularNotices/index.ctp:54
+msgid ""
+"Page {:page} of {:pages}, showing {:current} records out of {:count} total, "
+"starting on record {:start}, ending on {:end}"
+msgstr ""
+
+#: /View/CircularNotices/index.ctp:59
+msgid "previous"
+msgstr ""
+
+#: /View/CircularNotices/index.ctp:61
+msgid "next"
+msgstr ""
+
+#: /View/CircularNotices/index.ctp:68
+msgid "New Circular Notice"
+msgstr ""
+
+# 回覧一覧画面の表示コンテンツ絞り込みに使用
+msgid "Display All Contents"
+msgstr "全てのステータスを表示"
+
+# 回覧一覧画面の表示コンテンツ絞り込みに使用
+msgid "Display Public Pending Contents"
+msgstr "承認待ち"
+
+# 回覧一覧画面の表示コンテンツ絞り込みに使用
+msgid "Display Draft During Contents"
+msgstr "一時保存"
+
+# 回覧一覧画面の表示コンテンツ絞り込みに使用
+msgid "Display Remand Contents"
+msgstr "差し戻し"
+
+# 回覧一覧画面の表示コンテンツ絞り込みに使用
+msgid "Display Reserved Contents"
+msgstr "公開前"
+
+# 回覧一覧画面の表示コンテンツ絞り込みに使用
+msgid "Display Open Contents"
+msgstr "回覧中"
+
+# 回覧一覧画面の表示コンテンツ絞り込みに使用
+msgid "Display Fixed Contents"
+msgstr "回答受付終了"
+
+# 回覧一覧画面の表示コンテンツ絞り込みに使用
+msgid "Display Closed Contents"
+msgstr "回覧終了"
+
+# 回覧一覧画面の表示コンテンツ絞り込みに使用
+msgid "Display Unread Contents"
+msgstr "未読"
+
+# 回覧一覧画面の表示コンテンツ絞り込みに使用
+msgid "Display Read Yet Contents"
+msgstr "既読"
+
+# 回覧一覧画面の表示コンテンツ絞り込みに使用
+msgid "Display Replied Contents"
+msgstr "回答済"
+
+# 回覧一覧画面の表示順変更に使用
+msgid "Change Sort Order to New Arrival"
+msgstr "新着順（降順）"
+
+# 回覧一覧画面の表示順変更に使用
+msgid "Change Sort Order to Old Arrival"
+msgstr "新着順（降順）"
+
+# 回覧一覧画面の表示順変更に使用
+msgid "Change Sort Order to Reply Deadline"
+msgstr "回答期限順（降順）"
+
+# 回覧一覧画面で使用
+msgid "Circular Content Data Not Found"
+msgstr "公開されている回覧がありません"
+
+# 回覧一覧画面で使用
+msgid "Circular Content Period Title"
+msgstr "回覧期間："
+
+# 回覧一覧画面で使用
+msgid "Read Count Title"
+msgstr "閲覧状況："
+
+# 回覧一覧画面で使用
+msgid "Reply Count Title"
+msgstr "回答状況："
+
+# ステータス（公開前）
+msgid "Reserved"
+msgstr "公開前"
+
+# ステータス（回覧中）
+msgid "Open"
+msgstr "回覧中"
+
+# ステータス（回覧受付終了）
+msgid "Fixed"
+msgstr "回答受付終了"
+
+# ステータス（回覧終了）
+msgid "Closed"
+msgstr "回覧終了"
+
+# ステータス（未読）
+msgid "Unread"
+msgstr "未読"
+
+# ステータス（既読）
+msgid "Read Yet"
+msgstr "既読"
+
+# ステータス（回答済）
+msgid "Replied"
+msgstr "回答済"
+
+# 登録（編集）画面で使用
+msgid "Subject"
+msgstr "タイトル"
+
+# 登録（編集）画面で使用
+msgid "Content"
+msgstr "回覧内容"
+
+# 登録（編集）画面で使用
+msgid "Reply Type"
+msgstr "回答方式"
+
+# 登録（編集）画面で使用
+msgid "Reply Type Text"
+msgstr "記述方式"
+
+# 登録（編集）画面で使用
+msgid "Reply Type Selection"
+msgstr "択一選択"
+
+# 登録（編集）画面で使用
+msgid "Reply Type Multiple Selection"
+msgstr "選択方式"
+
+# 登録（編集）画面で使用
+msgid "Circular Target"
+msgstr "回覧先"
+
+# 登録（編集）画面で使用
+msgid "All Members Belings to this Room"
+msgstr "ルームに所属する全会員"
+
+# 登録（編集）画面で使用
+msgid "Pediod"
+msgstr "回覧期間"
+
+# 登録（編集）画面で使用
+msgid "Reply Deadline"
+msgstr "回答期限"
+
+# 登録（編集）画面で使用
+msgid "Hour"
+msgstr "時"
+
+# 登録（編集）画面で使用
+msgid "Minute"
+msgstr "分"
