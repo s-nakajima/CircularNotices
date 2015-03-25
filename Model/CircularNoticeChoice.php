@@ -69,7 +69,7 @@ class CircularNoticeChoice extends CircularNoticesAppModel {
  */
 	public function getReplyType()
 	{
-		$selectOption = array(
+		$replyType = array(
 			// 記述方式
 			array(
 				'num' => CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT,
@@ -87,7 +87,7 @@ class CircularNoticeChoice extends CircularNoticesAppModel {
 			),
 		);
 
-		return selectOption;
+		return $replyType;
 	}
 
 }

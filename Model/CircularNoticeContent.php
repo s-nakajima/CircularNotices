@@ -101,7 +101,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 		),
 		'reply_type' => array(
 			'boolean' => array(
-				'rule' => array('boolean'),
+				'rule' => array('numeric'),
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -257,7 +257,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			$circularNoticeContent['circularNoticeReplyCount'] = $count['circularNoticeReplyCount'];
 		}
 
-//		print_r($circularNoticeContents);
+		print_r($circularNoticeContents);
 
 		return $circularNoticeContents;
 	}

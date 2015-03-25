@@ -4,3 +4,7 @@
 	padding: 10px;
 	margin: 10px 0;
 }
+
+.circular-notice-date {
+	width: 100px !important;
+}

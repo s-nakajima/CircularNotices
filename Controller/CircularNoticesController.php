@@ -43,7 +43,7 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @var array
  */
 	public $components = array(
-//		'NetCommons.NetCommonsBlock',
+		'NetCommons.NetCommonsBlock',
 		'NetCommons.NetCommonsFrame',
 		'NetCommons.NetCommonsRoomRole' => array(
 			//コンテンツの権限設定
@@ -81,22 +81,6 @@ class CircularNoticesController extends CircularNoticesAppController {
  */
 	public function index() {
 		$this->__initCircularNotice();
-
-		if ($this->request->is('ajax')) {
-			$tokenFields = Hash::flatten($this->request->data);
-			$hiddenFields = array(
-				'CircularNotice.block_id',
-				'CircularNotice.key'
-			);
-			$this->set('tokenFields', $tokenFields);
-			$this->set('hiddenFields', $hiddenFields);
-			$this->renderJson();
-		} else {
-//			if ($this->viewVars['contentEditable']) {
-//				$this->view = 'Announcements/viewForEditor';
-//			}
-		}
-//print_r($this->viewVars);
 	}
 
 /**
@@ -109,25 +93,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 	public function view($frameId, $circularNoticeContentId) {
 
 
-
-		$this->__initCircularNotice();
-
-		if ($this->request->is('ajax')) {
-			$tokenFields = Hash::flatten($this->request->data);
-			$hiddenFields = array(
-				'CircularNotice.block_id',
-				'CircularNotice.key'
-			);
-			$this->set('tokenFields', $tokenFields);
-			$this->set('hiddenFields', $hiddenFields);
-			$this->renderJson();
-		} else {
-//			if ($this->viewVars['contentEditable']) {
-//				$this->view = 'Announcements/viewForEditor';
-//			}
-		}
-//print_r($this->viewVars);
-
 	}
 
 /**
@@ -138,19 +103,50 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @return void
  */
 	public function edit($frameId, $circularNoticeContentId = null) {
+		$result = null;
+
 		// 編集の場合
 		if($circularNoticeContentId) {
-			$results = $this->CircularNoticeContent->getCircularNoticeContent($circularNoticeContentId);
-			print_r($results);
+			$result = $this->CircularNoticeContent->getCircularNoticeContent($circularNoticeContentId);
+//			print_r($result);
+		}
+		// 新規登録の場合
+		else {
+			$result = $this->CircularNoticeContent->create();
+//			print_r($result);
+			// 初期値を設定する
+			// $result['CircularNoticeContent']['content'] = '';
+			// $result['CircularNoticeContent']['reply_type'] = (int)CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT;
+//			$result['contentStatus'] = $result['CircularNoticeContent']['status'];
 		}
 
-		// 回答方式選択肢を取得
-		$replyType = $this->CircularNoticeChoice->getReplyType();
+		//グループ情報を取得（Todo: 共通待ち)
+		$groups = null;
+		$groups['Group'][0] = array('id' => 10, 'group_name' => 'テストグループ10', );
+		$groups['Group'][1] = array('id' => 11, 'group_name' => 'テストグループ11', );
+		$groups['Group'][2] = array('id' => 12, 'group_name' => 'テストグループ12', );
 
-		$this->set(compact('circularNoticeContentId'));
-		$this->set(compact('replyType'));
-//		print_r($this->viewVars);
+		// 回答方式の定数配列を格納
+		$result['CircularNoticeContent']['circularNoticeContentReplyType'] = array(
+			'typeText' => CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT,
+			'typeSelection' => CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION,
+			'typeMultipleSelection' => CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION,
+		);
 
+
+		// 画面表示のためのデータを設定
+		$result = $this->camelizeKeyRecursive($result);
+//		$this->set('circularNoticeContent', $result['circularNoticeContent']);
+		$this->set('circularNoticeContent', $result['circularNoticeContent']);
+		$this->set('contentStatus', $result['circularNoticeContent']['status']);
+
+		$groups = $this->camelizeKeyRecursive($groups);
+		$this->set('groups', $groups['group']);
+
+		// $circularNoticeContentReplyType = $this->camelizeKeyRecursive($circularNoticeContentReplyType));
+		// $this->set('circularNoticeContentReplyType', $circularNoticeContentReplyType);
+
+		// print_r($result);
 	}
 
 /**

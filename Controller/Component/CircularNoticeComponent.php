@@ -21,84 +21,84 @@ App::uses('Component', 'NetCommonsBlock');
 class CircularNoticeComponent extends Component {
 
 /**
- * all status
+ * view all status
  *
  * @var string
  */
 	const CIRCULAR_NOTICE_CONTENT_STATUS_ALL = '0';
 
 /**
- * status published
+ * view status published
  *
  * @var string
  */
 	const CIRCULAR_NOTICE_CONTENT_STATUS_PUBLISHED = NetCommonsBlockComponent::STATUS_PUBLISHED;
 
 /**
- * status approved
+ * view status approved
  *
  * @var string
  */
 	const CIRCULAR_NOTICE_CONTENT_STATUS_APPROVED = NetCommonsBlockComponent::STATUS_APPROVED;
 
 /**
- * in draft status
+ * view in draft status
  *
  * @var string
  */
 	const CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT = NetCommonsBlockComponent::STATUS_IN_DRAFT;
 
 /**
- * status disapproved
+ * view status disapproved
  *
  * @var string
  */
 	const CIRCULAR_NOTICE_CONTENT_STATUS_DISAPPROVED = NetCommonsBlockComponent::STATUS_DISAPPROVED;
 
 /**
- * status reserved
+ * view status reserved
  *
  * @var string
  */
 	const CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED = '5';
 
 /**
- * status open
+ * view status open
  *
  * @var string
  */
-	const CIRCULAR_NOTICE_CONTENT_STATUS_OPEN = '5';
+	const CIRCULAR_NOTICE_CONTENT_STATUS_OPEN = '6';
 
 /**
- * status fixed
+ * view status fixed
  *
  * @var string
  */
-	const CIRCULAR_NOTICE_CONTENT_STATUS_FIXED = '6';
+	const CIRCULAR_NOTICE_CONTENT_STATUS_FIXED = '7';
 
 /**
- * status closed
+ * view status closed
  *
  * @var string
  */
-	const CIRCULAR_NOTICE_CONTENT_STATUS_CLOSED = '7';
+	const CIRCULAR_NOTICE_CONTENT_STATUS_CLOSED = '8';
 
 /**
- * status unread
+ * view status unread
  *
  * @var string
  */
 	const CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD = '10';
 
 /**
- * status read yet
+ * view status read yet
  *
  * @var string
  */
 	const CIRCULAR_NOTICE_CONTENT_STATUS_READ_YET = '11';
 
 /**
- * status replied
+ * view status replied
  *
  * @var string
  */

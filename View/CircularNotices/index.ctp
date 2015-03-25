@@ -10,12 +10,14 @@
  */
 ?>
 
+<?php echo $this->Html->script('/net_commons/base/js/workflow.js', false); ?>
+<?php echo $this->Html->script('/net_commons/base/js/wysiwyg.js', false); ?>
 <?php echo $this->Html->script('/circularNotices/js/circular_notices.js'); ?>
 <?php echo $this->Html->css('/circularNotices/css/circular_notices.css'); ?>
 
 <div id="nc-circular-notices-<?php echo (int)$frameId; ?>"
-	 ng-controller="CircularNotices.view"
-	 ng-init="initialize(<?php echo h(json_encode($this->viewVars)); ?>)">
+	 ng-controller="CircularNotices"
+	 ng-init="initCircularNoticeIndex(<?php echo h(json_encode($this->viewVars)); ?>)">
 
 	<?php if ($contentCreatable) : ?>
 		<p class="text-right">
@@ -35,51 +37,51 @@
 	<?php endif; ?>
 
 	<?php if($circularNoticeContentList) { ?>
-	<div>
-		<div class="form-inline">
-			<?php echo $this->Form->input('contentStatus',
-				array(
-					'label' => false,
-					'type' => 'select',
-					'ng-options' => 'status.num as status.label for status in selectOption.contentStatus',
-					'class' => 'form-control',
-					'ng-model' => 'selectOption.contentStatus',
-					'ng-change' => 'selectCategory()',
-					'div' => false,
-				)); ?>
-			<?php echo $this->Form->input('displayOrder',
-				array(
-					'label' => false,
-					'type' => 'select',
-					'ng-options' => 'order.num as order.label for order in selectOption.displayOrder',
-					'class' => 'form-control',
-					'ng-model' => 'selectOption.displayOrder',
-					'ng-change' => 'selectCategory()',
-					'div' => false,
-				)); ?>
-		</div>
-		<hr>
-			<?php foreach($circularNoticeContentList as $circularNoticeContent) { ?>
-			<div class="col-md-12 col-xs-12 circular-notice-block">
-				<p class="text-left">
-					<?php echo $this->element('CircularNotices.status_label',
-						array('status' => $circularNoticeContent['circularNoticeContentStatus'])); ?>
-					<?php //echo $circularNoticeContent['circularNoticeContentStatus']; ?>
-				</p>
-				<p class="text-left">
-					<?php echo $circularNoticeContent['circularNoticeContent']['subject']; ?><br />
-					<?php echo __d('circular_notices', 'Circular Content Period Title'); ?>
-					<?php echo date("Y/m/d H:i", strtotime($circularNoticeContent['circularNoticeContent']['openedPeriodFrom'])); ?>
-					～
-					<?php echo date("Y/m/d H:i", strtotime($circularNoticeContent['circularNoticeContent']['openedPeriodTo'])); ?><br />
-					<?php echo __d('circular_notices', 'Read Count Title'); ?> <?php echo $circularNoticeContent['circularNoticeReadCount']; ?>
-					/
-					<?php echo $circularNoticeContent['circularNoticeTargetCount']; ?><br />
-					<?php echo __d('circular_notices', 'Reply Count Title'); ?> <?php echo $circularNoticeContent['circularNoticeReplyCount']; ?>
-					/
-					<?php echo $circularNoticeContent['circularNoticeTargetCount']; ?>
-				</p>
+		<div>
+			<div class="form-inline">
+				<?php echo $this->Form->input('contentStatus',
+					array(
+						'label' => false,
+						'type' => 'select',
+						'ng-options' => 'status.num as status.label for status in selectOption.contentStatus',
+						'class' => 'form-control',
+						'ng-model' => 'selectOption.contentStatus',
+						'ng-change' => 'selectCategory()',
+						'div' => false,
+					)); ?>
+				<?php echo $this->Form->input('displayOrder',
+					array(
+						'label' => false,
+						'type' => 'select',
+						'ng-options' => 'order.num as order.label for order in selectOption.displayOrder',
+						'class' => 'form-control',
+						'ng-model' => 'selectOption.displayOrder',
+						'ng-change' => 'selectCategory()',
+						'div' => false,
+					)); ?>
 			</div>
+			<hr>
+			<?php foreach($circularNoticeContentList as $circularNoticeContent) { ?>
+				<div class="col-md-12 col-xs-12 circular-notice-block">
+					<p class="text-left">
+						<?php echo $this->element('CircularNotices/status_label',
+							array('status' => $circularNoticeContent['circularNoticeContentStatus'])); ?>
+						<?php //echo $circularNoticeContent['circularNoticeContentStatus']; ?>
+					</p>
+					<p class="text-left">
+						<?php echo $circularNoticeContent['circularNoticeContent']['subject']; ?><br />
+						<?php echo __d('circular_notices', 'Circular Content Period Title'); ?>
+						<?php echo date("Y/m/d H:i", strtotime($circularNoticeContent['circularNoticeContent']['openedPeriodFrom'])); ?>
+						～
+						<?php echo date("Y/m/d H:i", strtotime($circularNoticeContent['circularNoticeContent']['openedPeriodTo'])); ?><br />
+						<?php echo __d('circular_notices', 'Read Count Title'); ?> <?php echo $circularNoticeContent['circularNoticeReadCount']; ?>
+						/
+						<?php echo $circularNoticeContent['circularNoticeTargetCount']; ?><br />
+						<?php echo __d('circular_notices', 'Reply Count Title'); ?> <?php echo $circularNoticeContent['circularNoticeReplyCount']; ?>
+						/
+						<?php echo $circularNoticeContent['circularNoticeTargetCount']; ?>
+					</p>
+				</div>
 			<?php } ?>
 		<?php } else {
 			echo __d('circular_notices', 'Circular Content Data Not Found');

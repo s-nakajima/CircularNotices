@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CircularNotices\n"
 "POT-Creation-Date: 2015-03-20 06:31+0000\n"
-"PO-Revision-Date: 2015-03-23 15:07+0900\n"
+"PO-Revision-Date: 2015-03-25 17:08+0900\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>\n"
 "MIME-Version: 1.0\n"
@@ -229,7 +229,7 @@ msgid "All Members Belings to this Room"
 msgstr "ルームに所属する全会員"
 
 # 登録（編集）画面で使用
-msgid "Pediod"
+msgid "Period"
 msgstr "回覧期間"
 
 # 登録（編集）画面で使用
@@ -243,3 +243,15 @@ msgstr "時"
 # 登録（編集）画面で使用
 msgid "Minute"
 msgstr "分"
+
+# 登録（編集）画面で使用
+msgid "Till"
+msgstr "～"
+
+# 登録（編集）画面で使用
+msgid "No Deadline"
+msgstr "回答期限を設定しない"
+
+# 登録（編集）画面で使用
+msgid "Set Deadline"
+msgstr "回答期限を設定する"
