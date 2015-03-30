@@ -45,6 +45,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 	public $components = array(
 		'NetCommons.NetCommonsBlock',
 		'NetCommons.NetCommonsFrame',
+		'NetCommons.NetCommonsWorkflow',
 		'NetCommons.NetCommonsRoomRole' => array(
 			//コンテンツの権限設定
 			'allowedActions' => array(
@@ -52,7 +53,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 				'contentCreatable' => array('token', 'edit', 'delete'),
 			),
 		),
-//		'CircularNotice.CircularNotice',
 	);
 
 /**
@@ -71,7 +71,6 @@ class CircularNoticesController extends CircularNoticesAppController {
  */
 	public $helpers = array(
 		'NetCommons.Token',
-		'NetCommons.Date',
 	);
 
 /**
@@ -79,8 +78,17 @@ class CircularNoticesController extends CircularNoticesAppController {
  *
  * @return void
  */
-	public function index() {
+	public function index($frameId = null, $currentPage = 1, $displayOrder = 0,
+								$visibleRowCount = 10, $narrowDownParams = 0) {
 		$this->__initCircularNotice();
+
+		// プルダウン設定値を画面に渡す
+		$this->set('displayOrder', $displayOrder);
+		$this->set('visibleRowCount', $visibleRowCount);
+		$this->set('narrowDownParams', $narrowDownParams);
+
+		// 現在のページ番号を画面に渡す
+		$this->set('currentPage', $currentPage);
 	}
 
 /**
@@ -91,8 +99,28 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @return void
  */
 	public function view($frameId, $circularNoticeContentId) {
+		// 回答の登録
+		if ($this->request->isPost()) {
+			// 回答の登録
+			$this->CircularNoticeTargetUser->saveReplyValue($this->data['CircularNoticeTargetUser'], (int)$this->Auth->user('id'));
 
+			// 一覧画面へ遷移
+			$this->redirectByFrameId();
+			return;
+		}
+		else {
+			// 既読状態に設定
+			$this->CircularNoticeTargetUser->setReadYet($circularNoticeContentId, (int)$this->Auth->user('id'));
+		}
 
+		// 回覧関連データを取得
+		$result = $this->CircularNoticeContent->getCircularNoticeContentForView($circularNoticeContentId, (int)$this->Auth->user('id'));
+
+		// 画面表示のためのデータを設定
+		$result = $this->camelizeKeyRecursive($result);
+		$this->set('circularNoticeContent', $result['circularNoticeContent']);
+		$this->set('circularNoticeChoices', $result['circularNoticeChoice']);
+		$this->set('circularNoticeTargetUsers', $result['circularNoticeTargetUser']);
 	}
 
 /**
@@ -102,51 +130,46 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @param int $circularNoticeContentId circular_notice_content.id
  * @return void
  */
-	public function edit($frameId, $circularNoticeContentId = null) {
-		$result = null;
+	public function edit($frameId = null, $circularNoticeContentId = null) {
+		// 登録・編集画面表示
+		if (! $this->request->isPost()) {
+			$result = null;
 
-		// 編集の場合
-		if($circularNoticeContentId) {
-			$result = $this->CircularNoticeContent->getCircularNoticeContent($circularNoticeContentId);
-//			print_r($result);
+			// 編集の場合
+			if($circularNoticeContentId) {
+				$result = $this->CircularNoticeContent->getCircularNoticeContentForEdit($circularNoticeContentId);
+			}
+			// 新規登録の場合
+			else {
+				// テーブル定義のデフォルト値でレコードを作成（コミットはされない）
+				$result = $this->CircularNoticeContent->create();
+			}
+
+			//グループ情報を取得（Todo: 共通待ち)
+			$groups = $this->__getGroupId($this->viewVars['roomId']);
+
+			// 画面表示のためのデータを設定
+			$result = $this->camelizeKeyRecursive($result);
+			$this->set('circularNoticeContent', $result['circularNoticeContent']);
+			$this->set('contentStatus', $result['circularNoticeContent']['status']);
+
+			$groups = $this->camelizeKeyRecursive($groups);
+			$this->set('groups', $groups);
 		}
-		// 新規登録の場合
+		// 登録処理
 		else {
-			$result = $this->CircularNoticeContent->create();
-//			print_r($result);
-			// 初期値を設定する
-			// $result['CircularNoticeContent']['content'] = '';
-			// $result['CircularNoticeContent']['reply_type'] = (int)CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT;
-//			$result['contentStatus'] = $result['CircularNoticeContent']['status'];
+			// ステータスを取得
+			if (!$status = $this->NetCommonsWorkflow->parseStatus()) {
+				return;
+			}
+
+			// 回覧関連データを登録
+			$result = $this->CircularNoticeContent->saveCircularNoticeContent($this->data, $status);
+
+			// 一覧画面へ遷移
+//			$this->redirectByFrameId();
+			return;
 		}
-
-		//グループ情報を取得（Todo: 共通待ち)
-		$groups = null;
-		$groups['Group'][0] = array('id' => 10, 'group_name' => 'テストグループ10', );
-		$groups['Group'][1] = array('id' => 11, 'group_name' => 'テストグループ11', );
-		$groups['Group'][2] = array('id' => 12, 'group_name' => 'テストグループ12', );
-
-		// 回答方式の定数配列を格納
-		$result['CircularNoticeContent']['circularNoticeContentReplyType'] = array(
-			'typeText' => CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT,
-			'typeSelection' => CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION,
-			'typeMultipleSelection' => CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION,
-		);
-
-
-		// 画面表示のためのデータを設定
-		$result = $this->camelizeKeyRecursive($result);
-//		$this->set('circularNoticeContent', $result['circularNoticeContent']);
-		$this->set('circularNoticeContent', $result['circularNoticeContent']);
-		$this->set('contentStatus', $result['circularNoticeContent']['status']);
-
-		$groups = $this->camelizeKeyRecursive($groups);
-		$this->set('groups', $groups['group']);
-
-		// $circularNoticeContentReplyType = $this->camelizeKeyRecursive($circularNoticeContentReplyType));
-		// $this->set('circularNoticeContentReplyType', $circularNoticeContentReplyType);
-
-		// print_r($result);
 	}
 
 /**
@@ -157,8 +180,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 	private function __initCircularNotice() {
 		// ブロックが存在しない場合（新規配置）
 		if (empty($this->viewVars['blockId'])) {
-//			// ブロックを登録
-//			$block = $this->Block->saveByFrameId($this->viewVars['frameId'], false);
 
 			// 回覧板の初期設定を実施
 			$results = $this->CircularNotice->saveInitialSetting($this->viewVars['frameId'], $this->viewVars['frameKey']);
@@ -169,7 +190,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 			$this->set('circularNotice', $results['circularNotice']);
 
 			// 設定画面を表示
-			$this->render('Blocks/edit');
+			$this->render('Blocks.edit');
 
 			return;
 		}
@@ -193,10 +214,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 			// 回覧一覧取得
 			$circularNoticeContentList = $this->CircularNoticeContent->getCircularNoticeContentList($circularNotice['CircularNotice']['key'], $userId, $permission);
 
-			// 絞り込みのための選択肢取得
-			$selectOption = $this->CircularNoticeContent->getSelectOption((int)$this->viewVars['contentCreatable']);
-//$this->log(print_r($selectOption, true), 'trace');
-
 			// 画面表示のためのデータを設定
 			$circularNoticeFrameSetting = $this->camelizeKeyRecursive($circularNoticeFrameSetting);
 			$this->set('circularNoticeFrameSetting', $circularNoticeFrameSetting['circularNoticeFrameSetting']);
@@ -204,10 +221,20 @@ class CircularNoticesController extends CircularNoticesAppController {
 			$this->set('circularNotice', $circularNotice['circularNotice']);
 			$circularNoticeContentList = $this->camelizeKeyRecursive($circularNoticeContentList);
 			$this->set('circularNoticeContentList', $circularNoticeContentList);
-			$selectOption = $this->camelizeKeyRecursive($selectOption);
-			$this->set('selectOption', $selectOption);
-//$this->log(print_r($this->viewVars, true), 'trace');
 		}
 	}
 
+/**
+ * __getGroupId method
+ *
+ * @param int $roomId roles_rooms_users.user_id
+ * @return array
+ */
+	private function __getGroupId($roomId) {
+		return array(
+			"10" => "テストグループ10",
+			"11" => "テストグループ11",
+			"12" => "テストグループ12",
+		);
+	}
 }

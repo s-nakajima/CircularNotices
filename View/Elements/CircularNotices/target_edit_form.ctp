@@ -15,30 +15,25 @@
 			__d('circular_notices', 'Circular Target') . $this->element('NetCommons.required')
 	); ?>
 	<br />
-	<?php
-		echo $this->Form->input('CircularNoticeContent.target_room',
-		array(
-			'div' => false,
-			'type' => 'checkbox',
-			'label' => false,
-			'value' => $rolesRoomId,
-//				'ng-model' => 'circularNoticeContentReplyType',
-//				'ng-change' => 'dispReplySelectForm()',
-		));
-		echo __d('circular_notices', 'All Members Belings to this Room'); ?>
-		<br />
-	<?php foreach ($groups as $group) {
-			echo $this->Form->input('CircularNoticeContent.target_group',
-			array(
-				// 'class' => 'form-control',
-				'div' => false,
-				'type' => 'checkbox',
-				'label' => false,
-				'value' => $group['id'],
-//				'ng-model' => 'circularNoticeContentReplyType',
-//				'ng-change' => 'dispReplySelectForm()',
-			));
-			echo $group['groupName']; ?>
+	<?php echo $this->Form->input('CircularNoticeContent.is_room_targeted_flag',
+				array(
+					'class' => 'circular-notice-checkbox',
+					'div' => false,
+					'type' => 'select',
+					'label' => false,
+					'multiple' => 'checkbox',
+					'options' => array(
+						$rolesRoomId => __d('circular_notices', 'All Members Belings to this Room'),
+					),
+				)); ?>
+	<?php echo $this->Form->input('CircularNoticeContent.target_groups',
+				array(
+					'class' => 'circular-notice-checkbox',
+					'div' => false,
+					'type' => 'select',
+					'label' => false,
+					'multiple' => 'checkbox',
+					'options' => $groups,
+				)); ?>
 			<br />
-	<?php } ?>
 </div>

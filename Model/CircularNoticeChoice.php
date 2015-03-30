@@ -63,31 +63,58 @@ class CircularNoticeChoice extends CircularNoticesAppModel {
 	);
 
 /**
- * getReplyType method
+ * getCircularNoticeChoice method
  *
+ * @param int $circularNoticeContentId circular_notice_contents.id
  * @return array
  */
-	public function getReplyType()
+	public function getCircularNoticeChoice($circularNoticeContentId)
 	{
-		$replyType = array(
-			// 記述方式
-			array(
-				'num' => CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT,
-				'label' => __d('circular_notices', 'Reply Type Text')
-			),
-			// 新着順（降順）
-			array(
-				'num' => CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION,
-				'label' => __d('circular_notices', 'Reply Type Selection')
-			),
-			// 回答期限順（降順）
-			array(
-				'num' => CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION,
-				'label' => __d('circular_notices', 'Reply Type Multiple Selection')
-			),
+		// 取得条件を設定
+		$conditions = array(
+			'CircularNoticeChoice.circular_notice_content_id' => $circularNoticeContentId,
 		);
 
-		return $replyType;
+		// DBから取得した値を返す
+		return $this->find('all', array(
+			'conditions' => $conditions,
+			'recursive' => -1,
+			'order' => 'CircularNoticeChoice.weight asc',
+		));
+	}
+
+/**
+ * saveCircularNoticeChoice method
+ *
+ * @param array $data
+ * @return boolean
+ */
+	public function saveCircularNoticeChoice($data, $validate = true)
+	{
+		// if (!$this->validateCircularTargetUser($data)) {
+		// 	return false;
+		// }
+
+		$circularNoticeTargetUser = $this->saveAll($data['CircularNoticeTargetUser']);
+		if (! $circularNoticeTargetUser) {
+			// @codeCoverageIgnoreStart
+			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			// @codeCoverageIgnoreEnd
+		}
+		return $circularNoticeTargetUser;
+	}
+
+/**
+ * validateCircularChoice method
+ *
+ * @param array $data
+ * @return bool True on success, false on error
+ */
+	private function validateCircularChoice($data) {
+		$this->set($data);
+		$this->validates();
+//		return $this->validationErrors ? false : true;
+		return true;
 	}
 
 }

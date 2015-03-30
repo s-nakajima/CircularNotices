@@ -14,24 +14,16 @@
 	<?php echo $this->Form->label('CircularNoticeContent.subject',
 		__d('circular_notices', 'Subject') . $this->element('NetCommons.required')
 	); ?>
-<!--
-	<div class="row">
-		<div class="col-md-6">
- -->
-			<?php echo $this->Form->input(
-					'CircularNoticeContent.subject',
-					array(
-						'type' => 'text',
-						'label' => '',
-						'error' => false,
-						'class' => 'form-control',
-						'value' => (isset($circularNoticeContent['subject']) ? $circularNoticeContent['subject'] : ''),
-						'placeholder' => '',
-						'div' => false,
-					)
-				); ?>
-<!--
-			</div>
-		</div>
- -->
+	<?php echo $this->Form->input(
+			'CircularNoticeContent.subject',
+			array(
+				'type' => 'text',
+				'label' => '',
+				'error' => false,
+				'class' => 'form-control',
+				'value' => (isset($circularNoticeContent['subject']) ? $circularNoticeContent['subject'] : ''),
+				'placeholder' => '',
+				'div' => false,
+			)
+		); ?>
 </div>

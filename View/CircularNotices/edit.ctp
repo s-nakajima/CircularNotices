@@ -19,21 +19,23 @@
 	 ng-controller="CircularNotices"
 	 ng-init="initCircularNoticeEdit(<?php echo h(json_encode($this->viewVars['circularNoticeContent'])); ?>)">
 
-<?php echo $this->Form->hidden('Frame.id', array(
-	'value' => $frameId
-)); ?>
+	<div class="modal-header">
+		<?php echo __d('circular_notices', 'Plugin Name'); ?>
+	</div>
 
-<?php echo $this->Form->hidden('Block.id', array(
-	'value' => $blockId,
-)); ?>
-
-<?php /* <div class="row form-group">
-*/ ?>
 	<div class="panel panel-default">
 		<div class="panel-body">
 			<?php echo $this->Form->create('CircularNoticeContent', array(
 					'name' => 'form',
 					'novalidate' => true,
+				)); ?>
+
+				<?php echo $this->Form->hidden('Frame.id', array(
+					'value' => $frameId
+				)); ?>
+
+				<?php echo $this->Form->hidden('Block.id', array(
+					'value' => $blockId,
 				)); ?>
 
 				<?php /* タイトル */ ?>
@@ -66,52 +68,4 @@
 
 		</div>
 	</div>
-<?php /*
-<!-- 	</div> -->
-			<span class="input-group-btn">
-				<button class="btn btn-default" type="button" ng-click="getSiteInfo()">
-					<?php echo __d('rss_readers', 'Get Site Info'); ?>
-				</button>
-			</span>
-		</div>
-	</div>
-
-	<div class="col-xs-12">
-		<?php echo $this->element(
-			'RssReaders.errors', [
-				'errors' => $this->validationErrors,
-				'model' => 'RssReader',
-				'field' => 'url',
-			]); ?>
-	</div>
-</div>
-
-<?php echo $this->element('RssReaders/input_field', array(
-			'model' => 'RssReader',
-			'field' => 'title',
-			'label' => __d('rss_readers', 'Site Title') . $this->element('NetCommons.required'),
-		)
-	); ?>
-
-<?php echo $this->element('RssReaders/input_field', array(
-			'model' => 'RssReader',
-			'field' => 'link',
-			'label' => __d('rss_readers', 'Site Url'),
-			'attributes' => array(
-				'placeholder' => 'http://',
-			),
-		)
-	); ?>
-
-<?php echo $this->element('RssReaders/input_field', array(
-			'model' => 'RssReader',
-			'field' => 'summary',
-			'label' => __d('rss_readers', 'Site Explanation'),
-			'attributes' => array(
-				'type' => 'textarea',
-				'rows' => 2,
-			),
-		)
-	);
-*/ ?>
 </div>

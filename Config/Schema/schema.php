@@ -1,4 +1,20 @@
 <?php
+/**
+ * Schema file
+ *
+ * @author Noriko Arai <arai@nii.ac.jp>
+ * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
+ * @link http://www.netcommons.org NetCommons Project
+ * @license http://www.netcommons.org/license.txt NetCommons License
+ * @copyright Copyright 2014, NetCommons Project
+ */
+
+/**
+ * Schema file
+ *
+ * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
+ * @package NetCommons\CircularNotices\Config\Schema
+ */
 class AppSchema extends CakeSchema {
 
 	public $connection = 'master';
@@ -12,8 +28,9 @@ class AppSchema extends CakeSchema {
 
 	public $circular_notice_choices = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary', 'comment' => 'ID |  |  | '),
-		'circular_notice_content_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => 'circular notice content id | 回覧ID | circular_notice_contents.id | ', 'charset' => 'utf8'),
-		'value' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => 'circular notice\'s choice value | 選択候補値 |  | ', 'charset' => 'utf8'),
+		'circular_notice_content_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'comment' => 'circular notice content id | 回覧ID | circular_notice_contents.id | '),
+		'value' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => 'circular notice\'s choice value | 選択肢 |  | ', 'charset' => 'utf8'),
+		'weight' => array('type' => 'integer', 'null' => true, 'default' => null, 'comment' => 'circular notice\'s choice value\'s weight | 選択肢表示順 |  | '),
 		'created_user' => array('type' => 'integer', 'null' => true, 'default' => '0', 'comment' => 'created user | 作成者 | users.id | '),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null, 'comment' => 'created datetime | 作成日時 |  | '),
 		'modified_user' => array('type' => 'integer', 'null' => true, 'default' => '0', 'comment' => 'modified user | 更新者 | users.id | '),
@@ -26,18 +43,18 @@ class AppSchema extends CakeSchema {
 
 	public $circular_notice_contents = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary', 'comment' => 'ID |  |  | '),
-		'key' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => 'circular notice content key | 回覧キー | Hash値 | ', 'charset' => 'utf8'),
+		'key' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => 'cerculat notice content key | 回覧キー | Hash値 | ', 'charset' => 'utf8'),
 		'circular_notice_key' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => 'circular notice key | 回覧板キー | circular_notices.key | ', 'charset' => 'utf8'),
-		'status' => array('type' => 'integer', 'null' => false, 'default' => 0, 'length' => 4, 'comment' => 'public status, 1: public, 2: public pending, 3: draft during 4: remand | 公開状況  1:公開中、2:公開申請中、3:下書き中、4:差し戻し |  | '),
+		'status' => array('type' => 'integer', 'null' => false, 'default' => '0', 'length' => 4, 'comment' => 'public status, 1: public, 2: public pending, 3: draft during 4: remand | 公開状況  1:公開中、2:公開申請中、3:下書き中、4:差し戻し |  | '),
 		'subject' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => 'subject | 件名 |  | ', 'charset' => 'utf8'),
 		'content' => array('type' => 'text', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => 'content | 本文 |  | ', 'charset' => 'utf8'),
-		'reply_type' => array('type' => 'integer', 'null' => false, 'default' => '1', 'comment' => 'reply type. 1:text field , 2:selection, 3:multiple selection | 回答方式  1:記述方式、2:択一方式、3:選択方式 |  | '),
-		'choices_key' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => 'circular notice choices key | 回覧選択肢キー | circular_notices_choidces.key | ', 'charset' => 'utf8'),
+		'reply_type' => array('type' => 'integer', 'null' => false, 'default' => '1', 'length' => 1, 'comment' => 'reply type. 1:text field , 2:selection, 3:multiple selection | 回答方式  1:記述方式、2:択一方式、3:選択方式 |  | '),
+		'is_room_targeted_flag' => array('type' => 'boolean', 'null' => true, 'default' => null, 'comment' => 'is room targeted flag. 0:no , 1:yes  | ルーム対象回覧フラグ |  | '),
+		'target_groups' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => 'target groups  | 回覧対象グループ |  | ', 'charset' => 'utf8'),
 		'opened_period_from' => array('type' => 'datetime', 'null' => false, 'default' => null, 'comment' => 'opend period (from)  | 回覧期間（開始日時） |  | '),
 		'opened_period_to' => array('type' => 'datetime', 'null' => false, 'default' => null, 'comment' => 'opend period (to)  | 回覧期間（終了日時） |  | '),
 		'reply_deadline_set_flag' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'comment' => 'reply deadline set flag. 0:unset , 1:set | 回答期限設定フラグ |  | '),
 		'reply_deadline' => array('type' => 'datetime', 'null' => true, 'default' => null, 'comment' => 'reply deadline | 回答期限 |  | '),
-		'target_users_key' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => 'circular notice target users key | 回覧先会員キー | circular_notices_choidces.key | ', 'charset' => 'utf8'),
 		'is_auto_translated' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'comment' => 'translation type. 0:original , 1:auto translation | 翻訳タイプ  0:オリジナル、1:自動翻訳 |  | '),
 		'translation_engine' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => 'translation engine | 翻訳エンジン |  | ', 'charset' => 'utf8'),
 		'created_user' => array('type' => 'integer', 'null' => true, 'default' => '0', 'comment' => 'created user | 作成者 | users.id | '),
@@ -67,9 +84,11 @@ class AppSchema extends CakeSchema {
 	public $circular_notice_target_users = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary', 'comment' => 'ID |  |  | '),
 		'user_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'comment' => 'circular notice target user id | 回覧先 | users.id | '),
-		'circular_notice_content_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => 'circular notice content id | 回覧ID | circular_notice_contents.id | ', 'charset' => 'utf8'),
+		'circular_notice_content_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'comment' => 'circular notice content id | 回覧ID | circular_notice_contents.id | '),
 		'read_flag' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'comment' => 'read flag, 0: not read, 1: read yet | 閲覧フラグ  0:未読、1:既読 |  | '),
+		'read_datetime' => array('type' => 'datetime', 'null' => true, 'default' => null, 'comment' => 'read datetime | 閲覧日時 |  | '),
 		'reply_flag' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'comment' => 'reply flag, 0: not reply, 1: reply yet | 回答フラグ  0:未回答、1:回答 |  | '),
+		'reply_datetime' => array('type' => 'datetime', 'null' => true, 'default' => null, 'comment' => 'reply datetime | 回答日時 |  | '),
 		'reply_text_value' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => 'circular notice reply value from text | 回覧回答（記述方式） |  | ', 'charset' => 'utf8'),
 		'reply_selection_value' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => 'circular notice reply value from choices | 回覧回答（択一、選択方式） |  | ', 'charset' => 'utf8'),
 		'created_user' => array('type' => 'integer', 'null' => true, 'default' => '0', 'comment' => 'created user | 作成者 | users.id | '),

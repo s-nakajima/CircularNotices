@@ -83,8 +83,6 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		),
 	);
 
-	//The Associations below have been created with all possible keys, those that are not needed can be removed
-
 /**
  * belongsTo associations
  *
@@ -103,7 +101,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 /**
  * getCircularNoticeTargetUserCount method
  *
- * @param int $circularNoticeContentId circular_notice_content.id
+ * @param int $circularNoticeContentId circular_notice_contents.id
  * @return array
  */
 	public function getCircularNoticeTargetUserCount($circularNoticeContentId)
@@ -142,34 +140,242 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		return compact('circularNoticeTargetCount', 'circularNoticeReadCount', 'circularNoticeReplyCount');
 	}
 
+
 /**
- * getCircularNoticeTargetUserCount method
+ * getCircularNoticeTargetUser method
  *
- * @param int $circularNoticeContentId circular_notice_content.id
+ * @param int $circularNoticeContentId circular_notice_contents.id
  * @param int $userId users.id
+ * @return array
+ */
+	public function getCircularNoticeTargetUser($circularNoticeContentId, $userId)
+	{
+		// 取得条件を設定
+		$conditions = array(
+			'CircularNoticeTargetUser.circular_notice_content_id' => $circularNoticeContentId,
+			'NOT' => array(
+				'CircularNoticeTargetUser.user_id' => $userId,
+			),
+		);
+
+		// DBから取得した値を返す
+		return $this->find('all', array(
+			'conditions' => $conditions,
+			'recursive' => 1,
+		));
+	}
+
+
+/**
+ * saveCircularNoticeTargetUser method
+ *
+ * @param array $data
  * @return boolean
  */
-//	public function isTarget($circularNoticeContentId, $userId)
-//	{
-//		// 条件を設定
-//		$conditions = array(
-//			'CircularNoticeTargetUser.circular_notice_content_id' => $circularNoticeContentId,
-//			'CircularNoticeTargetUser.user_id' => $userId,
-//		);
-//
-//		// 件数を取得
-//		$count = $circularNoticeReplyCount = $this->find('count', array(
-//			'conditions' => $conditions,
-//		));
-//
-//		// 回覧先に含まれていない場合
-//		if($count == 0) {
-//			return false;
-//		}
-//		// 回覧先に含まれている場合
-//		else {
-//			return true;
-//		}
-//	}
+	public function saveCircularNoticeTargetUser($data, $validate = true)
+	{
+		// if (!$this->validateCircularTargetUser($data)) {
+		// 	return false;
+		// }
+
+		$circularNoticeTargetUser = $this->saveAll($data['CircularNoticeTargetUser']);
+		if (! $circularNoticeTargetUser) {
+			// @codeCoverageIgnoreStart
+			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			// @codeCoverageIgnoreEnd
+		}
+		return $circularNoticeTargetUser;
+	}
+
+/**
+ * validateCircularTargetUser method
+ *
+ * @param array $data
+ * @return bool True on success, false on error
+ */
+	private function validateCircularTargetUser($data) {
+		$this->set($data);
+		$this->validates();
+//		return $this->validationErrors ? false : true;
+		return true;
+	}
+
+/**
+ * getUserReadReplyFlag method
+ *
+ * @param int $circularNoticeContentId circular_notice_contents.id
+ * @param int $userId users.id
+ * @return array
+ */
+	public function getUserReadReplyFlag($circularNoticeContentId, $userId)
+	{
+		// 取得項目を設定
+		$fields = array(
+			'CircularNoticeTargetUser.read_flag',
+			'CircularNoticeTargetUser.reply_flag',
+		);
+
+		// 取得条件を設定（frameKey）
+		$conditions = array(
+			'CircularNoticeTargetUser.circular_notice_content_id' => $circularNoticeContentId,
+			'CircularNoticeTargetUser.user_id' => $userId,
+		);
+
+		// DBから取得した値を返す
+		return $this->find('first', array(
+			'fields' => $fields,
+			'conditions' => $conditions,
+		));
+	}
+
+/**
+ * getUserSelectionValue method
+ *
+ * @param int $circularNoticeContentId circular_notice_contents.id
+ * @param string $selection circular_notice_choices.value
+ * @return int
+ */
+	public function getUserSelectionValue($circularNoticeContentId, $selection)
+	{
+		// 条件を設定
+		$conditions = array(
+			'CircularNoticeTargetUser.circular_notice_content_id' => $circularNoticeContentId,
+			'CircularNoticeTargetUser.reply_selection_value' => $selection,
+		);
+
+		// 回覧先件数を取得
+		return $this->find('count', array(
+			'conditions' => $conditions,
+		));
+	}
+
+
+/**
+ * getMyAnswer method
+ *
+ * @param int $circularNoticeContentId circular_notice_contents.id
+ * @param int $userId users.id
+ * @return array
+ */
+	public function getMyAnswer($circularNoticeContentId, $userId)
+	{
+		// 取得項目を設定
+		$fields = array(
+			'CircularNoticeTargetUser.reply_text_value',
+			'CircularNoticeTargetUser.reply_selection_value',
+		);
+
+		// 取得条件を設定（frameKey）
+		$conditions = array(
+			'CircularNoticeTargetUser.circular_notice_content_id' => $circularNoticeContentId,
+			'CircularNoticeTargetUser.user_id' => $userId,
+		);
+
+		// DBから取得した値を返す
+		return $this->find('first', array(
+			'fields' => $fields,
+			'conditions' => $conditions,
+		));
+	}
+
+/**
+ * setReadYet method
+ *
+ * @param int $circularNoticeContentId circular_notice_contents.id
+ * @param int $userId users.id
+ * @return array
+ */
+	public function setReadYet($circularNoticeContentId, $userId)
+	{
+		// 回答を再取得
+		$circularNoticetargetuser = $this->find('first', array(
+			'conditions' => array(
+				'CircularNoticeTargetUser.circular_notice_content_id' => $circularNoticeContentId,
+				'CircularNoticeTargetUser.user_id' => $userId,
+				'CircularNoticeTargetUser.read_flag' => false,
+			),
+			'recursive' => -1,
+		));
+
+		if (! $circularNoticetargetuser) {
+			return;
+		}
+
+		// 更新値を設定
+		$circularNoticetargetuser['CircularNoticeTargetUser']['read_flag'] = true;
+		$circularNoticetargetuser['CircularNoticeTargetUser']['read_datetime'] = date('Y-m-d H:i:s');
+		$circularNoticetargetuser['CircularNoticeTargetUser']['modified_user'] = $userId;
+		$circularNoticetargetuser['CircularNoticeTargetUser']['modified'] = date('Y-m-d H:i:s');
+
+		//トランザクションBegin
+		$dataSource = $this->getDataSource();
+		$dataSource->begin();
+
+		try {
+			$this->save($circularNoticetargetuser);
+			$dataSource->commit();
+		} catch (Exception $ex) {
+			$dataSource->rollback();
+			CakeLog::error($ex);
+			throw $ex;
+		}
+	}
+
+
+/**
+ * saveReplyValue method
+ *
+ * @param array $replyData
+ * @param int $userId users.id
+ * @return array
+ */
+	public function saveReplyValue($replyData, $userId)
+	{
+		// 回答を再取得
+		$circularNoticetargetuser = $this->find('first', array(
+			'conditions' => array(
+				'CircularNoticeTargetUser.circular_notice_content_id' => $replyData['circular_notice_content_id'],
+				'CircularNoticeTargetUser.user_id' => $userId,
+			),
+			'recursive' => -1,
+		));
+
+		// 更新値を設定
+		// 「記述式」の場合
+		if (! $replyData['reply_selection_value']) {
+			// 更新値を設定
+			$circularNoticetargetuser['CircularNoticeTargetUser']['reply_text_value'] = $replyData['reply_text_value'];
+		} else {
+			if (is_array($replyData['reply_selection_value'])) {
+				$reply_selection_value = '';
+					foreach ($replyData['reply_selection_value']as $ans) {
+						$reply_selection_value .= $ans . ',';
+					}
+				$reply_selection_value = substr($reply_selection_value, 0, -1);
+			} else {
+				$reply_selection_value = $replyData['reply_selection_value'];
+			}
+			// 更新値を設定
+			$circularNoticetargetuser['CircularNoticeTargetUser']['reply_selection_value'] = $reply_selection_value;
+		}
+
+		$circularNoticetargetuser['CircularNoticeTargetUser']['reply_flag'] = true;
+		$circularNoticetargetuser['CircularNoticeTargetUser']['reply_datetime'] = date('Y-m-d H:i:s');
+		$circularNoticetargetuser['CircularNoticeTargetUser']['modified_user'] = $userId;
+		$circularNoticetargetuser['CircularNoticeTargetUser']['modified'] = date('Y-m-d H:i:s');
+
+		//トランザクションBegin
+		$dataSource = $this->getDataSource();
+		$dataSource->begin();
+
+		try {
+			$this->save($circularNoticetargetuser);
+			$dataSource->commit();
+		} catch (Exception $ex) {
+			$dataSource->rollback();
+			CakeLog::error($ex);
+			throw $ex;
+		}
+	}
 
 }

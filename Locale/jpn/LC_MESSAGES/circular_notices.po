@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CircularNotices\n"
 "POT-Creation-Date: 2015-03-20 06:31+0000\n"
-"PO-Revision-Date: 2015-03-25 17:08+0900\n"
+"PO-Revision-Date: 2015-03-30 09:58+0900\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>\n"
 "MIME-Version: 1.0\n"
@@ -255,3 +255,66 @@ msgstr "回答期限を設定しない"
 # 登録（編集）画面で使用
 msgid "Set Deadline"
 msgstr "回答期限を設定する"
+
+msgid "Plugin Name"
+msgstr "回覧板"
+
+# 参照画面で使用
+msgid "Created User Title"
+msgstr "作成者： "
+
+# 参照画面で使用
+msgid "Reply Type Title"
+msgstr "回答方式： "
+
+# 参照画面で使用
+msgid "Choices Title"
+msgstr "選択肢： "
+
+# 参照画面で使用
+msgid "Selected Count"
+msgstr "（回答数： %d ）"
+
+# 参照画面で使用
+msgid "Answer Title"
+msgstr "回答： "
+
+# 参照画面で使用
+msgid "Do Answer"
+msgstr "回答する"
+
+# 参照画面で使用
+msgid "Change Answer"
+msgstr "回答を修正する"
+
+# 参照画面で使用
+msgid "Target User"
+msgstr "回答先"
+
+# 参照画面で使用
+msgid "Read Datetime"
+msgstr "閲覧日時"
+
+# 参照画面で使用
+msgid "Reply Datetime"
+msgstr "回答日時"
+
+# 参照画面で使用
+msgid "Answer"
+msgstr "回答"
+
+# 参照画面で使用
+msgid "Unreply"
+msgstr "未回答"
+
+# 参照画面で使用
+msgid "Back"
+msgstr "戻る"
+
+# 参照画面で使用
+msgid "Show Other Users"
+msgstr "回覧先と回答を開く"
+
+# 参照画面で使用
+msgid "Close Other Users"
+msgstr "回覧先と回答を閉じる"

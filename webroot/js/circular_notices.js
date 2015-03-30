@@ -51,18 +51,44 @@ NetCommonsApp.controller('CircularNotices',
         // $scope.master = {};
 
         /**
-         * Initialize
+         * Initialize for Index
          *
          * @return {void}
          */
         $scope.initCircularNoticeIndex = function(data) {
-            $scope.frameId = data.frameId;
-            $scope.frameKey = data.frameKey;
-            $scope.circularNoticeFrameSetting = data.circularNoticeFrameSetting;
-            $scope.circularNotice = data.circularNotice;
-            $scope.circularNoticeContentList = data.circularNoticeContentList;
-            $scope.selectOption = data.selectOption;
-            $scope.reply_deadline_set_flag = '';
+            $scope.displayOrder = data.displayOrder;
+            $scope.currentPage = data.currentPage;
+            $scope.visibleRowCount = data.visibleRowCount;
+            $scope.narrowDownParams = data.narrowDownParams;
+        };
+
+        /**
+         * Initialize for View
+         *
+         * @return {void}
+         */
+        $scope.initCircularNoticeView = function(answer, choices) {
+            $scope.answer = answer;
+            $scope.showReplyForm = false;
+            $scope.showOtherUsers = false;
+        };
+
+        /**
+         * Switch Reply Form
+         *
+         * @return {void}
+         */
+        $scope.switchReplyForm = function(data) {
+            $scope.showReplyForm = data;
+        };
+
+        /**
+         * Switch Other User's Answer View
+         *
+         * @return {void}
+         */
+        $scope.switchOtherUserView = function(data) {
+            $scope.showOtherUsers = data;
         };
 
         /**
@@ -76,10 +102,5 @@ NetCommonsApp.controller('CircularNotices',
 
             // 回答方式を格納
             $scope.circularNoticeContentReplyType = data.replyType;
-
-            // 回答方式の定数を格納
-            $scope.circularNoticeContentReplyTypeText = data.circularNoticeContentReplyType.typeText;
-            $scope.circularNoticeContentReplyTypeMultipleSelection = data.circularNoticeContentReplyType.typeSelection;
-            $scope.circularNoticeContentReplyTypeMultipleSelection = data.circularNoticeContentReplyType.typeMultipleSelection;
         };
     });

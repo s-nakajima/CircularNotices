@@ -154,22 +154,4 @@ class CircularNoticeComponent extends Component {
 	public $components = array(
 		'Session',
 	);
-
-//	/**
-//	 * setCircularNoticeFrameSettingToSession method
-//	 *
-//	 * @param int $frameId frames.id
-//	 * @param int $blockId blocks.id
-//	 * @param int $displayNumber circular_notice_frame_settings.display_number
-//	 * @param int $currentPage select page
-//	 * @return void
-//	 */
-//	public function setCircularNoticeFrameSettingToSession($frameId, $blockId, $displayNumber, $currentPage = 1) {
-//		// セッション保存
-//		$this->Session->write('circularNotices.' . $frameId . '.' . $blockId . '.displayNumber', $displayNumber);
-//		$this->Session->write('circularNotices.' . $frameId . '.' . $blockId . '.currentPage', $currentPage);
-//	}
-
-
-
 }
