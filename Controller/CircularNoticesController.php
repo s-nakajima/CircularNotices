@@ -29,7 +29,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		'Blocks.Block',
 		'Auth.Auth',
 		'CircularNotices.CircularNoticeFrameSetting',
-		'CircularNotices.CircularNotice',
+		'CircularNotices.CircularNoticeSetting',
 		'CircularNotices.CircularNoticeContent',
 		'CircularNotices.CircularNoticeChoice',
 		'CircularNotices.CircularNoticeContent',
@@ -53,6 +53,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 				'contentCreatable' => array('token', 'edit', 'delete'),
 			),
 		),
+		'Paginator',
 	);
 
 /**
@@ -78,17 +79,16 @@ class CircularNoticesController extends CircularNoticesAppController {
  *
  * @return void
  */
-	public function index($frameId = null, $currentPage = 1, $displayOrder = 0,
-								$visibleRowCount = 10, $narrowDownParams = 0) {
+	public function index() {
 		$this->__initCircularNotice();
 
-		// プルダウン設定値を画面に渡す
-		$this->set('displayOrder', $displayOrder);
-		$this->set('visibleRowCount', $visibleRowCount);
-		$this->set('narrowDownParams', $narrowDownParams);
-
-		// 現在のページ番号を画面に渡す
-		$this->set('currentPage', $currentPage);
+//		// プルダウン設定値を画面に渡す
+//		$this->set('displayOrder', $displayOrder);
+//		$this->set('visibleRowCount', $visibleRowCount);
+//		$this->set('narrowDownParams', $narrowDownParams);
+//
+//		// 現在のページ番号を画面に渡す
+//		$this->set('currentPage', $currentPage);
 	}
 
 /**
@@ -103,10 +103,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 		if ($this->request->isPost()) {
 			// 回答の登録
 			$this->CircularNoticeTargetUser->saveReplyValue($this->data['CircularNoticeTargetUser'], (int)$this->Auth->user('id'));
-
-			// 一覧画面へ遷移
-			$this->redirectByFrameId();
-			return;
 		}
 		else {
 			// 既読状態に設定
@@ -167,7 +163,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 			$result = $this->CircularNoticeContent->saveCircularNoticeContent($this->data, $status);
 
 			// 一覧画面へ遷移
-//			$this->redirectByFrameId();
+			$this->redirectByFrameId();
 			return;
 		}
 	}
@@ -179,15 +175,15 @@ class CircularNoticesController extends CircularNoticesAppController {
  */
 	private function __initCircularNotice() {
 		// ブロックが存在しない場合（新規配置）
-		if (empty($this->viewVars['blockId'])) {
+		if (empty($this->viewVars['blockKey'])) {
 
 			// 回覧板の初期設定を実施
-			$results = $this->CircularNotice->saveInitialSetting($this->viewVars['frameId'], $this->viewVars['frameKey']);
+			$results = $this->CircularNoticeSetting->saveInitialSetting($this->viewVars['frameId'], $this->viewVars['frameKey']);
 
 			// 画面表示のためデータを設定
 			$results = $this->camelizeKeyRecursive($results);
 			$this->set('circularNoticeFrameSetting', $results['circularNoticeFrameSetting']);
-			$this->set('circularNotice', $results['circularNotice']);
+			$this->set('CircularNoticeSetting', $results['CircularNoticeSetting']);
 
 			// 設定画面を表示
 			$this->render('Blocks.edit');
@@ -198,29 +194,32 @@ class CircularNoticesController extends CircularNoticesAppController {
 		else {
 			// 回覧板情報を取得
 			$circularNoticeFrameSetting = $this->CircularNoticeFrameSetting->getCircularNoticeFrameSetting($this->viewVars['frameKey']);
-			$circularNotice = $this->CircularNotice->getCircularNotice($this->viewVars['blockId']);
+			$circularNotice = $this->CircularNoticeSetting->getCircularNotice($this->viewVars['blockKey']);
 
 			// ログインユーザIDを取得
-			$userId =(int)$this->Auth->user('id');
+			$userId = (int)$this->Auth->user('id');
 
-			// モデルに渡すため、権限関連の値を配列に詰めなおす
-			$permission = array(
-				'contentPublishable' => (int)$this->viewVars['contentPublishable'],	// 公開権限
-				'contentEditable' => (int)$this->viewVars['contentEditable'],		// 編集権限
-				'contentCreatable' => (int)$this->viewVars['contentCreatable'],		// 作成権限
-				'contentReadable' => (int)$this->viewVars['contentReadable'],		// 参照権限
-			);
+			// ログインユーザIDが存在する場合（回覧板はログイン前領域には表示させない）
+			if (! empty($userId)) {
+				// モデルに渡すため、権限関連の値を配列に詰めなおす
+				$permission = array(
+					'contentPublishable' => (int)$this->viewVars['contentPublishable'],	// 公開権限
+					'contentEditable' => (int)$this->viewVars['contentEditable'],		// 編集権限
+					'contentCreatable' => (int)$this->viewVars['contentCreatable'],		// 作成権限
+					'contentReadable' => (int)$this->viewVars['contentReadable'],		// 参照権限
+				);
 
-			// 回覧一覧取得
-			$circularNoticeContentList = $this->CircularNoticeContent->getCircularNoticeContentList($circularNotice['CircularNotice']['key'], $userId, $permission);
-
-			// 画面表示のためのデータを設定
-			$circularNoticeFrameSetting = $this->camelizeKeyRecursive($circularNoticeFrameSetting);
-			$this->set('circularNoticeFrameSetting', $circularNoticeFrameSetting['circularNoticeFrameSetting']);
-			$circularNotice = $this->camelizeKeyRecursive($circularNotice);
-			$this->set('circularNotice', $circularNotice['circularNotice']);
-			$circularNoticeContentList = $this->camelizeKeyRecursive($circularNoticeContentList);
-			$this->set('circularNoticeContentList', $circularNoticeContentList);
+				// 回覧一覧取得
+				$circularNoticeContentList = $this->CircularNoticeContent->getCircularNoticeContentList($circularNotice['CircularNoticeSetting']['key'], $userId, $permission);
+//print_r($circularNoticeContentList);
+				// 画面表示のためのデータを設定
+				$circularNoticeFrameSetting = $this->camelizeKeyRecursive($circularNoticeFrameSetting);
+				$this->set('circularNoticeFrameSetting', $circularNoticeFrameSetting['circularNoticeFrameSetting']);
+				$circularNotice = $this->camelizeKeyRecursive($circularNotice);
+				$this->set('CircularNoticeSetting', $circularNotice['CircularNoticeSetting']);
+				$circularNoticeContentList = $this->camelizeKeyRecursive($circularNoticeContentList);
+				$this->set('circularNoticeContentList', $circularNoticeContentList);
+			}
 		}
 	}
 

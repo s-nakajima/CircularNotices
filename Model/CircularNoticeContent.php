@@ -196,8 +196,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 	public function getCircularNoticeContentList($circularNoticeKey, $userId, $permission, $status = CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_ALL, $displayOrder = CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_DISPLAY_ORDER_NEW_ARRIVAL)
 	{
 		// 回覧一覧で使用する項目を取得
-		$circularNoticeContents = $this->__getCircularNoticeContentList
-		($circularNoticeKey, $userId, $permission, $status, $displayOrder);
+		$circularNoticeContents = $this->__getCircularNoticeContentList($circularNoticeKey, $userId, $permission, $status, $displayOrder);
 
 		foreach($circularNoticeContents as &$circularNoticeContent) {
 			// ステータスを設定
@@ -325,34 +324,8 @@ class CircularNoticeContent extends CircularNoticesAppModel {
  * @param int $displayOrder
  * @return array
  */
-	public function __getCircularNoticeContentList($circularNoticeKey, $userId, $permission, $status = CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_ALL, $displayOrder = CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_DISPLAY_ORDER_NEW_ARRIVAL)
+	private function __getCircularNoticeContentList($circularNoticeKey, $userId, $permission, $status = CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_ALL, $displayOrder = CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_DISPLAY_ORDER_NEW_ARRIVAL)
 	{
-		// 同一のキーで最新のデータのみを取得するため、サブクエリを作成
-		$db = $this->getDataSource();
-		$subQuery = $db->buildStatement(
-			array(
-				// 取得対象はIDの最大値
-				'fields' => array(
-					'MAX(CircularNoticeContent2.id)'
-				),
-				'table' => 'circular_notice_contents',
-				'alias' => 'CircularNoticeContent2',
-				'conditions' => array(
-					'CircularNoticeContent2.circular_notice_key' => $circularNoticeKey
-				),
-				'order' => null,
-				// キーでグルーピング
-				'group' => 'CircularNoticeContent2.key',
-			), $this
-		);
-
-		$subQuery = ' CircularNoticeContent.id in (' . $subQuery . ') ';
-		$subQueryExpression = $db->expression($subQuery);
-		$conditions[] = $subQueryExpression;
-
-		// サブクエリを配列に格納
-		$params = compact('conditions');
-
 		// 取得項目の設定
 		$fields = array(
 			'CircularNoticeContent.id',

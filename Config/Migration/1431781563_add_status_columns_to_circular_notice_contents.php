@@ -1,12 +1,12 @@
 <?php
-class Add2 extends CakeMigration {
+class AddStatusColumnsToCircularNoticeContents extends CakeMigration {
 
 /**
  * Migration description
  *
  * @var string
  */
-	public $description = 'add2';
+	public $description = 'add_status_columns_to_circular_notice_contents';
 
 /**
  * Actions to be performed
@@ -15,8 +15,16 @@ class Add2 extends CakeMigration {
  */
 	public $migration = array(
 		'up' => array(
+			'create_field' => array(
+				'circular_notice_contents' => array(
+					'status' => array('type' => 'integer', 'null' => false, 'default' => '3', 'length' => 1, 'comment' => 'status, 1: public, 3: draft during | 公開状況  1:公開中3:下書き中、 |  | ', 'after' => 'reply_deadline'),
+				),
+			),
 		),
 		'down' => array(
+			'drop_field' => array(
+				'circular_notice_contents' => array('status'),
+			),
 		),
 	);
 

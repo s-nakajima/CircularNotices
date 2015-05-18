@@ -1,12 +1,12 @@
 <?php
-class Recreate150309 extends CakeMigration {
+class Recreate extends CakeMigration {
 
 /**
  * Migration description
  *
  * @var string
  */
-	public $description = 'recreate_150309';
+	public $description = 'recreate';
 
 /**
  * Actions to be performed

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CircularNotices\n"
 "POT-Creation-Date: 2015-03-20 06:31+0000\n"
-"PO-Revision-Date: 2015-03-30 09:58+0900\n"
+"PO-Revision-Date: 2015-05-17 22:33+0900\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>\n"
 "MIME-Version: 1.0\n"
@@ -318,3 +318,11 @@ msgstr "回覧先と回答を開く"
 # 参照画面で使用
 msgid "Close Other Users"
 msgstr "回覧先と回答を閉じる"
+
+# 設定画面で使用
+msgid "Privilege Setting"
+msgstr "権限設定"
+
+# 表示方法変更画面で使用
+msgid "Show contents per page"
+msgstr "1ページに表示する回覧数"

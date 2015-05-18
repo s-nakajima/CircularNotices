@@ -10,17 +10,38 @@
  */
 ?>
 
-<?php echo $this->Html->script('/net_commons/base/js/workflow.js', false); ?>
-<?php echo $this->Html->script('/net_commons/base/js/wysiwyg.js', false); ?>
-<?php echo $this->Html->script('/circularNotices/js/circular_notices.js'); ?>
-<?php echo $this->Html->css('/circularNotices/css/circular_notices.css'); ?>
+<?php
+	$this->Html->script(
+		array(
+			'/net_commons/js/workflow.js',
+			'/net_commons/js/wysiwyg.js',
+			'/circularNotices/js/circular_notices.js'
+		),
+		array(
+			'plugin' => false,
+			'inline' => false
+		)
+	);
+?>
+<?php
+	$this->Html->css(
+		array(
+			'/circularNotices/css/circular_notices.css'
+		),
+		array(
+			'plugin' => false,
+			'inline' => false
+		)
+	);
+?>
+
 <div id="nc-circular-notices-<?php echo (int)$frameId; ?>"
 	 ng-controller="CircularNotices"
 	 ng-init="initCircularNoticeIndex(<?php echo h(json_encode($this->viewVars)); ?>)">
 
 	<?php if ($contentCreatable) { ?>
 		<p class="text-right">
-			<span class="nc-tooltip" tooltip="<?php echo __d('net_commons', 'Edit'); ?>">
+			<span class="nc-tooltip" tooltip="<?php echo __d('net_commons', 'Add'); ?>">
 				<a href="<?php echo $this->Html->url('/circular_notices/circular_notices/edit/' . $frameId) ?>" class="btn btn-success">
 					<span class="glyphicon glyphicon-plus"> </span>
 				</a>

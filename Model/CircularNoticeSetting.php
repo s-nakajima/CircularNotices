@@ -1,6 +1,6 @@
 <?php
 /**
- * CircularNotice Model
+ * CircularNoticeSettings Model
  *
  * @property Block $Block
  *
@@ -11,12 +11,12 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('CircularNoticesAppModel', 'CircularNotices.Model');
+App::uses('CircularNoticesAppModel', 'CircularNoticeSettings.Model');
 
 /**
- * CircularNotice Model
+ * CircularNoticeSetting Model
  */
-class CircularNotice extends CircularNoticesAppModel {
+class CircularNoticeSetting extends CircularNoticesAppModel {
 
 	// 定数定義
 	const DEFAULT_CIRCULAR_NOTICE_NAME = '回覧板';	// 回覧板名タイトル初期値
@@ -38,9 +38,9 @@ class CircularNotice extends CircularNoticesAppModel {
  * @var array
  */
 	public $validate = array(
-		'block_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
+		'block_key' => array(
+			'notEmpty' => array(
+				'rule' => array('notEmpty'),
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -178,7 +178,7 @@ class CircularNotice extends CircularNoticesAppModel {
 			$results = array(
 				'Block' => $block['Block'],
 				'CircularNoticeFrameSetting' => $circularNoticeFrameSetting['CircularNoticeFrameSetting'],
-				'CircularNotice' => $circularNotice['CircularNotice'],
+				'CircularNoticeSetting' => $circularNotice['CircularNoticeSetting'],
 			);
 
 			return $results;
@@ -203,10 +203,9 @@ class CircularNotice extends CircularNoticesAppModel {
 
 		// デフォルト値を設定
 		$circularNotice = array(
-			'CircularNotice' => array(
+			'CircularNoticeSetting' => array(
 				'block_id' => $blockId,
 				'key' => hash('sha256', 'circular_notice_' . microtime()),
-				'name' => self::DEFAULT_CIRCULAR_NOTICE_NAME,
 				'posts_authority' => self::DEFAULT_POSTS_AUTHORITY,
 				'mail_notice_flag' => self::DEFAULT_MAIL_NOTICE_FLAG,
 				'mail_subject' => self::DEFAULT_MAIL_SUBJECT,
@@ -223,28 +222,27 @@ class CircularNotice extends CircularNoticesAppModel {
 /**
  * getCircularNotice method
  *
- * @param int $blockId blocks.id
+ * @param int $blockKey blocks.key
  * @return array
  */
-	public function getCircularNotice($blockId)
+	public function getCircularNotice($blockKey)
 	{
 		// 取得項目を設定
 		$fields = array(
-			'CircularNotice.id',
-			'CircularNotice.key',
-			'CircularNotice.name',
+			'CircularNoticeSetting.id',
+			'CircularNoticeSetting.key',
 		);
 
 		// 回覧板設定値を取得
 		$conditions = array(
-			'block_id' => $blockId,
+			'block_key' => $blockKey,
 		);
 
 		$circularNotice = $this->find('first', array(
 			'fields' => $fields,
 			'recursive' => -1,
 			'conditions' => $conditions,
-			'order' => 'CircularNotice.id DESC',
+			'order' => 'CircularNoticeSetting.id DESC',
 		));
 
 		return $circularNotice;
