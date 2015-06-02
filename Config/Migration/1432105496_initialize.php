@@ -138,6 +138,7 @@ class Initialize extends CakeMigration {
 				'type' => 1,
 				'default_action' => 'circular_notices/index',
 				'default_setting_action' => 'circular_notice_settings/edit',
+			),
 		),
 		'plugins_roles' => array(
 			array(
