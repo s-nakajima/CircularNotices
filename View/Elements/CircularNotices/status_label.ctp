@@ -55,5 +55,5 @@ $label = isset($labels[$status]) ? $labels[$status] : null;
 ?>
 
 <?php if ($label): ?>
-<span class="label <?php echo $labels[$status]['class'] ?>"><?php echo $labels[$status]['message'] ?></span>
+<span class="label <?php echo h($labels[$status]['class']); ?>"><?php echo h($labels[$status]['message']); ?></span>
 <?php endif ?>

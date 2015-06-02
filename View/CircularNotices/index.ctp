@@ -41,95 +41,24 @@
 
 	<?php if ($contentCreatable) { ?>
 		<p class="text-right">
-			<span class="nc-tooltip" tooltip="<?php echo __d('net_commons', 'Add'); ?>">
-				<a href="<?php echo $this->Html->url('/circular_notices/circular_notices/edit/' . $frameId) ?>" class="btn btn-success">
+			<span class="nc-tooltip" tooltip="<?php echo h(__d('net_commons', 'Add')); ?>">
+				<a href="<?php echo $this->Html->url('/circular_notices/circular_notices/add/' . $frameId) ?>" class="btn btn-success">
 					<span class="glyphicon glyphicon-plus"> </span>
 				</a>
 			</span>
-			<?php if (Page::isSetting()) { ?>
-				<span>
-					<a href="<?php echo $this->Html->url('/circular_notices/frame_settings/edit/' . $frameId) ?>" class="btn btn-default">
-						<span class="glyphicon glyphicon-cog"> </span>
-					</a>
-				</span>
-			<?php } ?>
 		</p>
 	<?php } ?>
 
-	<?php if($circularNoticeContentList) { ?>
 		<div class="form-inline">
-			<?php // コンテンツ作成権限がない場合 ?>
-			<?php if (! $contentCreatable) { ?>
-				<?php echo $this->Form->select('CircularNoticeContent.narrowDownParams',
-					array(
-						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_ALL => __d('circular_notices', 'Display All Contents'),
-						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD => __d('circular_notices', 'Display Unread Contents'),
-						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_READ_YET => __d('circular_notices', 'Display Read Yet Contents'),
-						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_REPLIED => __d('circular_notices', 'Display Replied Contents'),
-						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED => __d('circular_notices', 'Display Fixed Contents'),
-					),
-					array(
-						'label' => false,
-						'class' => 'form-control',
-						'div' => false,
-						'empty' => null,
-						'ng-model' => 'narrowDownParams',
-					)); ?>
-			<?php // コンテンツ作成権限がある場合 ?>
-			<?php } else { ?>
-				<?php echo $this->Form->select('CircularNoticeContent.narrowDownParams',
-					array(
-						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_ALL => __d('circular_notices', 'Display All Contents'),
-						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_APPROVED => __d('circular_notices', 'Display Public Pending Contents'),
-						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT => __d('circular_notices', 'Display Draft During Contents'),
-						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_DISAPPROVED  => __d('circular_notices', 'Display Remand Contents'),
-						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED => __d('circular_notices', 'Display Reserved Contents'),
-						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN => __d('circular_notices', 'Display Open Contents'),
-						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED => __d('circular_notices', 'Display Fixed Contents'),
-						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_CLOSED => __d('circular_notices', 'Display Closed Contents'),
-						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD => __d('circular_notices', 'Display Unread Contents'),
-						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_READ_YET => __d('circular_notices', 'Display Read Yet Contents'),
-						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_REPLIED => __d('circular_notices', 'Display Replied Contents'),
-					),
-					array(
-						'class' => 'form-control',
-						'div' => false,
-						'empty' => null,
-						'ng-model' => 'narrowDownParams',
-					)); ?>
-			<?php } ?>
+			<?php echo $this->element('CircularNotices/select_status'); ?>
 			<div class="text-right form-inline circular-notice-float-right">
-				<?php echo $this->Form->select('CircularNoticeContent.displayOrder',
-					array(
-						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_DISPLAY_ORDER_NEW_ARRIVAL => __d('circular_notices', 'Change Sort Order to New Arrival'),
-						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_DISPLAY_ORDER_OLD_ARRIVAL => __d('circular_notices', 'Change Sort Order to Old Arrival'),
-						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_DISPLAY_ORDER_REPLY_DEADLINE_DESC => __d('circular_notices', 'Change Sort Order to Reply Deadline'),
-					),
-					array(
-						'class' => 'form-control',
-						'div' => false,
-						'empty' => null,
-						'ng-model' => 'displayOrder',
-					)); ?>
-
-				<?php echo $this->Form->select('CircularNoticeContent.visibleRowCount',
-					array(
-							1 => "1件",
-							5 => "5件",
-							10 => "10件",
-							20 => "20件",
-							50 => "50件",
-							100 => "100件",
-					),
-					array(
-						'class' => 'form-control',
-						'div' => false,
-						'empty' => null,
-						'ng-model' => 'visibleRowCount',
-					)); ?>
+				<?php echo $this->element('CircularNotices/select_sort'); ?>
+				<?php echo $this->element('CircularNotices/select_limit'); ?>
 			</div>
 		</div>
 		<hr class="circular-notice-clear-float">
+
+	<?php if($circularNoticeContentList) { ?>
 		<?php foreach($circularNoticeContentList as $circularNoticeContent) { ?>
 			<div class="circular-notice-block row">
 				<div>
@@ -138,29 +67,30 @@
 							array('status' => $circularNoticeContent['circularNoticeContentStatus'])); ?>
 					</div>
 					<div class="circular-notice-index-content">
-						<a href="<?php echo $this->Html->url('/circular_notices/circular_notices/view/' . $frameId . '/' . $circularNoticeContent['circularNoticeContent']['id']); ?>"><?php echo $circularNoticeContent['circularNoticeContent']['subject']; ?></a><br />
+						<a href="<?php echo $this->Html->url('/circular_notices/circular_notices/view/' . $frameId . '/' . $circularNoticeContent['circularNoticeContent']['id']); ?>"><?php echo h($circularNoticeContent['circularNoticeContent']['subject']); ?></a><br />
 						<small>
-							<?php echo __d('circular_notices', 'Circular Content Period Title'); ?>
-							<?php echo date("Y/m/d H:i", strtotime($circularNoticeContent['circularNoticeContent']['openedPeriodFrom'])); ?>
+							<?php echo h(__d('circular_notices', 'Circular Content Period Title')); ?>
+							<?php echo h($circularNoticeContent['circularNoticeContent']['openedPeriodFrom']); ?>
 							～
-							<?php echo date("Y/m/d H:i", strtotime($circularNoticeContent['circularNoticeContent']['openedPeriodTo'])); ?><br />
+							<?php echo h($circularNoticeContent['circularNoticeContent']['openedPeriodTo']); ?><br />
 						</small>
 					</div>
 					<div class="circular-notice-index-counter">
 						<small>
-							<?php echo __d('circular_notices', 'Read Count Title'); ?> <?php echo $circularNoticeContent['circularNoticeReadCount']; ?>
+							<?php echo h(__d('circular_notices', 'Read Count Title')); ?> <?php echo h($circularNoticeContent['circularNoticeReadCount']); ?>
 							/
-							<?php echo $circularNoticeContent['circularNoticeTargetCount']; ?><br />
-							<?php echo __d('circular_notices', 'Reply Count Title'); ?> <?php echo $circularNoticeContent['circularNoticeReplyCount']; ?>
+							<?php echo h($circularNoticeContent['circularNoticeTargetCount']); ?><br />
+							<?php echo h(__d('circular_notices', 'Reply Count Title')); ?> <?php echo h($circularNoticeContent['circularNoticeReplyCount']); ?>
 							/
-							<?php echo $circularNoticeContent['circularNoticeTargetCount']; ?>
+							<?php echo h($circularNoticeContent['circularNoticeTargetCount']); ?>
 						</small>
 					</div>
 				</div>
-<div>					<?php if ($contentCreatable) { ?>
+				<div>
+					<?php if ($contentCreatable) { ?>
 						<hr class="circular-notice-clear-float circular-notice-index-divider">
 						<div class="text-right">
-							<span class="nc-tooltip" tooltip="<?php echo __d('net_commons', 'Edit'); ?>">
+							<span class="nc-tooltip" tooltip="<?php echo h(__d('net_commons', 'Edit')); ?>">
 								<a href="<?php echo $this->Html->url('/circular_notices/circular_notices/edit/' . $frameId . '/' . $circularNoticeContent['circularNoticeContent']['id']) ?>" class="btn btn-sm btn-primary">
 									<span class="glyphicon glyphicon-edit"> </span>
 								</a>
@@ -170,7 +100,17 @@
 				</div>
 			</div>
 		<?php } ?>
+
+		<div class="text-center">
+			<?php echo $this->element('NetCommons.paginator', array(
+				'url' => Hash::merge(
+					array('controller' => 'circular_notices', 'action' => 'index', $frameId),
+					$this->Paginator->params['named']
+				)
+			)); ?>
+		</div>
+
 	<?php } else {
-		echo __d('circular_notices', 'Circular Content Data Not Found');
+		echo h(__d('circular_notices', 'Circular Content Data Not Found'));
 	} ?>
 </div>

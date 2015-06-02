@@ -10,77 +10,35 @@
  */
 ?>
 
-<div class="form-group">
-	<?php echo $this->Form->label('CircularNoticeTargetUser.reply_deadline_set_flag',
-			__d('circular_notices', 'Reply Deadline') . $this->element('NetCommons.required')
-	); ?>
-	<div class="form-inline">
+<div class="row form-group">
+	<div class="col-xs-12">
+		<?php echo $this->Form->label('CircularNoticeTargetUser.reply_deadline_set_flag',
+				__d('circular_notices', 'Reply Deadline') . $this->element('NetCommons.required')
+		); ?>
+	</div>
+	<div class="col-xs-offset-1 col-xs-11">
 		<?php
-			echo $this->Form->input('CircularNoticeContent.reply_deadline_set_flag',
-				array(
-					'class' => 'form-control',
-					'type' => 'radio',
-					'div' => true,
-					'legend' => false,
-					'ng-model' => 'reply_deadline_set_flag',
-					'options' => array(
-						'0' => __d('circular_notices', 'No Deadline'),
-						'1' => __d('circular_notices', 'Set Deadline'),
-					),
-				));
-		?>
-		<?php
-			echo $this->Form->input('CircularNoticeContent.reply_deadline_date',
-			array(
-				'class' => 'form-control circular-notice-date',
-				'div' => false,
-				'type' => 'text',
-				'label' => false,
-				'value' => '',
-				'ng-readonly' => 'reply_deadline_set_flag != 1',
-				'style' => 'width: 100px;',
+			$options = array(
+				'0' => __d('circular_notices', 'No Deadline'),
+				'1' => __d('circular_notices', 'Set Deadline'),
+			);
+			echo $this->Form->radio('CircularNoticeContent.reply_deadline_set_flag', $options, array(
+				'value' => (isset($circularNoticeContent['replyDeadlineSetFlag']) ? $circularNoticeContent['replyDeadlineSetFlag'] : 0),
+				'legend' => false,
+				'separator' => '<br />',
 			));
-			$this->Form->unlockField('CircularNoticeContent.reply_deadline_date');
 		?>
-		<?php echo $this->Form->select('CircularNoticeContent.reply_deadline_hour',
-				array(
-					0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
-				),
-				array(
+	</div>
+	<div class="col-xs-offset-1 col-xs-11">
+		<div class="input-group inline-block" style="margin-left: 20px;">
+			<div class="input-group">
+				<?php echo $this->Form->time('CircularNoticeContent.reply_deadline', array(
+					'value' => (isset($circularNoticeContent['replyDeadline']) ? $circularNoticeContent['replyDeadline'] : ''),
+					'label' => false,
 					'class' => 'form-control',
-					'div' => false,
-					'empty' => null,
-					'ng-disabled' => 'reply_deadline_set_flag != 1',
-				));
-				$this->Form->unlockField('CircularNoticeContent.reply_deadline_hour');
-		?>
-
-		<?php echo __d('circular_notices', 'Hour'); ?>
-
-		<?php echo $this->Form->select('CircularNoticeContent.reply_deadline_minute',
-				array(
-					0 => 0,
-					5 => 5,
-					10 => 10,
-					15 => 15,
-					20 => 20,
-					25 => 25,
-					30 => 30,
-					35 => 35,
-					40 => 40,
-					45 => 45,
-					50 => 50,
-					55 => 55,
-				),
-				array(
-					'class' => 'form-control',
-					'div' => false,
-					'empty' => null,
-					'ng-disabled' => 'reply_deadline_set_flag != 1',
-				));
-				$this->Form->unlockField('CircularNoticeContent.reply_deadline_minute');
-		?>
-
-		<?php echo __d('circular_notices', 'Minute'); ?>
+					'placeholder' => 'yyyy-mm-dd hh:nn'
+				)); ?>
+			</div>
+		</div>
 	</div>
 </div>

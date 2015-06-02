@@ -15,112 +15,55 @@ App::uses('CircularNoticesAppModel', 'CircularNoticeSettings.Model');
 
 /**
  * CircularNoticeSetting Model
+ *
+ * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
+ * @package NetCommons\CircularNotices\Model
  */
 class CircularNoticeSetting extends CircularNoticesAppModel {
 
-	// 定数定義
-	const DEFAULT_CIRCULAR_NOTICE_NAME = '回覧板';	// 回覧板名タイトル初期値
-	const DEFAULT_POSTS_AUTHORITY = 0;				// 記事投稿権限初期値（0：一般権限は投稿できない）
-	const DEFAULT_MAIL_NOTICE_FLAG = 1;				// メール通知フラグ初期値（1：通知する）
-	const DEFAULT_MAIL_SUBJECT = '件名';				// メール件名初期値
-	const DEFAULT_MAIL_BODY = 'メール本文';			// メール本文初期値
+/**
+ * Default posts authority
+ *
+ * @var int
+ */
+	const DEFAULT_POSTS_AUTHORITY = 0;
 
 /**
- * Use database config
+ * Default mail notice flag
+ *
+ * @var int
+ */
+	const DEFAULT_MAIL_NOTICE_FLAG = 1;
+
+/**
+ * Default mail subject
  *
  * @var string
  */
-	public $useDbConfig = 'master';
+	const DEFAULT_MAIL_SUBJECT = '件名';
+
+/**
+ * Default mail body
+ *
+ * @var string
+ */
+	const DEFAULT_MAIL_BODY = 'メール本文';
 
 /**
  * Validation rules
  *
  * @var array
  */
-	public $validate = array(
-		'block_key' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'key' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'name' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'posts_authority' => array(
-			'boolean' => array(
-				'rule' => array('boolean'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'mail_notice_flag' => array(
-			'boolean' => array(
-				'rule' => array('boolean'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'mail_subject' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'mail_body' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'is_auto_translated' => array(
-			'boolean' => array(
-				'rule' => array('boolean'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-	);
+	public $validate = array();
 
-//The Associations below have been created with all possible keys, those that are not needed can be removed
+/**
+ * Use behaviors
+ *
+ * @var array
+ */
+	public $actsAs = array(
+		'NetCommons.OriginalKey',
+	);
 
 /**
  * belongsTo associations
@@ -128,124 +71,188 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
  * @var array
  */
 	public $belongsTo = array(
-//		'Block' => array(
-//			'className' => 'Block',
-//			'foreignKey' => 'block_id',
-//			'conditions' => '',
-//			'fields' => '',
-//			'order' => ''
-//		)
+		'Block' => array(
+			'className' => 'Blocks.block',
+			'foreignKey' => 'block_key',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		)
 	);
 
 /**
- * saveInitialSetting method
+ * Prepare circular notice settings
  *
- * @param int $frameId frames.id
- * @param string $frameKey frames.key
- * @return array
+ * @param int $frameId
+ * @return mixed
+ * @throws Exception
  * @throws InternalErrorException
  */
-	public function saveInitialSetting($frameId, $frameKey)
-	{
-		// 必要なモデル読み込み
+	public function prepareCircularNoticeSetting($frameId) {
+
 		$this->loadModels([
-			'CircularNoticeFrameSetting' => 'CircularNotices.CircularNoticeFrameSetting',
+			'Frame' => 'Frames.Frame',
 			'Block' => 'Blocks.Block',
 		]);
 
-		// トランザクション開始
+		$this->setDataSource('master');
 		$dataSource = $this->getDataSource();
 		$dataSource->begin();
 
 		try {
-			// ブロックの登録
-			$block = $this->Block->saveByFrameId($frameId, false);
 
-			// 回覧板フレーム設定の初期登録（frameKey）
-			$circularNoticeFrameSetting = $this->CircularNoticeFrameSetting->saveInitialSetting($frameKey);
-			if (!$circularNoticeFrameSetting) {
+			// フレームを取得
+			if (! $frame = $this->Frame->findById($frameId)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 
-			// 回覧板の初期登録（block_id）
-			$circularNotice = $this->__saveInitialSetting($block['Block']['id']);
-			if (! $circularNotice) {
+			// フレームとブロックが紐付いていない
+			if (! isset($frame['Frame']['block_id'])) {
+
+				// フレームと同じルームに紐付いている回覧板ブロックを取得
+				$block = $this->Block->find('first', array(
+					'conditions' => array(
+						'Block.room_id' => $frame['Frame']['room_id'],
+						'Block.plugin_key' => 'circular_notices',
+					)
+				));
+
+				// フレームと同じルームに紐付く回覧板ブロックが存在しなければ新規作成してフレームと紐付け
+				if (! $block) {
+					$block = $this->Block->create(array(
+						'language_id' => $frame['Frame']['language_id'],
+						'room_id' => $frame['Frame']['room_id'],
+						'plugin_key' => 'circular_notices',
+					));
+					$block = $this->Block->saveByFrameId($frameId, $block);
+
+				// 存在する場合はフレームと紐付け
+				} else {
+					$frame['Frame']['block_id'] = $block['Block']['id'];
+					if (! $this->Frame->save($frame, false)) {
+						throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+					}
+				}
+
+			// 紐付いていればそのブロックを取得
+			} else {
+				$block = $this->Block->findById($frame['Frame']['block_id']);
+			}
+
+			// この時点でブロックが決定していないのはおかしい
+			if (! $block) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+
+			// ブロックに紐づく設定が存在しなければ新規作成
+			if (! $blockSetting = $this->findByBlockKey($block['Block']['key'])) {
+				$data = $this->create(array(
+					'block_key' => $block['Block']['key'],
+					'posts_authority' => self::DEFAULT_POSTS_AUTHORITY,
+					'mail_notice_flag' => self::DEFAULT_MAIL_NOTICE_FLAG,
+					'mail_subject' => self::DEFAULT_MAIL_SUBJECT,
+					'mail_body' => self::DEFAULT_MAIL_BODY,
+					'is_auto_translated' => false,
+					'translation_engine' => null,
+				));
+				if (! $blockSetting = $this->save($data, false)) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				}
 			}
 
 			$dataSource->commit();
-
-			$results = array(
-				'Block' => $block['Block'],
-				'CircularNoticeFrameSetting' => $circularNoticeFrameSetting['CircularNoticeFrameSetting'],
-				'CircularNoticeSetting' => $circularNotice['CircularNoticeSetting'],
-			);
-
-			return $results;
 
 		} catch (Exception $ex) {
 			$dataSource->rollback();
 			CakeLog::error($ex);
 			throw $ex;
 		}
+
+		return $blockSetting;
 	}
 
 /**
- * __saveInitialSetting method
+ * Get circular notice settings
  *
- * @param int $blockId blocks.id
- * @return boolean
+ * @param int $frameId
+ * @return mixed
  */
-	private function __saveInitialSetting($blockId)
-	{
-		// レコードを登録
-		$this->create();
+	public function getCircularNoticeSetting($frameId) {
 
-		// デフォルト値を設定
-		$circularNotice = array(
-			'CircularNoticeSetting' => array(
-				'block_id' => $blockId,
-				'key' => hash('sha256', 'circular_notice_' . microtime()),
-				'posts_authority' => self::DEFAULT_POSTS_AUTHORITY,
-				'mail_notice_flag' => self::DEFAULT_MAIL_NOTICE_FLAG,
-				'mail_subject' => self::DEFAULT_MAIL_SUBJECT,
-				'mail_body' => self::DEFAULT_MAIL_BODY,
-				'is_auto_translated' => false,
-				'translation_engine' => NULL,
-			)
-		);
+		$this->loadModels([
+			'Frame' => 'Frames.Frame',
+		]);
 
-		// 保存結果を返す
-		return $this->save($circularNotice);
-	}
+		if (! $frame = $this->Frame->findById($frameId)) {
+			return null;
+		}
 
-/**
- * getCircularNotice method
- *
- * @param int $blockKey blocks.key
- * @return array
- */
-	public function getCircularNotice($blockKey)
-	{
-		// 取得項目を設定
-		$fields = array(
-			'CircularNoticeSetting.id',
-			'CircularNoticeSetting.key',
-		);
-
-		// 回覧板設定値を取得
-		$conditions = array(
-			'block_key' => $blockKey,
-		);
-
-		$circularNotice = $this->find('first', array(
-			'fields' => $fields,
+		return $this->find('first', array(
 			'recursive' => -1,
-			'conditions' => $conditions,
-			'order' => 'CircularNoticeSetting.id DESC',
+			'conditions' => array(
+				'block_key' => $frame['Block']['key'],
+			),
 		));
-
-		return $circularNotice;
 	}
 
+/**
+ * Save circular notice settings
+ *
+ * @param array $data
+ * @return bool
+ * @throws Exception
+ * @throws InternalErrorException
+ */
+	public function saveCircularNoticeSetting($data) {
+
+		$this->loadModels([
+			'BlockRolePermission' => 'Blocks.BlockRolePermission',
+		]);
+
+		$this->setDataSource('master');
+		$dataSource = $this->getDataSource();
+		$dataSource->begin();
+
+		try {
+			if (! $this->validateCircularNoticeSetting($data)) {
+				return false;
+			}
+			foreach ($data[$this->BlockRolePermission->alias] as $value) {
+				if (! $this->BlockRolePermission->validateBlockRolePermissions($value)) {
+					$this->validationErrors = Hash::merge($this->validationErrors, $this->BlockRolePermission->validationErrors);
+					return false;
+				}
+			}
+
+			if (! $this->save(null, false)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+			foreach ($data[$this->BlockRolePermission->alias] as $value) {
+				if (! $this->BlockRolePermission->saveMany($value, ['validate' => false])) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				}
+			}
+
+			$dataSource->commit();
+
+		} catch (Exception $ex) {
+			$dataSource->rollback();
+			CakeLog::error($ex);
+			throw $ex;
+		}
+
+		return true;
+	}
+
+/**
+ * Validate this model
+ *
+ * @param array $data
+ * @return bool
+ */
+	public function validateCircularNoticeSetting($data) {
+		$this->set($data);
+		$this->validates();
+		return $this->validationErrors ? false : true;
+	}
 }

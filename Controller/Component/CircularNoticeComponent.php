@@ -10,10 +10,9 @@
  */
 
 App::uses('Component', 'Controller');
-App::uses('Component', 'NetCommonsBlock');
 
 /**
- * CircularNotices Component
+ * CircularNotice Component
  *
  * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
  * @package NetCommons\CircularNotices\Controller\Component
@@ -145,13 +144,4 @@ class CircularNoticeComponent extends Component {
  * @var string
  */
 	const CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION = '3';
-
-	/**
-	 * use component
-	 *
-	 * @var array
-	 */
-	public $components = array(
-		'Session',
-	);
 }
