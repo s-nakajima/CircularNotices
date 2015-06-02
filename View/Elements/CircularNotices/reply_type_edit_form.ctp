@@ -30,6 +30,6 @@
 			)); ?>
 </div>
 
-<div class="form-group" ng-show="circularNoticeContentReplyType!=<?php echo CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT ?>">
+<div class="form-group" ng-show="circularNoticeContentReplyType!=<?php echo h(CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT); ?>">
 	<?php echo $this->element('CircularNotices/choice_edit_form'); ?>
 </div>

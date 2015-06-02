@@ -1,6 +1,6 @@
 <?php
 /**
- * CircularNoticeFrameSettingsController. Controller
+ * CircularNoticeFrameSettingsController Controller
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
@@ -12,25 +12,25 @@
 App::uses('CircularNoticesAppController', 'CircularNotices.Controller');
 
 /**
- * CircularNoticeFrameSettingsController. Controller
+ * CircularNoticeFrameSettingsController Controller
  *
  * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
  * @package NetCommons\CircularNotices\Controller
  */
 class CircularNoticeFrameSettingsController extends CircularNoticesAppController {
 
-	/**
-	 * layout
-	 *
-	 * @var array
-	 */
+/**
+ * layout
+ *
+ * @var array
+ */
 	public $layout = 'NetCommons.setting';
 
-	/**
-	 * use models
-	 *
-	 * @var array
-	 */
+/**
+ * use models
+ *
+ * @var array
+ */
 	public $uses = array(
 		'CircularNotices.CircularNoticeFrameSetting',
 		'CircularNotices.CircularNoticeSetting',
@@ -38,88 +38,88 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
 		'Frames.Frame',
 	);
 
-	/**
-	 * use components
-	 *
-	 * @var array
-	 */
+/**
+ * use components
+ *
+ * @var array
+ */
 	public $components = array(
-		'NetCommons.NetCommonsFrame',
-		'NetCommons.NetCommonsWorkflow',
 		'NetCommons.NetCommonsRoomRole' => array(
 			// コンテンツの権限設定
 			'allowedActions' => array(
-				'blockEditable' => array('index', 'add', 'edit', 'delete')
+				'blockEditable' => array('edit')
 			),
 		),
 	);
 
-	/**
-	 * use helpers
-	 *
-	 * @var array
-	 */
+/**
+ * use helpers
+ *
+ * @var array
+ */
 	public $helpers = array(
 		'NetCommons.Token',
 	);
 
-	/**
-	 * beforeFilter
-	 *
-	 * @return void
-	 */
+/**
+ * beforeFilter
+ *
+ * @return void
+ */
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->Auth->deny('index');
 
 		$results = $this->camelizeKeyRecursive($this->NetCommonsFrame->data);
 		$this->set($results);
 	}
 
-	/**
-	 * edit
-	 *
-	 * @return void
-	 */
+/**
+ * edit action
+ *
+ * @return void
+ */
 	public function edit() {
-		$this->__initCircularNoticeFrameSetting();
+		if (! $this->NetCommonsFrame->validateFrameId()) {
+			$this->throwBadRequest();
+			return false;
+		}
 
-		// 設定保存時
-		if ($this->request->isPost()) {
+		if (! $frame = $this->Frame->findById($this->viewVars['frameId'])) {
+			$this->throwBadRequest();
+			return;
+		}
+
+		if (! $block = $this->Block->findById((int)$frame['Frame']['block_id'])) {
+			$this->throwBadRequest();
+			return false;
+		};
+		$this->set('blockId', $block['Block']['id']);
+		$this->set('blockKey', $block['Block']['key']);
+
+		// タブの設定
+		$this->initSettingTabs('circular_notice_frame_settings');
+
+		if (! $circularNoticeFrameSetting = $this->CircularNoticeFrameSetting->getCircularNoticeFrameSetting($this->viewVars['frameKey'])) {
+			$circularNoticeFrameSetting = $this->CircularNoticeFrameSetting->create(array(
+				'frame_key' => $this->viewVars['frameKey'],
+			));
+		}
+
+		$data = array();
+		if ($this->request->is('post')) {
 			$data = $this->data;
 			$this->CircularNoticeFrameSetting->saveCircularNoticeFrameSetting($data);
-
-//			if ($this->handleValidationError($this->BbsFrameSetting->validationErrors)) {
-//				if (! $this->request->is('ajax')) {
-//					$this->redirect('/bbses/bbses/index/' . $this->viewVars['frameId']);
-//				}
-//				return;
-//			}
-
-			$results = $this->camelizeKeyRecursive($data);
-			$this->set($results);
+			if ($this->handleValidationError($this->CircularNoticeFrameSetting->validationErrors)) {
+				$this->redirectByFrameId();
+				return;
+			}
 		}
-	}
 
-	/**
-	 * __initCircularNoticeFrameSetting
-	 *
-	 * @return void
-	 */
-	private function __initCircularNoticeFrameSetting() {
-		if (! $circularNoticeFrameSetting = $this->CircularNoticeFrameSetting->find('first', array(
-			'recursive' => -1,
-			'conditions' => array(
-				'frame_key' => $this->viewVars['frameKey']
-			)
-		))) {
-			$circularNoticeFrameSetting = $this->BbsFrameSetting->create(
-				array(
-					'frame_key' => $this->viewVars['frameKey']
-				)
-			);
-		}
-		$circularNoticeFrameSetting = $this->camelizeKeyRecursive($circularNoticeFrameSetting);
-		$this->set($circularNoticeFrameSetting);
+		$data = Hash::merge(
+			$circularNoticeFrameSetting,
+			$data
+		);
+		$results = $this->camelizeKeyRecursive($data);
+		$this->set($results);
 	}
 }

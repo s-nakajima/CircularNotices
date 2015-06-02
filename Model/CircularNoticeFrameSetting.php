@@ -2,6 +2,7 @@
 /**
  * CircularNoticeFrameSetting Model
  *
+ * @property Frame $Frame
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
@@ -14,56 +15,32 @@ App::uses('CircularNoticesAppModel', 'CircularNotices.Model');
 
 /**
  * CircularNoticeFrameSetting Model
+ *
+ * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
+ * @package NetCommons\CircularNotices\Model
  */
 class CircularNoticeFrameSetting extends CircularNoticesAppModel {
 
-	// 定数定義
-	const DEFAULT_DISPLAY_NUMBER = 5;	// 表示件数
-
 /**
- * Use database config
+ * Default display number
  *
- * @var string
+ * @var int
  */
-	public $useDbConfig = 'master';
+	const DEFAULT_DISPLAY_NUMBER = 5;
 
 /**
  * Validation rules
  *
  * @var array
  */
-	public $validate = array(
-		'frame_key' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'display_number' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'created_user' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-	);
+	public $validate = array();
+
+/**
+ * Use behaviors
+ *
+ * @var array
+ */
+	public $actsAs = array();
 
 /**
  * belongsTo associations
@@ -71,91 +48,103 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
  * @var array
  */
 	public $belongsTo = array(
-//		'Block' => array(
-//			'className' => 'Blocks.Block',
-//			'foreignKey' => 'block_id',
-//			'conditions' => '',
-//			'fields' => '',
-//			'order' => ''
-//		),
+		'Frame' => array(
+			'className' => 'Frames.Frame',
+			'foreignKey' => 'frame_key',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
 	);
 
 /**
- * saveInitialSetting method
+ * Prepare circular notice frame settings
  *
- * @param string $frameKey frames.key
- * @return boolean
+ * @param int $frameId
+ * @return mixed
+ * @throws Exception
+ * @throws InternalErrorException
  */
-	public function saveInitialSetting($frameKey) {
-		// レコードを登録
-		$this->create();
+	public function prepareCircularNoticeFrameSetting($frameId) {
 
-		// デフォルト値を設定
-		$circularNoticeFrameSetting = array(
-			'CircularNoticeFrameSetting' => array(
-				'frame_key' => $frameKey,
-				'display_number' => self::DEFAULT_DISPLAY_NUMBER,
-			)
-		);
-
-		// 保存結果を返す
-		return $this->save($circularNoticeFrameSetting);
-	}
-
-/**
- * getCircularNoticeFrameSetting method
- *
- * @param string $frameKey frames.key
- * @return array
- */
-	public function getCircularNoticeFrameSetting($frameKey) {
-		// 取得項目を設定
-		$fields = array(
-			'CircularNoticeFrameSetting.id',
-			'CircularNoticeFrameSetting.frame_key',
-			'CircularNoticeFrameSetting.display_number',
-		);
-
-		// 取得条件を設定（frameKey）
-		$conditions = array(
-			'CircularNoticeFrameSetting.frame_key' => $frameKey
-		);
-
-		// DBから取得した値を返す
-		return $this->find('first', array(
-			'fields' => $fields,
-			'conditions' => $conditions,
-		));
-	}
-
-/**
- * saveCircularNoticeFrameSetting method
- *
- * @param array $data
- * @return boolean
- */
-	public function saveCircularNoticeFrameSetting($data) {
-		// 必要なモデル読み込み
 		$this->loadModels([
-			'CircularNoticeFrameSetting' => 'CircularNotices.CircularNoticeFrameSetting',
+			'Frame' => 'Frames.Frame',
 		]);
 
-		//トランザクションBegin
+		$this->setDataSource('master');
 		$dataSource = $this->getDataSource();
 		$dataSource->begin();
 
 		try {
-			//バリデーション
-			if (!$this->validateCircularNoticeFrameSetting($data)) {
+
+			// フレームを取得
+			if (! $frame = $this->Frame->findById($frameId)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+
+			// フレームと紐づくフレーム設定が取得できない場合は新規作成
+			if (! $circularNoticeFrameSetting = $this->findByFrameKey($frame['Frame']['key'])) {
+				$data = $this->create(
+					array(
+						'frame_key' => $frame['Frame']['key'],
+						'display_number' => self::DEFAULT_DISPLAY_NUMBER,
+					)
+				);
+				if (! $circularNoticeFrameSetting = $this->save($data, false)) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				}
+			}
+
+			$dataSource->commit();
+
+		} catch (Exception $ex) {
+			$dataSource->rollback();
+			CakeLog::error($ex);
+			throw $ex;
+		}
+
+		return $circularNoticeFrameSetting;
+	}
+
+/**
+ * Get circular notice frame settings
+ *
+ * @param string $frameKey
+ * @return mixed
+ */
+	public function getCircularNoticeFrameSetting($frameKey) {
+		return $this->find('first', array(
+			'recursive' => -1,
+			'conditions' => array(
+				'frame_key' => $frameKey,
+			),
+		));
+	}
+
+/**
+ * Save circular notice frame settings
+ *
+ * @param array $data
+ * @return bool
+ * @throws Exception
+ * @throws InternalErrorException
+ */
+	public function saveCircularNoticeFrameSetting($data) {
+
+		$this->setDataSource('master');
+		$dataSource = $this->getDataSource();
+		$dataSource->begin();
+
+		try {
+
+			if (! $this->validateCircularNoticeFrameSetting($data)) {
 				return false;
 			}
 
-			//登録処理
 			if (! $this->save(null, false)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 
-			//トランザクションCommit
 			$dataSource->commit();
 
 		} catch (Exception $ex) {
@@ -168,10 +157,10 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
 	}
 
 /**
- * validate circular_notice_frame_settings
+ * Validate this model
  *
- * @param array $data received post data
- * @return bool True on success, false on error
+ * @param array $data
+ * @return bool
  */
 	public function validateCircularNoticeFrameSetting($data) {
 		$this->set($data);
@@ -179,19 +168,19 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
 		return $this->validationErrors ? false : true;
 	}
 
-	/**
-	 * getDisplayNumberOptions method
-	 *
-	 * @return array
-	 */
+/**
+ * Get display numbers for limit options
+ *
+ * @return array
+ */
 	public static function getDisplayNumberOptions() {
 		return array(
-			1 => __d('bbses', '%s article', 1),
-			5 => __d('bbses', '%s articles', 5),
-			10 => __d('bbses', '%s articles', 10),
-			20 => __d('bbses', '%s articles', 20),
-			50 => __d('bbses', '%s articles', 50),
-			100 => __d('bbses', '%s articles', 100),
+			1 => __d('circular_notices', '%s article', 1),
+			5 => __d('circular_notices', '%s articles', 5),
+			10 => __d('circular_notices', '%s articles', 10),
+			20 => __d('circular_notices', '%s articles', 20),
+			50 => __d('circular_notices', '%s articles', 50),
+			100 => __d('circular_notices', '%s articles', 100),
 		);
 	}
 }

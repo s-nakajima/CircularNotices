@@ -2,7 +2,6 @@
 /**
  * CircularNoticeChoice Model
  *
- *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
  * @link http://www.netcommons.org NetCommons Project
@@ -14,107 +13,75 @@ App::uses('CircularNoticesAppModel', 'CircularNotices.Model');
 
 /**
  * CircularNoticeChoice Model
+ *
+ * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
+ * @package NetCommons\CircularNotices\Model
  */
 class CircularNoticeChoice extends CircularNoticesAppModel {
-
-/**
- * Use database config
- *
- * @var string
- */
-	public $useDbConfig = 'master';
 
 /**
  * Validation rules
  *
  * @var array
  */
-	public $validate = array(
-		'key' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'content_id' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'value' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-	);
+	public $validate = array();
 
 /**
- * getCircularNoticeChoice method
+ * Use behaviors
  *
- * @param int $circularNoticeContentId circular_notice_contents.id
- * @return array
+ * @var array
  */
-	public function getCircularNoticeChoice($circularNoticeContentId)
-	{
-		// 取得条件を設定
-		$conditions = array(
+	public $actAs = array();
+
+/**
+ * Delete-insert circular notice choices
+ *
+ * @param array $data
+ */
+	public function replaceCircularNoticeChoices($data) {
+
+		$circularNoticeContentId = $data['CircularNoticeContent']['id'];
+
+		// 残す選択肢の条件を生成
+		$deleteConditions = array(
 			'CircularNoticeChoice.circular_notice_content_id' => $circularNoticeContentId,
 		);
-
-		// DBから取得した値を返す
-		return $this->find('all', array(
-			'conditions' => $conditions,
-			'recursive' => -1,
-			'order' => 'CircularNoticeChoice.weight asc',
-		));
-	}
-
-/**
- * saveCircularNoticeChoice method
- *
- * @param array $data
- * @return boolean
- */
-	public function saveCircularNoticeChoice($data, $validate = true)
-	{
-		// if (!$this->validateCircularTargetUser($data)) {
-		// 	return false;
-		// }
-
-		$circularNoticeTargetUser = $this->saveAll($data['CircularNoticeTargetUser']);
-		if (! $circularNoticeTargetUser) {
-			// @codeCoverageIgnoreStart
-			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-			// @codeCoverageIgnoreEnd
+		$extractIds = Hash::filter(Hash::extract($data['CircularNoticeChoices'], '{n}.CircularNoticeChoice.id'));
+		if (count($extractIds) > 0) {
+			$deleteConditions['CircularNoticeChoice.id NOT'] = $extractIds;
 		}
-		return $circularNoticeTargetUser;
-	}
 
-/**
- * validateCircularChoice method
- *
- * @param array $data
- * @return bool True on success, false on error
- */
-	private function validateCircularChoice($data) {
-		$this->set($data);
-		$this->validates();
-//		return $this->validationErrors ? false : true;
+		// 選択肢を一旦削除
+		if (! $this->deleteAll($deleteConditions, false)) {
+			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+		}
+
+		// 1件ずつ保存
+		foreach ($data['CircularNoticeChoices'] as $choice) {
+
+			$choice['CircularNoticeChoice']['circular_notice_content_id'] = $circularNoticeContentId;
+
+			if (! $this->__validateCircularChoice($choice)) {
+				return false;
+			}
+
+			if (! $this->save(null, false)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+		}
+
 		return true;
 	}
 
+/**
+ * Validate this model
+ *
+ * @param array $data
+ * @return bool
+ */
+	private function __validateCircularChoice($data) {
+		$this->set($data);
+		$this->validates();
+		return $this->validationErrors ? false : true;
+	}
 }

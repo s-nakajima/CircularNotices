@@ -15,73 +15,32 @@ App::uses('CircularNoticesAppModel', 'CircularNotices.Model');
 
 /**
  * CircularNoticeTargetUser Model
+ *
+ * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
+ * @package NetCommons\CircularNotices\Model
  */
 class CircularNoticeTargetUser extends CircularNoticesAppModel {
 
 /**
- * Use database config
+ * Default display number
  *
- * @var string
+ * @var int
  */
-	public $useDbConfig = 'master';
+	const DEFAULT_DISPLAY_NUMBER = 10;
 
 /**
  * Validation rules
  *
  * @var array
  */
-	public $validate = array(
-		'key' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'user_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'content_id' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'read_flag' => array(
-			'boolean' => array(
-				'rule' => array('boolean'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'reply_flag' => array(
-			'boolean' => array(
-				'rule' => array('boolean'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-	);
+	public $validate = array();
+
+/**
+ * Use behaviors
+ *
+ * @var array
+ */
+	public $actAs = array();
 
 /**
  * belongsTo associations
@@ -90,7 +49,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
  */
 	public $belongsTo = array(
 		'User' => array(
-			'className' => 'User',
+			'className' => 'Users.User',
 			'foreignKey' => 'user_id',
 			'conditions' => '',
 			'fields' => '',
@@ -99,9 +58,9 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 	);
 
 /**
- * getCircularNoticeTargetUserCount method
+ * Get count of circular notice target user
  *
- * @param int $circularNoticeContentId circular_notice_contents.id
+ * @param int $circularNoticeContentId
  * @return array
  */
 	public function getCircularNoticeTargetUserCount($circularNoticeContentId)
@@ -140,242 +99,204 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		return compact('circularNoticeTargetCount', 'circularNoticeReadCount', 'circularNoticeReplyCount');
 	}
 
-
 /**
- * getCircularNoticeTargetUser method
+ * Get circular notice target user of user
  *
- * @param int $circularNoticeContentId circular_notice_contents.id
- * @param int $userId users.id
- * @return array
+ * @param int $circularNoticeContentId
+ * @param int $userId
+ * @return mixed
  */
-	public function getCircularNoticeTargetUser($circularNoticeContentId, $userId)
-	{
-		// 取得条件を設定
+	public function getMyCircularNoticeTargetUser($circularNoticeContentId, $userId) {
+
 		$conditions = array(
-			'CircularNoticeTargetUser.circular_notice_content_id' => $circularNoticeContentId,
-			'NOT' => array(
-				'CircularNoticeTargetUser.user_id' => $userId,
-			),
+			"CircularNoticeTargetUser.circular_notice_content_id" => $circularNoticeContentId,
+			"CircularNoticeTargetUser.user_id" => $userId,
 		);
 
-		// DBから取得した値を返す
-		return $this->find('all', array(
-			'conditions' => $conditions,
-			'recursive' => 1,
+		return $this->find('first', array(
+			'conditions' => $conditions
 		));
 	}
 
-
 /**
- * saveCircularNoticeTargetUser method
+ * Get circular notice target user list for pagination
  *
- * @param array $data
- * @return boolean
+ * @param int $circularNoticeContentId
+ * @param array $paginatorParams
+ * @param int $userId
+ * @return array
  */
-	public function saveCircularNoticeTargetUser($data, $validate = true)
-	{
-		// if (!$this->validateCircularTargetUser($data)) {
-		// 	return false;
-		// }
+	public function getCircularNoticeTargetUsersForPaginator($circularNoticeContentId, $paginatorParams, $userId) {
 
-		$circularNoticeTargetUser = $this->saveAll($data['CircularNoticeTargetUser']);
-		if (! $circularNoticeTargetUser) {
-			// @codeCoverageIgnoreStart
-			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-			// @codeCoverageIgnoreEnd
+		// ログイン者を先頭に持ってくるためにfieldsをカスタム
+		$fields = array(
+			'*',
+			'(CASE WHEN CircularNoticeTargetUser.user_id = \'' . $userId . '\' THEN 1 ELSE 2 END) AS my_order',
+		);
+
+		$conditions = array(
+			"CircularNoticeTargetUser.circular_notice_content_id" => $circularNoticeContentId,
+		);
+
+		// 表示順
+		$order =  array("User.username" => "asc");
+		if (isset($paginatorParams['sort']) && isset($paginatorParams['direction'])) {
+			$order = array($paginatorParams['sort'] => $paginatorParams['direction']);
 		}
-		return $circularNoticeTargetUser;
+
+		// 表示件数
+		$limit = self::DEFAULT_DISPLAY_NUMBER;
+		if (isset($paginatorParams['limit'])) {
+			$limit = (int)$paginatorParams['limit'];
+		}
+
+		return array(
+			'fields' => $fields,
+			'recursive' => 0,
+			'conditions' => $conditions,
+			'order' => $order,
+			'limit' => $limit,
+		);
 	}
 
 /**
- * validateCircularTargetUser method
+ * Hook for Paginator's paginate
+ *
+ * @param array $conditions
+ * @param array $fields
+ * @param array $order
+ * @param int $limit
+ * @param int $page
+ * @param int $recursive
+ * @param array $extra
+ * @return mixed
+ */
+	public function paginate($conditions, $fields, $order, $limit, $page = 1, $recursive = null, $extra = array()) {
+
+		// ログイン者を先頭に持ってくるためにorderをカスタム
+		$customOrder = array(array("my_order" => "asc"));
+		if (! empty($order)) {
+			$customOrder[] = $order;
+		}
+		$order = $customOrder;
+
+		return $this->find('all', compact('conditions', 'fields', 'order', 'limit', 'page', 'recursive'));
+	}
+
+/**
+ * Save for read
+ *
+ * @param int $id
+ * @return bool
+ * @throws Exception
+ * @throws InternalErrorException
+ */
+	public function saveRead($id) {
+
+		$data = array(
+			'CircularNoticeTargetUser' => array(
+				'id' => $id,
+				'read_flag' => true,
+				'read_datetime' => date('Y-m-d H:i:s'),
+			)
+		);
+
+		return $this->saveCircularNoticeTargetUser($data);
+	}
+
+/**
+ * Save circular notice target user
  *
  * @param array $data
- * @return bool True on success, false on error
+ * @return bool
+ * @throws Exception
+ * @throws InternalErrorException
  */
-	private function validateCircularTargetUser($data) {
-		$this->set($data);
-		$this->validates();
-//		return $this->validationErrors ? false : true;
+	public function saveCircularNoticeTargetUser($data) {
+
+// FIXME: これがあるとページネーションでこけてしまうため回避方法を探す
+//		$this->setDataSource('master');
+		$dataSource = $this->getDataSource();
+		$dataSource->begin();
+
+		try {
+
+			// データセット＋検証
+			if (! $this->__validateCircularNoticeTargetUser($data)) {
+				return false;
+			}
+
+			// CircularNoticeTargetUserを保存
+			if (! $this->save(null, false)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+
+			$dataSource->commit();
+
+		} catch (Exception $ex) {
+			$dataSource->rollback();
+			CakeLog::error($ex);
+			throw $ex;
+		}
+
 		return true;
 	}
 
 /**
- * getUserReadReplyFlag method
+ * Delete-insert circular notice target users
  *
- * @param int $circularNoticeContentId circular_notice_contents.id
- * @param int $userId users.id
- * @return array
+ * @param array $data
  */
-	public function getUserReadReplyFlag($circularNoticeContentId, $userId)
-	{
-		// 取得項目を設定
-		$fields = array(
-			'CircularNoticeTargetUser.read_flag',
-			'CircularNoticeTargetUser.reply_flag',
-		);
+	public function replaceCircularNoticeTargetUsers($data) {
 
-		// 取得条件を設定（frameKey）
-		$conditions = array(
-			'CircularNoticeTargetUser.circular_notice_content_id' => $circularNoticeContentId,
-			'CircularNoticeTargetUser.user_id' => $userId,
-		);
+		$circularNoticeContentId = $data['CircularNoticeContent']['id'];
 
-		// DBから取得した値を返す
-		return $this->find('first', array(
-			'fields' => $fields,
-			'conditions' => $conditions,
-		));
-	}
-
-/**
- * getUserSelectionValue method
- *
- * @param int $circularNoticeContentId circular_notice_contents.id
- * @param string $selection circular_notice_choices.value
- * @return int
- */
-	public function getUserSelectionValue($circularNoticeContentId, $selection)
-	{
-		// 条件を設定
-		$conditions = array(
-			'CircularNoticeTargetUser.circular_notice_content_id' => $circularNoticeContentId,
-			'CircularNoticeTargetUser.reply_selection_value' => $selection,
-		);
-
-		// 回覧先件数を取得
-		return $this->find('count', array(
-			'conditions' => $conditions,
-		));
-	}
-
-
-/**
- * getMyAnswer method
- *
- * @param int $circularNoticeContentId circular_notice_contents.id
- * @param int $userId users.id
- * @return array
- */
-	public function getMyAnswer($circularNoticeContentId, $userId)
-	{
-		// 取得項目を設定
-		$fields = array(
-			'CircularNoticeTargetUser.reply_text_value',
-			'CircularNoticeTargetUser.reply_selection_value',
-		);
-
-		// 取得条件を設定（frameKey）
-		$conditions = array(
-			'CircularNoticeTargetUser.circular_notice_content_id' => $circularNoticeContentId,
-			'CircularNoticeTargetUser.user_id' => $userId,
-		);
-
-		// DBから取得した値を返す
-		return $this->find('first', array(
-			'fields' => $fields,
-			'conditions' => $conditions,
-		));
-	}
-
-/**
- * setReadYet method
- *
- * @param int $circularNoticeContentId circular_notice_contents.id
- * @param int $userId users.id
- * @return array
- */
-	public function setReadYet($circularNoticeContentId, $userId)
-	{
-		// 回答を再取得
-		$circularNoticetargetuser = $this->find('first', array(
-			'conditions' => array(
-				'CircularNoticeTargetUser.circular_notice_content_id' => $circularNoticeContentId,
-				'CircularNoticeTargetUser.user_id' => $userId,
-				'CircularNoticeTargetUser.read_flag' => false,
-			),
-			'recursive' => -1,
-		));
-
-		if (! $circularNoticetargetuser) {
-			return;
+		// すべてDelete
+		if (! $this->deleteAll(array('CircularNoticeTargetUser.circular_notice_content_id' => $circularNoticeContentId), false)) {
+			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 
-		// 更新値を設定
-		$circularNoticetargetuser['CircularNoticeTargetUser']['read_flag'] = true;
-		$circularNoticetargetuser['CircularNoticeTargetUser']['read_datetime'] = date('Y-m-d H:i:s');
-		$circularNoticetargetuser['CircularNoticeTargetUser']['modified_user'] = $userId;
-		$circularNoticetargetuser['CircularNoticeTargetUser']['modified'] = date('Y-m-d H:i:s');
+		// 1件ずつ保存
+		foreach ($data['CircularNoticeTargetUsers'] as $targetUser) {
 
-		//トランザクションBegin
-		$dataSource = $this->getDataSource();
-		$dataSource->begin();
+			$targetUser['CircularNoticeTargetUser']['circular_notice_content_id'] = $circularNoticeContentId;
 
-		try {
-			$this->save($circularNoticetargetuser);
-			$dataSource->commit();
-		} catch (Exception $ex) {
-			$dataSource->rollback();
-			CakeLog::error($ex);
-			throw $ex;
-		}
-	}
-
-
-/**
- * saveReplyValue method
- *
- * @param array $replyData
- * @param int $userId users.id
- * @return array
- */
-	public function saveReplyValue($replyData, $userId)
-	{
-		// 回答を再取得
-		$circularNoticetargetuser = $this->find('first', array(
-			'conditions' => array(
-				'CircularNoticeTargetUser.circular_notice_content_id' => $replyData['circular_notice_content_id'],
-				'CircularNoticeTargetUser.user_id' => $userId,
-			),
-			'recursive' => -1,
-		));
-
-		// 更新値を設定
-		// 「記述式」の場合
-		if (! $replyData['reply_selection_value']) {
-			// 更新値を設定
-			$circularNoticetargetuser['CircularNoticeTargetUser']['reply_text_value'] = $replyData['reply_text_value'];
-		} else {
-			if (is_array($replyData['reply_selection_value'])) {
-				$reply_selection_value = '';
-					foreach ($replyData['reply_selection_value']as $ans) {
-						$reply_selection_value .= $ans . ',';
-					}
-				$reply_selection_value = substr($reply_selection_value, 0, -1);
-			} else {
-				$reply_selection_value = $replyData['reply_selection_value'];
+			if (! $this->__validateCircularNoticeTargetUser($targetUser)) {
+				return false;
 			}
-			// 更新値を設定
-			$circularNoticetargetuser['CircularNoticeTargetUser']['reply_selection_value'] = $reply_selection_value;
+
+			if (! $this->save(null, false)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
 		}
 
-		$circularNoticetargetuser['CircularNoticeTargetUser']['reply_flag'] = true;
-		$circularNoticetargetuser['CircularNoticeTargetUser']['reply_datetime'] = date('Y-m-d H:i:s');
-		$circularNoticetargetuser['CircularNoticeTargetUser']['modified_user'] = $userId;
-		$circularNoticetargetuser['CircularNoticeTargetUser']['modified'] = date('Y-m-d H:i:s');
-
-		//トランザクションBegin
-		$dataSource = $this->getDataSource();
-		$dataSource->begin();
-
-		try {
-			$this->save($circularNoticetargetuser);
-			$dataSource->commit();
-		} catch (Exception $ex) {
-			$dataSource->rollback();
-			CakeLog::error($ex);
-			throw $ex;
-		}
+		return true;
 	}
 
+/**
+ * Validate this model
+ *
+ * @param array $data
+ * @return bool
+ */
+	private function __validateCircularNoticeTargetUser($data) {
+		$this->set($data);
+		$this->validates();
+		return $this->validationErrors ? false : true;
+	}
+
+/**
+ * Get display numbers for limit options
+ *
+ * @return array
+ */
+	public static function getDisplayNumberOptions() {
+		return array(
+			10 => __d('circular_notices', '%s articles', 10),
+			20 => __d('circular_notices', '%s articles', 20),
+			30 => __d('circular_notices', '%s articles', 30),
+			40 => __d('circular_notices', '%s articles', 40),
+			50 => __d('circular_notices', '%s articles', 50),
+		);
+	}
 }

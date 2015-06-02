@@ -1,6 +1,6 @@
 <?php
 /**
- * Block Controller
+ * Blocks Controller
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
@@ -44,24 +44,12 @@ class BlocksController extends CircularNoticesAppController {
 	 * @var array
 	 */
 	public $components = array(
-		'NetCommons.NetCommonsFrame',
-		'NetCommons.NetCommonsWorkflow',
 		'NetCommons.NetCommonsRoomRole' => array(
 			//コンテンツの権限設定
 			'allowedActions' => array(
 				'blockEditable' => array('index', 'add', 'edit', 'delete')
 			),
 		),
-		'Paginator',
-	);
-
-	/**
-	 * use helpers
-	 *
-	 * @var array
-	 */
-	public $helpers = array(
-		'NetCommons.Token',
 	);
 
 	/**
@@ -71,7 +59,6 @@ class BlocksController extends CircularNoticesAppController {
 	 */
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->Auth->deny('index');
 
 		$results = $this->camelizeKeyRecursive($this->NetCommonsFrame->data);
 		$this->set($results);
@@ -83,7 +70,7 @@ class BlocksController extends CircularNoticesAppController {
 	 * @return void
 	 */
 	public function index() {
-		// 一覧は表示しないため、権限設定画面へ遷移させる
-		$this->redirect('../circular_notice_frame_settings/edit' . '/' .  $this->viewVars['frameId']);
+		// 一覧は表示しないため、権限設定画面へ遷移
+		$this->redirect('/circular_notices/circular_notice_settings/edit/' . $this->viewVars['frameId'] . '/' . $this->viewVars['blockId']);
 	}
 }

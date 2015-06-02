@@ -1,6 +1,6 @@
 <?php
 /**
- * block index template
+ * CircularNoticeFrameSettings edit template
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
@@ -11,13 +11,8 @@
 ?>
 
 <div class="modal-body">
-	<?php echo $this->element('NetCommons.setting_tabs', array(
-			'tabs' => array(
-				'frame_settings' => array('url' => '/circular_notices/circular_notice_frame_settings/edit/' . $frameId),
-				__d('circular_notices', 'Privilege Setting') => array('url' => '/circular_notices/circular_notice_settings/edit/' . $blockId),
-			),
-			'active' => 'frame_settings'
-		)); ?>
+
+	<?php echo $this->element('NetCommons.setting_tabs', $settingTabs); ?>
 
 	<div class="tab-content">
 		<?php echo $this->Form->create('CircularNoticeFrameSetting', array(
@@ -33,7 +28,3 @@
 			)); ?>
 	</div>
 </div>
-
-
-
-

@@ -11,27 +11,31 @@
 ?>
 
 <div class="form-group">
-	<label class="control-label">
-		<?php echo __d('circular_notices', 'Content'); ?>
-	</label>
-	<?php echo $this->element('NetCommons.required'); ?>
-
-	<div class="nc-wysiwyg-alert">
+	<div>
+		<?php echo $this->Form->label(
+			'CircularNoticeContent.content',
+			__d('circular_notices', 'Content') . $this->element('NetCommons.required')
+		); ?>
+	</div>
+	<div>
 		<?php echo $this->Form->textarea(
-			'content', [
+			'CircularNoticeContent.content', [
+				'label' => false,
 				'class' => 'form-control',
 				'ui-tinymce' => 'tinymce.options',
+// FIXME: Angular経由で設定しているので要確認
 				'ng-model' => 'circularNoticeContentContent',
 				'rows' => 5,
 				'required' => 'required',
 			]) ?>
 	</div>
-
-	<?php echo $this->element(
-		'NetCommons.errors', [
-			'errors' => $this->validationErrors,
-			'model' => 'CircularNoticeContent',
-			'field' => 'content',
-		]) ?>
+	<div>
+		<?php echo $this->element(
+			'NetCommons.errors', [
+				'errors' => $this->validationErrors,
+				'model' => 'CircularNoticeContent',
+				'field' => 'content',
+			]) ?>
+	</div>
 </div>
 

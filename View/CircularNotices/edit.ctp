@@ -40,15 +40,17 @@
 	 ng-init="initCircularNoticeEdit(<?php echo h(json_encode($this->viewVars['circularNoticeContent'])); ?>)">
 
 	<div class="modal-header">
-		<?php echo __d('circular_notices', 'Plugin Name'); ?>
+		<?php echo h(__d('circular_notices', 'Plugin Name')); ?>
 	</div>
 
 	<div class="panel panel-default">
-		<div class="panel-body">
-			<?php echo $this->Form->create('CircularNoticeContent', array(
-					'name' => 'form',
-					'novalidate' => true,
-				)); ?>
+
+		<?php echo $this->Form->create('CircularNoticeContent', array(
+				'name' => 'form',
+				'novalidate' => true,
+			)); ?>
+
+			<div class="panel-body">
 
 				<?php echo $this->Form->hidden('Frame.id', array(
 					'value' => $frameId
@@ -56,6 +58,14 @@
 
 				<?php echo $this->Form->hidden('Block.id', array(
 					'value' => $blockId,
+				)); ?>
+
+				<?php echo $this->Form->hidden('CircularNoticeContent.id', array(
+					'value' => isset($circularNoticeContent['id']) ? $circularNoticeContent['id'] : null,
+				)); ?>
+
+				<?php echo $this->Form->hidden('CircularNoticeContent.circular_notice_setting_key', array(
+					'value' => isset($circularNoticeContent['circular_notice_setting_key']) ? $circularNoticeContent['circular_notice_setting_key'] : $circularNoticeSetting['key'],
 				)); ?>
 
 				<?php /* タイトル */ ?>
@@ -76,16 +86,19 @@
 				<?php /* 回答期限 */ ?>
 				<?php echo $this->element('CircularNotices/circular_deadline_edit_form'); ?>
 
-				<hr>
+			</div>
 
-				<?php /* コメント */ ?>
-				<?php echo $this->element('Comments.form'); ?>
-					<div class="panel-footer text-center">
-						<?php echo $this->element('NetCommons.workflow_buttons'); ?>
-					</div>
+			<div class="panel-footer text-center">
+				<?php echo $this->element('NetCommons.workflow_buttons'); ?>
+			</div>
 
-			<?php echo $this->Form->end(); ?>
+		<?php echo $this->Form->end(); ?>
 
-		</div>
+		<?php if ($this->request->params['action'] === 'edit') : ?>
+			<div class="panel-footer text-right">
+				<?php echo $this->element('CircularNotices/delete_form'); ?>
+			</div>
+		<?php endif; ?>
+
 	</div>
 </div>
