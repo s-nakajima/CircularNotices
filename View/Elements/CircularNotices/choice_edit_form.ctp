@@ -24,7 +24,7 @@
 		</div>
 
 		<div ng-hide="choices.length">
-			<p><?php echo h(__d('circular_notices', 'No choices.')); ?></p>
+			<p><?php echo h(__d('circular_notices', 'No choices')); ?></p>
 		</div>
 
 		<div class="pre-scrollable" ng-show="choices.length">

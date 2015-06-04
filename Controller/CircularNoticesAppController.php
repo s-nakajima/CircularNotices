@@ -37,6 +37,7 @@ class CircularNoticesAppController extends AppController {
 	public $components = array(
 		'NetCommons.NetCommonsFrame',
 		'NetCommons.NetCommonsBlock',
+		'Pages.PageLayout',
 		'Security',
 	);
 
@@ -45,11 +46,18 @@ class CircularNoticesAppController extends AppController {
  *
  * @return void
  */
-	public function beforeFilter() {
+	public function beforeFilter()
+	{
 		parent::beforeFilter();
 
 		$results = $this->camelizeKeyRecursive(['current' => $this->current]);
 		$this->set($results);
+
+		// フレームが新規配置された場合はブロック設定／フレーム設定を初期化
+		if (! $this->viewVars['blockId']) {
+			$this->CircularNoticeSetting->prepareCircularNoticeSetting($this->viewVars['frameId']);
+			$this->CircularNoticeFrameSetting->prepareCircularNoticeFrameSetting($this->viewVars['frameId']);
+		}
 	}
 
 /**
@@ -95,10 +103,10 @@ class CircularNoticesAppController extends AppController {
 
 		$settingTabs = array(
 			'tabs' => array(
-				'circular_notice_settings' => array(
+				'role_permissions' => array(
 					'url' => array(
 						'plugin' => $this->params['plugin'],
-						'controller' => 'circular_notice_settings',
+						'controller' => 'circular_notice_block_role_permissions',
 						'action' => 'edit',
 						$this->viewVars['frameId'],
 						$blockId,

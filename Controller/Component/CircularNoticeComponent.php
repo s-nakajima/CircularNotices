@@ -34,25 +34,11 @@ class CircularNoticeComponent extends Component {
 	const CIRCULAR_NOTICE_CONTENT_STATUS_PUBLISHED = NetCommonsBlockComponent::STATUS_PUBLISHED;
 
 /**
- * view status approved
- *
- * @var string
- */
-	const CIRCULAR_NOTICE_CONTENT_STATUS_APPROVED = NetCommonsBlockComponent::STATUS_APPROVED;
-
-/**
  * view in draft status
  *
  * @var string
  */
 	const CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT = NetCommonsBlockComponent::STATUS_IN_DRAFT;
-
-/**
- * view status disapproved
- *
- * @var string
- */
-	const CIRCULAR_NOTICE_CONTENT_STATUS_DISAPPROVED = NetCommonsBlockComponent::STATUS_DISAPPROVED;
 
 /**
  * view status reserved
@@ -104,27 +90,6 @@ class CircularNoticeComponent extends Component {
 	const CIRCULAR_NOTICE_CONTENT_STATUS_REPLIED = '12';
 
 /**
- * order by new arrival
- *
- * @var string
- */
-	const CIRCULAR_NOTICE_CONTENT_DISPLAY_ORDER_NEW_ARRIVAL = '0';
-
-/**
- * order by old arrival
- *
- * @var string
- */
-	const CIRCULAR_NOTICE_CONTENT_DISPLAY_ORDER_OLD_ARRIVAL = '1';
-
-/**
- * order by reply deadline descending
- *
- * @var string
- */
-	const CIRCULAR_NOTICE_CONTENT_DISPLAY_ORDER_REPLY_DEADLINE_DESC = '2';
-
-/**
  * reply by text
  *
  * @var string
@@ -144,4 +109,11 @@ class CircularNoticeComponent extends Component {
  * @var string
  */
 	const CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION = '3';
+
+/**
+ * reply selection values delimiter
+ *
+ * @var string
+ */
+	const SELECTION_VALUES_DELIMITER = '|';
 }

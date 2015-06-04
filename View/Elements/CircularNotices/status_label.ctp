@@ -9,18 +9,15 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
+$status = $currentStatus;
+if ($myStatus && $currentStatus == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN) {
+	$status = $myStatus;
+}
+
 $labels = [
-	CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_APPROVED => [
-		'class' => 'label-warning',
-		'message' => __d('net_commons', 'Approving'),
-	],
 	CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT => [
 		'class' => 'label-info',
 		'message' => __d('net_commons', 'Temporary'),
-	],
-	CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_DISAPPROVED => [
-		'class' => 'label-danger',
-		'message' => __d('net_commons', 'Disapproving'),
 	],
 	CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED => [
 		'class' => 'label-success',

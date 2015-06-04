@@ -11,7 +11,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('CircularNoticesAppModel', 'CircularNoticeSettings.Model');
+App::uses('CircularNoticesAppModel', 'CircularNotices.Model');
 
 /**
  * CircularNoticeSetting Model

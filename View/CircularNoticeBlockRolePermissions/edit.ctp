@@ -1,6 +1,6 @@
 <?php
 /**
- * circular notice frame settings edit template
+ * circular notice block role permissions edit template
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
@@ -14,10 +14,11 @@
 	<?php echo $this->element('NetCommons.setting_tabs', $settingTabs); ?>
 	<div class="tab-content">
 		<?php echo $this->element('Blocks.edit_form', array(
-			'controller' => 'CircularNoticeFrameSettings',
-			'action' => 'edit' . '/' . $frameId,
-			'callback' => 'CircularNotices.CircularNoticeFrameSettings/edit_form',
-			'cancelUrl' => $this->Html->url(isset($current['page']) ? '/' . $current['page']['permalink'] : null)
+			'controller' => 'CircularNoticeBlockRolePermissions',
+			'action' => 'edit' . '/' . $frameId . '/' . $blockId,
+			'callback' => 'CircularNotices.CircularNoticeBlockRolePermissions/edit_form',
+			'cancelUrl' => $this->Html->url(isset($current['page']) ? '/' . $current['page']['permalink'] : null),
+			'options' => array('ng-controller' => 'CircularNotices'),
 		)); ?>
 	</div>
 </div>

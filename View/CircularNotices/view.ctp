@@ -35,10 +35,7 @@
 	);
 ?>
 
-<div id="nc-circular-notices-<?php echo (int)$frameId; ?>"
-	 ng-controller="CircularNotices"
-	 ng-init="initCircularNoticeView(<?php echo h(json_encode($this->viewVars['circularNoticeContent']['answer'])) ?>,
-	 								 <?php echo h(json_encode($this->viewVars['circularNoticeChoices'])); ?>)">
+<div id="nc-circular-notices-<?php echo (int)$frameId; ?>" ng-controller="CircularNotices" ng-init="initCircularNoticeView()">
 
 	<div class="modal-header">
 		<?php echo h(__d('circular_notices', 'Plugin Name')); ?>
@@ -101,17 +98,9 @@
 						<br />
 					<?php } ?>
 				</div>
-
-
-				<div class="circular-notice-box-left">
-					<?php foreach ($circularNoticeChoices as $circularNoticeChoice) { ?>
-						<?php echo h($circularNoticeChoice['circularNoticeChoice']['value']); ?>
-						<br />
-					<?php } ?>
-				</div>
 				<div>
-					<?php foreach ($circularNoticeChoices as $circularNoticeChoice) { ?>
-						<?php echo h(__d('circular_notices', 'Selected Count', $circularNoticeChoice['circularNoticeChoice']['selectedCount'])); ?>
+					<?php foreach ($circularNoticeChoice as $choice) { ?>
+						<?php echo h(__d('circular_notices', 'Selected Count', isset($answersSummary[$choice['value']]) ? $answersSummary[$choice['value']] : 0)); ?>
 						<br />
 					<?php } ?>
 				</div>

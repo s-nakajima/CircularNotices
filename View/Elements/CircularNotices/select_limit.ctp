@@ -11,14 +11,16 @@
 
 $url = Hash::merge(
 	array('controller' => 'circular_notices', 'action' => 'index', $frameId),
-	$this->Paginator->params['named']
+	$this->Paginator->params['named'],
+	['page' => 1]
 );
 $options = CircularNoticeFrameSetting::getDisplayNumberOptions();
+$currentLimit = $this->Paginator->param('limit') ? $this->Paginator->param('limit') : CircularNoticeFrameSetting::DEFAULT_DISPLAY_NUMBER;
 ?>
 
 <span class="btn-group">
 	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-		<?php echo h($options[$this->Paginator->param('limit')]); ?>
+		<?php echo h($options[$currentLimit]); ?>
 		<span class="caret"></span>
 	</button>
 	<ul class="dropdown-menu" role="menu">

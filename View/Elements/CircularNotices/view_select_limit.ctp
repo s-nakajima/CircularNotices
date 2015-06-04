@@ -11,7 +11,8 @@
 
 $url = Hash::merge(
 	array('controller' => 'circular_notices', 'action' => 'view', $frameId, $circularNoticeContent['id']),
-	$this->Paginator->params['named']
+	$this->Paginator->params['named'],
+	['page' => 1]
 );
 $options = CircularNoticeTargetUser::getDisplayNumberOptions();
 ?>

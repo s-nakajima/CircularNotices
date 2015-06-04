@@ -13,6 +13,7 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vendor/empty" afterPath="$PROJECT_DIR$/Vendor/empty" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/View/Helper/empty" afterPath="$PROJECT_DIR$/View/Helper/empty" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/.name" afterPath="$PROJECT_DIR$/.idea/.name" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Config/Migration/1432105496_initialize.php" afterPath="$PROJECT_DIR$/Config/Migration/1432105496_initialize.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/BlocksController.php" afterPath="$PROJECT_DIR$/Controller/BlocksController.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Model/CircularNoticeChoice.php" afterPath="$PROJECT_DIR$/Model/CircularNoticeChoice.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Test/Fixture/CircularNoticeChoiceFixture.php" afterPath="$PROJECT_DIR$/Test/Fixture/CircularNoticeChoiceFixture.php" />
@@ -24,6 +25,7 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Test/Fixture/CircularNoticeFrameSettingFixture.php" afterPath="$PROJECT_DIR$/Test/Fixture/CircularNoticeFrameSettingFixture.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/CircularNoticeFrameSettingsController.php" afterPath="$PROJECT_DIR$/Controller/CircularNoticeFrameSettingsController.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Model/CircularNoticeSetting.php" afterPath="$PROJECT_DIR$/Model/CircularNoticeSetting.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/CircularNoticeSettingsController.php" afterPath="$PROJECT_DIR$/Controller/CircularNoticeSettingsController.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Model/CircularNoticeTargetUser.php" afterPath="$PROJECT_DIR$/Model/CircularNoticeTargetUser.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Test/Fixture/CircularNoticeTargetUserFixture.php" afterPath="$PROJECT_DIR$/Test/Fixture/CircularNoticeTargetUserFixture.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Test/Case/Model/CircularNoticeTargetUserTest.php" afterPath="$PROJECT_DIR$/Test/Case/Model/CircularNoticeTargetUserTest.php" />
@@ -33,6 +35,7 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/CircularNoticesController.php" afterPath="$PROJECT_DIR$/Controller/CircularNoticesController.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Config/Schema/app.php" afterPath="$PROJECT_DIR$/Config/Schema/app.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/View/Elements/CircularNotices/choice_edit_form.ctp" afterPath="$PROJECT_DIR$/View/Elements/CircularNotices/choice_edit_form.ctp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webroot/js/choices.js" afterPath="$PROJECT_DIR$/webroot/js/choices.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/View/Elements/CircularNotices/circular_deadline_edit_form.ctp" afterPath="$PROJECT_DIR$/View/Elements/CircularNotices/circular_deadline_edit_form.ctp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webroot/css/circular_notices.css" afterPath="$PROJECT_DIR$/webroot/css/circular_notices.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webroot/js/circular_notices.js" afterPath="$PROJECT_DIR$/webroot/js/circular_notices.js" />
@@ -40,10 +43,13 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Locale/jpn/LC_MESSAGES/circular_notices.po" afterPath="$PROJECT_DIR$/Locale/jpn/LC_MESSAGES/circular_notices.po" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/View/Elements/CircularNotices/circular_period_edit_form.ctp" afterPath="$PROJECT_DIR$/View/Elements/CircularNotices/circular_period_edit_form.ctp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/View/Elements/CircularNotices/content_edit_form.ctp" afterPath="$PROJECT_DIR$/View/Elements/CircularNotices/content_edit_form.ctp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/View/Elements/CircularNotices/delete_form.ctp" afterPath="$PROJECT_DIR$/View/Elements/CircularNotices/delete_form.ctp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/View/Blocks/edit.ctp" afterPath="$PROJECT_DIR$/View/Blocks/edit.ctp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/View/CircularNoticeFrameSettings/edit.ctp" afterPath="$PROJECT_DIR$/View/CircularNoticeFrameSettings/edit.ctp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/View/CircularNoticeSettings/edit.ctp" afterPath="$PROJECT_DIR$/View/CircularNoticeSettings/edit.ctp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/View/CircularNotices/edit.ctp" afterPath="$PROJECT_DIR$/View/CircularNotices/edit.ctp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/View/Elements/CircularNoticeFrameSettings/edit_form.ctp" afterPath="$PROJECT_DIR$/View/Elements/CircularNoticeFrameSettings/edit_form.ctp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/View/Elements/CircularNoticeSettings/edit_form.ctp" afterPath="$PROJECT_DIR$/View/Elements/CircularNoticeSettings/edit_form.ctp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/View/CircularNotices/form.ctp" afterPath="$PROJECT_DIR$/View/CircularNotices/form.ctp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/View/CircularNotices/index.ctp" afterPath="$PROJECT_DIR$/View/CircularNotices/index.ctp" />
@@ -52,11 +58,16 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/View/Elements/CircularNotices/reply_type_edit_form.ctp" afterPath="$PROJECT_DIR$/View/Elements/CircularNotices/reply_type_edit_form.ctp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Config/Schema/schema.php" afterPath="$PROJECT_DIR$/Config/Schema/schema.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" afterPath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/View/Elements/CircularNotices/select_limit.ctp" afterPath="$PROJECT_DIR$/View/Elements/CircularNotices/select_limit.ctp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/View/Elements/CircularNotices/select_sort.ctp" afterPath="$PROJECT_DIR$/View/Elements/CircularNotices/select_sort.ctp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/View/Elements/CircularNotices/select_status.ctp" afterPath="$PROJECT_DIR$/View/Elements/CircularNotices/select_status.ctp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/View/Elements/CircularNotices/status_label.ctp" afterPath="$PROJECT_DIR$/View/Elements/CircularNotices/status_label.ctp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/View/Elements/CircularNotices/subject_edit_form.ctp" afterPath="$PROJECT_DIR$/View/Elements/CircularNotices/subject_edit_form.ctp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/View/Elements/CircularNotices/target_edit_form.ctp" afterPath="$PROJECT_DIR$/View/Elements/CircularNotices/target_edit_form.ctp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/View/CircularNotices/view.ctp" afterPath="$PROJECT_DIR$/View/CircularNotices/view.ctp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/View/Elements/CircularNotices/view_select_limit.ctp" afterPath="$PROJECT_DIR$/View/Elements/CircularNotices/view_select_limit.ctp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/View/Elements/CircularNotices/view_select_sort.ctp" afterPath="$PROJECT_DIR$/View/Elements/CircularNotices/view_select_sort.ctp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="CircularNotices.iws" />
@@ -92,19 +103,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CircularNoticeFrameSetting.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Model/CircularNoticeFrameSetting.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1887" max-vertical-offset="3213">
-              <caret line="148" column="0" selection-start-line="148" selection-start-column="0" selection-end-line="148" selection-end-column="0" />
-              <folding>
-                <marker date="1432722612000" expanded="false" signature="9:51" placeholder=" CircularNoticeFrameSetting Model ..." />
-                <marker date="1432722612000" expanded="true" signature="3851:3879" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="CircularNoticeFrameSettingsController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Controller/CircularNoticeFrameSettingsController.php">
           <provider selected="true" editor-type-id="text-editor">
@@ -117,11 +115,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.ctp" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.ctp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/View/CircularNotices/index.ctp">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.13076924" vertical-offset="187" max-vertical-offset="2091">
+            <state vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="2091">
               <caret line="18" column="10" selection-start-line="18" selection-start-column="10" selection-end-line="18" selection-end-column="10" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="1432105496_initialize.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Config/Migration/1432105496_initialize.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.51699466" vertical-offset="2839" max-vertical-offset="4250">
+              <caret line="143" column="0" selection-start-line="143" selection-start-column="0" selection-end-line="143" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -182,7 +190,7 @@
       <file leaf-file-name="CircularNoticesAppController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Controller/CircularNoticesAppController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2448" max-vertical-offset="2601">
+            <state vertical-scroll-proportion="0.0" vertical-offset="2329" max-vertical-offset="2482">
               <caret line="145" column="10" selection-start-line="145" selection-start-column="10" selection-end-line="145" selection-end-column="10" />
               <folding />
             </state>
@@ -197,7 +205,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/View/CircularNotices/setting.ctp" />
         <option value="$PROJECT_DIR$/View/Blocks/edit.ctp" />
         <option value="$PROJECT_DIR$/Model/CircularNoticeChoice.php" />
         <option value="$PROJECT_DIR$/webroot/circular_notices.js" />
@@ -248,6 +255,7 @@
         <option value="$PROJECT_DIR$/View/CircularNoticeFrameSettings/edit.ctp" />
         <option value="$PROJECT_DIR$/View/Elements/CircularNoticeFrameSettings/edit_form.ctp" />
         <option value="$PROJECT_DIR$/View/CircularNotices/index.ctp" />
+        <option value="$PROJECT_DIR$/Config/Migration/1432105496_initialize.php" />
       </list>
     </option>
   </component>
@@ -256,10 +264,10 @@
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds">
-    <option name="x" value="1358" />
+    <option name="x" value="-8" />
     <option name="y" value="-8" />
-    <option name="width" value="1936" />
-    <option name="height" value="1066" />
+    <option name="width" value="1382" />
+    <option name="height" value="754" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -655,6 +663,9 @@
       <BehatRunner />
       <method />
     </configuration>
+    <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server">
+      <method />
+    </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
       <node-options />
       <gulpfile />
@@ -662,9 +673,6 @@
       <arguments />
       <pass-parent-envs>true</pass-parent-envs>
       <envs />
-      <method />
-    </configuration>
-    <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server">
       <method />
     </configuration>
     <list size="0" />
@@ -683,7 +691,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1358" y="-8" width="1936" height="1066" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
     <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -693,20 +701,20 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17252396" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24697885" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1965812" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32954547" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -734,14 +742,82 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/View/CircularNotices/edit.ctp">
-      <provider editor-type-id="com.intellij.database.editor.CsvTableFileEditorProvider">
-        <state />
+    <entry file="file://$PROJECT_DIR$/Controller/CircularNoticeFrameSettingsController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="867" max-vertical-offset="2227">
+          <caret line="88" column="19" selection-start-line="88" selection-start-column="19" selection-end-line="88" selection-end-column="19" />
+          <folding>
+            <element signature="e#6#339#0#PHP" expanded="true" />
+          </folding>
+        </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/View/CircularNotices/index.ctp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="100">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/BlocksController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="822" max-vertical-offset="1394">
+          <caret line="73" column="63" selection-start-line="73" selection-start-column="63" selection-end-line="73" selection-end-column="63" />
+          <folding>
+            <element signature="e#6#308#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/View/CircularNoticeFrameSettings/edit.ctp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="187" max-vertical-offset="612">
+          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/View/Elements/CircularNoticeFrameSettings/edit_form.ctp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="595" max-vertical-offset="782">
+          <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/View/Elements/CircularNotices/circular_deadline_edit_form.ctp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="272" max-vertical-offset="833">
+          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Locale/jpn/LC_MESSAGES/circular_notices.po">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="5355" max-vertical-offset="5678">
+          <caret line="315" column="18" selection-start-line="315" selection-start-column="18" selection-end-line="315" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/CircularNoticesAppController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2329" max-vertical-offset="2482">
+          <caret line="145" column="10" selection-start-line="145" selection-start-column="10" selection-end-line="145" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/View/CircularNotices/edit.ctp">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="350" max-vertical-offset="546">
           <caret line="25" column="62" selection-start-line="25" selection-start-column="62" selection-end-line="25" selection-end-column="62" />
         </state>
+      </provider>
+      <provider editor-type-id="com.intellij.database.editor.CsvTableFileEditorProvider">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Model/CircularNoticeSetting.php">
@@ -859,23 +935,23 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/View/CircularNotices/edit.ctp">
-      <provider editor-type-id="com.intellij.database.editor.CsvTableFileEditorProvider">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="350" max-vertical-offset="546">
           <caret line="25" column="62" selection-start-line="25" selection-start-column="62" selection-end-line="25" selection-end-column="62" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/View/Blocks/edit.ctp">
       <provider editor-type-id="com.intellij.database.editor.CsvTableFileEditorProvider">
         <state />
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/View/Blocks/edit.ctp">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="56" max-vertical-offset="140">
           <caret line="4" column="2" selection-start-line="0" selection-start-column="0" selection-end-line="4" selection-end-column="2" />
         </state>
+      </provider>
+      <provider editor-type-id="com.intellij.database.editor.CsvTableFileEditorProvider">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/webroot/js/circular_notices.js">
@@ -935,13 +1011,13 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/View/CircularNotices/view.ctp">
-      <provider editor-type-id="com.intellij.database.editor.CsvTableFileEditorProvider">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5219">
           <caret line="128" column="0" selection-start-line="128" selection-start-column="0" selection-end-line="128" selection-end-column="0" />
         </state>
+      </provider>
+      <provider editor-type-id="com.intellij.database.editor.CsvTableFileEditorProvider">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Controller/Component/CircularNoticeComponent.php">
@@ -963,8 +1039,8 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="1887" max-vertical-offset="3213">
           <caret line="148" column="0" selection-start-line="148" selection-start-column="0" selection-end-line="148" selection-end-column="0" />
           <folding>
-            <marker date="1432722612000" expanded="false" signature="9:51" placeholder=" CircularNoticeFrameSetting Model ..." />
-            <marker date="1432722612000" expanded="true" signature="3851:3879" placeholder="..." />
+            <marker date="1432722612000" expanded="false" signature="-1:-1" placeholder=" CircularNoticeFrameSetting Model ..." />
+            <marker date="1432722612000" expanded="true" signature="-1:-1" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -1052,12 +1128,20 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/View/CircularNotices/index.ctp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="2091">
+          <caret line="18" column="10" selection-start-line="18" selection-start-column="10" selection-end-line="18" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
       <provider editor-type-id="com.intellij.database.editor.CsvTableFileEditorProvider">
         <state />
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Config/Migration/1432105496_initialize.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.13076924" vertical-offset="187" max-vertical-offset="2091">
-          <caret line="18" column="10" selection-start-line="18" selection-start-column="10" selection-end-line="18" selection-end-column="10" />
+        <state vertical-scroll-proportion="0.51699466" vertical-offset="2839" max-vertical-offset="4250">
+          <caret line="143" column="0" selection-start-line="143" selection-start-column="0" selection-end-line="143" selection-end-column="0" />
           <folding />
         </state>
       </provider>

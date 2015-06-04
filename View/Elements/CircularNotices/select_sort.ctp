@@ -11,7 +11,8 @@
 
 $url = Hash::merge(
 	array('controller' => 'circular_notices', 'action' => 'index', $frameId),
-	$this->Paginator->params['named']
+	$this->Paginator->params['named'],
+	['page' => 1]
 );
 
 $curretSort = isset($this->Paginator->params['named']['sort']) ? $this->Paginator->params['named']['sort'] : 'CircularNoticeContent.created';

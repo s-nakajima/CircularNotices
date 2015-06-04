@@ -42,7 +42,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
  */
 	public function beforeValidate($options = array()) {
 
-// FIXME: きちんと実装すること
+// FIXME: バリデーションの実装
 // FIXME: 相関チェック類の実装方法（日付FromToとかラジオと連動する値とか）
 
 		$this->validate = Hash::merge($this->validate, array(
@@ -178,21 +178,22 @@ class CircularNoticeContent extends CircularNoticesAppModel {
  * @param array $circularNoticeFrameSetting
  * @param array $paginatorParams
  * @param int $userId
- * @param array $permission
  * @return array
  */
-	public function getCircularNoticeContentsForPaginate($blockKey, $circularNoticeFrameSetting, $paginatorParams, $userId, $permission)
+	public function getCircularNoticeContentsForPaginate($blockKey, $circularNoticeFrameSetting, $paginatorParams, $userId)
 	{
 		$fields = array(
 			'*',
-			'temp_status_tbl.temp_status',
+			'CircularNoticeContentCurrentStatus.current_status',
+			'CircularNoticeContentMyStatus.my_status',
 		);
 
 		$joins = array();
 
 		// 回覧ステータス取得用のJOIN
-// FIXME: こういう実装方法しかないのか？
 		$dataSource = $this->getDataSource();
+
+		// 現時点での回覧ステータスを取得するためのJOIN
 		$subQuery = $dataSource->buildStatement(
 			array(
 				'fields' => array(
@@ -200,81 +201,100 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 					'(CASE ' .
 					'WHEN status = \'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT . '\' THEN ' .
 						'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT . '\' ' .
-					'WHEN status = \'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_APPROVED . '\' THEN ' .
-						'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_APPROVED . '\' ' .
-					'WHEN status = \'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_DISAPPROVED . '\' THEN ' .
-						'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_DISAPPROVED . '\' ' .
 					'WHEN status = \'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_PUBLISHED . '\' THEN ' .
 						'CASE ' .
-						'WHEN created_user = \'' . $userId . '\' THEN ' .
-							'CASE ' .
-							'WHEN opened_period_from > NOW() THEN ' .
-								'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED . '\' ' .
-							'ELSE ' .
-								'CASE ' .
-								'WHEN opened_period_to < NOW() THEN ' .
-									'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_CLOSED . '\' ' .
-								'WHEN reply_deadline_set_flag = \'1\' AND reply_deadline < NOW() THEN ' .
-									'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED . '\' ' .
-								'ELSE ' .
-									'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN . '\' ' .
-								'END ' .
-							'END ' .
+						'WHEN opened_period_from > NOW() THEN ' .
+							'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED . '\' ' .
 						'ELSE ' .
 							'CASE ' .
 							'WHEN opened_period_to < NOW() THEN ' .
 								'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_CLOSED . '\' ' .
-							'WHEN reply_deadline_set_flag = \'1\' AND reply_deadline < NOW() THEN ' .
+							'WHEN reply_deadline_set_flag = 1 AND reply_deadline < NOW() THEN ' .
 								'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED . '\' ' .
 							'ELSE ' .
-// FIXME: 回答状況によるステータス判断
-								'\'99999\' ' .
+								'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN . '\' ' .
 							'END ' .
 						'END ' .
-					'END) AS temp_status'
+					'END) AS current_status',
 				),
 				'table' => 'circular_notice_contents',
-				'alias' => 'temp_status_tbl',
+				'alias' => 'CircularNoticeContentCurrentStatus',
 			),
 			$this
 		);
 		$joins[] = array(
 			'type' => 'LEFT',
-			'alias' => 'temp_status_tbl',
 			'table' => '(' . $subQuery . ')',
+			'alias' => 'CircularNoticeContentCurrentStatus',
 			'conditions' => array(
-				'CircularNoticeContent.id = temp_status_tbl.id',
+				'CircularNoticeContent.id = CircularNoticeContentCurrentStatus.id',
 			),
 		);
 
-		// 作成権限、編集権限、公開権限がない場合
-// FIXME: 権限まわりを整理の上、処理を修正
-		if(!$permission['contentPublishable'] || !$permission['contentEditable'] || !$permission['contentCreatable']) {
-			// 自身が回覧先に含まれている回覧データのみを取得
-			$joins[] = array(
-				'type' => 'INNER',
-				'table' => 'circular_notice_target_users',
-				'alias' => 'CircularNoticeTargetUser',
-				'conditions' => array(
-					'CircularNoticeTargetUser.user_id = ' . $userId,
-					'CircularNoticeContent.id = CircularNoticeTargetUser.circular_notice_content_id',
-					'CircularNoticeContent.status = ' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_PUBLISHED,
+		// ログイン者用の回覧ステータスを取得するためのJOIN
+		$subQuery = $dataSource->buildStatement(
+			array(
+				'fields' => array(
+					'user_id',
+					'circular_notice_content_id',
+					'(CASE ' .
+					'WHEN read_flag = 0 THEN ' .
+						'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD . '\' ' .
+					'ELSE ' .
+						'CASE ' .
+						'WHEN reply_flag = 0 THEN ' .
+							'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_READ_YET . '\' ' .
+						'ELSE' .
+							'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_REPLIED . '\' ' .
+						'END ' .
+					'END) AS my_status'
 				),
-			);
-		}
+				'table' => 'circular_notice_target_users',
+				'alias' => 'CircularNoticeContentMyStatus',
+			),
+			$this->CircularNoticeTargetUser
+		);
+		$joins[] = array(
+			'type' => 'LEFT',
+			'table' => '(' . $subQuery . ')',
+			'alias' => 'CircularNoticeContentMyStatus',
+			'conditions' => array(
+				'CircularNoticeContent.id = CircularNoticeContentMyStatus.circular_notice_content_id',
+				'CircularNoticeContentMyStatus.user_id' => $userId,
+			),
+		);
 
+// FIXME: 回覧者じゃない場合は回覧期限の条件が必要
 		// 取得条件の設定
 		$conditions = array(
-			"CircularNoticeContent.circular_notice_setting_key" => $blockKey,
+			'CircularNoticeContent.circular_notice_setting_key' => $blockKey,
+			'OR' => array(
+				'CircularNoticeContent.created_user' => $userId,
+				'CircularNoticeContentMyStatus.my_status IS NOT NULL',
+			),
 		);
 
 		// ステータス
 		if (isset($paginatorParams['status'])) {
-			$conditions['temp_status_tbl.temp_status'] = (int)$paginatorParams['status'];
+			switch ($paginatorParams['status']) {
+				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_PUBLISHED:
+				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT:
+				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED:
+				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN:
+				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED:
+				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_CLOSED:
+					$conditions['CircularNoticeContentCurrentStatus.current_status'] = (int)$paginatorParams['status'];
+					break;
+				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD:
+				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_READ_YET:
+				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_REPLIED:
+					$conditions['CircularNoticeContentMyStatus.my_status'] = (int)$paginatorParams['status'];
+					break;
+			}
 		}
 
 		// 表示順
-		$order =  array("CircularNoticeContent.created" => "desc");
+		$order =  array('CircularNoticeContent.created' => 'desc');
 		if (isset($paginatorParams['sort']) && isset($paginatorParams['direction'])) {
 			$order = array($paginatorParams['sort'] => $paginatorParams['direction']);
 		}
@@ -398,9 +418,9 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			// 削除対象となるIDを取得
 			$targetIds = $this->find('list', array(
 				'fields' => array('CircularNoticeContent.id', 'CircularNoticeContent.key'),
-				"recursive" => -1,
-				"conditions" => array(
-					"CircularNoticeContent.key" => $key,
+				'recursive' => -1,
+				'conditions' => array(
+					'CircularNoticeContent.key' => $key,
 				)
 			));
 

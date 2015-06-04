@@ -11,7 +11,8 @@
 
 $url = Hash::merge(
 	array('controller' => 'circular_notices', 'action' => 'view', $frameId, $circularNoticeContent['id']),
-	$this->Paginator->params['named']
+	$this->Paginator->params['named'],
+	['page' => 1]
 );
 
 $curretSort = isset($this->Paginator->params['named']['sort']) ? $this->Paginator->params['named']['sort'] : 'User.username';
@@ -19,32 +20,32 @@ $curretDirection = isset($this->Paginator->params['named']['direction']) ? $this
 
 $options = array(
 	'User.username.asc' => array(
-		'label' => '回答先順（昇順）', // FIXME: 言語ファイル化
+		'label' => __d('circular_notices', 'Target User (Ascending)'),
 		'sort' => 'User.username',
 		'direction' => 'asc'
 	),
 	'User.username.desc' => array(
-		'label' => '回答先順（降順）', // FIXME: 言語ファイル化
+		'label' => __d('circular_notices', 'Target User (Descending)'),
 		'sort' => 'User.username',
 		'direction' => 'desc'
 	),
 	'CircularNoticeTargetUser.reply_text_value.asc' => array(
-		'label' => '回答順（昇順）', // FIXME: 言語ファイル化
+		'label' => __d('circular_notices', 'Answer (Ascending)'),
 		'sort' => 'CircularNoticeTargetUser.reply_text_value',
 		'direction' => 'asc'
 	),
 	'CircularNoticeTargetUser.reply_text_value.desc' => array(
-		'label' => '回答順（降順）', // FIXME: 言語ファイル化
+		'label' => __d('circular_notices', 'Answer (Descending)'),
 		'sort' => 'CircularNoticeTargetUser.reply_text_value',
 		'direction' => 'desc'
 	),
 	'CircularNoticeTargetUser.reply_datetime.asc' => array(
-		'label' => '回答日時順（昇順）', // FIXME: 言語ファイル化
+		'label' => __d('circular_notices', 'Reply Datetime (Ascending)'),
 		'sort' => 'CircularNoticeTargetUser.reply_datetime',
 		'direction' => 'asc'
 	),
 	'CircularNoticeTargetUser.reply_datetime.desc' => array(
-		'label' => '回答日時順（降順）', // FIXME: 言語ファイル化
+		'label' => __d('circular_notices', 'Reply Datetime (Descending)'),
 		'sort' => 'CircularNoticeTargetUser.reply_datetime',
 		'direction' => 'desc'
 	),
