@@ -146,7 +146,7 @@ msgstr "新着順（降順）"
 
 # 回覧一覧画面の表示順変更に使用
 msgid "Change Sort Order to Old Arrival"
-msgstr "新着順（降順）"
+msgstr "新着順（昇順）"
 
 # 回覧一覧画面の表示順変更に使用
 msgid "Change Sort Order to Reply Deadline"
@@ -326,3 +326,38 @@ msgstr "権限設定"
 # 表示方法変更画面で使用
 msgid "Show contents per page"
 msgstr "1ページに表示する回覧数"
+
+
+
+#: Plugins/CircularNotices/Model/CircularNoticeFrameSetting.php:
+#: Plugins/CircularNotices/Model/CircularNoticeTargetUser.php:
+msgid "%d items"
+msgstr "%d 件"
+
+#: Plugins/CircularNotices/View/Elements/CircularNotices/view_select_sort.ctp:
+msgid "Target User (Ascending)"
+msgstr "回答先順（昇順）"
+
+#: Plugins/CircularNotices/View/Elements/CircularNotices/view_select_sort.ctp:
+msgid "Target User (Descending)"
+msgstr "回答先順（降順）"
+
+#: Plugins/CircularNotices/View/Elements/CircularNotices/view_select_sort.ctp:
+msgid "Answer (Ascending)"
+msgstr "回答順（昇順）"
+
+#: Plugins/CircularNotices/View/Elements/CircularNotices/view_select_sort.ctp:
+msgid "Answer (Descending)"
+msgstr "回答順（降順）"
+
+#: Plugins/CircularNotices/View/Elements/CircularNotices/view_select_sort.ctp:
+msgid "Reply Datetime (Ascending)"
+msgstr "回答日時順（昇順）"
+
+#: Plugins/CircularNotices/View/Elements/CircularNotices/view_select_sort.ctp:
+msgid "Reply Datetime (Descending)"
+msgstr "回答日時順（降順）"
+
+#: Plugins/CircularNotices/View/Elements/CircularNotices/choice_edit_form.ctp:
+msgid "No choices"
+msgstr "選択肢が設定されていません"

@@ -37,38 +37,11 @@ NetCommonsApp.controller('CircularNotices',
         $scope.tinymce = NetCommonsWysiwyg.new();
 
         /**
-         * form
-         *
-         * @type {form}
-         */
-        // $scope.form = {};
-
-        /**
-         * master
-         *
-         * @type {object}
-         */
-        // $scope.master = {};
-
-        /**
-         * Initialize for Index
-         *
-         * @return {void}
-         */
-        $scope.initCircularNoticeIndex = function(data) {
-            $scope.displayOrder = data.displayOrder;
-            $scope.currentPage = data.currentPage;
-            $scope.visibleRowCount = data.visibleRowCount;
-            $scope.narrowDownParams = data.narrowDownParams;
-        };
-
-        /**
          * Initialize for View
          *
          * @return {void}
          */
-        $scope.initCircularNoticeView = function(answer, choices) {
-            $scope.answer = answer;
+        $scope.initCircularNoticeView = function() {
             $scope.showReplyForm = false;
             $scope.showOtherUsers = false;
         };

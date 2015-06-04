@@ -35,9 +35,7 @@
 	);
 ?>
 
-<div id="nc-circular-notices-<?php echo (int)$frameId; ?>"
-	 ng-controller="CircularNotices"
-	 ng-init="initCircularNoticeIndex(<?php echo h(json_encode($this->viewVars)); ?>)">
+<div id="nc-circular-notices-<?php echo (int)$frameId; ?>">
 
 	<?php if ($contentCreatable) { ?>
 		<p class="text-right">
@@ -58,16 +56,31 @@
 		</div>
 		<hr class="circular-notice-clear-float">
 
-	<?php if($circularNoticeContentList) { ?>
+	<?php if (isset($circularNoticeContentList) && count($circularNoticeContentList) > 0) { ?>
 		<?php foreach($circularNoticeContentList as $circularNoticeContent) { ?>
 			<div class="circular-notice-block row">
 				<div>
 					<div class="circular-notice-index-status">
 						<?php echo $this->element('CircularNotices/status_label',
-							array('status' => $circularNoticeContent['circularNoticeContentStatus'])); ?>
+							array(
+								'currentStatus' => $circularNoticeContent['currentStatus'],
+								'myStatus' => $circularNoticeContent['myStatus'],
+							)
+						); ?>
 					</div>
 					<div class="circular-notice-index-content">
+
+					<?php if (
+						$circularNoticeContent['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT ||
+						$circularNoticeContent['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED
+					) { ?>
+						<?php echo h($circularNoticeContent['circularNoticeContent']['subject']); ?><br />
+					<?php } else { ?>
 						<a href="<?php echo $this->Html->url('/circular_notices/circular_notices/view/' . $frameId . '/' . $circularNoticeContent['circularNoticeContent']['id']); ?>"><?php echo h($circularNoticeContent['circularNoticeContent']['subject']); ?></a><br />
+					<?php } ?>
+
+
+
 						<small>
 							<?php echo h(__d('circular_notices', 'Circular Content Period Title')); ?>
 							<?php echo h($circularNoticeContent['circularNoticeContent']['openedPeriodFrom']); ?>
@@ -87,7 +100,7 @@
 					</div>
 				</div>
 				<div>
-					<?php if ($contentCreatable) { ?>
+					<?php if ($contentCreatable && $circularNoticeContent['circularNoticeContent']['createdUser'] == $userId) { ?>
 						<hr class="circular-notice-clear-float circular-notice-index-divider">
 						<div class="text-right">
 							<span class="nc-tooltip" tooltip="<?php echo h(__d('net_commons', 'Edit')); ?>">

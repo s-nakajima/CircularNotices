@@ -175,12 +175,12 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
  */
 	public static function getDisplayNumberOptions() {
 		return array(
-			1 => __d('circular_notices', '%s article', 1),
-			5 => __d('circular_notices', '%s articles', 5),
-			10 => __d('circular_notices', '%s articles', 10),
-			20 => __d('circular_notices', '%s articles', 20),
-			50 => __d('circular_notices', '%s articles', 50),
-			100 => __d('circular_notices', '%s articles', 100),
+			1 => __d('circular_notices', '%d items', 1),
+			5 => __d('circular_notices', '%d items', 5),
+			10 => __d('circular_notices', '%d items', 10),
+			20 => __d('circular_notices', '%d items', 20),
+			50 => __d('circular_notices', '%d items', 50),
+			100 => __d('circular_notices', '%d items', 100),
 		);
 	}
 }

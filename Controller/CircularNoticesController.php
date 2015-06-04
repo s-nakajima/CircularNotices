@@ -76,12 +76,6 @@ class CircularNoticesController extends CircularNoticesAppController {
  */
 	public function index() {
 
-		// ブロックに新規配置された場合はブロック設定、フレーム設定を初期化
-		if (! $this->viewVars['blockId']) {
-			$this->CircularNoticeSetting->prepareCircularNoticeSetting($this->viewVars['frameId']);
-			$this->CircularNoticeFrameSetting->prepareCircularNoticeFrameSetting($this->viewVars['frameId']);
-		}
-
 		$this->initCircularNotice();
 
 		// ログインユーザIDを取得
@@ -90,30 +84,24 @@ class CircularNoticesController extends CircularNoticesAppController {
 		// ログインユーザIDが存在する場合（回覧板はログイン前領域には表示させない）
 		if (! empty($userId)) {
 
-			// モデルに渡すため、権限関連の値を配列に詰めなおす
-			// FIXME: 権限まわりを整理の上、処理を修正
-			$permission = array(
-				'contentPublishable' => (int)$this->viewVars['contentPublishable'],	// 公開権限
-				'contentEditable' => (int)$this->viewVars['contentEditable'],		// 編集権限
-				'contentCreatable' => (int)$this->viewVars['contentCreatable'],		// 作成権限
-				'contentReadable' => (int)$this->viewVars['contentReadable'],		// 参照権限
-			);
-
 			// Paginator経由で一覧を取得
 			$this->Paginator->settings = $this->CircularNoticeContent->getCircularNoticeContentsForPaginate(
 				$this->viewVars['circularNoticeSetting']['key'],
 				$this->viewVars['circularNoticeFrameSetting'],
-				$this->params['named'], $userId, $permission);
+				$this->params['named'],
+				$userId
+			);
 			$circularNoticeContentList = $this->Paginator->paginate('CircularNoticeContent');
 
 			// 各回覧データの閲覧／回答件数を取得
 			foreach ($circularNoticeContentList as $i => $circularNoticeContent) {
 
-				// 閲覧者に応じたステータスをセット
-				$circularNoticeContentList[$i]['circularNoticeContentStatus'] = $circularNoticeContent['temp_status_tbl']['temp_status'];
+				// 現時点／ログイン者に応じたステータスをセット
+				$circularNoticeContentList[$i]['currentStatus'] = $circularNoticeContent['CircularNoticeContentCurrentStatus']['current_status'];
+				$circularNoticeContentList[$i]['myStatus'] = $circularNoticeContent['CircularNoticeContentMyStatus']['my_status'];
 
 				// 閲覧件数／回答件数を取得してセット
-				// FIXME: 表示件数が多い場合にクエリ発行回数がかなり増える
+// FIXME: 表示件数が多い場合、クエリ発行回数がかなり増える
 				$counts = $this->CircularNoticeTargetUser->getCircularNoticeTargetUserCount((int)$circularNoticeContent['CircularNoticeContent']['id']);
 				$circularNoticeContentList[$i]['circularNoticeTargetCount'] = $counts['circularNoticeTargetCount'];
 				$circularNoticeContentList[$i]['circularNoticeReadCount'] = $counts['circularNoticeReadCount'];
@@ -158,9 +146,11 @@ class CircularNoticesController extends CircularNoticesAppController {
 		// 回答の登録／更新
 		if ($this->request->is('post')) {
 
-			$replySelectionValue = $this->data['CircularNoticeTargetUser']['reply_selection_value'];
-			if ($circularNoticeContent['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION) {
-				$replySelectionValue = implode(',', $this->data['CircularNoticeTargetUser']['reply_selection_value']);
+			$replySelectionValue = '';
+			if ($circularNoticeContent['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION) {
+				$replySelectionValue = $this->data['CircularNoticeTargetUser']['reply_selection_value'];
+			} else if ($circularNoticeContent['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION) {
+				$replySelectionValue = implode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $this->data['CircularNoticeTargetUser']['reply_selection_value']);
 			}
 
 			$data = Hash::merge(
@@ -198,18 +188,44 @@ class CircularNoticesController extends CircularNoticesAppController {
 		);
 		$circularNoticeTargetUsers = $this->Paginator->paginate('CircularNoticeTargetUser');
 
+		// 択一選択と選択方式の回覧の場合は回答集計用に回答先一覧を取得
+		$answersSummary = array();
+		if (
+			$circularNoticeContent['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION ||
+			$circularNoticeContent['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION
+		) {
+			$circularNoticeTargetUsersForSummary = $this->CircularNoticeTargetUser->getCircularNoticeTargetUsers($circularNoticeContentId);
+			foreach ($circularNoticeTargetUsersForSummary as $circularNoticeTargetUser) {
+				$selectionValues = $circularNoticeTargetUser['CircularNoticeTargetUser']['reply_selection_value'];
+				if ($selectionValues) {
+					$answers = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $selectionValues);
+					foreach ($answers as $answer) {
+						if (! isset($answersSummary[$answer])) {
+							$answersSummary[$answer] = 1;
+						} else {
+							$answersSummary[$answer]++;
+						}
+					}
+				}
+			}
+		}
+
 		// 画面表示用に一部データを整形
 		$myCircularNoticeTargetUser['CircularNoticeTargetUser']['reply_selection_value'] =
-			explode(',', $myCircularNoticeTargetUser['CircularNoticeTargetUser']['reply_selection_value']);
+			explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $myCircularNoticeTargetUser['CircularNoticeTargetUser']['reply_selection_value']);
 		foreach ($circularNoticeTargetUsers as $i => $circularNoticeTargetUser) {
 			$circularNoticeTargetUsers[$i]['CircularNoticeTargetUser']['reply_selection_value'] =
-				explode(',', $circularNoticeTargetUser['CircularNoticeTargetUser']['reply_selection_value']);
+				explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $circularNoticeTargetUser['CircularNoticeTargetUser']['reply_selection_value']);
 		}
 
 		$results = Hash::merge(
 			$circularNoticeContent,
 			$counts,
-			['myAnswer' => $myCircularNoticeTargetUser, 'CircularNoticeTargetUsers' => $circularNoticeTargetUsers]
+			[
+				'MyAnswer' => $myCircularNoticeTargetUser,
+				'CircularNoticeTargetUsers' => $circularNoticeTargetUsers,
+				'AnswersSummary' => $answersSummary,
+			]
 		);
 		$results = $this->camelizeKeyRecursive($results);
 		$this->set($results);
@@ -227,7 +243,11 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 		$this->initCircularNotice();
 
-		$circularNoticeContent = $this->CircularNoticeContent->create();
+		$circularNoticeContent = $this->CircularNoticeContent->create(array(
+			'is_room_targeted_flag' => false,
+			'target_groups' => ''
+		));
+		$circularNoticeContent['CircularNoticeChoice'] = array();
 
 		$data = array();
 		if ($this->request->is('post')) {
@@ -313,7 +333,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$circularNoticeContent['CircularNoticeContent']['is_room_targeted_flag'] =
 			$circularNoticeContent['CircularNoticeContent']['is_room_targeted_flag'] ? array('1') : null;
 		$circularNoticeContent['CircularNoticeContent']['target_groups'] =
-			explode(',', $circularNoticeContent['CircularNoticeContent']['target_groups']);
+			explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $circularNoticeContent['CircularNoticeContent']['target_groups']);
 
 		$results = Hash::merge(
 			$circularNoticeContent, $data,
@@ -364,13 +384,18 @@ class CircularNoticesController extends CircularNoticesAppController {
 		}
 
 		if (! empty($this->data['CircularNoticeContent']['target_groups'])) {
-			$data['CircularNoticeContent']['target_groups'] = implode(',', $data['CircularNoticeContent']['target_groups']);
+			$data['CircularNoticeContent']['target_groups'] = implode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $data['CircularNoticeContent']['target_groups']);
 		} else {
 			$data['CircularNoticeContent']['target_groups'] = NULL;
 		}
 
 		if ($this->data['CircularNoticeContent']['reply_deadline_set_flag'] !== '1') {
 			$data['CircularNoticeContent']['reply_deadline'] = null;
+		}
+
+		foreach ($data['CircularNoticeChoices'] as $i => $choice) {
+			$data['CircularNoticeChoices'][$i]['CircularNoticeChoice']['value'] =
+				str_replace(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, '', $choice['CircularNoticeChoice']['value']);
 		}
 
 		return $data;

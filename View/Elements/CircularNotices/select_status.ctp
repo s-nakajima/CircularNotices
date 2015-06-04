@@ -11,7 +11,8 @@
 
 $url = Hash::merge(
 	array('controller' => 'circular_notices', 'action' => 'index', $frameId),
-	$this->Paginator->params['named']
+	$this->Paginator->params['named'],
+	['page' => 1]
 );
 
 $currentStatus = isset($this->Paginator->params['named']['status']) ? $this->Paginator->params['named']['status'] : '';
@@ -50,17 +51,9 @@ if (! $contentCreatable) {
 			'label' => __d('circular_notices', 'Display All Contents'),
 			'status' => null,
 		),
-		'CircularNoticeContents.status_' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_APPROVED => array(
-			'label' => __d('circular_notices', 'Display Public Pending Contents'),
-			'status' => CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_APPROVED,
-		),
 		'CircularNoticeContents.status_' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT => array(
 			'label' => __d('circular_notices', 'Display Draft During Contents'),
 			'status' => CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT,
-		),
-		'CircularNoticeContents.status_' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_DISAPPROVED => array(
-			'label' => __d('circular_notices', 'Display Remand Contents'),
-			'status' => CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_DISAPPROVED,
 		),
 		'CircularNoticeContents.status_' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED => array(
 			'label' => __d('circular_notices', 'Display Reserved Contents'),

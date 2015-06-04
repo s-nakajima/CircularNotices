@@ -1,6 +1,6 @@
 <?php
 /**
- * CircularNoticeFrameSettings Controller
+ * CircularNoticeBlockRolePermissions Controller
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
@@ -12,12 +12,12 @@
 App::uses('CircularNoticesAppController', 'CircularNotices.Controller');
 
 /**
- * CircularNoticeFrameSettings Controller
+ * CircularNoticeBlockRolePermissions Controller
  *
  * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
  * @package NetCommons\CircularNotices\Controller
  */
-class CircularNoticeFrameSettingsController extends CircularNoticesAppController {
+class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppController {
 
 /**
  * layout
@@ -32,7 +32,8 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
  * @var array
  */
 	public $uses = array(
-		'CircularNotices.CircularNoticeFrameSetting',
+		'CircularNotices.CircularNoticeSetting',
+		'Blocks.Block',
 	);
 
 /**
@@ -67,7 +68,7 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
 		parent::beforeFilter();
 
 		// タブの設定
-		$this->initSettingTabs('circular_notice_frame_settings');
+		$this->initSettingTabs('role_permissions');
 	}
 
 /**
@@ -76,32 +77,45 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
  * @return void
  */
 	public function edit() {
-		if (! $this->NetCommonsFrame->validateFrameId()) {
+		if (! $this->NetCommonsBlock->validateBlockId()) {
 			$this->throwBadRequest();
 			return false;
 		}
 
-		if (! $circularNoticeFrameSetting = $this->CircularNoticeFrameSetting->getCircularNoticeFrameSetting($this->viewVars['frameKey'])) {
-			$circularNoticeFrameSetting = $this->CircularNoticeFrameSetting->create(array(
-				'frame_key' => $this->viewVars['frameKey'],
-			));
+		if (! $block = $this->Block->findById((int)$this->params['pass'][1])) {
+			$this->throwBadRequest();
+			return false;
+		};
+		$this->set('blockId', $block['Block']['id']);
+		$this->set('blockKey', $block['Block']['key']);
+
+		$permissions = $this->NetCommonsBlock->getBlockRolePermissions(
+			$this->viewVars['blockKey'],
+			['content_creatable']
+		);
+
+		if (! $circularNoticeSetting = $this->CircularNoticeSetting->getCircularNoticeSetting($this->viewVars['frameId'])) {
+			$this->throwBadRequest();
+			return false;
 		}
 
-		$data = array();
 		if ($this->request->is('post')) {
 			$data = $this->data;
-			$this->CircularNoticeFrameSetting->saveCircularNoticeFrameSetting($data);
-			if ($this->handleValidationError($this->CircularNoticeFrameSetting->validationErrors)) {
-				$this->redirectByFrameId();
+			$this->CircularNoticeSetting->saveCircularNoticeSetting($data);
+			if ($this->handleValidationError($this->CircularNoticeSetting->validationErrors)) {
+				if (! $this->request->is('ajax')) {
+					$this->redirectByFrameId();
+				}
 				return;
 			}
 		}
 
-		$data = Hash::merge(
-			$circularNoticeFrameSetting,
-			$data
+		$results = array(
+			'circularNoticeSetting' => $circularNoticeSetting['CircularNoticeSetting'],
+			'blockRolePermissions' => $permissions['BlockRolePermissions'],
+			'roles' => $permissions['Roles'],
 		);
-		$results = $this->camelizeKeyRecursive($data);
+		$results = $this->camelizeKeyRecursive($results);
 		$this->set($results);
 	}
 }

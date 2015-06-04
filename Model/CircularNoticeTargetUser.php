@@ -109,12 +109,29 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 	public function getMyCircularNoticeTargetUser($circularNoticeContentId, $userId) {
 
 		$conditions = array(
-			"CircularNoticeTargetUser.circular_notice_content_id" => $circularNoticeContentId,
-			"CircularNoticeTargetUser.user_id" => $userId,
+			'CircularNoticeTargetUser.circular_notice_content_id' => $circularNoticeContentId,
+			'CircularNoticeTargetUser.user_id' => $userId,
 		);
 
 		return $this->find('first', array(
 			'conditions' => $conditions
+		));
+	}
+
+/**
+ * Get circular notice target users
+ *
+ * @param int $circularNoticeContentId
+ * @return array
+ */
+	public function getCircularNoticeTargetUsers($circularNoticeContentId) {
+
+		$conditions = array(
+			'CircularNoticeTargetUser.circular_notice_content_id' => $circularNoticeContentId,
+		);
+
+		return $this->find('all', array(
+			'conditions' => $conditions,
 		));
 	}
 
@@ -135,11 +152,11 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		);
 
 		$conditions = array(
-			"CircularNoticeTargetUser.circular_notice_content_id" => $circularNoticeContentId,
+			'CircularNoticeTargetUser.circular_notice_content_id' => $circularNoticeContentId,
 		);
 
 		// 表示順
-		$order =  array("User.username" => "asc");
+		$order =  array('User.username' => 'asc');
 		if (isset($paginatorParams['sort']) && isset($paginatorParams['direction'])) {
 			$order = array($paginatorParams['sort'] => $paginatorParams['direction']);
 		}
@@ -174,7 +191,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 	public function paginate($conditions, $fields, $order, $limit, $page = 1, $recursive = null, $extra = array()) {
 
 		// ログイン者を先頭に持ってくるためにorderをカスタム
-		$customOrder = array(array("my_order" => "asc"));
+		$customOrder = array(array('my_order' => 'asc'));
 		if (! empty($order)) {
 			$customOrder[] = $order;
 		}
@@ -292,11 +309,11 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
  */
 	public static function getDisplayNumberOptions() {
 		return array(
-			10 => __d('circular_notices', '%s articles', 10),
-			20 => __d('circular_notices', '%s articles', 20),
-			30 => __d('circular_notices', '%s articles', 30),
-			40 => __d('circular_notices', '%s articles', 40),
-			50 => __d('circular_notices', '%s articles', 50),
+			10 => __d('circular_notices', '%d items', 10),
+			20 => __d('circular_notices', '%d items', 20),
+			30 => __d('circular_notices', '%d items', 30),
+			40 => __d('circular_notices', '%d items', 40),
+			50 => __d('circular_notices', '%d items', 50),
 		);
 	}
 }

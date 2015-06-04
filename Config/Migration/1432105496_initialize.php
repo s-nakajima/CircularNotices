@@ -137,7 +137,7 @@ class Initialize extends CakeMigration {
 				'name' => '回覧板',
 				'type' => 1,
 				'default_action' => 'circular_notices/index',
-				'default_setting_action' => 'circular_notice_settings/edit',
+				'default_setting_action' => 'circular_notice_blocks/index',
 			),
 		),
 		'plugins_roles' => array(
