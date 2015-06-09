@@ -5,75 +5,77 @@
 
 
 /**
+ * CircularNotices.edit Javascript
+ *
+ * @param {string} Controller name
+ * @param {function($scope, NetCommonsWysiwyg)} Controller
+ */
+NetCommonsApp.controller('CircularNoticeEdit',
+    function($scope, NetCommonsWysiwyg) {
+
+      /**
+       * tinymce
+       *
+       * @type {object}
+       */
+      $scope.tinymce = NetCommonsWysiwyg.new();
+
+      /**
+       * CircularNoticeContent object
+       *
+       * @type {object}
+       */
+      $scope.circularNoticeContent = [];
+
+      /**
+       * Initialize
+       *
+       * @param {object} CircularNoticeContents data
+       * @return {void}
+       */
+      $scope.initialize = function(data) {
+        $scope.circularNoticeContent = data;
+      };
+
+    });
+
+
+/**
  * CircularNotices.view Javascript
  *
  * @param {string} Controller name
- * @param {function($scope, $sce)} Controller
+ * @param {function($scope)} Controller
  */
-NetCommonsApp.controller('CircularNotices',
-    function($scope, NetCommonsBase, NetCommonsWysiwyg, NetCommonsTab, NetCommonsUser, NetCommonsWorkflow) {
+NetCommonsApp.controller('CircularNoticeView', function($scope) {
 
-        /**
-         * show user information method
-         *
-         * @param {number} users.id
-         * @return {string}
-         */
-        $scope.user = NetCommonsUser.new();
+  /**
+   * Initialize
+   *
+   * @return {void}
+   */
+  $scope.initialize = function() {
+    $scope.showReplyForm = false;
+    $scope.showOtherUsers = true;
+  };
 
-        /**
-         * serverValidationClear method
-         *
-         * @param {number} users.id
-         * @return {string}
-         */
-        $scope.serverValidationClear = NetCommonsBase.serverValidationClear;
+  /**
+   * Switch reply form
+   *
+   * @param {boolean} Flag of visibility
+   * @return {void}
+   */
+  $scope.switchReplyForm = function(isVisible) {
+    $scope.showReplyForm = isVisible;
+  };
 
-        /**
-         * tinymce
-         *
-         * @type {object}
-         */
-        $scope.tinymce = NetCommonsWysiwyg.new();
+  /**
+   * Switch other user's list
+   *
+   * @param {boolean} Flag of visibility
+   * @return {void}
+   */
+  $scope.switchOtherUserView = function(isVisible) {
+    $scope.showOtherUsers = isVisible;
+  };
 
-        /**
-         * Initialize for View
-         *
-         * @return {void}
-         */
-        $scope.initCircularNoticeView = function() {
-            $scope.showReplyForm = false;
-            $scope.showOtherUsers = false;
-        };
-
-        /**
-         * Switch Reply Form
-         *
-         * @return {void}
-         */
-        $scope.switchReplyForm = function(data) {
-            $scope.showReplyForm = data;
-        };
-
-        /**
-         * Switch Other User's Answer View
-         *
-         * @return {void}
-         */
-        $scope.switchOtherUserView = function(data) {
-            $scope.showOtherUsers = data;
-        };
-
-        /**
-         * Initialize for Edit View
-         *
-         * @return {void}
-         */
-        $scope.initCircularNoticeEdit = function(data) {
-            // 回覧内容を格納
-            $scope.circularNoticeContentContent = data.content;
-
-            // 回答方式を格納
-            $scope.circularNoticeContentReplyType = data.replyType;
-        };
-    });
+});

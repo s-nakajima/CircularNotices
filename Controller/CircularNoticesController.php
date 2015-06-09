@@ -91,26 +91,26 @@ class CircularNoticesController extends CircularNoticesAppController {
 				$this->params['named'],
 				$userId
 			);
-			$circularNoticeContentList = $this->Paginator->paginate('CircularNoticeContent');
+			$contents = $this->Paginator->paginate('CircularNoticeContent');
 
 			// 各回覧データの閲覧／回答件数を取得
-			foreach ($circularNoticeContentList as $i => $circularNoticeContent) {
+			foreach ($contents as $i => $content) {
 
 				// 現時点／ログイン者に応じたステータスをセット
-				$circularNoticeContentList[$i]['currentStatus'] = $circularNoticeContent['CircularNoticeContentCurrentStatus']['current_status'];
-				$circularNoticeContentList[$i]['myStatus'] = $circularNoticeContent['CircularNoticeContentMyStatus']['my_status'];
+				$contents[$i]['currentStatus'] = $content['CircularNoticeContentCurrentStatus']['current_status'];
+				$contents[$i]['myStatus'] = $content['CircularNoticeContentMyStatus']['my_status'];
 
 				// 閲覧件数／回答件数を取得してセット
-// FIXME: 表示件数が多い場合、クエリ発行回数がかなり増える
-				$counts = $this->CircularNoticeTargetUser->getCircularNoticeTargetUserCount((int)$circularNoticeContent['CircularNoticeContent']['id']);
-				$circularNoticeContentList[$i]['circularNoticeTargetCount'] = $counts['circularNoticeTargetCount'];
-				$circularNoticeContentList[$i]['circularNoticeReadCount'] = $counts['circularNoticeReadCount'];
-				$circularNoticeContentList[$i]['circularNoticeReplyCount'] = $counts['circularNoticeReplyCount'];
+				// FIXME: 表示件数が多い場合、クエリ発行回数がかなり増える
+				$counts = $this->CircularNoticeTargetUser->getCircularNoticeTargetUserCount((int)$content['CircularNoticeContent']['id']);
+				$contents[$i]['targetCount'] = $counts['targetCount'];
+				$contents[$i]['readCount'] = $counts['readCount'];
+				$contents[$i]['replyCount'] = $counts['replyCount'];
 			}
 
 			// 画面表示のためのデータを設定
-			$circularNoticeContentList = $this->camelizeKeyRecursive($circularNoticeContentList);
-			$this->set('circularNoticeContentList', $circularNoticeContentList);
+			$contents = $this->camelizeKeyRecursive($contents);
+			$this->set('circularNoticeContentList', $contents);
 		}
 	}
 
@@ -118,114 +118,81 @@ class CircularNoticesController extends CircularNoticesAppController {
  * view action
  *
  * @param int $frameId frames.id
- * @param int $circularNoticeContentId circular_notice_content.id
+ * @param int $contentId circular_notice_content.id
  * @return void
  */
-	public function view($frameId = null, $circularNoticeContentId = null) {
+	public function view($frameId = null, $contentId = null) {
 
 		$this->initCircularNotice();
 
 		$userId = (int)$this->Auth->user('id');
 
 		// 回覧を取得
-		$circularNoticeContent = $this->CircularNoticeContent->getCircularNoticeContent($circularNoticeContentId);
+		$content = $this->CircularNoticeContent->getCircularNoticeContent($contentId);
 
 		// ログイン者の回答を取得
-		$myCircularNoticeTargetUser = $this->CircularNoticeTargetUser->getMyCircularNoticeTargetUser(
-			$circularNoticeContentId,
-			$userId
-		);
+		$myTargetUser = $this->CircularNoticeTargetUser->getMyCircularNoticeTargetUser($contentId, $userId);
 
 		// 未読の場合は既読に更新
-		if (! $myCircularNoticeTargetUser['CircularNoticeTargetUser']['read_flag']) {
-			if (!$this->CircularNoticeTargetUser->saveRead($myCircularNoticeTargetUser['CircularNoticeTargetUser']['id'])) {
-				// FIXME: バリデーション失敗時の処理が必要
-			}
+		if (! $myTargetUser['CircularNoticeTargetUser']['read_flag']) {
+			$this->CircularNoticeTargetUser->saveRead($myTargetUser['CircularNoticeTargetUser']['id']);
 		}
 
 		// 回答の登録／更新
 		if ($this->request->is('post')) {
 
 			$replySelectionValue = '';
-			if ($circularNoticeContent['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION) {
+			if ($content['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION) {
 				$replySelectionValue = $this->data['CircularNoticeTargetUser']['reply_selection_value'];
-			} else if ($circularNoticeContent['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION) {
+			} elseif ($content['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION) {
 				$replySelectionValue = implode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $this->data['CircularNoticeTargetUser']['reply_selection_value']);
 			}
 
 			$data = Hash::merge(
 				$this->data,
-				['CircularNoticeTargetUser' => [
-					'reply_flag' => true,
-					'reply_datetime' => date('Y-m-d H:i:s'),
-					'reply_selection_value' => $replySelectionValue,
-				]]
+				['CircularNoticeTargetUser' => ['reply_flag' => true, 'reply_datetime' => date('Y-m-d H:i:s'), 'reply_selection_value' => $replySelectionValue,]]
 			);
 
-			if (! $this->CircularNoticeTargetUser->saveCircularNoticeTargetUser($data)) {
-				// FIXME: バリデーション失敗時の処理が必要
+			$this->CircularNoticeTargetUser->saveCircularNoticeTargetUser($data);
+			if ($this->handleValidationError($this->CircularNoticeTargetUser->validationErrors)) {
+				// FIXME: こうしておかないと２回目のrequest->is('post')がfalseになるため要確認
+				$this->redirect($this->request->here);
+				return;
 			}
 
-			// FIXME: こうしておかないと２回目のrequest->is('post')がfalseになるため要確認
-			$this->redirect($this->request->here);
-			return;
+			// FIXME: バリデーションエラー後の値セット処理を整理すること
 		}
 
 		// ログイン者の回答を再取得（更新されている可能性があるため）
-		$myCircularNoticeTargetUser = $this->CircularNoticeTargetUser->getMyCircularNoticeTargetUser(
-			$circularNoticeContentId,
-			$userId
-		);
+		$myTargetUser = $this->CircularNoticeTargetUser->getMyCircularNoticeTargetUser($contentId, $userId);
 
 		// 回覧の閲覧件数／回答件数を取得
-		$counts = $this->CircularNoticeTargetUser->getCircularNoticeTargetUserCount($circularNoticeContentId);
+		$counts = $this->CircularNoticeTargetUser->getCircularNoticeTargetUserCount($contentId);
 
 		// Paginator経由で回答先一覧を取得
-		$this->Paginator->settings = $this->CircularNoticeTargetUser->getCircularNoticeTargetUsersForPaginator(
-			$circularNoticeContentId,
-			$this->params['named'],
-			$userId
-		);
-		$circularNoticeTargetUsers = $this->Paginator->paginate('CircularNoticeTargetUser');
+		$this->Paginator->settings = $this->CircularNoticeTargetUser->getCircularNoticeTargetUsersForPaginator($contentId, $this->params['named'], $userId);
+		$targetUsers = $this->Paginator->paginate('CircularNoticeTargetUser');
 
-		// 択一選択と選択方式の回覧の場合は回答集計用に回答先一覧を取得
+		// 択一選択／選択方式の場合は回答集計
 		$answersSummary = array();
 		if (
-			$circularNoticeContent['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION ||
-			$circularNoticeContent['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION
+			$content['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION ||
+			$content['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION
 		) {
-			$circularNoticeTargetUsersForSummary = $this->CircularNoticeTargetUser->getCircularNoticeTargetUsers($circularNoticeContentId);
-			foreach ($circularNoticeTargetUsersForSummary as $circularNoticeTargetUser) {
-				$selectionValues = $circularNoticeTargetUser['CircularNoticeTargetUser']['reply_selection_value'];
-				if ($selectionValues) {
-					$answers = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $selectionValues);
-					foreach ($answers as $answer) {
-						if (! isset($answersSummary[$answer])) {
-							$answersSummary[$answer] = 1;
-						} else {
-							$answersSummary[$answer]++;
-						}
-					}
-				}
-			}
+			$answersSummary = $this->__getAnswerSummary($contentId);
 		}
 
 		// 画面表示用に一部データを整形
-		$myCircularNoticeTargetUser['CircularNoticeTargetUser']['reply_selection_value'] =
-			explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $myCircularNoticeTargetUser['CircularNoticeTargetUser']['reply_selection_value']);
-		foreach ($circularNoticeTargetUsers as $i => $circularNoticeTargetUser) {
-			$circularNoticeTargetUsers[$i]['CircularNoticeTargetUser']['reply_selection_value'] =
-				explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $circularNoticeTargetUser['CircularNoticeTargetUser']['reply_selection_value']);
+		$myTargetUser['CircularNoticeTargetUser']['reply_selection_value'] =
+			explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $myTargetUser['CircularNoticeTargetUser']['reply_selection_value']);
+		foreach ($targetUsers as $i => $targetUser) {
+			$targetUsers[$i]['CircularNoticeTargetUser']['reply_selection_value'] =
+				explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $targetUser['CircularNoticeTargetUser']['reply_selection_value']);
 		}
 
 		$results = Hash::merge(
-			$circularNoticeContent,
-			$counts,
-			[
-				'MyAnswer' => $myCircularNoticeTargetUser,
-				'CircularNoticeTargetUsers' => $circularNoticeTargetUsers,
-				'AnswersSummary' => $answersSummary,
-			]
+			$content, $counts,
+			['MyAnswer' => $myTargetUser, 'CircularNoticeTargetUsers' => $targetUsers, 'AnswersSummary' => $answersSummary,]
 		);
 		$results = $this->camelizeKeyRecursive($results);
 		$this->set($results);
@@ -243,11 +210,11 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 		$this->initCircularNotice();
 
-		$circularNoticeContent = $this->CircularNoticeContent->create(array(
+		$content = $this->CircularNoticeContent->create(array(
 			'is_room_targeted_flag' => false,
 			'target_groups' => ''
 		));
-		$circularNoticeContent['CircularNoticeChoice'] = array();
+		$content['CircularNoticeChoice'] = array();
 
 		$data = array();
 		if ($this->request->is('post')) {
@@ -266,7 +233,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 				return;
 			}
 
-// FIXME: バリデーションエラーはこうやってひっかけるっぽい・・・のでちょっと処理を整理しないといけない
+			// FIXME: バリデーションエラー後の値セット処理を整理すること
 			unset($data['CircularNoticeContent']['id']);
 			unset($data['CircularNoticeContent']['status']);
 			$data['CircularNoticeContent']['is_room_targeted_flag'] = $this->data['CircularNoticeContent']['is_room_targeted_flag'];
@@ -277,7 +244,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$groups = $this->getGroupsStub();
 
 		$results = Hash::merge(
-			$circularNoticeContent, $data,
+			$content, $data,
 			['contentStatus' => null, 'groups' => $groups]
 		);
 		$results = $this->camelizeKeyRecursive($results);
@@ -288,15 +255,14 @@ class CircularNoticesController extends CircularNoticesAppController {
  * edit action
  *
  * @param int $frameId frames.id
- * @param int $circularNoticeContentId circular_notice_content.id
+ * @param int $contentId circular_notice_content.id
  * @return void
  */
-// FIXME: 基準はidか？keyか？
-	public function edit($frameId = null, $circularNoticeContentId = null) {
+	public function edit($frameId = null, $contentId = null) {
 
 		$this->initCircularNotice();
 
-		if (! $circularNoticeContent = $this->CircularNoticeContent->getCircularNoticeContent($circularNoticeContentId)) {
+		if (! $content = $this->CircularNoticeContent->getCircularNoticeContent($contentId)) {
 			$this->throwBadRequest();
 			return;
 		}
@@ -319,9 +285,9 @@ class CircularNoticesController extends CircularNoticesAppController {
 				return;
 			}
 
-// FIXME: バリデーションエラーはこうやってひっかけるっぽい・・・のでちょっと処理を整理しないといけない
+			// FIXME: バリデーションエラー後の値セット処理を整理すること
 			$data['CircularNoticeContent']['is_room_targeted_flag'] = $this->data['CircularNoticeContent']['is_room_targeted_flag'];
-			$circularNoticeContent['CircularNoticeContent']['target_groups'] = $data['CircularNoticeContent']['target_groups'];
+			$content['CircularNoticeContent']['target_groups'] = $data['CircularNoticeContent']['target_groups'];
 			unset($data['CircularNoticeContent']['status']);
 			unset($data['CircularNoticeContent']['target_groups']);
 		}
@@ -330,13 +296,13 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$groups = $this->getGroupsStub();
 
 		// 画面表示用に一部データを整形
-		$circularNoticeContent['CircularNoticeContent']['is_room_targeted_flag'] =
-			$circularNoticeContent['CircularNoticeContent']['is_room_targeted_flag'] ? array('1') : null;
-		$circularNoticeContent['CircularNoticeContent']['target_groups'] =
-			explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $circularNoticeContent['CircularNoticeContent']['target_groups']);
+		$content['CircularNoticeContent']['is_room_targeted_flag'] =
+			$content['CircularNoticeContent']['is_room_targeted_flag'] ? array('1') : null;
+		$content['CircularNoticeContent']['target_groups'] =
+			explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $content['CircularNoticeContent']['target_groups']);
 
 		$results = Hash::merge(
-			$circularNoticeContent, $data,
+			$content, $data,
 			['contentStatus' => null, 'groups' => $groups]
 		);
 		$results = $this->camelizeKeyRecursive($results);
@@ -347,11 +313,10 @@ class CircularNoticesController extends CircularNoticesAppController {
  * delete action
  *
  * @param int $frameId frames.id
- * @param string $circularNoticeContentKey circular_notice_content.key
+ * @param string $contentKey circular_notice_content.key
  * @return void
  */
-// FIXME: 基準はidか？keyか？
-	public function delete($frameId = null, $circularNoticeContentKey = null) {
+	public function delete($frameId = null, $contentKey = null) {
 
 		$this->initCircularNotice();
 
@@ -360,9 +325,36 @@ class CircularNoticesController extends CircularNoticesAppController {
 			return;
 		}
 
-		$this->CircularNoticeContent->deleteCircularNoticeContent($circularNoticeContentKey);
+		$this->CircularNoticeContent->deleteCircularNoticeContent($contentKey);
 		$this->redirectByFrameId();
 		return;
+	}
+
+/**
+ * Get summary of answer.
+ *
+ * @param int $contentId
+ */
+	private function __getAnswerSummary($contentId) {
+
+		$answerSummary = array();
+
+		$targetUsers = $this->CircularNoticeTargetUser->getCircularNoticeTargetUsers($contentId);
+		foreach ($targetUsers as $targetUser) {
+			$selectionValues = $targetUser['CircularNoticeTargetUser']['reply_selection_value'];
+			if ($selectionValues) {
+				$answers = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $selectionValues);
+				foreach ($answers as $answer) {
+					if (! isset($answerSummary[$answer])) {
+						$answerSummary[$answer] = 1;
+					} else {
+						$answerSummary[$answer]++;
+					}
+				}
+			}
+		}
+
+		return $answerSummary;
 	}
 
 /**
@@ -384,9 +376,10 @@ class CircularNoticesController extends CircularNoticesAppController {
 		}
 
 		if (! empty($this->data['CircularNoticeContent']['target_groups'])) {
-			$data['CircularNoticeContent']['target_groups'] = implode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $data['CircularNoticeContent']['target_groups']);
+			$data['CircularNoticeContent']['target_groups'] =
+				implode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $data['CircularNoticeContent']['target_groups']);
 		} else {
-			$data['CircularNoticeContent']['target_groups'] = NULL;
+			$data['CircularNoticeContent']['target_groups'] = null;
 		}
 
 		if ($this->data['CircularNoticeContent']['reply_deadline_set_flag'] !== '1') {

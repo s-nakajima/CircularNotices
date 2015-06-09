@@ -90,12 +90,12 @@
 					</div>
 					<div class="circular-notice-index-counter">
 						<small>
-							<?php echo h(__d('circular_notices', 'Read Count Title')); ?> <?php echo h($circularNoticeContent['circularNoticeReadCount']); ?>
+							<?php echo h(__d('circular_notices', 'Read Count Title')); ?> <?php echo h($circularNoticeContent['readCount']); ?>
 							/
-							<?php echo h($circularNoticeContent['circularNoticeTargetCount']); ?><br />
-							<?php echo h(__d('circular_notices', 'Reply Count Title')); ?> <?php echo h($circularNoticeContent['circularNoticeReplyCount']); ?>
+							<?php echo h($circularNoticeContent['targetCount']); ?><br />
+							<?php echo h(__d('circular_notices', 'Reply Count Title')); ?> <?php echo h($circularNoticeContent['replyCount']); ?>
 							/
-							<?php echo h($circularNoticeContent['circularNoticeTargetCount']); ?>
+							<?php echo h($circularNoticeContent['targetCount']); ?>
 						</small>
 					</div>
 				</div>

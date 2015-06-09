@@ -83,14 +83,14 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
 			}
 
 			// フレームと紐づくフレーム設定が取得できない場合は新規作成
-			if (! $circularNoticeFrameSetting = $this->findByFrameKey($frame['Frame']['key'])) {
+			if (! $frameSetting = $this->findByFrameKey($frame['Frame']['key'])) {
 				$data = $this->create(
 					array(
 						'frame_key' => $frame['Frame']['key'],
 						'display_number' => self::DEFAULT_DISPLAY_NUMBER,
 					)
 				);
-				if (! $circularNoticeFrameSetting = $this->save($data, false)) {
+				if (! $frameSetting = $this->save($data, false)) {
 					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				}
 			}
@@ -103,7 +103,7 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
 			throw $ex;
 		}
 
-		return $circularNoticeFrameSetting;
+		return $frameSetting;
 	}
 
 /**

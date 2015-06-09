@@ -42,8 +42,8 @@ class CircularNoticeContent extends CircularNoticesAppModel {
  */
 	public function beforeValidate($options = array()) {
 
-// FIXME: バリデーションの実装
-// FIXME: 相関チェック類の実装方法（日付FromToとかラジオと連動する値とか）
+		// FIXME: バリデーションの実装
+		// FIXME: 相関チェック類の実装方法（日付FromToとかラジオと連動する値とか）
 
 		$this->validate = Hash::merge($this->validate, array(
 			'subject' => array(
@@ -175,121 +175,50 @@ class CircularNoticeContent extends CircularNoticesAppModel {
  * Get circular notice content list for pagination
  *
  * @param string $blockKey
- * @param array $circularNoticeFrameSetting
+ * @param array $frameSetting
  * @param array $paginatorParams
  * @param int $userId
  * @return array
  */
-	public function getCircularNoticeContentsForPaginate($blockKey, $circularNoticeFrameSetting, $paginatorParams, $userId)
-	{
+	public function getCircularNoticeContentsForPaginate($blockKey, $frameSetting, $paginatorParams, $userId) {
+
+		// 取得フィールド
 		$fields = array(
 			'*',
 			'CircularNoticeContentCurrentStatus.current_status',
 			'CircularNoticeContentMyStatus.my_status',
 		);
 
-		$joins = array();
-
-		// 回覧ステータス取得用のJOIN
-		$dataSource = $this->getDataSource();
-
-		// 現時点での回覧ステータスを取得するためのJOIN
-		$subQuery = $dataSource->buildStatement(
-			array(
-				'fields' => array(
-					'id',
-					'(CASE ' .
-					'WHEN status = \'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT . '\' THEN ' .
-						'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT . '\' ' .
-					'WHEN status = \'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_PUBLISHED . '\' THEN ' .
-						'CASE ' .
-						'WHEN opened_period_from > NOW() THEN ' .
-							'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED . '\' ' .
-						'ELSE ' .
-							'CASE ' .
-							'WHEN opened_period_to < NOW() THEN ' .
-								'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_CLOSED . '\' ' .
-							'WHEN reply_deadline_set_flag = 1 AND reply_deadline < NOW() THEN ' .
-								'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED . '\' ' .
-							'ELSE ' .
-								'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN . '\' ' .
-							'END ' .
-						'END ' .
-					'END) AS current_status',
-				),
-				'table' => 'circular_notice_contents',
-				'alias' => 'CircularNoticeContentCurrentStatus',
-			),
-			$this
-		);
-		$joins[] = array(
-			'type' => 'LEFT',
-			'table' => '(' . $subQuery . ')',
-			'alias' => 'CircularNoticeContentCurrentStatus',
-			'conditions' => array(
-				'CircularNoticeContent.id = CircularNoticeContentCurrentStatus.id',
-			),
+		// JOIN
+		$joins = array(
+			$this->__getJoinArrayForCurrentStatus(),
+			$this->__getJoinArrayForMyStatus($userId)
 		);
 
-		// ログイン者用の回覧ステータスを取得するためのJOIN
-		$subQuery = $dataSource->buildStatement(
-			array(
-				'fields' => array(
-					'user_id',
-					'circular_notice_content_id',
-					'(CASE ' .
-					'WHEN read_flag = 0 THEN ' .
-						'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD . '\' ' .
-					'ELSE ' .
-						'CASE ' .
-						'WHEN reply_flag = 0 THEN ' .
-							'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_READ_YET . '\' ' .
-						'ELSE' .
-							'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_REPLIED . '\' ' .
-						'END ' .
-					'END) AS my_status'
-				),
-				'table' => 'circular_notice_target_users',
-				'alias' => 'CircularNoticeContentMyStatus',
-			),
-			$this->CircularNoticeTargetUser
-		);
-		$joins[] = array(
-			'type' => 'LEFT',
-			'table' => '(' . $subQuery . ')',
-			'alias' => 'CircularNoticeContentMyStatus',
-			'conditions' => array(
-				'CircularNoticeContent.id = CircularNoticeContentMyStatus.circular_notice_content_id',
-				'CircularNoticeContentMyStatus.user_id' => $userId,
-			),
-		);
-
-// FIXME: 回覧者じゃない場合は回覧期限の条件が必要
-		// 取得条件の設定
+		// 取得条件
 		$conditions = array(
 			'CircularNoticeContent.circular_notice_setting_key' => $blockKey,
 			'OR' => array(
 				'CircularNoticeContent.created_user' => $userId,
-				'CircularNoticeContentMyStatus.my_status IS NOT NULL',
+				array(
+					'CircularNoticeContentMyStatus.my_status IS NOT NULL',
+					'CircularNoticeContent.status' => CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_PUBLISHED,
+					'CircularNoticeContent.opened_period_from <= NOW()',
+					'CircularNoticeContent.opened_period_to >= NOW()',
+				)
 			),
 		);
 
 		// ステータス
 		if (isset($paginatorParams['status'])) {
-			switch ($paginatorParams['status']) {
-				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_PUBLISHED:
-				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT:
-				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED:
-				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN:
-				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED:
-				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_CLOSED:
-					$conditions['CircularNoticeContentCurrentStatus.current_status'] = (int)$paginatorParams['status'];
-					break;
-				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD:
-				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_READ_YET:
-				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_REPLIED:
-					$conditions['CircularNoticeContentMyStatus.my_status'] = (int)$paginatorParams['status'];
-					break;
+			if (
+				$paginatorParams['status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD ||
+				$paginatorParams['status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_READ_YET ||
+				$paginatorParams['status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_REPLIED
+			) {
+				$conditions['CircularNoticeContentMyStatus.my_status'] = (int)$paginatorParams['status'];
+			} else {
+				$conditions['CircularNoticeContentCurrentStatus.current_status'] = (int)$paginatorParams['status'];
 			}
 		}
 
@@ -300,7 +229,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 		}
 
 		// 表示件数
-		$limit = $circularNoticeFrameSetting['displayNumber'];
+		$limit = $frameSetting['displayNumber'];
 		if (isset($paginatorParams['limit'])) {
 			$limit = (int)$paginatorParams['limit'];
 		}
@@ -344,12 +273,12 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			}
 
 			// CircularNoticeContentを保存
-			if (! $circularNoticeContent = $this->save(null, false)) {
+			if (! $content = $this->save(null, false)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 
 			// 保存されたCircularNoticeContentでデータを差し替え
-			$data['CircularNoticeContent'] = $circularNoticeContent['CircularNoticeContent'];
+			$data['CircularNoticeContent'] = $content['CircularNoticeContent'];
 
 			// CircularNoticeChoicesを保存
 			if (! $this->CircularNoticeChoice->replaceCircularNoticeChoices($data)) {
@@ -417,7 +346,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 
 			// 削除対象となるIDを取得
 			$targetIds = $this->find('list', array(
-				'fields' => array('CircularNoticeContent.id', 'CircularNoticeContent.key'),
+				'fields' => array('CircularNoticeContent.id', 'CircularNoticeContent.id'),
 				'recursive' => -1,
 				'conditions' => array(
 					'CircularNoticeContent.key' => $key,
@@ -426,7 +355,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 
 			// 関連するデータを一式削除
 			if (count($targetIds) > 0) {
-				foreach ($targetIds as $targetId => $targetKey) {
+				foreach ($targetIds as $targetId) {
 					if (! $this->CircularNoticeTargetUser->deleteAll(array('CircularNoticeTargetUser.circular_notice_content_id' => $targetId), false)) {
 						throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 					}
@@ -448,5 +377,88 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 		}
 
 		return true;
+	}
+
+/**
+ * Get join array for current status of content.
+ *
+ * @return array
+ */
+	private function __getJoinArrayForCurrentStatus() {
+		// 現時点での回覧ステータスを取得するためのJOIN定義
+		$dataSource = $this->getDataSource();
+		$subQuery = $dataSource->buildStatement(
+			array(
+				'fields' => array(
+					'id',
+					'(CASE WHEN status = \'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT . '\' THEN ' .
+					'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT . '\' ' .
+					'WHEN status = \'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_PUBLISHED . '\' THEN ' .
+					'CASE WHEN opened_period_from > NOW() THEN ' .
+					'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED . '\' ' .
+					'ELSE ' .
+					'CASE WHEN opened_period_to < NOW() THEN ' .
+					'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_CLOSED . '\' ' .
+					'WHEN reply_deadline_set_flag = TRUE AND reply_deadline < NOW() THEN ' .
+					'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED . '\' ' .
+					'ELSE ' .
+					'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN . '\' ' .
+					'END ' .
+					'END ' .
+					'END) AS current_status',
+				),
+				'table' => 'circular_notice_contents',
+				'alias' => 'CircularNoticeContentCurrentStatus',
+			),
+			$this
+		);
+		return array(
+			'type' => 'LEFT',
+			'table' => '(' . $subQuery . ')',
+			'alias' => 'CircularNoticeContentCurrentStatus',
+			'conditions' => array(
+				'CircularNoticeContent.id = CircularNoticeContentCurrentStatus.id',
+			),
+		);
+	}
+
+/**
+ * Get join array for my status of content.
+ *
+ * @param $userId
+ * @return array
+ */
+	private function __getJoinArrayForMyStatus($userId) {
+		// ログイン者用の回覧ステータスを取得するためのJOIN定義
+		$dataSource = $this->getDataSource();
+		$subQuery = $dataSource->buildStatement(
+			array(
+				'fields' => array(
+					'user_id',
+					'circular_notice_content_id',
+					'(CASE WHEN read_flag = FALSE THEN ' .
+					'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD . '\' ' .
+					'ELSE ' .
+					'CASE WHEN reply_flag = FALSE THEN ' .
+					'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_READ_YET . '\' ' .
+					'ELSE' .
+					'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_REPLIED . '\' ' .
+					'END ' .
+					'END) AS my_status'
+				),
+				'table' => 'circular_notice_target_users',
+				'alias' => 'CircularNoticeContentMyStatus',
+			),
+			$this->CircularNoticeTargetUser
+		);
+		return array(
+			'type' => 'LEFT',
+			'table' => '(' . $subQuery . ')',
+			'alias' => 'CircularNoticeContentMyStatus',
+			'conditions' => array(
+				'CircularNoticeContent.id = CircularNoticeContentMyStatus.circular_notice_content_id',
+				'CircularNoticeContentMyStatus.user_id' => $userId,
+			),
+		);
 	}
 }

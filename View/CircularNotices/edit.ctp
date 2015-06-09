@@ -36,8 +36,8 @@
 ?>
 
 <div id="nc-circular-notices-<?php echo (int)$frameId; ?>"
-	 ng-controller="CircularNotices"
-	 ng-init="initCircularNoticeEdit(<?php echo h(json_encode($this->viewVars['circularNoticeContent'])); ?>)">
+	 ng-controller="CircularNoticeEdit"
+	 ng-init="initialize(<?php echo h(json_encode($this->viewVars['circularNoticeContent'])); ?>)">
 
 	<div class="modal-header">
 		<?php echo h(__d('circular_notices', 'Plugin Name')); ?>

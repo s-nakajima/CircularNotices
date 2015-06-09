@@ -1,6 +1,6 @@
 <?php
 /**
- * CircularNoticeTargetUser Test Case
+ * CircularNoticeContent Test Case
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
@@ -9,12 +9,12 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('CircularNoticeTargetUser', 'CircularNotices.Model');
+App::uses('CircularNoticeContent', 'CircularNotices.Model');
 
 /**
- * CircularNoticeTargetUser Test Case
+ * CircularNoticeContent Test Case
  */
-class CircularNoticeTargetUserTest extends CakeTestCase {
+class CircularNoticeContentTest extends CakeTestCase {
 
 /**
  * Fixtures
@@ -36,7 +36,7 @@ class CircularNoticeTargetUserTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->CircularNoticeTargetUser = ClassRegistry::init('CircularNotices.CircularNoticeTargetUser');
+		$this->CircularNoticeContent = ClassRegistry::init('CircularNotices.CircularNoticeContent');
 	}
 
 /**
@@ -45,7 +45,7 @@ class CircularNoticeTargetUserTest extends CakeTestCase {
  * @return void
  */
 	public function tearDown() {
-		unset($this->CircularNoticeTargetUser);
+		unset($this->CircularNoticeContent);
 		parent::tearDown();
 	}
 

@@ -68,22 +68,22 @@ class CircularNoticesAppController extends AppController {
 	public function initCircularNotice() {
 
 		// ブロック設定を取得
-		$circularNoticeSetting = $this->CircularNoticeSetting->getCircularNoticeSetting($this->viewVars['frameId']);
-		if (! $circularNoticeSetting) {
+		$setting = $this->CircularNoticeSetting->getCircularNoticeSetting($this->viewVars['frameId']);
+		if (! $setting) {
 			$this->throwBadRequest();
 			return;
 		}
-		$circularNoticeSetting = $this->camelizeKeyRecursive($circularNoticeSetting);
-		$this->set($circularNoticeSetting);
+		$setting = $this->camelizeKeyRecursive($setting);
+		$this->set($setting);
 
 		// フレーム設定を取得
-		$circularNoticeFrameSetting = $this->CircularNoticeFrameSetting->getCircularNoticeFrameSetting($this->viewVars['frameKey']);
-		if (! $circularNoticeFrameSetting) {
+		$frameSetting = $this->CircularNoticeFrameSetting->getCircularNoticeFrameSetting($this->viewVars['frameKey']);
+		if (! $frameSetting) {
 			$this->throwBadRequest();
 			return;
 		}
-		$circularNoticeFrameSetting = $this->camelizeKeyRecursive($circularNoticeFrameSetting);
-		$this->set($circularNoticeFrameSetting);
+		$frameSetting = $this->camelizeKeyRecursive($frameSetting);
+		$this->set($frameSetting);
 	}
 
 /**
@@ -128,7 +128,11 @@ class CircularNoticesAppController extends AppController {
 		$this->set('settingTabs', $settingTabs);
 	}
 
-// FIXME: スタブメソッド
+	/**
+	 * Get groups for stub.
+	 *
+	 * @return array
+	 */
 	protected function getGroupsStub() {
 		return array(
 			array('Group' => array(

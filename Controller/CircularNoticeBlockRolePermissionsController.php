@@ -94,7 +94,7 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
 			['content_creatable']
 		);
 
-		if (! $circularNoticeSetting = $this->CircularNoticeSetting->getCircularNoticeSetting($this->viewVars['frameId'])) {
+		if (! $setting = $this->CircularNoticeSetting->getCircularNoticeSetting($this->viewVars['frameId'])) {
 			$this->throwBadRequest();
 			return false;
 		}
@@ -111,7 +111,7 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
 		}
 
 		$results = array(
-			'circularNoticeSetting' => $circularNoticeSetting['CircularNoticeSetting'],
+			'circularNoticeSetting' => $setting['CircularNoticeSetting'],
 			'blockRolePermissions' => $permissions['BlockRolePermissions'],
 			'roles' => $permissions['Roles'],
 		);
