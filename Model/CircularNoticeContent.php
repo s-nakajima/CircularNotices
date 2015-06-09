@@ -41,7 +41,6 @@ class CircularNoticeContent extends CircularNoticesAppModel {
  * @see Model::save()
  */
 	public function beforeValidate($options = array()) {
-
 		// FIXME: バリデーションの実装
 		// FIXME: 相関チェック類の実装方法（日付FromToとかラジオと連動する値とか）
 
@@ -62,9 +61,9 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 					'required' => true,
 				),
 			),
-//			'reply_type',
-//			'is_room_targeted_flag',
-//			'target_groups',
+			//'reply_type',
+			//'is_room_targeted_flag',
+			//'target_groups',
 			'opened_period_from' => array(
 				'notEmpty' => array(
 					'rule' => array('notEmpty'),
@@ -89,10 +88,9 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 					'message' => 'Please enter a valid date and time.',
 				),
 			),
-
-//			'reply_deadline_set_flag',
-//			'reply_deadline',
-//			'status',
+			//'reply_deadline_set_flag',
+			//'reply_deadline',
+			//'status',
 		));
 
 		return parent::beforeValidate($options);
@@ -159,7 +157,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 /**
  * Get circular notice content
  *
- * @param int $id
+ * @param int $id circular_notice_contents.id
  * @return mixed
  */
 	public function getCircularNoticeContent($id) {
@@ -174,14 +172,13 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 /**
  * Get circular notice content list for pagination
  *
- * @param string $blockKey
- * @param array $frameSetting
- * @param array $paginatorParams
- * @param int $userId
+ * @param string $blockKey circular_notice_contents.circular_notice_setting_key
+ * @param array $frameSetting circular_notice_frame_settings
+ * @param array $paginatorParams paginator params
+ * @param int $userId user id
  * @return array
  */
 	public function getCircularNoticeContentsForPaginate($blockKey, $frameSetting, $paginatorParams, $userId) {
-
 		// 取得フィールド
 		$fields = array(
 			'*',
@@ -223,7 +220,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 		}
 
 		// 表示順
-		$order =  array('CircularNoticeContent.created' => 'desc');
+		$order = array('CircularNoticeContent.created' => 'desc');
 		if (isset($paginatorParams['sort']) && isset($paginatorParams['direction'])) {
 			$order = array($paginatorParams['sort'] => $paginatorParams['direction']);
 		}
@@ -247,13 +244,11 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 /**
  * Save circular notice content
  *
- * @param array $data
+ * @param array $data input data
  * @return bool
- * @throws Exception
  * @throws InternalErrorException
  */
 	public function saveCircularNoticeContent($data) {
-
 		// 必要なモデル読み込み
 		$this->loadModels([
 			'CircularNoticeContent' => 'CircularNotices.CircularNoticeContent',
@@ -319,7 +314,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 /**
  * Validate this model
  *
- * @param array $data
+ * @param array $data input data
  * @return bool
  */
 	private function __validateCircularNoticeContent($data) {
@@ -331,13 +326,11 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 /**
  * Delete circular notice content
  *
- * @param string $key
+ * @param string $key circular_notice_contents.key
  * @return bool
- * @throws Exception
  * @throws InternalErrorException
  */
 	public function deleteCircularNoticeContent($key) {
-
 		$this->setDataSource('master');
 		$dataSource = $this->getDataSource();
 		$dataSource->begin();
@@ -425,7 +418,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 /**
  * Get join array for my status of content.
  *
- * @param $userId
+ * @param int $userId user id
  * @return array
  */
 	private function __getJoinArrayForMyStatus($userId) {

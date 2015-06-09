@@ -28,11 +28,11 @@ class CircularNoticeBlocksController extends CircularNoticesAppController {
 		'Frames.Frame',
 	);
 
-	/**
-	 * use components
-	 *
-	 * @var array
-	 */
+/**
+ * use components
+ *
+ * @var array
+ */
 	public $components = array(
 		'NetCommons.NetCommonsRoomRole' => array(
 			//コンテンツの権限設定
@@ -42,20 +42,20 @@ class CircularNoticeBlocksController extends CircularNoticesAppController {
 		),
 	);
 
-	/**
-	 * beforeFilter
-	 *
-	 * @return void
-	 */
+/**
+ * beforeFilter
+ *
+ * @return void
+ */
 	public function beforeFilter() {
 		parent::beforeFilter();
 	}
 
-	/**
-	 * index
-	 *
-	 * @return void
-	 */
+/**
+ * index
+ *
+ * @return void
+ */
 	public function index() {
 
 		if (! $this->NetCommonsFrame->validateFrameId()) {

@@ -60,11 +60,10 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 /**
  * Get count of circular notice target user
  *
- * @param int $contentId
+ * @param int $contentId circular_notice_target_users.circular_notice_content_id
  * @return array
  */
-	public function getCircularNoticeTargetUserCount($contentId)
-	{
+	public function getCircularNoticeTargetUserCount($contentId) {
 		// 条件を設定
 		$conditions = array(
 			'CircularNoticeTargetUser.circular_notice_content_id' => $contentId,
@@ -102,12 +101,11 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 /**
  * Get circular notice target user of user
  *
- * @param int $contentId
- * @param int $userId
+ * @param int $contentId circular_notice_target_users.circular_notice_content_id
+ * @param int $userId user id
  * @return mixed
  */
 	public function getMyCircularNoticeTargetUser($contentId, $userId) {
-
 		$conditions = array(
 			'CircularNoticeTargetUser.circular_notice_content_id' => $contentId,
 			'CircularNoticeTargetUser.user_id' => $userId,
@@ -121,11 +119,10 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 /**
  * Get circular notice target users
  *
- * @param int $contentId
+ * @param int $contentId circular_notice_target_users.circular_notice_content_id
  * @return array
  */
 	public function getCircularNoticeTargetUsers($contentId) {
-
 		$conditions = array(
 			'CircularNoticeTargetUser.circular_notice_content_id' => $contentId,
 		);
@@ -138,13 +135,12 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 /**
  * Get circular notice target user list for pagination
  *
- * @param int $contentId
- * @param array $paginatorParams
- * @param int $userId
+ * @param int $contentId circular_notice_target_users.circular_notice_content_id
+ * @param array $paginatorParams paginator params
+ * @param int $userId user id
  * @return array
  */
 	public function getCircularNoticeTargetUsersForPaginator($contentId, $paginatorParams, $userId) {
-
 		// ログイン者を先頭に持ってくるためにfieldsをカスタム
 		$fields = array(
 			'*',
@@ -156,7 +152,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		);
 
 		// 表示順
-		$order =  array('User.username' => 'asc');
+		$order = array('User.username' => 'asc');
 		if (isset($paginatorParams['sort']) && isset($paginatorParams['direction'])) {
 			$order = array($paginatorParams['sort'] => $paginatorParams['direction']);
 		}
@@ -179,17 +175,16 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 /**
  * Hook for Paginator's paginate
  *
- * @param array $conditions
- * @param array $fields
- * @param array $order
- * @param int $limit
- * @param int $page
- * @param int $recursive
- * @param array $extra
+ * @param array $conditions conditions
+ * @param array $fields fields
+ * @param array $order order
+ * @param int $limit limit
+ * @param int $page page
+ * @param int $recursive recursive
+ * @param array $extra extra
  * @return mixed
  */
 	public function paginate($conditions, $fields, $order, $limit, $page = 1, $recursive = null, $extra = array()) {
-
 		// ログイン者を先頭に持ってくるためにorderをカスタム
 		$customOrder = array(array('my_order' => 'asc'));
 		if (! empty($order)) {
@@ -203,13 +198,11 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 /**
  * Save for read
  *
- * @param int $id
+ * @param int $id circular_notice_target_users.id
  * @return bool
- * @throws Exception
  * @throws InternalErrorException
  */
 	public function saveRead($id) {
-
 		$data = array(
 			'CircularNoticeTargetUser' => array(
 				'id' => $id,
@@ -228,15 +221,13 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 /**
  * Save circular notice target user
  *
- * @param array $data
+ * @param array $data input data
  * @return bool
- * @throws Exception
  * @throws InternalErrorException
  */
 	public function saveCircularNoticeTargetUser($data) {
-
 		// FIXME: これがあるとページネーションでこけてしまうため回避方法を探す
-//		$this->setDataSource('master');
+		//$this->setDataSource('master');
 		$dataSource = $this->getDataSource();
 		$dataSource->begin();
 
@@ -266,10 +257,11 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 /**
  * Delete-insert circular notice target users
  *
- * @param array $data
+ * @param $data input data
+ * @return bool
+ * @throws InternalErrorException
  */
 	public function replaceCircularNoticeTargetUsers($data) {
-
 		$contentId = $data['CircularNoticeContent']['id'];
 
 		// すべてDelete
@@ -297,7 +289,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 /**
  * Validate this model
  *
- * @param array $data
+ * @param array $data input data
  * @return bool
  */
 	private function __validateCircularNoticeTargetUser($data) {

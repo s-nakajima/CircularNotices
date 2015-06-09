@@ -46,8 +46,7 @@ class CircularNoticesAppController extends AppController {
  *
  * @return void
  */
-	public function beforeFilter()
-	{
+	public function beforeFilter() {
 		parent::beforeFilter();
 
 		$results = $this->camelizeKeyRecursive(['current' => $this->current]);
@@ -66,7 +65,6 @@ class CircularNoticesAppController extends AppController {
  * @return void
  */
 	public function initCircularNotice() {
-
 		// ブロック設定を取得
 		$setting = $this->CircularNoticeSetting->getCircularNoticeSetting($this->viewVars['frameId']);
 		if (! $setting) {
@@ -89,11 +87,10 @@ class CircularNoticesAppController extends AppController {
 /**
  * Initialize setting tabs
  *
- * @param string $activeTab
+ * @param string $activeTab Active tag name
  * @return void
  */
 	public function initSettingTabs($activeTab) {
-
 		$blockId = null;
 		if (isset($this->params['pass'][1])) {
 			$blockId = (int)$this->params['pass'][1];
@@ -128,11 +125,11 @@ class CircularNoticesAppController extends AppController {
 		$this->set('settingTabs', $settingTabs);
 	}
 
-	/**
-	 * Get groups for stub.
-	 *
-	 * @return array
-	 */
+/**
+ * Get groups for stub.
+ *
+ * @return array
+ */
 	protected function getGroupsStub() {
 		return array(
 			array('Group' => array(

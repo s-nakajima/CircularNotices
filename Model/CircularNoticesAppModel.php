@@ -19,11 +19,11 @@ App::uses('AppModel', 'Model');
  */
 class CircularNoticesAppModel extends AppModel {
 
-	/**
-	 * Get users for stub.
-	 *
-	 * @return array
-	 */
+/**
+ * Get users for stub.
+ *
+ * @return array
+ */
 	protected function getUsersStub() {
 		return array(
 			array('User' => array(
