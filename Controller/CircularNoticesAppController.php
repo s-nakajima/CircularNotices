@@ -130,7 +130,7 @@ class CircularNoticesAppController extends AppController {
  *
  * @return array
  */
-	protected function getGroupsStub() {
+	protected function _getGroupsStub() {
 		return array(
 			array('Group' => array(
 				'id' => 1,

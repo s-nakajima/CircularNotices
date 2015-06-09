@@ -127,7 +127,6 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
  * @throws InternalErrorException
  */
 	public function saveCircularNoticeFrameSetting($data) {
-
 		$this->setDataSource('master');
 		$dataSource = $this->getDataSource();
 		$dataSource->begin();

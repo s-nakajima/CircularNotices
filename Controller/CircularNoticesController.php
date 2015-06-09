@@ -238,7 +238,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		}
 
 		// FIXME: グループ情報を取得（共通待ち）
-		$groups = $this->getGroupsStub();
+		$groups = $this->_getGroupsStub();
 
 		$results = Hash::merge(
 			$content, $data,
@@ -289,7 +289,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		}
 
 		// FIXME: グループ情報を取得（共通待ち）
-		$groups = $this->getGroupsStub();
+		$groups = $this->_getGroupsStub();
 
 		// 画面表示用に一部データを整形
 		$content['CircularNoticeContent']['is_room_targeted_flag'] =

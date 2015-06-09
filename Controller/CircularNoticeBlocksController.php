@@ -57,7 +57,6 @@ class CircularNoticeBlocksController extends CircularNoticesAppController {
  * @return void
  */
 	public function index() {
-
 		if (! $this->NetCommonsFrame->validateFrameId()) {
 			$this->throwBadRequest();
 			return false;

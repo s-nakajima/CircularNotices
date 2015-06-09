@@ -104,9 +104,8 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 
-			// フレームとブロックが紐付いていない
 			if (! isset($frame['Frame']['block_id'])) {
-
+				// フレームとブロックが紐付いていない
 				// フレームと同じルームに紐付いている回覧板ブロックを取得
 				$block = $this->Block->find('first', array(
 					'conditions' => array(
@@ -130,9 +129,8 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 						throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 					}
 				}
-
-			// 紐付いていればそのブロックを取得
 			} else {
+				// 紐付いていればそのブロックを取得
 				$block = $this->Block->findById($frame['Frame']['block_id']);
 			}
 

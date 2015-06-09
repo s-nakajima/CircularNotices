@@ -281,7 +281,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			}
 
 			// FIXME: 回覧先の取得（共通待ち）
-			$users = $this->getUsersStub();
+			$users = $this->_getUsersStub();
 
 			// 取得したUserでデータを差し替え
 			$targetUsers = array();

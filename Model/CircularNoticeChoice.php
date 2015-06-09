@@ -36,7 +36,7 @@ class CircularNoticeChoice extends CircularNoticesAppModel {
 /**
  * Delete-insert circular notice choices
  *
- * @param $data input data
+ * @param array $data input data
  * @return bool
  * @throws InternalErrorException
  */

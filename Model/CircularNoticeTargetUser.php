@@ -257,7 +257,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 /**
  * Delete-insert circular notice target users
  *
- * @param $data input data
+ * @param array $data input data
  * @return bool
  * @throws InternalErrorException
  */

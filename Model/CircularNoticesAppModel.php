@@ -24,7 +24,7 @@ class CircularNoticesAppModel extends AppModel {
  *
  * @return array
  */
-	protected function getUsersStub() {
+	protected function _getUsersStub() {
 		return array(
 			array('User' => array(
 				'id' => 1,
