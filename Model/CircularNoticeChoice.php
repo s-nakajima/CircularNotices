@@ -40,11 +40,11 @@ class CircularNoticeChoice extends CircularNoticesAppModel {
  */
 	public function replaceCircularNoticeChoices($data) {
 
-		$circularNoticeContentId = $data['CircularNoticeContent']['id'];
+		$contentId = $data['CircularNoticeContent']['id'];
 
 		// 残す選択肢の条件を生成
 		$deleteConditions = array(
-			'CircularNoticeChoice.circular_notice_content_id' => $circularNoticeContentId,
+			'CircularNoticeChoice.circular_notice_content_id' => $contentId,
 		);
 		$extractIds = Hash::filter(Hash::extract($data['CircularNoticeChoices'], '{n}.CircularNoticeChoice.id'));
 		if (count($extractIds) > 0) {
@@ -59,7 +59,7 @@ class CircularNoticeChoice extends CircularNoticesAppModel {
 		// 1件ずつ保存
 		foreach ($data['CircularNoticeChoices'] as $choice) {
 
-			$choice['CircularNoticeChoice']['circular_notice_content_id'] = $circularNoticeContentId;
+			$choice['CircularNoticeChoice']['circular_notice_content_id'] = $contentId;
 
 			if (! $this->__validateCircularChoice($choice)) {
 				return false;

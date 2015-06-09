@@ -35,7 +35,7 @@
 	);
 ?>
 
-<div id="nc-circular-notices-<?php echo (int)$frameId; ?>" ng-controller="CircularNotices" ng-init="initCircularNoticeView()">
+<div id="nc-circular-notices-<?php echo (int)$frameId; ?>" ng-controller="CircularNoticeView" ng-init="initialize()">
 
 	<div class="modal-header">
 		<?php echo h(__d('circular_notices', 'Plugin Name')); ?>
@@ -57,12 +57,12 @@
 			</div>
 
 			<div class="circular-notice-index-counter">
-				<?php echo h(__d('circular_notices', 'Read Count Title')); ?> <?php echo h($circularNoticeReadCount); ?>
+				<?php echo h(__d('circular_notices', 'Read Count Title')); ?> <?php echo h($readCount); ?>
 				/
-				<?php echo h($circularNoticeTargetCount); ?><br />
-				<?php echo h(__d('circular_notices', 'Reply Count Title')); ?> <?php echo h($circularNoticeReplyCount); ?>
+				<?php echo h($targetCount); ?><br />
+				<?php echo h(__d('circular_notices', 'Reply Count Title')); ?> <?php echo h($replyCount); ?>
 				/
-				<?php echo h($circularNoticeTargetCount); ?><br />
+				<?php echo h($targetCount); ?><br />
 			</div>
 
 			<hr class="circular-notice-clear-float">

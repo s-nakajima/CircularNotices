@@ -23,8 +23,7 @@
 				'label' => false,
 				'class' => 'form-control',
 				'ui-tinymce' => 'tinymce.options',
-// FIXME: Angular経由で設定しているので要確認
-				'ng-model' => 'circularNoticeContentContent',
+				'ng-model' => 'circularNoticeContent.content',
 				'rows' => 5,
 				'required' => 'required',
 			]) ?>

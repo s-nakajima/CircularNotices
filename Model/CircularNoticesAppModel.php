@@ -19,7 +19,11 @@ App::uses('AppModel', 'Model');
  */
 class CircularNoticesAppModel extends AppModel {
 
-// FIXME: スタブメソッド
+	/**
+	 * Get users for stub.
+	 *
+	 * @return array
+	 */
 	protected function getUsersStub() {
 		return array(
 			array('User' => array(

@@ -60,18 +60,18 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 /**
  * Get count of circular notice target user
  *
- * @param int $circularNoticeContentId
+ * @param int $contentId
  * @return array
  */
-	public function getCircularNoticeTargetUserCount($circularNoticeContentId)
+	public function getCircularNoticeTargetUserCount($contentId)
 	{
 		// 条件を設定
 		$conditions = array(
-			'CircularNoticeTargetUser.circular_notice_content_id' => $circularNoticeContentId,
+			'CircularNoticeTargetUser.circular_notice_content_id' => $contentId,
 		);
 
 		// 回覧先件数を取得
-		$circularNoticeTargetCount = $this->find('count', array(
+		$targetCount = $this->find('count', array(
 			'conditions' => $conditions,
 		));
 
@@ -81,7 +81,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		);
 
 		// 閲覧済件数を取得
-		$circularNoticeReadCount = $this->find('count', array(
+		$readCount = $this->find('count', array(
 			'conditions' => $conditions,
 		));
 
@@ -91,25 +91,25 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		);
 
 		// 回答済件数を取得
-		$circularNoticeReplyCount = $this->find('count', array(
+		$replyCount = $this->find('count', array(
 			'conditions' => $conditions,
 		));
 
 		// 配列に詰めて返す
-		return compact('circularNoticeTargetCount', 'circularNoticeReadCount', 'circularNoticeReplyCount');
+		return compact('targetCount', 'readCount', 'replyCount');
 	}
 
 /**
  * Get circular notice target user of user
  *
- * @param int $circularNoticeContentId
+ * @param int $contentId
  * @param int $userId
  * @return mixed
  */
-	public function getMyCircularNoticeTargetUser($circularNoticeContentId, $userId) {
+	public function getMyCircularNoticeTargetUser($contentId, $userId) {
 
 		$conditions = array(
-			'CircularNoticeTargetUser.circular_notice_content_id' => $circularNoticeContentId,
+			'CircularNoticeTargetUser.circular_notice_content_id' => $contentId,
 			'CircularNoticeTargetUser.user_id' => $userId,
 		);
 
@@ -121,13 +121,13 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 /**
  * Get circular notice target users
  *
- * @param int $circularNoticeContentId
+ * @param int $contentId
  * @return array
  */
-	public function getCircularNoticeTargetUsers($circularNoticeContentId) {
+	public function getCircularNoticeTargetUsers($contentId) {
 
 		$conditions = array(
-			'CircularNoticeTargetUser.circular_notice_content_id' => $circularNoticeContentId,
+			'CircularNoticeTargetUser.circular_notice_content_id' => $contentId,
 		);
 
 		return $this->find('all', array(
@@ -138,12 +138,12 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 /**
  * Get circular notice target user list for pagination
  *
- * @param int $circularNoticeContentId
+ * @param int $contentId
  * @param array $paginatorParams
  * @param int $userId
  * @return array
  */
-	public function getCircularNoticeTargetUsersForPaginator($circularNoticeContentId, $paginatorParams, $userId) {
+	public function getCircularNoticeTargetUsersForPaginator($contentId, $paginatorParams, $userId) {
 
 		// ログイン者を先頭に持ってくるためにfieldsをカスタム
 		$fields = array(
@@ -152,7 +152,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		);
 
 		$conditions = array(
-			'CircularNoticeTargetUser.circular_notice_content_id' => $circularNoticeContentId,
+			'CircularNoticeTargetUser.circular_notice_content_id' => $contentId,
 		);
 
 		// 表示順
@@ -218,7 +218,11 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 			)
 		);
 
-		return $this->saveCircularNoticeTargetUser($data);
+		if (! $this->saveCircularNoticeTargetUser($data)) {
+			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+		}
+
+		return true;
 	}
 
 /**
@@ -231,7 +235,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
  */
 	public function saveCircularNoticeTargetUser($data) {
 
-// FIXME: これがあるとページネーションでこけてしまうため回避方法を探す
+		// FIXME: これがあるとページネーションでこけてしまうため回避方法を探す
 //		$this->setDataSource('master');
 		$dataSource = $this->getDataSource();
 		$dataSource->begin();
@@ -266,17 +270,17 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
  */
 	public function replaceCircularNoticeTargetUsers($data) {
 
-		$circularNoticeContentId = $data['CircularNoticeContent']['id'];
+		$contentId = $data['CircularNoticeContent']['id'];
 
 		// すべてDelete
-		if (! $this->deleteAll(array('CircularNoticeTargetUser.circular_notice_content_id' => $circularNoticeContentId), false)) {
+		if (! $this->deleteAll(array('CircularNoticeTargetUser.circular_notice_content_id' => $contentId), false)) {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 
 		// 1件ずつ保存
 		foreach ($data['CircularNoticeTargetUsers'] as $targetUser) {
 
-			$targetUser['CircularNoticeTargetUser']['circular_notice_content_id'] = $circularNoticeContentId;
+			$targetUser['CircularNoticeTargetUser']['circular_notice_content_id'] = $contentId;
 
 			if (! $this->__validateCircularNoticeTargetUser($targetUser)) {
 				return false;

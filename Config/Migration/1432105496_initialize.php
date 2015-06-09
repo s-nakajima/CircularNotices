@@ -1,4 +1,20 @@
 <?php
+/**
+ * CircularNotices CakeMigration
+ *
+ * @author Noriko Arai <arai@nii.ac.jp>
+ * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
+ * @link http://www.netcommons.org NetCommons Project
+ * @license http://www.netcommons.org/license.txt NetCommons License
+ * @copyright Copyright 2014, NetCommons Project
+ */
+
+/**
+ * CircularNotices CakeMigration
+ *
+ * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
+ * @package NetCommons\Bbses\Config\Migration
+ */
 class Initialize extends CakeMigration {
 
 /**
@@ -154,7 +170,7 @@ class Initialize extends CakeMigration {
 		),
 	);
 
-	/**
+/**
  * Before migration callback
  *
  * @param string $direction Direction of migration process (up or down)
@@ -175,7 +191,7 @@ class Initialize extends CakeMigration {
 			return true;
 		}
 		foreach ($this->records as $model => $records) {
-			if (!$this->updateRecords($model, $records)) {
+			if (! $this->updateRecords($model, $records)) {
 				return false;
 			}
 		}
@@ -194,7 +210,7 @@ class Initialize extends CakeMigration {
 		$Model = $this->generateModel($model);
 		foreach ($records as $record) {
 			$Model->create();
-			if (!$Model->save($record, false)) {
+			if (! $Model->save($record, false)) {
 				return false;
 			}
 		}

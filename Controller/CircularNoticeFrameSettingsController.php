@@ -81,8 +81,8 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
 			return false;
 		}
 
-		if (! $circularNoticeFrameSetting = $this->CircularNoticeFrameSetting->getCircularNoticeFrameSetting($this->viewVars['frameKey'])) {
-			$circularNoticeFrameSetting = $this->CircularNoticeFrameSetting->create(array(
+		if (! $frameSetting = $this->CircularNoticeFrameSetting->getCircularNoticeFrameSetting($this->viewVars['frameKey'])) {
+			$frameSetting = $this->CircularNoticeFrameSetting->create(array(
 				'frame_key' => $this->viewVars['frameKey'],
 			));
 		}
@@ -98,7 +98,7 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
 		}
 
 		$data = Hash::merge(
-			$circularNoticeFrameSetting,
+			$frameSetting,
 			$data
 		);
 		$results = $this->camelizeKeyRecursive($data);
