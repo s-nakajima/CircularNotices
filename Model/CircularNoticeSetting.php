@@ -83,13 +83,11 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 /**
  * Prepare circular notice settings
  *
- * @param int $frameId
+ * @param int $frameId frames.id
  * @return mixed
- * @throws Exception
  * @throws InternalErrorException
  */
 	public function prepareCircularNoticeSetting($frameId) {
-
 		$this->loadModels([
 			'Frame' => 'Frames.Frame',
 			'Block' => 'Blocks.Block',
@@ -106,9 +104,8 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 
-			// フレームとブロックが紐付いていない
 			if (! isset($frame['Frame']['block_id'])) {
-
+				// フレームとブロックが紐付いていない
 				// フレームと同じルームに紐付いている回覧板ブロックを取得
 				$block = $this->Block->find('first', array(
 					'conditions' => array(
@@ -117,25 +114,23 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 					)
 				));
 
-				// フレームと同じルームに紐付く回覧板ブロックが存在しなければ新規作成してフレームと紐付け
 				if (! $block) {
+					// フレームと同じルームに紐付く回覧板ブロックが存在しなければ新規作成してフレームと紐付け
 					$block = $this->Block->create(array(
 						'language_id' => $frame['Frame']['language_id'],
 						'room_id' => $frame['Frame']['room_id'],
 						'plugin_key' => 'circular_notices',
 					));
 					$block = $this->Block->saveByFrameId($frameId, $block);
-
-				// 存在する場合はフレームと紐付け
 				} else {
+					// 存在する場合はフレームと紐付け
 					$frame['Frame']['block_id'] = $block['Block']['id'];
 					if (! $this->Frame->save($frame, false)) {
 						throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 					}
 				}
-
-			// 紐付いていればそのブロックを取得
 			} else {
+				// 紐付いていればそのブロックを取得
 				$block = $this->Block->findById($frame['Frame']['block_id']);
 			}
 
@@ -174,11 +169,10 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 /**
  * Get circular notice settings
  *
- * @param int $frameId
+ * @param int $frameId frames.id
  * @return mixed
  */
 	public function getCircularNoticeSetting($frameId) {
-
 		$this->loadModels([
 			'Frame' => 'Frames.Frame',
 		]);
@@ -198,13 +192,11 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 /**
  * Save circular notice settings
  *
- * @param array $data
+ * @param array $data input data
  * @return bool
- * @throws Exception
  * @throws InternalErrorException
  */
 	public function saveCircularNoticeSetting($data) {
-
 		$this->loadModels([
 			'BlockRolePermission' => 'Blocks.BlockRolePermission',
 		]);
@@ -247,7 +239,7 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 /**
  * Validate this model
  *
- * @param array $data
+ * @param array $data input data
  * @return bool
  */
 	public function validateCircularNoticeSetting($data) {

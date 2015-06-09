@@ -75,7 +75,6 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @return void
  */
 	public function index() {
-
 		$this->initCircularNotice();
 
 		// ログインユーザIDを取得
@@ -122,7 +121,6 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @return void
  */
 	public function view($frameId = null, $contentId = null) {
-
 		$this->initCircularNotice();
 
 		$userId = (int)$this->Auth->user('id');
@@ -150,7 +148,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 			$data = Hash::merge(
 				$this->data,
-				['CircularNoticeTargetUser' => ['reply_flag' => true, 'reply_datetime' => date('Y-m-d H:i:s'), 'reply_selection_value' => $replySelectionValue,]]
+				['CircularNoticeTargetUser' => ['reply_flag' => true, 'reply_datetime' => date('Y-m-d H:i:s'), 'reply_selection_value' => $replySelectionValue]]
 			);
 
 			$this->CircularNoticeTargetUser->saveCircularNoticeTargetUser($data);
@@ -192,7 +190,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 		$results = Hash::merge(
 			$content, $counts,
-			['MyAnswer' => $myTargetUser, 'CircularNoticeTargetUsers' => $targetUsers, 'AnswersSummary' => $answersSummary,]
+			['MyAnswer' => $myTargetUser, 'CircularNoticeTargetUsers' => $targetUsers, 'AnswersSummary' => $answersSummary]
 		);
 		$results = $this->camelizeKeyRecursive($results);
 		$this->set($results);
@@ -205,7 +203,6 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @return void
  */
 	public function add($frameId = null) {
-
 		$this->view = 'edit';
 
 		$this->initCircularNotice();
@@ -241,7 +238,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		}
 
 		// FIXME: グループ情報を取得（共通待ち）
-		$groups = $this->getGroupsStub();
+		$groups = $this->_getGroupsStub();
 
 		$results = Hash::merge(
 			$content, $data,
@@ -259,7 +256,6 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @return void
  */
 	public function edit($frameId = null, $contentId = null) {
-
 		$this->initCircularNotice();
 
 		if (! $content = $this->CircularNoticeContent->getCircularNoticeContent($contentId)) {
@@ -293,7 +289,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		}
 
 		// FIXME: グループ情報を取得（共通待ち）
-		$groups = $this->getGroupsStub();
+		$groups = $this->_getGroupsStub();
 
 		// 画面表示用に一部データを整形
 		$content['CircularNoticeContent']['is_room_targeted_flag'] =
@@ -317,7 +313,6 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @return void
  */
 	public function delete($frameId = null, $contentKey = null) {
-
 		$this->initCircularNotice();
 
 		if (! $this->request->isDelete()) {
@@ -327,16 +322,15 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 		$this->CircularNoticeContent->deleteCircularNoticeContent($contentKey);
 		$this->redirectByFrameId();
-		return;
 	}
 
 /**
  * Get summary of answer.
  *
- * @param int $contentId
+ * @param int $contentId circular_notice_content.id
+ * @return array
  */
 	private function __getAnswerSummary($contentId) {
-
 		$answerSummary = array();
 
 		$targetUsers = $this->CircularNoticeTargetUser->getCircularNoticeTargetUsers($contentId);

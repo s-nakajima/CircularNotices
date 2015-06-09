@@ -60,13 +60,11 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
 /**
  * Prepare circular notice frame settings
  *
- * @param int $frameId
+ * @param int $frameId frames.id
  * @return mixed
- * @throws Exception
  * @throws InternalErrorException
  */
 	public function prepareCircularNoticeFrameSetting($frameId) {
-
 		$this->loadModels([
 			'Frame' => 'Frames.Frame',
 		]);
@@ -109,7 +107,7 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
 /**
  * Get circular notice frame settings
  *
- * @param string $frameKey
+ * @param string $frameKey circular_notice_frame_settings.frame_key
  * @return mixed
  */
 	public function getCircularNoticeFrameSetting($frameKey) {
@@ -124,13 +122,11 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
 /**
  * Save circular notice frame settings
  *
- * @param array $data
+ * @param array $data input data
  * @return bool
- * @throws Exception
  * @throws InternalErrorException
  */
 	public function saveCircularNoticeFrameSetting($data) {
-
 		$this->setDataSource('master');
 		$dataSource = $this->getDataSource();
 		$dataSource->begin();
@@ -159,7 +155,7 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
 /**
  * Validate this model
  *
- * @param array $data
+ * @param array $data input data
  * @return bool
  */
 	public function validateCircularNoticeFrameSetting($data) {

@@ -36,10 +36,11 @@ class CircularNoticeChoice extends CircularNoticesAppModel {
 /**
  * Delete-insert circular notice choices
  *
- * @param array $data
+ * @param array $data input data
+ * @return bool
+ * @throws InternalErrorException
  */
 	public function replaceCircularNoticeChoices($data) {
-
 		$contentId = $data['CircularNoticeContent']['id'];
 
 		// 残す選択肢の条件を生成
@@ -76,7 +77,7 @@ class CircularNoticeChoice extends CircularNoticesAppModel {
 /**
  * Validate this model
  *
- * @param array $data
+ * @param array $data input data
  * @return bool
  */
 	private function __validateCircularChoice($data) {
