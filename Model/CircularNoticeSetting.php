@@ -149,11 +149,6 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 				$block = $this->Block->findById($frame['Frame']['block_id']);
 			}
 
-			// この時点でブロックが決定していないのはおかしい
-			if (! $block) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-			}
-
 			// ブロックに紐づく設定が存在しなければ新規作成
 			if (! $blockSetting = $this->findByBlockKey($block['Block']['key'])) {
 				$data = $this->create(array(
