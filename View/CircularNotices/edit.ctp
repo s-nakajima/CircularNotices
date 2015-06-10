@@ -90,10 +90,10 @@
 			</div>
 
 			<div class="panel-footer text-center">
-				<?php if (isset($circularNoticeContentCurrentStatus)) { ?>
+				<?php if ($this->request->params['action'] === 'edit') { ?>
 					<?php if (
-						$circularNoticeContentCurrentStatus['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT ||
-						$circularNoticeContentCurrentStatus['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED
+						$circularNoticeContent['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT ||
+						$circularNoticeContent['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED
 					) { ?>
 						<?php echo $this->element('NetCommons.workflow_buttons'); ?>
 					<?php } else { ?>

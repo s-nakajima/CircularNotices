@@ -155,6 +155,34 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 	);
 
 /**
+ * Called before each find operation. Return false if you want to halt the find
+ * call, otherwise return the (modified) query data.
+ *
+ * @param array $query Data used to execute this query, i.e. conditions, order, etc.
+ * @return mixed true if the operation should continue, false if it should abort; or, modified
+ *  $query to continue with new $query
+ * @link http://book.cakephp.org/2.0/en/models/callback-methods.html#beforefind
+ */
+	public function beforeFind($query) {
+		$this->virtualFields['current_status'] =
+			'CASE WHEN status = \'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT . '\' THEN ' .
+				'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT . '\' ' .
+			'WHEN status = \'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_PUBLISHED . '\' THEN ' .
+				'CASE WHEN opened_period_from > NOW() THEN ' .
+					'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED . '\' ' .
+				'ELSE ' .
+					'CASE WHEN opened_period_to < NOW() THEN ' .
+						'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_CLOSED . '\' ' .
+					'WHEN reply_deadline_set_flag = TRUE AND reply_deadline < NOW() THEN ' .
+						'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED . '\' ' .
+					'ELSE ' .
+						'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN . '\' ' .
+					'END ' .
+				'END ' .
+			'END';
+	}
+
+/**
  * Get circular notice content
  *
  * @param int $id circular_notice_contents.id
@@ -164,12 +192,10 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 	public function getCircularNoticeContent($id, $userId) {
 		$fields = array(
 			'*',
-			'CircularNoticeContentCurrentStatus.current_status',
 			'CircularNoticeContentMyStatus.my_status',
 		);
 
 		$joins = array(
-			$this->__getJoinArrayForCurrentStatus(),
 			$this->__getJoinArrayForMyStatus($userId),
 		);
 
@@ -196,13 +222,11 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 		// 取得フィールド
 		$fields = array(
 			'*',
-			'CircularNoticeContentCurrentStatus.current_status',
 			'CircularNoticeContentMyStatus.my_status',
 		);
 
 		// JOIN
 		$joins = array(
-			$this->__getJoinArrayForCurrentStatus(),
 			$this->__getJoinArrayForMyStatus($userId)
 		);
 
@@ -229,7 +253,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			) {
 				$conditions['CircularNoticeContentMyStatus.my_status'] = (int)$paginatorParams['status'];
 			} else {
-				$conditions['CircularNoticeContentCurrentStatus.current_status'] = (int)$paginatorParams['status'];
+				$conditions['CircularNoticeContent.current_status'] = (int)$paginatorParams['status'];
 			}
 		}
 
@@ -384,49 +408,6 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 		}
 
 		return true;
-	}
-
-/**
- * Get join array for current status of content.
- *
- * @return array
- */
-	private function __getJoinArrayForCurrentStatus() {
-		// 現時点での回覧ステータスを取得するためのJOIN定義
-		$dataSource = $this->getDataSource();
-		$subQuery = $dataSource->buildStatement(
-			array(
-				'fields' => array(
-					'id',
-					'(CASE WHEN status = \'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT . '\' THEN ' .
-					'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT . '\' ' .
-					'WHEN status = \'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_PUBLISHED . '\' THEN ' .
-					'CASE WHEN opened_period_from > NOW() THEN ' .
-					'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED . '\' ' .
-					'ELSE ' .
-					'CASE WHEN opened_period_to < NOW() THEN ' .
-					'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_CLOSED . '\' ' .
-					'WHEN reply_deadline_set_flag = TRUE AND reply_deadline < NOW() THEN ' .
-					'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED . '\' ' .
-					'ELSE ' .
-					'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN . '\' ' .
-					'END ' .
-					'END ' .
-					'END) AS current_status',
-				),
-				'table' => 'circular_notice_contents',
-				'alias' => 'CircularNoticeContentCurrentStatus',
-			),
-			$this
-		);
-		return array(
-			'type' => 'LEFT',
-			'table' => '(' . $subQuery . ')',
-			'alias' => 'CircularNoticeContentCurrentStatus',
-			'conditions' => array(
-				'CircularNoticeContent.id = CircularNoticeContentCurrentStatus.id',
-			),
-		);
 	}
 
 /**

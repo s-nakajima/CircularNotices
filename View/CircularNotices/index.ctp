@@ -63,7 +63,7 @@
 					<div class="circular-notice-index-status">
 						<?php echo $this->element('CircularNotices/status_label',
 							array(
-								'currentStatus' => $circularNoticeContent['currentStatus'],
+								'currentStatus' => $circularNoticeContent['circularNoticeContent']['currentStatus'],
 								'myStatus' => $circularNoticeContent['myStatus'],
 							)
 						); ?>
@@ -71,8 +71,8 @@
 					<div class="circular-notice-index-content">
 
 					<?php if (
-						$circularNoticeContent['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT ||
-						$circularNoticeContent['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED
+						$circularNoticeContent['circularNoticeContent']['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT ||
+						$circularNoticeContent['circularNoticeContent']['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED
 					) { ?>
 						<?php echo h($circularNoticeContent['circularNoticeContent']['subject']); ?><br />
 					<?php } else { ?>

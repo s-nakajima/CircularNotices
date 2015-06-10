@@ -157,11 +157,8 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
  * @return array
  */
 	public function getCircularNoticeTargetUsersForPaginator($contentId, $paginatorParams, $userId) {
-		// ログイン者を先頭に持ってくるためにfieldsをカスタム
-		$fields = array(
-			'*',
-			'(CASE WHEN CircularNoticeTargetUser.user_id = \'' . $userId . '\' THEN 1 ELSE 2 END) AS my_order',
-		);
+		$this->virtualFields['first_order'] =
+			'CASE WHEN CircularNoticeTargetUser.user_id = ' . $userId . ' THEN 1 ELSE 2 END';
 
 		$conditions = array(
 			'CircularNoticeTargetUser.circular_notice_content_id' => $contentId,
@@ -180,7 +177,6 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		}
 
 		return array(
-			'fields' => $fields,
 			'recursive' => 0,
 			'conditions' => $conditions,
 			'order' => $order,
@@ -202,7 +198,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
  */
 	public function paginate($conditions, $fields, $order, $limit, $page = 1, $recursive = null, $extra = array()) {
 		// ログイン者を先頭に持ってくるためにorderをカスタム
-		$customOrder = array(array('my_order' => 'asc'));
+		$customOrder = array(array('CircularNoticeTargetUser.first_order' => 'asc'));
 		if (! empty($order)) {
 			$customOrder[] = $order;
 		}

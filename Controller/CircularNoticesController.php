@@ -95,8 +95,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 			// 各回覧データの閲覧／回答件数を取得
 			foreach ($contents as $i => $content) {
 
-				// 現時点／ログイン者に応じたステータスをセット
-				$contents[$i]['currentStatus'] = $content['CircularNoticeContentCurrentStatus']['current_status'];
+				// ログイン者に応じたステータスをセット
 				$contents[$i]['myStatus'] = $content['CircularNoticeContentMyStatus']['my_status'];
 
 				// 閲覧件数／回答件数を取得してセット
@@ -135,8 +134,8 @@ class CircularNoticesController extends CircularNoticesAppController {
 		// 未読で回覧中／回答受付終了の場合は既読に更新
 		if ($content['CircularNoticeContentMyStatus']['my_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD) {
 			if (
-				$content['CircularNoticeContentCurrentStatus']['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN ||
-				$content['CircularNoticeContentCurrentStatus']['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED
+				$content['CircularNoticeContent']['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN ||
+				$content['CircularNoticeContent']['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED
 			) {
 				$this->CircularNoticeTargetUser->saveRead($myTargetUser['CircularNoticeTargetUser']['id']);
 			}
