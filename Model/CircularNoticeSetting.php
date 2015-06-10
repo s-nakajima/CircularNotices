@@ -133,7 +133,7 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 					// フレームと同じルームに紐付く回覧板ブロックが存在しなければ新規作成してフレームと紐付け
 					$block = $this->Block->create(array(
 						'language_id' => $frame['Frame']['language_id'],
-						'room_id' => $frame['Frame']['room_id'],
+						'room_id' => $frame['Frame']['room_id'] ? $frame['Frame']['room_id'] : 0,
 						'plugin_key' => 'circular_notices',
 					));
 					$block = $this->Block->saveByFrameId($frameId, $block);
@@ -147,11 +147,6 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 			} else {
 				// 紐付いていればそのブロックを取得
 				$block = $this->Block->findById($frame['Frame']['block_id']);
-			}
-
-			// この時点でブロックが決定していないのはおかしい
-			if (! $block) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 
 			// ブロックに紐づく設定が存在しなければ新規作成

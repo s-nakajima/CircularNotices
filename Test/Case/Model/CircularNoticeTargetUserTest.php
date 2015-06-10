@@ -10,6 +10,8 @@
  */
 
 App::uses('CircularNoticeTargetUser', 'CircularNotices.Model');
+App::uses('NetCommonsBlockComponent', 'NetCommons.Controller/Component');
+App::uses('CircularNoticeComponent', 'CircularNotices.Controller/Component');
 
 /**
  * CircularNoticeTargetUser Test Case

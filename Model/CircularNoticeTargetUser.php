@@ -12,6 +12,7 @@
  */
 
 App::uses('CircularNoticesAppModel', 'CircularNotices.Model');
+App::uses('CircularNoticeComponent', 'CircularNotices.Controller/Component');
 
 /**
  * CircularNoticeTargetUser Model
@@ -70,8 +71,40 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
-		)
+		),
+		'CircularNoticeContent' => array(
+			'className' => 'CircularNotices.CircularNoticeContent',
+			'foreignKey' => 'circular_notice_content_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
 	);
+
+/**
+ * Constructor. Binds the model's database table to the object.
+ *
+ * @param bool|int|string|array $id Set this ID for this model on startup,
+ * can also be an array of options, see above.
+ * @param string $table Name of database table to use.
+ * @param string $ds DataSource connection name.
+ * @see Model::__construct()
+ * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+ */
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+
+		$this->virtualFields['user_status'] =
+			'CASE WHEN read_flag = FALSE THEN ' .
+				'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD . '\' ' .
+			'ELSE ' .
+				'CASE WHEN reply_flag = FALSE THEN ' .
+					'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_READ_YET . '\' ' .
+				'ELSE' .
+					'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_REPLIED . '\' ' .
+				'END ' .
+			'END';
+	}
 
 /**
  * Get count of circular notice target user
@@ -157,11 +190,8 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
  * @return array
  */
 	public function getCircularNoticeTargetUsersForPaginator($contentId, $paginatorParams, $userId) {
-		// ログイン者を先頭に持ってくるためにfieldsをカスタム
-		$fields = array(
-			'*',
-			'(CASE WHEN CircularNoticeTargetUser.user_id = \'' . $userId . '\' THEN 1 ELSE 2 END) AS my_order',
-		);
+		$this->virtualFields['first_order'] =
+			'CASE WHEN CircularNoticeTargetUser.user_id = ' . $userId . ' THEN 1 ELSE 2 END';
 
 		$conditions = array(
 			'CircularNoticeTargetUser.circular_notice_content_id' => $contentId,
@@ -180,7 +210,6 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		}
 
 		return array(
-			'fields' => $fields,
 			'recursive' => 0,
 			'conditions' => $conditions,
 			'order' => $order,
@@ -202,7 +231,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
  */
 	public function paginate($conditions, $fields, $order, $limit, $page = 1, $recursive = null, $extra = array()) {
 		// ログイン者を先頭に持ってくるためにorderをカスタム
-		$customOrder = array(array('my_order' => 'asc'));
+		$customOrder = array(array('CircularNoticeTargetUser.first_order' => 'asc'));
 		if (! empty($order)) {
 			$customOrder[] = $order;
 		}
@@ -214,21 +243,36 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 /**
  * Save for read
  *
- * @param int $id circular_notice_target_users.id
+ * @param int $contentId circular_notice_contents.id
+ * @param int $userId user id
  * @return bool
  * @throws InternalErrorException
  */
-	public function saveRead($id) {
-		$data = array(
-			'CircularNoticeTargetUser' => array(
-				'id' => $id,
-				'read_flag' => true,
-				'read_datetime' => date('Y-m-d H:i:s'),
+	public function saveRead($contentId, $userId) {
+		$target = $this->find('first', array(
+			'conditions' => array(
+				'CircularNoticeTargetUser.circular_notice_content_id' => $contentId,
+				'CircularNoticeTargetUser.user_id' => $userId,
 			)
-		);
+		));
 
-		if (! $this->saveCircularNoticeTargetUser($data)) {
-			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+		if ($target['CircularNoticeTargetUser']['user_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD) {
+			if (
+				$target['CircularNoticeContent']['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN ||
+				$target['CircularNoticeContent']['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED
+			) {
+				$data = array(
+					'CircularNoticeTargetUser' => array(
+						'id' => $target['CircularNoticeTargetUser']['id'],
+						'read_flag' => true,
+						'read_datetime' => date('Y-m-d H:i:s'),
+					)
+				);
+
+				if (! $this->saveCircularNoticeTargetUser($data)) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				}
+			}
 		}
 
 		return true;

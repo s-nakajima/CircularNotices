@@ -61,25 +61,18 @@
 			<div class="circular-notice-block row">
 				<div>
 					<div class="circular-notice-index-status">
-						<?php echo $this->element('CircularNotices/status_label',
-							array(
-								'currentStatus' => $circularNoticeContent['currentStatus'],
-								'myStatus' => $circularNoticeContent['myStatus'],
-							)
-						); ?>
+						<?php echo $this->element('CircularNotices/status_label', array('circularNoticeContent' => $circularNoticeContent)); ?>
 					</div>
 					<div class="circular-notice-index-content">
 
 					<?php if (
-						$circularNoticeContent['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT ||
-						$circularNoticeContent['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED
+						$circularNoticeContent['circularNoticeContent']['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT ||
+						$circularNoticeContent['circularNoticeContent']['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED
 					) { ?>
 						<?php echo h($circularNoticeContent['circularNoticeContent']['subject']); ?><br />
 					<?php } else { ?>
 						<a href="<?php echo $this->Html->url('/circular_notices/circular_notices/view/' . $frameId . '/' . $circularNoticeContent['circularNoticeContent']['id']); ?>"><?php echo h($circularNoticeContent['circularNoticeContent']['subject']); ?></a><br />
 					<?php } ?>
-
-
 
 						<small>
 							<?php echo h(__d('circular_notices', 'Circular Content Period Title')); ?>

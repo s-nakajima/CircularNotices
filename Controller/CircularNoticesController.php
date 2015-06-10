@@ -94,11 +94,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 			// 各回覧データの閲覧／回答件数を取得
 			foreach ($contents as $i => $content) {
-
-				// 現時点／ログイン者に応じたステータスをセット
-				$contents[$i]['currentStatus'] = $content['CircularNoticeContentCurrentStatus']['current_status'];
-				$contents[$i]['myStatus'] = $content['CircularNoticeContentMyStatus']['my_status'];
-
 				// 閲覧件数／回答件数を取得してセット
 				// FIXME: 表示件数が多い場合、クエリ発行回数がかなり増える
 				$counts = $this->CircularNoticeTargetUser->getCircularNoticeTargetUserCount((int)$content['CircularNoticeContent']['id']);
@@ -127,19 +122,16 @@ class CircularNoticesController extends CircularNoticesAppController {
 		// 回覧を取得
 		$content = $this->CircularNoticeContent->getCircularNoticeContent($contentId, $userId);
 
-		// ログイン者の回答を取得
-		$myTargetUser = $this->CircularNoticeTargetUser->getMyCircularNoticeTargetUser($contentId, $userId);
-		$myTargetUser['CircularNoticeTargetUser']['origin_reply_text_value'] = $myTargetUser['CircularNoticeTargetUser']['reply_text_value'];
-		$myTargetUser['CircularNoticeTargetUser']['origin_reply_selection_value'] = $myTargetUser['CircularNoticeTargetUser']['reply_selection_value'];
+		// ログイン者が回覧先に含まれる
+		if ($content['MyCircularNoticeTargetUser']) {
 
-		// 未読で回覧中／回答受付終了の場合は既読に更新
-		if ($content['CircularNoticeContentMyStatus']['my_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD) {
-			if (
-				$content['CircularNoticeContentCurrentStatus']['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN ||
-				$content['CircularNoticeContentCurrentStatus']['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED
-			) {
-				$this->CircularNoticeTargetUser->saveRead($myTargetUser['CircularNoticeTargetUser']['id']);
-			}
+			// 既読に更新
+			$this->CircularNoticeTargetUser->saveRead($contentId, $userId);
+
+			// ログイン者の回答を取得して整形
+			$myTargetUser = array('CircularNoticeTargetUser' => $content['MyCircularNoticeTargetUser'][0]);
+			$myTargetUser['CircularNoticeTargetUser']['origin_reply_text_value'] = $myTargetUser['CircularNoticeTargetUser']['reply_text_value'];
+			$myTargetUser['CircularNoticeTargetUser']['origin_reply_selection_value'] = $myTargetUser['CircularNoticeTargetUser']['reply_selection_value'];
 		}
 
 		// 回覧の閲覧件数／回答件数を取得
