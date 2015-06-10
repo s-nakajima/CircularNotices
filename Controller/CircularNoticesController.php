@@ -122,20 +122,24 @@ class CircularNoticesController extends CircularNoticesAppController {
  */
 	public function view($frameId = null, $contentId = null) {
 		$this->initCircularNotice();
-
 		$userId = (int)$this->Auth->user('id');
 
 		// 回覧を取得
-		$content = $this->CircularNoticeContent->getCircularNoticeContent($contentId);
+		$content = $this->CircularNoticeContent->getCircularNoticeContent($contentId, $userId);
 
 		// ログイン者の回答を取得
 		$myTargetUser = $this->CircularNoticeTargetUser->getMyCircularNoticeTargetUser($contentId, $userId);
 		$myTargetUser['CircularNoticeTargetUser']['origin_reply_text_value'] = $myTargetUser['CircularNoticeTargetUser']['reply_text_value'];
 		$myTargetUser['CircularNoticeTargetUser']['origin_reply_selection_value'] = $myTargetUser['CircularNoticeTargetUser']['reply_selection_value'];
 
-		// 未読の場合は既読に更新
-		if (! $myTargetUser['CircularNoticeTargetUser']['read_flag']) {
-			$this->CircularNoticeTargetUser->saveRead($myTargetUser['CircularNoticeTargetUser']['id']);
+		// 未読で回覧中／回答受付終了の場合は既読に更新
+		if ($content['CircularNoticeContentMyStatus']['my_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD) {
+			if (
+				$content['CircularNoticeContentCurrentStatus']['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN ||
+				$content['CircularNoticeContentCurrentStatus']['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED
+			) {
+				$this->CircularNoticeTargetUser->saveRead($myTargetUser['CircularNoticeTargetUser']['id']);
+			}
 		}
 
 		// 回覧の閲覧件数／回答件数を取得
@@ -145,14 +149,8 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$this->Paginator->settings = $this->CircularNoticeTargetUser->getCircularNoticeTargetUsersForPaginator($contentId, $this->params['named'], $userId);
 		$targetUsers = $this->Paginator->paginate('CircularNoticeTargetUser');
 
-		// 択一選択／選択方式の場合は回答集計
-		$answersSummary = array();
-		if (
-			$content['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION ||
-			$content['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION
-		) {
-			$answersSummary = $this->__getAnswerSummary($contentId);
-		}
+		// 回答を集計
+		$answersSummary = $this->__getAnswerSummary($contentId);
 
 		// 回答の登録／更新
 		if ($this->request->is('post')) {
@@ -250,8 +248,9 @@ class CircularNoticesController extends CircularNoticesAppController {
  */
 	public function edit($frameId = null, $contentId = null) {
 		$this->initCircularNotice();
+		$userId = (int)$this->Auth->user('id');
 
-		if (! $content = $this->CircularNoticeContent->getCircularNoticeContent($contentId)) {
+		if (! $content = $this->CircularNoticeContent->getCircularNoticeContent($contentId, $userId)) {
 			$this->throwBadRequest();
 			return;
 		}
