@@ -22,19 +22,21 @@
 		<div class="input-group inline-block" style="margin-left: 20px;">
 			<div class="input-group">
 				<?php echo $this->Form->time('CircularNoticeContent.opened_period_from', array(
-					'value' => (isset($circularNoticeContent['openedPeriodFrom']) ? $circularNoticeContent['openedPeriodFrom'] : ''),
+					'ng-model' => 'circularNoticeContent.openedPeriodFrom',
 					'label' => false,
 					'class' => 'form-control',
-					'placeholder' => 'yyyy-mm-dd hh:nn'
+					'placeholder' => 'yyyy-mm-dd hh:mm',
+					'datetimepicker'
 				)); ?>
 				<span class="input-group-addon">
 					<span class="glyphicon glyphicon-minus"></span>
 				</span>
 				<?php echo $this->Form->time('CircularNoticeContent.opened_period_to', array(
-					'value' => (isset($circularNoticeContent['openedPeriodTo']) ? $circularNoticeContent['openedPeriodTo'] : ''),
+					'ng-model' => 'circularNoticeContent.openedPeriodTo',
 					'label' => false,
 					'class' => 'form-control',
-					'placeholder' => 'yyyy-mm-dd hh:nn'
+					'placeholder' => 'yyyy-mm-dd hh:mm',
+					'datetimepicker'
 				)); ?>
 			</div>
 		</div>
