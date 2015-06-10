@@ -90,7 +90,21 @@
 			</div>
 
 			<div class="panel-footer text-center">
-				<?php echo $this->element('NetCommons.workflow_buttons'); ?>
+				<?php if (isset($circularNoticeContentCurrentStatus)) { ?>
+					<?php if (
+						$circularNoticeContentCurrentStatus['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT ||
+						$circularNoticeContentCurrentStatus['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED
+					) { ?>
+						<?php echo $this->element('NetCommons.workflow_buttons'); ?>
+					<?php } else { ?>
+						<a href="<?php echo $this->Html->url('/') ?>" class="btn btn-default btn-workflow">
+							<span class="glyphicon glyphicon-remove"></span>
+							<?php echo __d('net_commons', 'Cancel') ?>
+						</a>
+					<?php } ?>
+				<?php } else { ?>
+					<?php echo $this->element('NetCommons.workflow_buttons'); ?>
+				<?php } ?>
 			</div>
 
 		<?php echo $this->Form->end(); ?>
