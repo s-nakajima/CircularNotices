@@ -113,11 +113,12 @@
 				<?php echo h(__d('circular_notices', 'Answer Title')); ?>
 				<?php switch ($circularNoticeContent['replyType']) {
 					case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT:
-						echo h($myAnswer['circularNoticeTargetUser']['replyTextValue']);
+						echo h($myAnswer['circularNoticeTargetUser']['originReplyTextValue']);
 						break;
 					case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION:
 					case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION:
-						echo h(implode('、', $myAnswer['circularNoticeTargetUser']['replySelectionValue']));
+						$selectionValues = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $myAnswer['circularNoticeTargetUser']['originReplySelectionValue']);
+						echo h(implode('、', $selectionValues));
 						break;
 				} ?>
 
@@ -161,7 +162,7 @@
 										'type' => 'radio',
 										'legend' => false,
 										'label' => true,
-										'value' => ($myAnswer['circularNoticeTargetUser']['replySelectionValue'] ? $myAnswer['circularNoticeTargetUser']['replySelectionValue'][0] : null),
+										'value' => $myAnswer['circularNoticeTargetUser']['replySelectionValue'],
 										'options' => $selections,
 									));
 									break;
@@ -170,13 +171,14 @@
 									foreach ($circularNoticeChoice as $choices) {
 										$selections[$choices['value']] = $choices['value'];
 									}
+									$selected = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $myAnswer['circularNoticeTargetUser']['replySelectionValue']);
 									echo $this->Form->input('CircularNoticeTargetUser.reply_selection_value', array(
 										'class' => 'circular-notice-checkbox',
 										'div' => false,
 										'type' => 'select',
 										'label' => false,
 										'multiple' => 'checkbox',
-										'selected' => $myAnswer['circularNoticeTargetUser']['replySelectionValue'],
+										'selected' => $selected,
 										'options' => $selections,
 									));
 									break;
@@ -266,7 +268,8 @@
 									break;
 								case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION:
 								case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION:
-									$answer = implode('、', $circularNoticeTargetUser['circularNoticeTargetUser']['replySelectionValue']);
+									$selectionValues = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $circularNoticeTargetUser['circularNoticeTargetUser']['replySelectionValue']);
+									$answer = implode('、', $selectionValues);
 									break;
 							}
 
