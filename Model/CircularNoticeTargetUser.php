@@ -244,7 +244,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
  * Save for read
  *
  * @param int $contentId circular_notice_contents.id
- * @param int $id circular_notice_target_users.id
+ * @param int $userId user id
  * @return bool
  * @throws InternalErrorException
  */

@@ -444,12 +444,12 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 		);
 	}
 
-	/**
-	 * Bind login user's circular notice target user.
-	 *
-	 * @param int $userId user id
-	 * @return void
-	 */
+/**
+ * Bind login user's circular notice target user.
+ *
+ * @param int $userId user id
+ * @return void
+ */
 	private function __bindMyCircularNoticeTargetUser($userId) {
 		$this->bindModel(array('hasMany' => array(
 			'MyCircularNoticeTargetUser' => array(
