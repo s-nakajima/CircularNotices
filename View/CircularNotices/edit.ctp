@@ -23,6 +23,7 @@
 		)
 	);
 ?>
+<?php echo $this->element('NetCommons.datetimepicker'); ?>
 <?php
 	$this->Html->css(
 		array(

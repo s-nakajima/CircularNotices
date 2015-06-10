@@ -33,10 +33,11 @@
 		<div class="input-group inline-block" style="margin-left: 20px;">
 			<div class="input-group">
 				<?php echo $this->Form->time('CircularNoticeContent.reply_deadline', array(
-					'value' => (isset($circularNoticeContent['replyDeadline']) ? $circularNoticeContent['replyDeadline'] : ''),
+					'ng-model' => 'circularNoticeContent.replyDeadline',
 					'label' => false,
 					'class' => 'form-control',
-					'placeholder' => 'yyyy-mm-dd hh:nn'
+					'placeholder' => 'yyyy-mm-dd hh:mm',
+					'datetimepicker'
 				)); ?>
 			</div>
 		</div>

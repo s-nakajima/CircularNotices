@@ -158,11 +158,25 @@ class CircularNoticeContent extends CircularNoticesAppModel {
  * Get circular notice content
  *
  * @param int $id circular_notice_contents.id
+ * @param int $userId user id
  * @return mixed
  */
-	public function getCircularNoticeContent($id) {
+	public function getCircularNoticeContent($id, $userId) {
+		$fields = array(
+			'*',
+			'CircularNoticeContentCurrentStatus.current_status',
+			'CircularNoticeContentMyStatus.my_status',
+		);
+
+		$joins = array(
+			$this->__getJoinArrayForCurrentStatus(),
+			$this->__getJoinArrayForMyStatus($userId),
+		);
+
 		return $this->find('first', array(
+			'fields' => $fields,
 			'recursive' => 1,
+			'joins' => $joins,
 			'conditions' => array(
 				'CircularNoticeContent.id' => $id,
 			),
