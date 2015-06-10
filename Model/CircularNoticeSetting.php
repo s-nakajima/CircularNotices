@@ -71,7 +71,7 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 		return parent::beforeValidate($options);
 	}
 
-	/**
+/**
  * Use behaviors
  *
  * @var array
