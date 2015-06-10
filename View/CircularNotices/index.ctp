@@ -61,12 +61,7 @@
 			<div class="circular-notice-block row">
 				<div>
 					<div class="circular-notice-index-status">
-						<?php echo $this->element('CircularNotices/status_label',
-							array(
-								'currentStatus' => $circularNoticeContent['circularNoticeContent']['currentStatus'],
-								'myStatus' => $circularNoticeContent['myStatus'],
-							)
-						); ?>
+						<?php echo $this->element('CircularNotices/status_label', array('circularNoticeContent' => $circularNoticeContent)); ?>
 					</div>
 					<div class="circular-notice-index-content">
 
@@ -78,8 +73,6 @@
 					<?php } else { ?>
 						<a href="<?php echo $this->Html->url('/circular_notices/circular_notices/view/' . $frameId . '/' . $circularNoticeContent['circularNoticeContent']['id']); ?>"><?php echo h($circularNoticeContent['circularNoticeContent']['subject']); ?></a><br />
 					<?php } ?>
-
-
 
 						<small>
 							<?php echo h(__d('circular_notices', 'Circular Content Period Title')); ?>

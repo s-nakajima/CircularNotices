@@ -10,6 +10,8 @@
  */
 
 App::uses('CircularNoticeChoice', 'CircularNotices.Model');
+App::uses('NetCommonsBlockComponent', 'NetCommons.Controller/Component');
+App::uses('CircularNoticeComponent', 'CircularNotices.Controller/Component');
 
 /**
  * CircularNoticeChoice Test Case

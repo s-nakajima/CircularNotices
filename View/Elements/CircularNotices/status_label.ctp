@@ -9,9 +9,12 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-$status = $currentStatus;
-if ($myStatus && $currentStatus == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN) {
-	$status = $myStatus;
+$status = $circularNoticeContent['circularNoticeContent']['currentStatus'];
+if (
+	$circularNoticeContent['myCircularNoticeTargetUser'] &&
+	$status == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN
+) {
+	$status = $circularNoticeContent['myCircularNoticeTargetUser'][0]['userStatus'];
 }
 
 $labels = [

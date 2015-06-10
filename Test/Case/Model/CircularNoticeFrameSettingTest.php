@@ -10,6 +10,8 @@
  */
 
 App::uses('CircularNoticeFrameSetting', 'CircularNotices.Model');
+App::uses('NetCommonsBlockComponent', 'NetCommons.Controller/Component');
+App::uses('CircularNoticeComponent', 'CircularNotices.Controller/Component');
 
 /**
  * CircularNoticeFrameSetting Test Case
