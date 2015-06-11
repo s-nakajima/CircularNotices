@@ -76,8 +76,6 @@ class CircularNoticesController extends CircularNoticesAppController {
  */
 	public function index() {
 		$this->initCircularNotice();
-
-		// ログインユーザIDを取得
 		$userId = (int)$this->Auth->user('id');
 
 		// ログインユーザIDが存在する場合（回覧板はログイン前領域には表示させない）
@@ -145,7 +143,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$answersSummary = $this->__getAnswerSummary($contentId);
 
 		// 回答の登録／更新
-		if ($this->request->is('post')) {
+		if ($this->request->is(array('post', 'put'))) {
 
 			$replyTextValue = '';
 			$replySelectionValue = '';
@@ -252,7 +250,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 			explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $content['CircularNoticeContent']['target_groups']);
 
 		$data = array();
-		if ($this->request->is('post')) {
+		if ($this->request->is(array('post', 'put'))) {
 
 			if (! $status = $this->NetCommonsWorkflow->parseStatus()) {
 				$this->throwBadRequest();
