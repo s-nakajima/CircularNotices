@@ -10,10 +10,11 @@
  */
 ?>
 
-<div class="row form-group">
-	<div class="col-xs-12">
-		<?php echo $this->Form->label('CircularNoticeTargetUser.reply_deadline_set_flag',
-				__d('circular_notices', 'Reply Deadline') . $this->element('NetCommons.required')
+<div class="form-group">
+	<div>
+		<?php echo $this->Form->label(
+			'CircularNoticeContent.reply_deadline_set_flag',
+			__d('circular_notices', 'Reply Deadline') . $this->element('NetCommons.required')
 		); ?>
 	</div>
 	<div class="col-xs-offset-1 col-xs-11">
@@ -30,7 +31,7 @@
 		?>
 	</div>
 	<div class="col-xs-offset-1 col-xs-11">
-		<div class="input-group inline-block" style="margin-left: 20px;">
+		<div class="input-group inline-block">
 			<div class="input-group">
 				<?php echo $this->Form->time('CircularNoticeContent.reply_deadline', array(
 					'ng-model' => 'circularNoticeContent.replyDeadline',
@@ -41,5 +42,13 @@
 				)); ?>
 			</div>
 		</div>
+	</div>
+	<div>
+		<?php echo $this->element(
+			'NetCommons.errors', [
+				'errors' => $this->validationErrors,
+				'model' => 'CircularNoticeContent',
+				'field' => 'reply_deadline',
+			]); ?>
 	</div>
 </div>
