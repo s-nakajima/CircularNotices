@@ -41,8 +41,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
  * @see Model::save()
  */
 	public function beforeValidate($options = array()) {
-		// FIXME: バリデーションの実装
-		// FIXME: 相関チェック類の実装方法（日付FromToとかラジオと連動する値とか）
+		// FIXME: まだ仮実装であるため精査が必要
 
 		$this->validate = Hash::merge($this->validate, array(
 			'subject' => array(
@@ -61,9 +60,23 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 					'required' => true,
 				),
 			),
-			//'reply_type',
-			//'is_room_targeted_flag',
-			//'target_groups',
+			'reply_type' => array(
+				'inList' => array(
+					'rule' => array('inList', array(
+						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT,
+						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION,
+						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION,
+					)),
+					'message' => __d('net_commons', 'Invalid request.'),
+					'required' => true,
+				),
+			),
+			'is_room_targeted_flag' => array(
+				'notEmpty' => array(
+					'rule' => array('validateTargetUserEmpty'),
+					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Circular Target')),
+				),
+			),
 			'opened_period_from' => array(
 				'notEmpty' => array(
 					'rule' => array('notEmpty'),
@@ -74,6 +87,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 				'datetime' => array(
 					'rule' => array('datetime'),
 					'message' => 'Please enter a valid date and time.',
+					'required' => true,
 				),
 			),
 			'opened_period_to' => array(
@@ -86,14 +100,98 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 				'datetime' => array(
 					'rule' => array('datetime'),
 					'message' => 'Please enter a valid date and time.',
+					'required' => true,
+				),
+				'fromTo' => array(
+					'rule' => array('validateDatetimeFromTo', array('from' => 'opened_period_from')),
+					'message' => __d('net_commons', 'Invalid request.'),
+				)
+			),
+			'reply_deadline_set_flag' => array(
+				'boolean' => array(
+					'rule' => array('boolean'),
+					'message' => __d('net_commons', 'Pleas input boolean.'),
+					'required' => true,
 				),
 			),
-			//'reply_deadline_set_flag',
-			//'reply_deadline',
-			//'status',
 		));
 
+		if ($this->data['CircularNoticeContent']['reply_deadline_set_flag']) {
+			$this->validate = Hash::merge($this->validate, array(
+				'reply_deadline' => array(
+					'notEmpty' => array(
+						'rule' => array('notEmpty'),
+						'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Reply Deadline')),
+						'required' => true,
+					),
+					'datetime' => array(
+						'rule' => array('datetime'),
+						'message' => 'Please enter a valid date and time.',
+						'required' => true,
+					),
+					'between' => array(
+						'rule' => array('validateDatetimeBetween', array('from' => 'opened_period_from', 'to' => 'opened_period_to')),
+						'message' => __d('net_commons', 'Invalid request.'),
+					)
+				),
+			));
+		}
+
 		return parent::beforeValidate($options);
+	}
+
+/**
+ * Validate empty of target users.
+ *
+ * @param array $check check fields.
+ * @return bool
+ */
+	public function validateTargetUserEmpty($check) {
+		if (
+			! $this->data['CircularNoticeContent']['is_room_targeted_flag'] &&
+			! $this->data['CircularNoticeContent']['target_groups']
+		) {
+			return false;
+		}
+		return true;
+	}
+
+/**
+ * Validate datetime from to.
+ *
+ * @param array $check check fields.
+ * @param array $params parameters.
+ * @return bool
+ */
+	public function validateDatetimeFromTo($check, $params) {
+		$from = $params['from'];
+		$to = array_keys($check)[0];
+		if ($this->data['CircularNoticeContent'][$from] < $this->data['CircularNoticeContent'][$to]) {
+			return true;
+		}
+		return false;
+	}
+
+/**
+ * Validate datetime between.
+ *
+ * @param array $check check fields.
+ * @param array $params parameters.
+ * @return bool
+ */
+	public function validateDatetimeBetween($check, $params) {
+		$min = $params['from'];
+		$max = $params['to'];
+		$date = array_keys($check)[0];
+
+		if (
+			$this->data['CircularNoticeContent'][$date] >= $this->data['CircularNoticeContent'][$min] &&
+			$this->data['CircularNoticeContent'][$date] <= $this->data['CircularNoticeContent'][$max]
+		) {
+			return true;
+		}
+
+		return false;
 	}
 
 /**

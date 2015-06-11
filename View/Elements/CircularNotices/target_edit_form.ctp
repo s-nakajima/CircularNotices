@@ -10,10 +10,11 @@
  */
 ?>
 
-<div class="row form-group">
-	<div class="col-xs-12">
-		<?php echo $this->Form->label('CircularNoticeTargetUser.userId',
-				__d('circular_notices', 'Circular Target') . $this->element('NetCommons.required')
+<div class="form-group">
+	<div>
+		<?php echo $this->Form->label(
+			'CircularNoticeContent.userId',
+			__d('circular_notices', 'Circular Target') . $this->element('NetCommons.required')
 		); ?>
 	</div>
 	<div class="col-xs-offset-1 col-xs-11">
@@ -22,6 +23,7 @@
 			'div' => false,
 			'type' => 'select',
 			'label' => false,
+			'error' => false,
 			'multiple' => 'checkbox',
 			'selected' => $circularNoticeContent['isRoomTargetedFlag'],
 			'options' => array(
@@ -38,10 +40,19 @@
 				'div' => false,
 				'type' => 'select',
 				'label' => false,
+				'error' => false,
 				'multiple' => 'checkbox',
 				'selected' => $circularNoticeContent['targetGroups'],
 				'options' => $options,
 			));
 		?>
+	</div>
+	<div>
+		<?php echo $this->element(
+			'NetCommons.errors', [
+				'errors' => $this->validationErrors,
+				'model' => 'CircularNoticeContent',
+				'field' => 'is_room_targeted_flag',
+			]); ?>
 	</div>
 </div>

@@ -17,7 +17,6 @@
 			__d('circular_notices', 'Period') . $this->element('NetCommons.required')
 		); ?>
 	</div>
-
 	<div>
 		<div class="input-group inline-block" style="margin-left: 20px;">
 			<div class="input-group">
