@@ -47,9 +47,31 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
  */
 	public function beforeValidate($options = array()) {
 		$this->validate = Hash::merge($this->validate, array(
+			'reply_text_value' => array(
+				'notEmpty' => array(
+					'rule' => array('validateNotEmptyReplyValue'),
+					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Answer Title')),
+				),
+			),
 		));
-
 		return parent::beforeValidate($options);
+	}
+
+/**
+ * Validate empty of reply value.
+ *
+ * @param array $check check fields.
+ * @return bool
+ */
+	public function validateNotEmptyReplyValue($check) {
+		CakeLog::error(var_export($this->data['CircularNoticeTargetUser'], true));
+		if (
+			! $this->data['CircularNoticeTargetUser']['reply_text_value'] &&
+			! $this->data['CircularNoticeTargetUser']['reply_selection_value']
+		) {
+			return false;
+		}
+		return true;
 	}
 
 /**

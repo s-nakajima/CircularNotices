@@ -152,7 +152,9 @@ class CircularNoticesController extends CircularNoticesAppController {
 			} elseif ($content['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION) {
 				$replySelectionValue = $this->data['CircularNoticeTargetUser']['reply_selection_value'];
 			} elseif ($content['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION) {
-				$replySelectionValue = implode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $this->data['CircularNoticeTargetUser']['reply_selection_value']);
+				if ($this->data['CircularNoticeTargetUser']['reply_selection_value']) {
+					$replySelectionValue = implode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $this->data['CircularNoticeTargetUser']['reply_selection_value']);
+				}
 			}
 
 			$data = Hash::merge(

@@ -230,6 +230,15 @@
 				<?php echo $this->Form->end(); ?>
 			<?php } ?>
 
+			<div>
+				<?php echo $this->element(
+					'NetCommons.errors', [
+						'errors' => $this->validationErrors,
+						'model' => 'CircularNoticeTargetUser',
+						'field' => 'reply_text_value',
+					]); ?>
+			</div>
+
 			<hr class="circular-notice-clear-float">
 			<div class="circular-notice-block text-center" ng-hide="showOtherUsers!=false" ng-click="switchOtherUserView(true)">
 				<?php echo h(__d('circular_notices', 'Show Other Users')); ?>
