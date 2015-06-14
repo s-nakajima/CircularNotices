@@ -39,6 +39,22 @@
 				'field' => 'reply_type',
 			]); ?>
 	</div>
+	<div>
+		<?php echo $this->element(
+			'NetCommons.errors', [
+				'errors' => $this->validationErrors,
+				'model' => 'CircularNoticeContent',
+				'field' => 'value',
+			]); ?>
+	</div>
+	<div>
+		<?php echo $this->element(
+			'NetCommons.errors', [
+				'errors' => $this->validationErrors,
+				'model' => 'CircularNoticeContent',
+				'field' => 'weight',
+			]); ?>
+	</div>
 </div>
 
 <div class="form-group" ng-show="circularNoticeContent.replyType!=<?php echo h(CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT); ?>">

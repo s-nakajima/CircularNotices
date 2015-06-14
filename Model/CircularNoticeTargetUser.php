@@ -294,7 +294,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		try {
 
 			// データセット＋検証
-			if (! $this->__validateCircularNoticeTargetUser($data)) {
+			if (! $this->validateCircularNoticeTargetUser($data)) {
 				return false;
 			}
 
@@ -334,7 +334,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 
 			$targetUser['CircularNoticeTargetUser']['circular_notice_content_id'] = $contentId;
 
-			if (! $this->__validateCircularNoticeTargetUser($targetUser)) {
+			if (! $this->validateCircularNoticeTargetUser($targetUser)) {
 				return false;
 			}
 
@@ -352,10 +352,27 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
  * @param array $data input data
  * @return bool
  */
-	private function __validateCircularNoticeTargetUser($data) {
+	public function validateCircularNoticeTargetUser($data) {
 		$this->set($data);
 		$this->validates();
 		return $this->validationErrors ? false : true;
+	}
+
+/**
+ * Validate this models
+ *
+ * @param array $data input data
+ * @return bool
+ */
+	public function validateCircularNoticeTargetUsers($data) {
+		if (isset($data['CircularNoticeTargetUsers'])) {
+			foreach ($data['CircularNoticeTargetUsers'] as $value) {
+				if (!$this->validateCircularNoticeTargetUser($value)) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 /**

@@ -360,9 +360,13 @@ class CircularNoticesController extends CircularNoticesAppController {
 			$data['CircularNoticeContent']['reply_deadline'] = null;
 		}
 
-		foreach ($data['CircularNoticeChoices'] as $i => $choice) {
-			$data['CircularNoticeChoices'][$i]['CircularNoticeChoice']['value'] =
-				str_replace(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, '', $choice['CircularNoticeChoice']['value']);
+		if (isset($data['CircularNoticeChoices'])) {
+			foreach ($data['CircularNoticeChoices'] as $i => $choice) {
+				$data['CircularNoticeChoices'][$i]['CircularNoticeChoice']['value'] =
+					str_replace(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, '', $choice['CircularNoticeChoice']['value']);
+			}
+		} else {
+			$data['CircularNoticeChoices'] = array();
 		}
 
 		return $data;
