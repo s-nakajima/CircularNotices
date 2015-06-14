@@ -37,6 +37,18 @@ class CircularNoticeChoice extends CircularNoticesAppModel {
  */
 	public function beforeValidate($options = array()) {
 		$this->validate = Hash::merge($this->validate, array(
+			'value' => array(
+				'notEmpty' => array(
+					'rule' => array('notEmpty'),
+					'message' => __d('net_commons', 'Invalid request.'),
+				),
+			),
+			'weight' => array(
+				'naturalNumber' => array(
+					'rule' => array('naturalNumber', true),
+					'message' => __d('net_commons', 'Invalid request.'),
+				),
+			),
 		));
 		return parent::beforeValidate($options);
 	}
@@ -77,7 +89,7 @@ class CircularNoticeChoice extends CircularNoticesAppModel {
 
 			$choice['CircularNoticeChoice']['circular_notice_content_id'] = $contentId;
 
-			if (! $this->__validateCircularChoice($choice)) {
+			if (! $this->validateCircularChoice($choice)) {
 				return false;
 			}
 
@@ -95,9 +107,27 @@ class CircularNoticeChoice extends CircularNoticesAppModel {
  * @param array $data input data
  * @return bool
  */
-	private function __validateCircularChoice($data) {
+	public function validateCircularChoice($data) {
 		$this->set($data);
 		$this->validates();
 		return $this->validationErrors ? false : true;
 	}
+
+/**
+ * Validate this models
+ *
+ * @param array $data input data
+ * @return bool
+ */
+	public function validateCircularChoices($data) {
+		if (isset($data['CircularNoticeChoices'])) {
+			foreach ($data['CircularNoticeChoices'] as $value) {
+				if (!$this->validateCircularChoice($value)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 }
+

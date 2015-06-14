@@ -20,6 +20,45 @@ App::uses('AppModel', 'Model');
 class CircularNoticesAppModel extends AppModel {
 
 /**
+ * Validate datetime from to.
+ *
+ * @param array $check check fields.
+ * @param array $params parameters.
+ * @return bool
+ */
+	public function validateDatetimeFromTo($check, $params) {
+		$checkValue = array_values($check)[0];
+		$isCompareFrom = isset($params['from']);
+		$compareValue = $isCompareFrom ? $params['from'] : $params['to'];
+
+		if (
+			($isCompareFrom && $checkValue > $compareValue) ||
+			(! $isCompareFrom && $checkValue < $compareValue)
+		) {
+			return true;
+		}
+		return false;
+	}
+
+/**
+ * Validate datetime between.
+ *
+ * @param array $check check fields.
+ * @param array $params parameters.
+ * @return bool
+ */
+	public function validateDatetimeBetween($check, $params) {
+		$checkValue = array_values($check)[0];
+		$min = $params['from'];
+		$max = $params['to'];
+
+		if ($checkValue >= $min && $checkValue <= $max) {
+			return true;
+		}
+		return false;
+	}
+
+/**
  * Get users for stub.
  *
  * @return array

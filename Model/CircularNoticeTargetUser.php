@@ -47,9 +47,31 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
  */
 	public function beforeValidate($options = array()) {
 		$this->validate = Hash::merge($this->validate, array(
+			'reply_text_value' => array(
+				'notEmpty' => array(
+					'rule' => array('validateNotEmptyReplyValue'),
+					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Answer Title')),
+				),
+			),
 		));
-
 		return parent::beforeValidate($options);
+	}
+
+/**
+ * Validate empty of reply value.
+ *
+ * @param array $check check fields.
+ * @return bool
+ */
+	public function validateNotEmptyReplyValue($check) {
+		CakeLog::error(var_export($this->data['CircularNoticeTargetUser'], true));
+		if (
+			! $this->data['CircularNoticeTargetUser']['reply_text_value'] &&
+			! $this->data['CircularNoticeTargetUser']['reply_selection_value']
+		) {
+			return false;
+		}
+		return true;
 	}
 
 /**
@@ -294,7 +316,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		try {
 
 			// データセット＋検証
-			if (! $this->__validateCircularNoticeTargetUser($data)) {
+			if (! $this->validateCircularNoticeTargetUser($data)) {
 				return false;
 			}
 
@@ -334,7 +356,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 
 			$targetUser['CircularNoticeTargetUser']['circular_notice_content_id'] = $contentId;
 
-			if (! $this->__validateCircularNoticeTargetUser($targetUser)) {
+			if (! $this->validateCircularNoticeTargetUser($targetUser)) {
 				return false;
 			}
 
@@ -352,10 +374,27 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
  * @param array $data input data
  * @return bool
  */
-	private function __validateCircularNoticeTargetUser($data) {
+	public function validateCircularNoticeTargetUser($data) {
 		$this->set($data);
 		$this->validates();
 		return $this->validationErrors ? false : true;
+	}
+
+/**
+ * Validate this models
+ *
+ * @param array $data input data
+ * @return bool
+ */
+	public function validateCircularNoticeTargetUsers($data) {
+		if (isset($data['CircularNoticeTargetUsers'])) {
+			foreach ($data['CircularNoticeTargetUsers'] as $value) {
+				if (!$this->validateCircularNoticeTargetUser($value)) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 /**

@@ -88,7 +88,7 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
 		}
 
 		$data = array();
-		if ($this->request->is('post')) {
+		if ($this->request->is(array('post', 'put'))) {
 			$data = $this->data;
 			$this->CircularNoticeFrameSetting->saveCircularNoticeFrameSetting($data);
 			if ($this->handleValidationError($this->CircularNoticeFrameSetting->validationErrors)) {

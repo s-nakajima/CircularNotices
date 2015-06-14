@@ -41,23 +41,17 @@ class CircularNoticeContent extends CircularNoticesAppModel {
  * @see Model::save()
  */
 	public function beforeValidate($options = array()) {
-		// FIXME: まだ仮実装であるため精査が必要
-
 		$this->validate = Hash::merge($this->validate, array(
 			'subject' => array(
 				'notEmpty' => array(
 					'rule' => array('notEmpty'),
 					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Subject')),
-					'allowEmpty' => false,
-					'required' => true,
 				),
 			),
 			'content' => array(
 				'notEmpty' => array(
 					'rule' => array('notEmpty'),
 					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Content')),
-					'allowEmpty' => false,
-					'required' => true,
 				),
 			),
 			'reply_type' => array(
@@ -68,12 +62,15 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION,
 					)),
 					'message' => __d('net_commons', 'Invalid request.'),
-					'required' => true,
+				),
+				'notEmptyChoices' => array(
+					'rule' => array('validateNotEmptyChoices'),
+					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Choice')),
 				),
 			),
 			'is_room_targeted_flag' => array(
 				'notEmpty' => array(
-					'rule' => array('validateTargetUserEmpty'),
+					'rule' => array('validateNotEmptyTargetUser'),
 					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Circular Target')),
 				),
 			),
@@ -81,29 +78,23 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 				'notEmpty' => array(
 					'rule' => array('notEmpty'),
 					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Period')),
-					'allowEmpty' => false,
-					'required' => true,
 				),
 				'datetime' => array(
 					'rule' => array('datetime'),
-					'message' => 'Please enter a valid date and time.',
-					'required' => true,
+					'message' => __d('net_commons', 'Invalid request.'),
 				),
 			),
 			'opened_period_to' => array(
 				'notEmpty' => array(
 					'rule' => array('notEmpty'),
 					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Period')),
-					'allowEmpty' => false,
-					'required' => true,
 				),
 				'datetime' => array(
 					'rule' => array('datetime'),
-					'message' => 'Please enter a valid date and time.',
-					'required' => true,
+					'message' => __d('net_commons', 'Invalid request.'),
 				),
 				'fromTo' => array(
-					'rule' => array('validateDatetimeFromTo', array('from' => 'opened_period_from')),
+					'rule' => array('validateDatetimeFromTo', array('from' => $this->data['CircularNoticeContent']['opened_period_from'])),
 					'message' => __d('net_commons', 'Invalid request.'),
 				)
 			),
@@ -111,7 +102,6 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 				'boolean' => array(
 					'rule' => array('boolean'),
 					'message' => __d('net_commons', 'Pleas input boolean.'),
-					'required' => true,
 				),
 			),
 		));
@@ -122,15 +112,16 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 					'notEmpty' => array(
 						'rule' => array('notEmpty'),
 						'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Reply Deadline')),
-						'required' => true,
 					),
 					'datetime' => array(
 						'rule' => array('datetime'),
-						'message' => 'Please enter a valid date and time.',
-						'required' => true,
+						'message' => __d('net_commons', 'Invalid request.'),
 					),
 					'between' => array(
-						'rule' => array('validateDatetimeBetween', array('from' => 'opened_period_from', 'to' => 'opened_period_to')),
+						'rule' => array('validateDatetimeBetween', array(
+							'from' => $this->data['CircularNoticeContent']['opened_period_from'],
+							'to' => $this->data['CircularNoticeContent']['opened_period_to']
+						)),
 						'message' => __d('net_commons', 'Invalid request.'),
 					)
 				),
@@ -146,7 +137,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
  * @param array $check check fields.
  * @return bool
  */
-	public function validateTargetUserEmpty($check) {
+	public function validateNotEmptyTargetUser($check) {
 		if (
 			! $this->data['CircularNoticeContent']['is_room_targeted_flag'] &&
 			! $this->data['CircularNoticeContent']['target_groups']
@@ -157,41 +148,21 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 	}
 
 /**
- * Validate datetime from to.
+ * Validate choices count.
  *
  * @param array $check check fields.
- * @param array $params parameters.
  * @return bool
  */
-	public function validateDatetimeFromTo($check, $params) {
-		$from = $params['from'];
-		$to = array_keys($check)[0];
-		if ($this->data['CircularNoticeContent'][$from] < $this->data['CircularNoticeContent'][$to]) {
-			return true;
-		}
-		return false;
-	}
-
-/**
- * Validate datetime between.
- *
- * @param array $check check fields.
- * @param array $params parameters.
- * @return bool
- */
-	public function validateDatetimeBetween($check, $params) {
-		$min = $params['from'];
-		$max = $params['to'];
-		$date = array_keys($check)[0];
-
+	public function validateNotEmptyChoices($check) {
 		if (
-			$this->data['CircularNoticeContent'][$date] >= $this->data['CircularNoticeContent'][$min] &&
-			$this->data['CircularNoticeContent'][$date] <= $this->data['CircularNoticeContent'][$max]
+			$this->data['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION ||
+			$this->data['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION
 		) {
-			return true;
+			if (! isset($this->data['CircularNoticeChoices']) || count($this->data['CircularNoticeChoices']) == 0) {
+				return false;
+			}
 		}
-
-		return false;
+		return true;
 	}
 
 /**
@@ -392,8 +363,30 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 
 		try {
 
+			// FIXME: 回覧先の取得（共通待ち）
+			$users = $this->_getUsersStub();
+
+			// 取得したUserでデータを差し替え
+			$targetUsers = array();
+			foreach ($users as $user) {
+				$targetUsers[] = array(
+					'CircularNoticeTargetUser' => array(
+						'id' => null,
+						'user_id' => $user['User']['id'],
+					)
+				);
+			}
+			$data['CircularNoticeTargetUsers'] = $targetUsers;
+
 			// データセット＋検証
-			if (! $this->__validateCircularNoticeContent($data)) {
+			$this->validateCircularNoticeContent($data);
+			if (! $this->CircularNoticeChoice->validateCircularChoices($data)) {
+				$this->validationErrors = Hash::merge($this->validationErrors, $this->CircularNoticeChoice->validationErrors);
+			}
+			if (! $this->CircularNoticeTargetUser->validateCircularNoticeTargetUsers($data)) {
+				$this->validationErrors = Hash::merge($this->validationErrors, $this->CircularNoticeTargetUser->validationErrors);
+			}
+			if ($this->validationErrors) {
 				return false;
 			}
 
@@ -409,21 +402,6 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			if (! $this->CircularNoticeChoice->replaceCircularNoticeChoices($data)) {
 				return false;
 			}
-
-			// FIXME: 回覧先の取得（共通待ち）
-			$users = $this->_getUsersStub();
-
-			// 取得したUserでデータを差し替え
-			$targetUsers = array();
-			foreach ($users as $user) {
-				$targetUsers[] = array(
-					'CircularNoticeTargetUser' => array(
-						'id' => null,
-						'user_id' => $user['User']['id'],
-					)
-				);
-			}
-			$data['CircularNoticeTargetUsers'] = $targetUsers;
 
 			// CircularNoticeTargetUsersを保存
 			if (! $this->CircularNoticeTargetUser->replaceCircularNoticeTargetUsers($data)) {
@@ -447,7 +425,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
  * @param array $data input data
  * @return bool
  */
-	private function __validateCircularNoticeContent($data) {
+	public function validateCircularNoticeContent($data) {
 		$this->set($data);
 		$this->validates();
 		return $this->validationErrors ? false : true;
