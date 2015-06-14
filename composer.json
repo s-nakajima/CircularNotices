@@ -37,6 +37,18 @@
     "license": "NetCommons License",
     "authors": [
         {
+          "name": "Hirohisa Kuwata(WithOne)",
+          "email": "nc@withone.co.jp",
+          "homepage": "http://www.withone.co.jp",
+          "role": "Developer"
+        },
+        {
+          "name": "Kazutaka Yamada(WithOne)",
+          "email": "nc@withone.co.jp",
+          "homepage": "http://www.withone.co.jp",
+          "role": "Developer"
+        },
+        {
             "name": "NetCommons Community",
             "homepage": "https://github.com/NetCommons3/CircularNotices/graphs/contributors"
         }
