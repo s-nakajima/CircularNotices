@@ -99,7 +99,7 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
 			return false;
 		}
 
-		if ($this->request->is('post')) {
+		if ($this->request->is(array('post', 'put'))) {
 			$data = $this->data;
 			$this->CircularNoticeSetting->saveCircularNoticeSetting($data);
 			if ($this->handleValidationError($this->CircularNoticeSetting->validationErrors)) {
