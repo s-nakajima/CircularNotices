@@ -20,22 +20,24 @@
 	<div>
 		<div class="input-group inline-block" style="margin-left: 20px;">
 			<div class="input-group">
-				<?php echo $this->Form->time('CircularNoticeContent.opened_period_from', array(
+				<?php echo $this->Form->input('CircularNoticeContent.opened_period_from', array(
+					'type' => 'text',
 					'ng-model' => 'circularNoticeContent.openedPeriodFrom',
+					'datetimepicker',
 					'label' => false,
 					'class' => 'form-control',
 					'placeholder' => 'yyyy-mm-dd hh:mm',
-					'datetimepicker'
 				)); ?>
 				<span class="input-group-addon">
 					<span class="glyphicon glyphicon-minus"></span>
 				</span>
-				<?php echo $this->Form->time('CircularNoticeContent.opened_period_to', array(
+				<?php echo $this->Form->input('CircularNoticeContent.opened_period_to', array(
+					'type' => 'text',
 					'ng-model' => 'circularNoticeContent.openedPeriodTo',
+					'datetimepicker',
 					'label' => false,
 					'class' => 'form-control',
 					'placeholder' => 'yyyy-mm-dd hh:mm',
-					'datetimepicker'
 				)); ?>
 			</div>
 		</div>
