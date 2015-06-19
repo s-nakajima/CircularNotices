@@ -71,7 +71,6 @@ class CircularNoticesAppController extends AppController {
 			$this->throwBadRequest();
 			return;
 		}
-		$setting = $this->camelizeKeyRecursive($setting);
 		$this->set($setting);
 
 		// フレーム設定を取得
@@ -80,7 +79,6 @@ class CircularNoticesAppController extends AppController {
 			$this->throwBadRequest();
 			return;
 		}
-		$frameSetting = $this->camelizeKeyRecursive($frameSetting);
 		$this->set($frameSetting);
 	}
 

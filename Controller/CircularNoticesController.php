@@ -75,35 +75,36 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @return void
  */
 	public function index() {
-		$this->initCircularNotice();
 		$userId = (int)$this->Auth->user('id');
-
-		// ログインユーザIDが存在する場合（回覧板はログイン前領域には表示させない）
-		if (! empty($userId)) {
-
-			// Paginator経由で一覧を取得
-			$this->Paginator->settings = $this->CircularNoticeContent->getCircularNoticeContentsForPaginate(
-				$this->viewVars['circularNoticeSetting']['key'],
-				$this->viewVars['circularNoticeFrameSetting'],
-				$this->params['named'],
-				$userId
-			);
-			$contents = $this->Paginator->paginate('CircularNoticeContent');
-
-			// 各回覧データの閲覧／回答件数を取得
-			foreach ($contents as $i => $content) {
-				// 閲覧件数／回答件数を取得してセット
-				// FIXME: 表示件数が多い場合、クエリ発行回数がかなり増える
-				$counts = $this->CircularNoticeTargetUser->getCircularNoticeTargetUserCount((int)$content['CircularNoticeContent']['id']);
-				$contents[$i]['targetCount'] = $counts['targetCount'];
-				$contents[$i]['readCount'] = $counts['readCount'];
-				$contents[$i]['replyCount'] = $counts['replyCount'];
-			}
-
-			// 画面表示のためのデータを設定
-			$contents = $this->camelizeKeyRecursive($contents);
-			$this->set('circularNoticeContentList', $contents);
+		if (! $userId) {
+			$this->autoRender = false;
+			return;
 		}
+
+		$this->initCircularNotice();
+
+		// Paginator経由で一覧を取得
+		$this->Paginator->settings = $this->CircularNoticeContent->getCircularNoticeContentsForPaginate(
+			$this->viewVars['CircularNoticeSetting']['key'],
+			$userId,
+			$this->params['named'],
+			$this->viewVars['CircularNoticeFrameSetting']['display_number']
+		);
+		$contents = $this->Paginator->paginate('CircularNoticeContent');
+
+		// 各回覧データの閲覧／回答件数を取得
+		foreach ($contents as $i => $content) {
+			// 閲覧件数／回答件数を取得してセット
+			// FIXME: 表示件数が多い場合、クエリ発行回数がかなり増える
+			$counts = $this->CircularNoticeTargetUser->getCircularNoticeTargetUserCount((int)$content['CircularNoticeContent']['id']);
+			$contents[$i]['targetCount'] = $counts['targetCount'];
+			$contents[$i]['readCount'] = $counts['readCount'];
+			$contents[$i]['replyCount'] = $counts['replyCount'];
+		}
+
+		// 画面表示のためのデータを設定
+		$contents = $this->camelizeKeyRecursive($contents);
+		$this->set('circularNoticeContentList', $contents);
 	}
 
 /**
@@ -114,8 +115,8 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @return void
  */
 	public function view($frameId = null, $contentId = null) {
-		$this->initCircularNotice();
 		$userId = (int)$this->Auth->user('id');
+		$this->initCircularNotice();
 
 		// 回覧を取得
 		$content = $this->CircularNoticeContent->getCircularNoticeContent($contentId, $userId);
@@ -127,7 +128,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 			$this->CircularNoticeTargetUser->saveRead($contentId, $userId);
 
 			// ログイン者の回答を取得して整形
-			$myTargetUser = array('CircularNoticeTargetUser' => $content['MyCircularNoticeTargetUser'][0]);
+			$myTargetUser = array('CircularNoticeTargetUser' => $content['MyCircularNoticeTargetUser']);
 			$myTargetUser['CircularNoticeTargetUser']['origin_reply_text_value'] = $myTargetUser['CircularNoticeTargetUser']['reply_text_value'];
 			$myTargetUser['CircularNoticeTargetUser']['origin_reply_selection_value'] = $myTargetUser['CircularNoticeTargetUser']['reply_selection_value'];
 		}
@@ -239,8 +240,8 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @return void
  */
 	public function edit($frameId = null, $contentId = null) {
-		$this->initCircularNotice();
 		$userId = (int)$this->Auth->user('id');
+		$this->initCircularNotice();
 
 		if (! $content = $this->CircularNoticeContent->getCircularNoticeContent($contentId, $userId)) {
 			$this->throwBadRequest();

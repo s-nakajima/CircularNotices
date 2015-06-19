@@ -117,14 +117,18 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		parent::__construct($id, $table, $ds);
 
 		$this->virtualFields['user_status'] =
-			'CASE WHEN read_flag = FALSE THEN ' .
+			'CASE WHEN ' . $this->alias . '.read_flag = FALSE THEN ' .
 				'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD . '\' ' .
-			'ELSE ' .
-				'CASE WHEN reply_flag = FALSE THEN ' .
+			'WHEN ' . $this->alias . '.read_flag = TRUE THEN ' .
+				'CASE WHEN ' . $this->alias . '.reply_flag = FALSE THEN ' .
 					'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_READ_YET . '\' ' .
-				'ELSE' .
+				'WHEN ' . $this->alias . '.reply_flag = TRUE THEN ' .
 					'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_REPLIED . '\' ' .
+				'ELSE ' .
+					'NULL ' .
 				'END ' .
+			'ELSE ' .
+				'NULL ' .
 			'END';
 	}
 
