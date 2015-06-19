@@ -278,7 +278,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
  * @param string $blockKey circular_notice_contents.circular_notice_setting_key
  * @param int $userId user id
  * @param array $paginatorParams paginator params
- * @param array $frameSetting circular_notice_frame_settings
+ * @param int $defaultLimit default limit per page
  * @return array
  */
 	public function getCircularNoticeContentsForPaginate($blockKey, $userId, $paginatorParams, $defaultLimit) {
