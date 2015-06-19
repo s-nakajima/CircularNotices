@@ -276,12 +276,12 @@ class CircularNoticeContent extends CircularNoticesAppModel {
  * Get circular notice content list for pagination
  *
  * @param string $blockKey circular_notice_contents.circular_notice_setting_key
- * @param array $frameSetting circular_notice_frame_settings
- * @param array $paginatorParams paginator params
  * @param int $userId user id
+ * @param array $paginatorParams paginator params
+ * @param array $frameSetting circular_notice_frame_settings
  * @return array
  */
-	public function getCircularNoticeContentsForPaginate($blockKey, $frameSetting, $paginatorParams, $userId) {
+	public function getCircularNoticeContentsForPaginate($blockKey, $userId, $paginatorParams, $defaultLimit) {
 		$this->__bindMyCircularNoticeTargetUser($userId, false);
 		$this->virtualFields['user_status'] = $this->MyCircularNoticeTargetUser->virtualFields['user_status'];
 
@@ -316,7 +316,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			$order = array($paginatorParams['sort'] => $paginatorParams['direction']);
 		}
 
-		$limit = $frameSetting['displayNumber'];
+		$limit = $defaultLimit;
 		if (isset($paginatorParams['limit'])) {
 			$limit = (int)$paginatorParams['limit'];
 		}
