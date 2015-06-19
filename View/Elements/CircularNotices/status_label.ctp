@@ -11,10 +11,10 @@
 
 $status = $circularNoticeContent['circularNoticeContent']['currentStatus'];
 if (
-	$circularNoticeContent['myCircularNoticeTargetUser'] &&
-	$status == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN
+	$status == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN &&
+	$circularNoticeContent['circularNoticeContent']['userStatus']
 ) {
-	$status = $circularNoticeContent['myCircularNoticeTargetUser'][0]['userStatus'];
+	$status = $circularNoticeContent['circularNoticeContent']['userStatus'];
 }
 
 $labels = [

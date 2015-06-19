@@ -128,7 +128,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 			$this->CircularNoticeTargetUser->saveRead($contentId, $userId);
 
 			// ログイン者の回答を取得して整形
-			$myTargetUser = array('CircularNoticeTargetUser' => $content['MyCircularNoticeTargetUser'][0]);
+			$myTargetUser = array('CircularNoticeTargetUser' => $content['MyCircularNoticeTargetUser']);
 			$myTargetUser['CircularNoticeTargetUser']['origin_reply_text_value'] = $myTargetUser['CircularNoticeTargetUser']['reply_text_value'];
 			$myTargetUser['CircularNoticeTargetUser']['origin_reply_selection_value'] = $myTargetUser['CircularNoticeTargetUser']['reply_selection_value'];
 		}
