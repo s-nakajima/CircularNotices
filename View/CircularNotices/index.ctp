@@ -78,9 +78,9 @@
 
 						<small>
 							<?php echo h(__d('circular_notices', 'Circular Content Period Title')); ?>
-							<?php echo h($circularNoticeContent['circularNoticeContent']['openedPeriodFrom']); ?>
+							<?php echo $this->Date->dateFormat($circularNoticeContent['circularNoticeContent']['openedPeriodFrom']); ?>
 							～
-							<?php echo h($circularNoticeContent['circularNoticeContent']['openedPeriodTo']); ?><br />
+							<?php echo $this->Date->dateFormat($circularNoticeContent['circularNoticeContent']['openedPeriodTo']); ?>
 						</small>
 					</div>
 					<div class="circular-notice-index-counter">

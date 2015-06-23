@@ -42,6 +42,15 @@ class CircularNoticesAppController extends AppController {
 	);
 
 /**
+ * use helpers
+ *
+ * @var array
+ */
+	public $helpers = array(
+		'NetCommons.Date',
+	);
+
+/**
  * beforeFilter
  *
  * @return void
