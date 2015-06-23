@@ -1,6 +1,6 @@
 <?php
 /**
- * CircularNotices index template
+ * circular notice index template
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
@@ -19,6 +19,7 @@
 		),
 		array(
 			'plugin' => false,
+			'once' => true,
 			'inline' => false
 		)
 	);
@@ -30,6 +31,7 @@
 		),
 		array(
 			'plugin' => false,
+			'once' => true,
 			'inline' => false
 		)
 	);
@@ -76,9 +78,9 @@
 
 						<small>
 							<?php echo h(__d('circular_notices', 'Circular Content Period Title')); ?>
-							<?php echo h($circularNoticeContent['circularNoticeContent']['openedPeriodFrom']); ?>
+							<?php echo $this->Date->dateFormat($circularNoticeContent['circularNoticeContent']['openedPeriodFrom']); ?>
 							～
-							<?php echo h($circularNoticeContent['circularNoticeContent']['openedPeriodTo']); ?><br />
+							<?php echo $this->Date->dateFormat($circularNoticeContent['circularNoticeContent']['openedPeriodTo']); ?>
 						</small>
 					</div>
 					<div class="circular-notice-index-counter">

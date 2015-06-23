@@ -1,6 +1,6 @@
 <?php
 /**
- * status_label element template
+ * circular notice status label for index element
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>

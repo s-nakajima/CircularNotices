@@ -1,6 +1,6 @@
 <?php
 /**
- * CircularNotices view template
+ * circular notice view template
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
@@ -19,6 +19,7 @@
 		),
 		array(
 			'plugin' => false,
+			'once' => true,
 			'inline' => false
 		)
 	);
@@ -30,6 +31,7 @@
 		),
 		array(
 			'plugin' => false,
+			'once' => true,
 			'inline' => false
 		)
 	);
@@ -48,9 +50,9 @@
 				<?php echo h($circularNoticeContent['subject']); ?><br />
 				<div class="circular-notice-indent">
 					<?php echo h(__d('circular_notices', 'Circular Content Period Title')); ?>
-					<?php echo h($circularNoticeContent['openedPeriodFrom']); ?>
+					<?php echo $this->Date->dateFormat($circularNoticeContent['openedPeriodFrom']); ?>
 					～
-					<?php echo h($circularNoticeContent['openedPeriodTo']); ?><br />
+					<?php echo $this->Date->dateFormat($circularNoticeContent['openedPeriodTo']); ?><br />
 					<?php echo h(__d('circular_notices', 'Created User Title')); ?>
 					<?php echo h($user['username']); ?><br />
 				</div>

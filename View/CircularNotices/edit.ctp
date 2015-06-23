@@ -1,9 +1,9 @@
 <?php
 /**
- * RssReaders edit form element
+ * circular notice edit template
  *
  * @author Noriko Arai <arai@nii.ac.jp>
- * @author Shohei Nakajima <nakajimashouhei@gmail.com>
+ * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
  * @link http://www.netcommons.org NetCommons Project
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
@@ -19,6 +19,7 @@
 		),
 		array(
 			'plugin' => false,
+			'once' => true,
 			'inline' => false
 		)
 	);
@@ -31,6 +32,7 @@
 		),
 		array(
 			'plugin' => false,
+			'once' => true,
 			'inline' => false
 		)
 	);
@@ -66,7 +68,7 @@
 				)); ?>
 
 				<?php echo $this->Form->hidden('CircularNoticeContent.circular_notice_setting_key', array(
-					'value' => isset($circularNoticeContent['circular_notice_setting_key']) ? $circularNoticeContent['circular_notice_setting_key'] : $circularNoticeSetting['key'],
+					'value' => isset($circularNoticeContent['circular_notice_setting_key']) ? $circularNoticeContent['circular_notice_setting_key'] : $circularNoticeSetting['CircularNoticeSetting']['key'],
 				)); ?>
 
 				<?php /* タイトル */ ?>

@@ -42,6 +42,15 @@ class CircularNoticesAppController extends AppController {
 	);
 
 /**
+ * use helpers
+ *
+ * @var array
+ */
+	public $helpers = array(
+		'NetCommons.Date',
+	);
+
+/**
  * beforeFilter
  *
  * @return void
@@ -65,21 +74,19 @@ class CircularNoticesAppController extends AppController {
  * @return void
  */
 	public function initCircularNotice() {
-		// ブロック設定を取得
 		$setting = $this->CircularNoticeSetting->getCircularNoticeSetting($this->viewVars['frameId']);
 		if (! $setting) {
 			$this->throwBadRequest();
 			return;
 		}
-		$this->set($setting);
+		$this->set('circularNoticeSetting', $setting);
 
-		// フレーム設定を取得
 		$frameSetting = $this->CircularNoticeFrameSetting->getCircularNoticeFrameSetting($this->viewVars['frameKey']);
 		if (! $frameSetting) {
 			$this->throwBadRequest();
 			return;
 		}
-		$this->set($frameSetting);
+		$this->set('circularNoticeFrameSetting', $frameSetting);
 	}
 
 /**

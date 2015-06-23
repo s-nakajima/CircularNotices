@@ -85,10 +85,10 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 		// Paginator経由で一覧を取得
 		$this->Paginator->settings = $this->CircularNoticeContent->getCircularNoticeContentsForPaginate(
-			$this->viewVars['CircularNoticeSetting']['key'],
+			$this->viewVars['circularNoticeSetting']['CircularNoticeSetting']['key'],
 			$userId,
 			$this->params['named'],
-			$this->viewVars['CircularNoticeFrameSetting']['display_number']
+			$this->viewVars['circularNoticeFrameSetting']['CircularNoticeFrameSetting']['display_number']
 		);
 		$contents = $this->Paginator->paginate('CircularNoticeContent');
 

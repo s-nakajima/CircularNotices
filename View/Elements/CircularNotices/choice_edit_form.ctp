@@ -1,6 +1,6 @@
 <?php
 /**
- * announcements edit form element template
+ * circular notice edit choices element
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
@@ -10,7 +10,16 @@
  */
 ?>
 
-<?php echo $this->Html->script('/circular_notices/js/choices.js', false); ?>
+<?php
+	$this->Html->script(
+		'/circular_notices/js/choices.js',
+		array(
+			'plugin' => false,
+			'once' => true,
+			'inline' => false
+		)
+	);
+?>
 
 <?php $this->Form->unlockField('CircularNoticeChoices'); ?>
 

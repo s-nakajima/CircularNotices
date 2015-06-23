@@ -1,6 +1,6 @@
 <?php
 /**
- * circular notice block role permissions edit form template
+ * circular notice block role permissions edit form element
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
