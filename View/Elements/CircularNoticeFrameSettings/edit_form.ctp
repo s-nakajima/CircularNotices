@@ -1,6 +1,6 @@
 <?php
 /**
- * circular notice frame settings edit form template
+ * circular notice frame settings edit form element
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>

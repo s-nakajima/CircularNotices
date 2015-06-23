@@ -1,6 +1,6 @@
 <?php
 /**
- * announcements edit form element template
+ * circular notice edit reply element
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>

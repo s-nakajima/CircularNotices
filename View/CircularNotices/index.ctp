@@ -1,6 +1,6 @@
 <?php
 /**
- * CircularNotices index template
+ * circular notice index template
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
