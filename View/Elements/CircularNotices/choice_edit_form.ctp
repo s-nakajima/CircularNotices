@@ -10,7 +10,16 @@
  */
 ?>
 
-<?php echo $this->Html->script('/circular_notices/js/choices.js', false); ?>
+<?php
+	$this->Html->script(
+		'/circular_notices/js/choices.js',
+		array(
+			'plugin' => false,
+			'once' => true,
+			'inline' => false
+		)
+	);
+?>
 
 <?php $this->Form->unlockField('CircularNoticeChoices'); ?>
 

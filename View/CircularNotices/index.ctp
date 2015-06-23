@@ -19,6 +19,7 @@
 		),
 		array(
 			'plugin' => false,
+			'once' => true,
 			'inline' => false
 		)
 	);
@@ -30,6 +31,7 @@
 		),
 		array(
 			'plugin' => false,
+			'once' => true,
 			'inline' => false
 		)
 	);
