@@ -68,7 +68,7 @@
 				)); ?>
 
 				<?php echo $this->Form->hidden('CircularNoticeContent.circular_notice_setting_key', array(
-					'value' => isset($circularNoticeContent['circular_notice_setting_key']) ? $circularNoticeContent['circular_notice_setting_key'] : $circularNoticeSetting['key'],
+					'value' => isset($circularNoticeContent['circular_notice_setting_key']) ? $circularNoticeContent['circular_notice_setting_key'] : $circularNoticeSetting['CircularNoticeSetting']['key'],
 				)); ?>
 
 				<?php /* タイトル */ ?>
