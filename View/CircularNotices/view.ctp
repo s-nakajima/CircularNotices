@@ -287,13 +287,13 @@
 							if (! $circularNoticeTargetUser['circularNoticeTargetUser']['readDatetime']) {
 								$readDatetime = __d('circular_notices', 'Unread');
 							} else {
-								$readDatetime = $circularNoticeTargetUser['circularNoticeTargetUser']['readDatetime'];
+								$readDatetime = $this->Date->dateFormat($circularNoticeTargetUser['circularNoticeTargetUser']['readDatetime']);
 							}
 
 							if (! $circularNoticeTargetUser['circularNoticeTargetUser']['replyDatetime']) {
 								$replyDatetime = __d('circular_notices', 'Unreply');
 							} else {
-								$replyDatetime = $circularNoticeTargetUser['circularNoticeTargetUser']['replyDatetime'];
+								$replyDatetime = $this->Date->dateFormat($circularNoticeTargetUser['circularNoticeTargetUser']['replyDatetime']);
 							}
 
 							echo $this->Html->tableCells(array(
