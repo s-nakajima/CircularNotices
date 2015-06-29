@@ -311,7 +311,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			}
 		}
 
-		$order = array('CircularNoticeContent.created' => 'desc');
+		$order = array('CircularNoticeContent.modified' => 'desc');
 		if (isset($paginatorParams['sort']) && isset($paginatorParams['direction'])) {
 			$order = array($paginatorParams['sort'] => $paginatorParams['direction']);
 		}
