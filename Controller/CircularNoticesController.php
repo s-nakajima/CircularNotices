@@ -104,7 +104,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 		// 画面表示のためのデータを設定
 		$contents = $this->camelizeKeyRecursive($contents);
-		$this->set('circularNoticeContentList', $contents);
+		$this->set('circularNoticeContents', $contents);
 	}
 
 /**

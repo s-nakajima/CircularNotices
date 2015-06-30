@@ -42,16 +42,16 @@
 	 ng-controller="CircularNoticeEdit"
 	 ng-init="initialize(<?php echo h(json_encode($this->viewVars['circularNoticeContent'])); ?>)">
 
-	<div class="modal-header">
+	<h1>
 		<?php echo h(__d('circular_notices', 'Plugin Name')); ?>
-	</div>
+	</h1>
 
 	<div class="panel panel-default">
 
 		<?php echo $this->Form->create('CircularNoticeContent', array(
-				'name' => 'form',
-				'novalidate' => true,
-			)); ?>
+			'name' => 'form',
+			'novalidate' => true,
+		)); ?>
 
 			<div class="panel-body">
 
@@ -71,42 +71,36 @@
 					'value' => isset($circularNoticeContent['circular_notice_setting_key']) ? $circularNoticeContent['circular_notice_setting_key'] : $circularNoticeSetting['CircularNoticeSetting']['key'],
 				)); ?>
 
-				<?php /* タイトル */ ?>
 				<?php echo $this->element('CircularNotices/subject_edit_form'); ?>
 
-				<?php /* 回覧内容 */ ?>
 				<?php echo $this->element('CircularNotices/content_edit_form'); ?>
 
-				<?php /* 回答方式 */ ?>
 				<?php echo $this->element('CircularNotices/reply_type_edit_form'); ?>
 
-				<?php /* 回覧先 */ ?>
 				<?php echo $this->element('CircularNotices/target_edit_form'); ?>
 
-				<?php /* 回覧期間 */ ?>
 				<?php echo $this->element('CircularNotices/circular_period_edit_form'); ?>
 
-				<?php /* 回答期限 */ ?>
 				<?php echo $this->element('CircularNotices/circular_deadline_edit_form'); ?>
 
 			</div>
 
 			<div class="panel-footer text-center">
-				<?php if ($this->request->params['action'] === 'edit') { ?>
+				<?php if ($this->request->params['action'] === 'edit') : ?>
 					<?php if (
 						$circularNoticeContent['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT ||
 						$circularNoticeContent['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED
-					) { ?>
+					) : ?>
 						<?php echo $this->element('NetCommons.workflow_buttons'); ?>
-					<?php } else { ?>
+					<?php else : ?>
 						<a href="<?php echo $this->Html->url('/') ?>" class="btn btn-default btn-workflow">
 							<span class="glyphicon glyphicon-remove"></span>
 							<?php echo __d('net_commons', 'Cancel') ?>
 						</a>
-					<?php } ?>
-				<?php } else { ?>
+					<?php endif; ?>
+				<?php else : ?>
 					<?php echo $this->element('NetCommons.workflow_buttons'); ?>
-				<?php } ?>
+				<?php endif; ?>
 			</div>
 
 		<?php echo $this->Form->end(); ?>
@@ -118,4 +112,5 @@
 		<?php endif; ?>
 
 	</div>
+
 </div>

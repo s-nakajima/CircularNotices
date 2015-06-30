@@ -20,7 +20,7 @@ $currentStatus = isset($this->Paginator->params['named']['status']) ? $this->Pag
 $options = array();
 
 // コンテンツ作成権限がない場合
-if (! $contentCreatable) {
+if (! $contentCreatable) :
 	$options = array(
 		'CircularNoticeContents.status_' => array(
 			'label' => __d('circular_notices', 'Display All Contents'),
@@ -45,7 +45,7 @@ if (! $contentCreatable) {
 	);
 
 // コンテンツ作成権限がある場合
-} else {
+else :
 	$options = array(
 		'CircularNoticeContents.status_' => array(
 			'label' => __d('circular_notices', 'Display All Contents'),
@@ -84,7 +84,7 @@ if (! $contentCreatable) {
 			'status' => CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_REPLIED,
 		),
 	);
-}
+endif;
 ?>
 
 <span class="btn-group">
@@ -95,10 +95,11 @@ if (! $contentCreatable) {
 	<ul class="dropdown-menu" role="menu">
 		<?php foreach ($options as $key => $status) : ?>
 			<li>
-				<?php echo $this->Paginator->link($status['label'],
-						array('status' => $status['status']),
-						array('url' => $url)
-					); ?>
+				<?php echo $this->Paginator->link(
+					$status['label'],
+					array('status' => $status['status']),
+					array('url' => $url)
+				); ?>
 			</li>
 		<?php endforeach; ?>
 	</ul>

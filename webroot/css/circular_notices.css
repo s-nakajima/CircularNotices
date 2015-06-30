@@ -6,50 +6,68 @@
 	clear: both;
 }
 
+/*
 .circular-notice-date {
 	width: 100px !important;
 }
+*/
 
+/*
 .circular-notice-float-right {
 	float: right;
 }
+*/
 
+/*
 .circular-notice-clear-float {
 	clear: both;
 }
+*/
 
 .circular-notice-index-status {
-	float: left;
+/*	float: left;*/
 	margin-right: 10px;
 	margin-bottom: 10px;
 }
 
+/*
 .circular-notice-index-content {
 	float: left;
 	margin-bottom: 10px;
 }
+*/
 
+/*
 .circular-notice-index-counter {
 	float: right;
 	margin-bottom: 10px;
 }
+*/
 
+/*
 .circular-notice-index-divider {
 	margin-bottom: 10px !important;
 }
+*/
 
+/*
 .circular-notice-box-left {
 	float: left;
 	margin-right: 10px;
 }
+*/
 
+/*
 .circular-notice-indent {
 	margin-left: 20px;
 }
+*/
 
+/*
 .circular-notice-target-users-header {
 	background-color: #CCC;
 }
+*/
 
 /*
 .circular-notice-checkbox {

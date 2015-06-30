@@ -13,9 +13,9 @@ $status = $circularNoticeContent['circularNoticeContent']['currentStatus'];
 if (
 	$status == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN &&
 	$circularNoticeContent['circularNoticeContent']['userStatus']
-) {
+) :
 	$status = $circularNoticeContent['circularNoticeContent']['userStatus'];
-}
+endif;
 
 $labels = [
 	CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT => [
@@ -55,5 +55,5 @@ $label = isset($labels[$status]) ? $labels[$status] : null;
 ?>
 
 <?php if ($label): ?>
-<span class="label <?php echo h($labels[$status]['class']); ?>"><?php echo h($labels[$status]['message']); ?></span>
-<?php endif ?>
+	<span class="label <?php echo h($labels[$status]['class']); ?>"><?php echo h($labels[$status]['message']); ?></span>
+<?php endif; ?>

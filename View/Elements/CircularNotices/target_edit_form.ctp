@@ -32,9 +32,9 @@
 		)); ?>
 		<?php
 			$options = array();
-			foreach ($groups as $group) {
+			foreach ($groups as $group) :
 				$options[$group['group']['id']] = $group['group']['name'];
-			}
+			endforeach;
 			echo $this->Form->input('CircularNoticeContent.target_groups', array(
 				'class' => 'circular-notice-checkbox',
 				'div' => false,
