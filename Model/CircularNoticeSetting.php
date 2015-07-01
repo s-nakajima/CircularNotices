@@ -22,13 +22,6 @@ App::uses('CircularNoticesAppModel', 'CircularNotices.Model');
 class CircularNoticeSetting extends CircularNoticesAppModel {
 
 /**
- * Default posts authority
- *
- * @var int
- */
-	const DEFAULT_POSTS_AUTHORITY = 0;
-
-/**
  * Default mail notice flag
  *
  * @var int
@@ -153,7 +146,6 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 			if (! $blockSetting = $this->findByBlockKey($block['Block']['key'])) {
 				$data = $this->create(array(
 					'block_key' => $block['Block']['key'],
-					'posts_authority' => self::DEFAULT_POSTS_AUTHORITY,
 					'mail_notice_flag' => self::DEFAULT_MAIL_NOTICE_FLAG,
 					'mail_subject' => self::DEFAULT_MAIL_SUBJECT,
 					'mail_body' => self::DEFAULT_MAIL_BODY,
