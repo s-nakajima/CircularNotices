@@ -13,7 +13,7 @@
  * CircularNotices CakeMigration
  *
  * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
- * @package NetCommons\Bbses\Config\Migration
+ * @package NetCommons\CircularNotices\Config\Migration
  */
 class Initialize extends CakeMigration {
 

@@ -15,18 +15,18 @@ $url = Hash::merge(
 	['page' => 1]
 );
 
-$curretSort = isset($this->Paginator->params['named']['sort']) ? $this->Paginator->params['named']['sort'] : 'CircularNoticeContent.created';
+$curretSort = isset($this->Paginator->params['named']['sort']) ? $this->Paginator->params['named']['sort'] : 'CircularNoticeContent.modified';
 $curretDirection = isset($this->Paginator->params['named']['direction']) ? $this->Paginator->params['named']['direction'] : 'desc';
 
 $options = array(
-	'CircularNoticeContent.created.desc' => array(
+	'CircularNoticeContent.modified.desc' => array(
 		'label' => __d('circular_notices', 'Change Sort Order to New Arrival'),
-		'sort' => 'CircularNoticeContent.created',
+		'sort' => 'CircularNoticeContent.modified',
 		'direction' => 'desc'
 	),
-	'CircularNoticeContent.created.asc' => array(
+	'CircularNoticeContent.modified.asc' => array(
 		'label' => __d('circular_notices', 'Change Sort Order to Old Arrival'),
-		'sort' => 'CircularNoticeContent.created',
+		'sort' => 'CircularNoticeContent.modified',
 		'direction' => 'asc'
 	),
 	'CircularNoticeContent.reply_deadline.desc' => array(
