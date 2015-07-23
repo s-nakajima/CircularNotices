@@ -236,16 +236,18 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 	public function __construct($id = false, $table = null, $ds = null) {
 		parent::__construct($id, $table, $ds);
 
+		$now = date('Y-m-d H:i:s');
+
 		$this->virtualFields['current_status'] =
 			'CASE WHEN ' . $this->alias . '.status = \'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT . '\' THEN ' .
 				'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT . '\' ' .
 			'WHEN ' . $this->alias . '.status = \'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_PUBLISHED . '\' THEN ' .
-				'CASE WHEN ' . $this->alias . '.opened_period_from > NOW() THEN ' .
+				'CASE WHEN ' . $this->alias . '.opened_period_from > \'' . $now . '\' THEN ' .
 					'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED . '\' ' .
 				'ELSE ' .
-					'CASE WHEN ' . $this->alias . '.opened_period_to < NOW() THEN ' .
+					'CASE WHEN ' . $this->alias . '.opened_period_to < \'' . $now . '\' THEN ' .
 						'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_CLOSED . '\' ' .
-					'WHEN ' . $this->alias . '.reply_deadline_set_flag = TRUE AND ' . $this->alias . '.reply_deadline < NOW() THEN ' .
+					'WHEN ' . $this->alias . '.reply_deadline_set_flag = 1 AND ' . $this->alias . '.reply_deadline < \'' . $now . '\' THEN ' .
 						'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED . '\' ' .
 					'ELSE ' .
 						'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN . '\' ' .
