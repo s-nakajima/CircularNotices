@@ -77,7 +77,6 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
  * @return void
  */
 	public function edit() {
-
 		if (! $this->NetCommonsFrame->validateFrameId()) {
 			$this->throwBadRequest();
 			return false;
