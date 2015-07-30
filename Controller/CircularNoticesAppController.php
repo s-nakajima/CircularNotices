@@ -96,13 +96,6 @@ class CircularNoticesAppController extends AppController {
  * @return void
  */
 	public function initSettingTabs($activeTab) {
-		$blockId = null;
-		if (isset($this->params['pass'][1])) {
-			$blockId = (int)$this->params['pass'][1];
-		} elseif (isset($this->viewVars['blockId'])) {
-			$blockId = $this->viewVars['blockId'];
-		}
-
 		$settingTabs = array(
 			'tabs' => array(
 				'role_permissions' => array(
@@ -111,7 +104,6 @@ class CircularNoticesAppController extends AppController {
 						'controller' => 'circular_notice_block_role_permissions',
 						'action' => 'edit',
 						$this->viewVars['frameId'],
-						$blockId,
 					),
 					'label' => __d('circular_notices', 'Privilege Setting'),
 				),
