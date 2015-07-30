@@ -198,14 +198,14 @@ class Initialize extends CakeMigration {
 		return true;
 	}
 
-	/**
-	 * Update model records
-	 *
-	 * @param string $model model name to update
-	 * @param string $records records to be stored
-	 * @param string $scope ?
-	 * @return bool Should process continue
-	 */
+/**
+ * Update model records
+ *
+ * @param string $model model name to update
+ * @param string $records records to be stored
+ * @param string $scope ?
+ * @return bool Should process continue
+ */
 	public function updateRecords($model, $records, $scope = null) {
 		$Model = $this->generateModel($model);
 		foreach ($records as $record) {

@@ -77,17 +77,23 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
  * @return void
  */
 	public function edit() {
-		if (! $this->NetCommonsBlock->validateBlockId()) {
+
+		if (! $this->NetCommonsFrame->validateFrameId()) {
 			$this->throwBadRequest();
 			return false;
 		}
 
-		if (! $block = $this->Block->findById((int)$this->params['pass'][1])) {
+		if (! $frame = $this->Frame->findById($this->viewVars['frameId'])) {
 			$this->throwBadRequest();
 			return false;
-		};
-		$this->set('blockId', $block['Block']['id']);
-		$this->set('blockKey', $block['Block']['key']);
+		}
+
+		if (! $frame['Block'] || ! $frame['Block']['id']) {
+			$this->throwBadRequest();
+			return false;
+		}
+		$this->set('blockId', $frame['Block']['id']);
+		$this->set('blockKey', $frame['Block']['key']);
 
 		$permissions = $this->NetCommonsBlock->getBlockRolePermissions(
 			$this->viewVars['blockKey'],
