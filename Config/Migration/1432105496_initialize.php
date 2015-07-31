@@ -149,7 +149,7 @@ class Initialize extends CakeMigration {
 			array(
 				'language_id' => 2,
 				'key' => 'circular_notices',
-				'namespace' => 'netcommons/circular_notices',
+				'namespace' => 'netcommons/circular-notices',
 				'name' => '回覧板',
 				'type' => 1,
 				'default_action' => 'circular_notices/index',
