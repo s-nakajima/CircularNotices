@@ -28,7 +28,7 @@ class CircularNoticesSchema extends CakeSchema {
 /**
  * before
  *
- * @param array $event
+ * @param array $event event
  * @return bool
  */
 	public function before($event = array()) {
@@ -38,8 +38,8 @@ class CircularNoticesSchema extends CakeSchema {
 /**
  * after
  *
- * @param array $event
- * @return bool
+ * @param array $event event
+ * @return void
  */
 	public function after($event = array()) {
 	}

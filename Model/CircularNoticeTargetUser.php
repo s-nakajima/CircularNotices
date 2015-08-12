@@ -65,8 +65,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
  */
 	public function validateNotEmptyReplyValue($check) {
 		CakeLog::error(var_export($this->data['CircularNoticeTargetUser'], true));
-		if (
-			! $this->data['CircularNoticeTargetUser']['reply_text_value'] &&
+		if (! $this->data['CircularNoticeTargetUser']['reply_text_value'] &&
 			! $this->data['CircularNoticeTargetUser']['reply_selection_value']
 		) {
 			return false;
@@ -283,8 +282,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		));
 
 		if ($target['CircularNoticeTargetUser']['user_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD) {
-			if (
-				$target['CircularNoticeContent']['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN ||
+			if ($target['CircularNoticeContent']['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN ||
 				$target['CircularNoticeContent']['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED
 			) {
 				$data = array(
