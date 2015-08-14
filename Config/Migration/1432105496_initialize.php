@@ -140,37 +140,6 @@ class Initialize extends CakeMigration {
 	);
 
 /**
- * Records keyed by model name.
- *
- * @var array $records
- */
-	public $records = array(
-		'plugins' => array(
-			array(
-				'language_id' => 2,
-				'key' => 'circular_notices',
-				'namespace' => 'netcommons/circular-notices',
-				'name' => '回覧板',
-				'type' => 1,
-				'default_action' => 'circular_notices/index',
-				'default_setting_action' => 'circular_notice_blocks/index',
-			),
-		),
-		'plugins_roles' => array(
-			array(
-				'role_key' => 'room_administrator',
-				'plugin_key' => 'circular_notices'
-			),
-		),
-		'plugins_rooms' => array(
-			array(
-				'room_id' => '1',
-				'plugin_key' => 'circular_notices'
-			),
-		),
-	);
-
-/**
  * Before migration callback
  *
  * @param string $direction Direction of migration process (up or down)
@@ -187,33 +156,6 @@ class Initialize extends CakeMigration {
  * @return bool Should process continue
  */
 	public function after($direction) {
-		if ($direction === 'down') {
-			return true;
-		}
-		foreach ($this->records as $model => $records) {
-			if (! $this->updateRecords($model, $records)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-/**
- * Update model records
- *
- * @param string $model model name to update
- * @param string $records records to be stored
- * @param string $scope ?
- * @return bool Should process continue
- */
-	public function updateRecords($model, $records, $scope = null) {
-		$Model = $this->generateModel($model);
-		foreach ($records as $record) {
-			$Model->create();
-			if (! $Model->save($record, false)) {
-				return false;
-			}
-		}
 		return true;
 	}
 }
