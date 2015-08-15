@@ -53,10 +53,10 @@
 			<?php echo h($user['username']); ?><br />
 		</div>
 		<div class="pull-right">
-			<?php echo h(__d('circular_notices', 'Read Count Title')); ?> <?php echo h($readCount); ?>
+			<?php echo h(__d('circular_notices', 'Read Count Title') . ' ' . h($readCount)); ?>
 			/
 			<?php echo h($targetCount); ?><br />
-			<?php echo h(__d('circular_notices', 'Reply Count Title')); ?> <?php echo h($replyCount); ?>
+			<?php echo h(__d('circular_notices', 'Reply Count Title') . ' ' . h($replyCount)); ?>
 			/
 			<?php echo h($targetCount); ?><br />
 		</div>
@@ -72,7 +72,8 @@
 
 	<div>
 		<?php echo h(__d('circular_notices', 'Reply Type Title')); ?>
-		<?php switch ($circularNoticeContent['replyType']) :
+		<?php
+		switch ($circularNoticeContent['replyType']) {
 			case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT:
 				echo h(__d('circular_notices', 'Reply Type Text'));
 				break;
@@ -82,7 +83,8 @@
 			case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION:
 				echo h(__d('circular_notices', 'Reply Type Multiple Selection'));
 				break;
-		endswitch; ?>
+		}
+		?>
 	</div>
 
 	<?php if ($circularNoticeContent['replyType'] != CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT) : ?>
@@ -113,7 +115,8 @@
 		<div>
 
 			<?php echo h(__d('circular_notices', 'Answer Title')); ?>
-			<?php switch ($circularNoticeContent['replyType']) :
+			<?php
+			switch ($circularNoticeContent['replyType']) {
 				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT:
 					echo h($myAnswer['circularNoticeTargetUser']['originReplyTextValue']);
 					break;
@@ -122,7 +125,8 @@
 					$selectionValues = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $myAnswer['circularNoticeTargetUser']['originReplySelectionValue']);
 					echo h(implode('、', $selectionValues));
 					break;
-			endswitch; ?>
+			}
+			?>
 
 			<hr class="circular-notice-spacer" />
 
@@ -139,7 +143,8 @@
 							'value' => $myAnswer['circularNoticeTargetUser']['id'],
 						)); ?>
 
-						<?php switch ($circularNoticeContent['replyType']) :
+						<?php
+						switch ($circularNoticeContent['replyType']) {
 							case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT:
 								echo $this->Form->input('CircularNoticeTargetUser.reply_text_value', array(
 									'type' => 'text',
@@ -182,7 +187,8 @@
 									'options' => $selections,
 								));
 								break;
-						endswitch; ?>
+						}
+						?>
 
 						</div>
 					</div>
@@ -302,7 +308,7 @@
 
 				foreach ($circularNoticeTargetUsers as $circularNoticeTargetUser) :
 					$answer = null;
-					switch ($circularNoticeContent['replyType']) :
+					switch ($circularNoticeContent['replyType']) {
 						case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT:
 							$answer = $circularNoticeTargetUser['circularNoticeTargetUser']['replyTextValue'];
 							break;
@@ -311,7 +317,7 @@
 							$selectionValues = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $circularNoticeTargetUser['circularNoticeTargetUser']['replySelectionValue']);
 							$answer = implode('、', $selectionValues);
 							break;
-					endswitch;
+					}
 
 					if (! $circularNoticeTargetUser['circularNoticeTargetUser']['readDatetime']) :
 						$readDatetime = __d('circular_notices', 'Unread');

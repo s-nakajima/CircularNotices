@@ -80,7 +80,9 @@
 							) : ?>
 								<?php echo h($circularNoticeContent['circularNoticeContent']['subject']); ?><br />
 							<?php else : ?>
-								<a href="<?php echo $this->Html->url('/circular_notices/circular_notices/view/' . $frameId . '/' . $circularNoticeContent['circularNoticeContent']['id']); ?>"><?php echo h($circularNoticeContent['circularNoticeContent']['subject']); ?></a><br />
+								<a href="<?php echo $this->Html->url('/circular_notices/circular_notices/view/' . $frameId . '/' . $circularNoticeContent['circularNoticeContent']['id']); ?>">
+									<?php echo h($circularNoticeContent['circularNoticeContent']['subject']); ?>
+								</a><br />
 							<?php endif; ?>
 							<small>
 								<?php echo h(__d('circular_notices', 'Circular Content Period Title')); ?>
@@ -91,10 +93,10 @@
 						</div>
 						<div class="pull-right">
 							<small>
-								<?php echo h(__d('circular_notices', 'Read Count Title')); ?> <?php echo h($circularNoticeContent['readCount']); ?>
+								<?php echo h(__d('circular_notices', 'Read Count Title') . ' ' . h($circularNoticeContent['readCount'])); ?>
 								/
 								<?php echo h($circularNoticeContent['targetCount']); ?><br />
-								<?php echo h(__d('circular_notices', 'Reply Count Title')); ?> <?php echo h($circularNoticeContent['replyCount']); ?>
+								<?php echo h(__d('circular_notices', 'Reply Count Title') . ' ' . h($circularNoticeContent['replyCount'])); ?>
 								/
 								<?php echo h($circularNoticeContent['targetCount']); ?>
 							</small>
