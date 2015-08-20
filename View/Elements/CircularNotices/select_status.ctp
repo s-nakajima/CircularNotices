@@ -19,8 +19,8 @@ $currentStatus = isset($this->Paginator->params['named']['status']) ? $this->Pag
 
 $options = array();
 
-// コンテンツ作成権限がない場合
 if (! $contentCreatable) :
+	// コンテンツ作成権限がない場合
 	$options = array(
 		'CircularNoticeContents.status_' => array(
 			'label' => __d('circular_notices', 'Display All Contents'),
@@ -44,8 +44,8 @@ if (! $contentCreatable) :
 		),
 	);
 
-// コンテンツ作成権限がある場合
 else :
+	// コンテンツ作成権限がある場合
 	$options = array(
 		'CircularNoticeContents.status_' => array(
 			'label' => __d('circular_notices', 'Display All Contents'),

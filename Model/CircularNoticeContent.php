@@ -138,8 +138,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
  * @return bool
  */
 	public function validateNotEmptyTargetUser($check) {
-		if (
-			! $this->data['CircularNoticeContent']['is_room_targeted_flag'] &&
+		if (! $this->data['CircularNoticeContent']['is_room_targeted_flag'] &&
 			! $this->data['CircularNoticeContent']['target_groups']
 		) {
 			return false;
@@ -154,8 +153,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
  * @return bool
  */
 	public function validateNotEmptyChoices($check) {
-		if (
-			$this->data['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION ||
+		if ($this->data['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION ||
 			$this->data['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION
 		) {
 			if (! isset($this->data['CircularNoticeChoices']) || count($this->data['CircularNoticeChoices']) == 0) {
@@ -302,8 +300,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 		);
 
 		if (isset($paginatorParams['status'])) {
-			if (
-				$paginatorParams['status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD ||
+			if ($paginatorParams['status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD ||
 				$paginatorParams['status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_READ_YET ||
 				$paginatorParams['status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_REPLIED
 			) {
