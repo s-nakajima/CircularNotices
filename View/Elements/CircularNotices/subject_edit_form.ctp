@@ -12,12 +12,12 @@
 
 <div class="form-group">
 	<?php
-        echo $this->NetCommonsForm->input(
-            'CircularNoticeContent.subject',
-            array(
-                'label' => __d('circular_notices', 'Subject'),
-                'required' => 'required',
-            )
-        );
+		echo $this->NetCommonsForm->input(
+			'CircularNoticeContent.subject',
+			array(
+				'label' => __d('circular_notices', 'Subject'),
+				'required' => 'required',
+			)
+		);
 	?>
 </div>

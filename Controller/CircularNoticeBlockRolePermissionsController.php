@@ -45,7 +45,7 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
 	public $components = array(
 		'Blocks.BlockTabs' => array(
 			'mainTabs' => array(
-//				'block_index' => array('url' => array('controller' => 'circular_notice_blocks')),
+				//'block_index' => array('url' => array('controller' => 'circular_notice_blocks')),
 				'role_permissions' => array('url' => array('controller' => 'circular_notice_block_role_permissions')),
 				'frame_settings' => array('url' => array('controller' => 'circular_notice_frame_settings')),
 			),
@@ -64,7 +64,7 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
  * @var array
  */
 	public $helpers = array(
-//		'NetCommons.Token',
+		//'NetCommons.Token',
 		'Blocks.BlockRolePermissionForm',
 		'NetCommons.Date',
 	);
@@ -78,8 +78,8 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
 		parent::beforeFilter();
 		$this->Auth->deny('index');
 
-//		// タブの設定
-//		$this->initSettingTabs('role_permissions');
+		// タブの設定
+		//$this->initSettingTabs('role_permissions');
 	}
 
 /**
@@ -106,10 +106,10 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
 		$this->set('blockId', $frame['Block']['id']);
 		$this->set('blockKey', $frame['Block']['key']);
 
-//		$permissions = $this->NetCommonsBlock->getBlockRolePermissions(
-//			$this->viewVars['blockKey'],
-//			['content_creatable']
-//		);
+		//$permissions = $this->NetCommonsBlock->getBlockRolePermissions(
+		//	$this->viewVars['blockKey'],
+		//	['content_creatable']
+		//);
 
 		if (! $setting = $this->CircularNoticeSetting->getCircularNoticeSetting($frameId)) {
 			$this->throwBadRequest();
@@ -127,12 +127,12 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
 			}
 		}
 
-//		$results = array(
-//			'circularNoticeSetting' => $setting['CircularNoticeSetting'],
-//			'blockRolePermissions' => $permissions['BlockRolePermissions'],
-//			'roles' => $permissions['Roles'],
-//		);
-//		$results = $this->camelizeKeyRecursive($results);
-//		$this->set($results);
+		//$results = array(
+		//	'circularNoticeSetting' => $setting['CircularNoticeSetting'],
+		//	'blockRolePermissions' => $permissions['BlockRolePermissions'],
+		//	'roles' => $permissions['Roles'],
+		//);
+		//$results = $this->camelizeKeyRecursive($results);
+		//$this->set($results);
 	}
 }

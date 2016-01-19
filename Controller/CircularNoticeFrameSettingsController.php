@@ -34,7 +34,7 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
 	public $uses = array(
 		'Blocks.Block',
 		'Frames.Frame',
-//		'CircularNotices.CircularNotice',
+		//'CircularNotices.CircularNotice',
 		'CircularNotices.CircularNoticeFrameSetting',
 	);
 

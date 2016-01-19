@@ -35,8 +35,8 @@ class CircularNoticesAppController extends AppController {
  * @var array
  */
 	public $components = array(
-//		'NetCommons.NetCommonsFrame',
-//		'NetCommons.NetCommonsBlock',
+		//'NetCommons.NetCommonsFrame',
+		//'NetCommons.NetCommonsBlock',
 		'Pages.PageLayout',
 		'Security',
 	);
