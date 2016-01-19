@@ -41,11 +41,11 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @var array
  */
 	public $components = array(
-		'NetCommons.NetCommonsWorkflow',
-		'NetCommons.NetCommonsRoomRole' => array(
-			//コンテンツの権限設定
-			'allowedActions' => array(
-				'contentCreatable' => array('add', 'edit', 'delete'),
+		'Workflow.Workflow',
+		'NetCommons.Permission' => array(
+			//アクセスの権限
+			'allow' => array(
+				'edit,delete' => 'content_creatable',
 			),
 		),
 		'Paginator',
@@ -67,6 +67,7 @@ class CircularNoticesController extends CircularNoticesAppController {
  */
 	public $helpers = array(
 		'NetCommons.Token',
+		'Workflow.Workflow',
 	);
 
 /**
@@ -75,7 +76,7 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @return void
  */
 	public function index() {
-		$userId = (int)$this->Auth->user('id');
+		$userId = Current::read('User.id');
 		if (! $userId) {
 			$this->autoRender = false;
 			return;
@@ -189,6 +190,8 @@ class CircularNoticesController extends CircularNoticesAppController {
  */
 	public function add($frameId = null) {
 		$this->view = 'edit';
+		$frameId = Current::read('Frame.id');
+		$blockId = Current::read('Block.id');
 		$this->initCircularNotice();
 
 		$content = $this->CircularNoticeContent->create(array(
@@ -200,7 +203,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$data = array();
 		if ($this->request->is('post')) {
 
-			if (! $status = $this->NetCommonsWorkflow->parseStatus()) {
+			if (! $status = $this->Workflow->parseStatus()) {
 				$this->throwBadRequest();
 				return;
 			}
@@ -209,10 +212,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 			$data['CircularNoticeContent']['status'] = $status;
 
 			$this->CircularNoticeContent->saveCircularNoticeContent($data);
-			if ($this->handleValidationError($this->CircularNoticeContent->validationErrors)) {
-				$this->redirectByFrameId();
-				return;
-			}
+			$this->NetCommons->handleValidationError($this->CircularNoticeContent->validationErrors);
 
 			unset($data['CircularNoticeContent']['status']);
 			unset($content['CircularNoticeContent']['is_room_targeted_flag']);
@@ -230,6 +230,8 @@ class CircularNoticesController extends CircularNoticesAppController {
 		);
 		$results = $this->camelizeKeyRecursive($results);
 		$this->set($results);
+		$this->set('frameId', $frameId);
+		$this->set('blockId', $blockId);
 	}
 
 /**

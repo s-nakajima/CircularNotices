@@ -71,6 +71,7 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
  */
 	public $actsAs = array(
 		'NetCommons.OriginalKey',
+		'Blocks.BlockRolePermission',
 	);
 
 /**
@@ -124,19 +125,30 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 
 				if (! $block) {
 					// フレームと同じルームに紐付く回覧板ブロックが存在しなければ新規作成してフレームと紐付け
-					$block = $this->Block->create(array(
+//					$block = $this->Block->create(array(
+//						'language_id' => $frame['Frame']['language_id'],
+//						'room_id' => $frame['Frame']['room_id'] ? $frame['Frame']['room_id'] : 0,
+//						'plugin_key' => 'circular_notices',
+//					));
+//					$block = $this->Block->saveByFrameId($frameId, $block);
+					$block = $this->Block->save(array(
 						'language_id' => $frame['Frame']['language_id'],
 						'room_id' => $frame['Frame']['room_id'] ? $frame['Frame']['room_id'] : 0,
-						'plugin_key' => 'circular_notices',
+						'plugin_key' => $frame['Frame']['plugin_key'],
 					));
-					$block = $this->Block->saveByFrameId($frameId, $block);
-				} else {
+					if (!$block) {
+						return false;
+					}
+					Current::$current['Block'] = $block['Block'];
+
+//				} else {
+				}
 					// 存在する場合はフレームと紐付け
 					$frame['Frame']['block_id'] = $block['Block']['id'];
 					if (! $this->Frame->save($frame, false)) {
 						throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 					}
-				}
+//				}
 			} else {
 				// 紐付いていればそのブロックを取得
 				$block = $this->Block->findById($frame['Frame']['block_id']);

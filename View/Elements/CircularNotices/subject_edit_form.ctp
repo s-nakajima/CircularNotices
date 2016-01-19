@@ -11,32 +11,13 @@
 ?>
 
 <div class="form-group">
-	<div>
-		<?php echo $this->Form->label(
-			'CircularNoticeContent.subject',
-			__d('circular_notices', 'Subject') . $this->element('NetCommons.required')
-		); ?>
-	</div>
-	<div>
-		<?php echo $this->Form->input(
-			'CircularNoticeContent.subject',
-			array(
-				'type' => 'text',
-				'label' => '',
-				'error' => false,
-				'class' => 'form-control',
-				'value' => (isset($circularNoticeContent['subject']) ? $circularNoticeContent['subject'] : ''),
-				'placeholder' => '',
-				'div' => false,
-			)
-		); ?>
-	</div>
-	<div>
-		<?php echo $this->element(
-			'NetCommons.errors', [
-				'errors' => $this->validationErrors,
-				'model' => 'CircularNoticeContent',
-				'field' => 'subject',
-			]); ?>
-	</div>
+	<?php
+        echo $this->NetCommonsForm->input(
+            'CircularNoticeContent.subject',
+            array(
+                'label' => __d('circular_notices', 'Subject'),
+                'required' => 'required',
+            )
+        );
+	?>
 </div>

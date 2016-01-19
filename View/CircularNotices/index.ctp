@@ -11,11 +11,9 @@
 ?>
 
 <?php
-	$this->Html->script(
+	echo $this->NetCommonsHtml->script(
 		array(
-			'/net_commons/js/workflow.js',
-			'/net_commons/js/wysiwyg.js',
-			'/circularNotices/js/circular_notices.js'
+			'/circular_notices/js/circular_notices.js'
 		),
 		array(
 			'plugin' => false,
@@ -24,10 +22,11 @@
 		)
 	);
 ?>
+
 <?php
-	$this->Html->css(
+	echo $this->NetCommonsHtml->css(
 		array(
-			'/circularNotices/css/circular_notices.css'
+			'/circular_notices/css/circular_notices.css'
 		),
 		array(
 			'plugin' => false,
@@ -39,13 +38,21 @@
 
 <div class="nc-content-list">
 
-	<?php if ($contentCreatable) : ?>
+	<?php if (Current::permission('content_creatable')) : ?>
 		<div class="clearfix">
 			<div class="pull-right">
 				<span class="nc-tooltip" tooltip="<?php echo h(__d('net_commons', 'Add')); ?>">
-					<a href="<?php echo $this->Html->url('/circular_notices/circular_notices/add/' . $frameId) ?>" class="btn btn-success">
-						<span class="glyphicon glyphicon-plus"> </span>
-					</a>
+					<?php
+					$addUrl = $this->NetCommonsHtml->url(array(
+						'controller' => 'circular_notices',
+						'action' => 'add',
+						'frame_id' => Current::read('Frame.id')
+					));
+					echo $this->Button->addLink('',
+						$addUrl,
+						array('tooltip' => __d('net_commons', 'Add')));
+					?>
+
 				</span>
 			</div>
 		</div>

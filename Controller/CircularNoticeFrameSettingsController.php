@@ -32,6 +32,9 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
  * @var array
  */
 	public $uses = array(
+		'Blocks.Block',
+		'Frames.Frame',
+//		'CircularNotices.CircularNotice',
 		'CircularNotices.CircularNoticeFrameSetting',
 	);
 
@@ -41,10 +44,17 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
  * @var array
  */
 	public $components = array(
-		'NetCommons.NetCommonsRoomRole' => array(
-			// コンテンツの権限設定
-			'allowedActions' => array(
-				'blockEditable' => array('edit')
+		'Blocks.BlockTabs' => array(
+			'mainTabs' => array(
+				'block_index' => array('url' => array('controller' => 'circular_notice_blocks')),
+				'role_permissions' => array('url' => array('controller' => 'circular_notice_block_role_permissions')),
+				'frame_settings' => array('url' => array('controller' => 'circular_notice_frame_settings')),
+			),
+		),
+		'NetCommons.Permission' => array(
+			//アクセスの権限
+			'allow' => array(
+				'edit' => 'block_permission_editable',
 			),
 		),
 	);
