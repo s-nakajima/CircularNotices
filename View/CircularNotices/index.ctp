@@ -87,9 +87,17 @@
 							) : ?>
 								<?php echo h($circularNoticeContent['circularNoticeContent']['subject']); ?><br />
 							<?php else : ?>
-								<a href="<?php echo $this->Html->url('/circular_notices/circular_notices/view/' . $frameId . '/' . $circularNoticeContent['circularNoticeContent']['id']); ?>">
-									<?php echo h($circularNoticeContent['circularNoticeContent']['subject']); ?>
-								</a><br />
+								<?php echo $this->Html->link(
+									$circularNoticeContent['circularNoticeContent']['subject'],
+									$this->NetCommonsHtml->url(
+										array(
+											'controller' => 'circular_notices',
+											'action' => 'view' . '/' . $frameId,
+											'key' => $circularNoticeContent['circularNoticeContent']['key']
+										)
+									)
+								);
+								?>
 							<?php endif; ?>
 							<small>
 								<?php echo h(__d('circular_notices', 'Circular Content Period Title')); ?>
