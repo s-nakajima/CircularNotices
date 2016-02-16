@@ -37,6 +37,29 @@
 
 <div id="nc-circular-notices-<?php echo (int)Current::read('Frame.id'); ?>" ng-controller="CircularNoticeView" ng-init="initialize()">
 
+	<!-- 編集 -->
+	<?php if (Current::permission('content_creatable') && $circularNoticeContent['createdUser'] == $userId) : ?>
+		<div class="pull-right">
+			<span class="nc-tooltip" tooltip="<?php echo h(__d('net_commons', 'Edit')); ?>">
+				<?php echo $this->NetCommonsHtml->link(
+					'<span class="glyphicon glyphicon-edit"> </span>',
+					$this->NetCommonsHtml->url(
+						array(
+							'controller' => 'circular_notices',
+							'action' => 'edit',
+							'key' => $circularNoticeContent['key']
+						)
+					),
+					array(
+						'class' => 'btn btn-sm btn-primary',
+						'escape' => false
+					)
+				);
+				?>
+			</span>
+		</div>
+	<?php endif; ?>
+
 	<h1>
 		<?php echo h($circularNoticeContent['subject']); ?>
 	</h1>
