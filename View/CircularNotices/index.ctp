@@ -82,8 +82,9 @@
 						</div>
 						<div class="pull-left">
 							<?php if (
-								$circularNoticeContent['circularNoticeContent']['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT ||
-								$circularNoticeContent['circularNoticeContent']['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED
+								$circularNoticeContent['circularNoticeContent']['createdUser'] != Current::read('User.id') &&
+								($circularNoticeContent['circularNoticeContent']['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT ||
+								$circularNoticeContent['circularNoticeContent']['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED)
 							) : ?>
 								<?php echo h($circularNoticeContent['circularNoticeContent']['subject']); ?><br />
 							<?php else : ?>
@@ -92,7 +93,9 @@
 									$this->NetCommonsHtml->url(
 										array(
 											'controller' => 'circular_notices',
-											'action' => 'view' . '/' . $frameId,
+//											'action' => 'view' . '/' . $frameId,
+//											'action' => 'view' . '/' . Current::read('Frame.id'),
+											'action' => 'view',
 											'key' => $circularNoticeContent['circularNoticeContent']['key']
 										)
 									)
@@ -117,14 +120,33 @@
 							</small>
 						</div>
 					</div>
-					<?php if ($contentCreatable && $circularNoticeContent['circularNoticeContent']['createdUser'] == $userId) : ?>
+<!--					--><?php //if ($contentCreatable && $circularNoticeContent['circularNoticeContent']['createdUser'] == $userId) : ?>
+					<?php if (Current::permission('content_creatable') && $circularNoticeContent['circularNoticeContent']['createdUser'] == $userId) : ?>
 						<div>
 							<hr />
 							<div class="pull-right">
 								<span class="nc-tooltip" tooltip="<?php echo h(__d('net_commons', 'Edit')); ?>">
-									<a href="<?php echo $this->Html->url('/circular_notices/circular_notices/edit/' . $frameId . '/' . $circularNoticeContent['circularNoticeContent']['id']) ?>" class="btn btn-sm btn-primary">
-										<span class="glyphicon glyphicon-edit"> </span>
-									</a>
+<!--									<a href="--><?php //echo $this->Html->url('/circular_notices/circular_notices/edit/' . Current::read('Frame.id') . '/' . $circularNoticeContent['circularNoticeContent']['id']) ?><!--" class="btn btn-sm btn-primary">-->
+<!--										<span class="glyphicon glyphicon-edit"> </span>-->
+<!--									</a>-->
+									<?php echo $this->NetCommonsHtml->link(
+										'<span class="glyphicon glyphicon-edit"> </span>',
+										$this->NetCommonsHtml->url(
+											array(
+												'controller' => 'circular_notices',
+//											'action' => 'view' . '/' . $frameId,
+//											'action' => 'view' . '/' . Current::read('Frame.id'),
+												'action' => 'edit',
+												'key' => $circularNoticeContent['circularNoticeContent']['key']
+											)
+										),
+										array(
+											'class' => 'btn btn-sm btn-primary',
+											'escape' => false
+										)
+									);
+									?>
+
 								</span>
 							</div>
 						</div>
@@ -136,7 +158,7 @@
 		<div class="text-center">
 			<?php echo $this->element('NetCommons.paginator', array(
 				'url' => Hash::merge(
-					array('controller' => 'circular_notices', 'action' => 'index', $frameId),
+					array('controller' => 'circular_notices', 'action' => 'index', Current::read('Frame.id')),
 					$this->Paginator->params['named']
 				)
 			)); ?>

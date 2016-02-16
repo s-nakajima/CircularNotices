@@ -49,7 +49,7 @@ class PluginRecords extends NetCommonsMigration {
 				'name' => '回覧板',
 				'type' => 1,
 				'default_action' => 'circular_notices/index',
-				'default_setting_action' => 'circular_notice_block_role_permissions/edit',
+				'default_setting_action' => 'circular_notice_frame_settings/edit',
 			),
 			//英語
 			array(
@@ -59,7 +59,7 @@ class PluginRecords extends NetCommonsMigration {
 				'name' => 'Circular Notices',
 				'type' => 1,
 				'default_action' => 'circular_notices/index',
-				'default_setting_action' => 'circular_notice_block_role_permissions/edit',
+				'default_setting_action' => 'circular_notice_frame_settings/edit',
 			),
 		),
 		'PluginsRole' => array(

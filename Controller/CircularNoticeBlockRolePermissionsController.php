@@ -45,7 +45,8 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
 	public $components = array(
 		'Blocks.BlockTabs' => array(
 			'mainTabs' => array(
-				//'block_index' => array('url' => array('controller' => 'circular_notice_blocks')),
+//				'block_index' => array('url' => array('controller' => 'circular_notice_blocks')),
+//				'circular_notice_setting' => array('url' => array('controller' => 'circular_notice_block_role_permissions', 'action' => 'edit')),
 				'role_permissions' => array('url' => array('controller' => 'circular_notice_block_role_permissions')),
 				'frame_settings' => array('url' => array('controller' => 'circular_notice_frame_settings')),
 			),
@@ -79,7 +80,7 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
 		$this->Auth->deny('index');
 
 		// タブの設定
-		//$this->initSettingTabs('role_permissions');
+		$this->initSettingTabs('role_permissions');
 	}
 
 /**
@@ -88,6 +89,12 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
  * @return void
  */
 	public function edit() {
+
+		$permissions = $this->Workflow->getBlockRolePermissions(
+			array('content_creatable', 'content_publishable', /*'content_comment_creatable', *//*'content_comment_publishable'*/)
+		);
+		$this->set('roles', $permissions['Roles']);
+
 		$frameId = Current::read('Frame.id');
 		if (! $frameId) {
 			$this->throwBadRequest();
@@ -125,6 +132,10 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
 				}
 				return;
 			}
+		} else {
+			$this->request->data['circularNoticeSetting'] = $setting['CircularNoticeSetting'];
+			$this->request->data['BlockRolePermission'] = $permissions['BlockRolePermissions'];
+			$this->request->data['Frame'] = Current::read('Frame');
 		}
 
 		//$results = array(

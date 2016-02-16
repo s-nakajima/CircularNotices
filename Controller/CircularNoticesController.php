@@ -115,15 +115,28 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @param int $contentId circular_notice_content.id
  * @return void
  */
-	public function view($frameId = null, $contentId = null) {
-		$userId = (int)$this->Auth->user('id');
+	public function view($frameId = null, $contentId = null, $key = null) {
+//		$userId = (int)$this->Auth->user('id');
+		$userId = Current::read('User.id');
 		$this->initCircularNotice();
 
+		$circularNoticeContentKey = null;
+		if (isset($this->params['pass'][1])) {
+			$circularNoticeContentKey = $this->params['pass'][1];
+		}
+
 		// 回覧を取得
-		$content = $this->CircularNoticeContent->getCircularNoticeContent($contentId, $userId);
+		$content = $this->CircularNoticeContent->getCircularNoticeContent($circularNoticeContentKey, $userId);
+		if (! $content) {
+			$this->throwBadRequest();
+			return false;
+		}
+		$contentId = $content['CircularNoticeContent']['id'];
+		$myTargetUser = array();
 
 		// ログイン者が回覧先に含まれる
-		if ($content['MyCircularNoticeTargetUser']) {
+//		if ($content['MyCircularNoticeTargetUser']) {
+		if (!empty($content['MyCircularNoticeTargetUser']['user_id'])) {
 
 			// 既読に更新
 			$this->CircularNoticeTargetUser->saveRead($contentId, $userId);
@@ -179,6 +192,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 			['MyAnswer' => $myTargetUser, 'CircularNoticeTargetUsers' => $targetUsers, 'AnswersSummary' => $answersSummary]
 		);
 		$results = $this->camelizeKeyRecursive($results);
+$this->log($results);
 		$this->set($results);
 	}
 
@@ -189,13 +203,14 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @return void
  */
 	public function add($frameId = null) {
+//$this->log($this->request->data);
 		$this->view = 'edit';
 		$frameId = Current::read('Frame.id');
 		$blockId = Current::read('Block.id');
 		$this->initCircularNotice();
 
 		$content = $this->CircularNoticeContent->create(array(
-			'is_room_targeted_flag' => false,
+			'is_room_targeted_flag' => true,
 			'target_groups' => ''
 		));
 		$content['CircularNoticeChoice'] = array();
@@ -211,14 +226,26 @@ class CircularNoticesController extends CircularNoticesAppController {
 			$data = $this->__parseRequestForSave();
 			$data['CircularNoticeContent']['status'] = $status;
 
-			$this->CircularNoticeContent->saveCircularNoticeContent($data);
+//			$this->CircularNoticeContent->saveCircularNoticeContent($data);
+			if ($circularContent = $this->CircularNoticeContent->saveCircularNoticeContent($data)) {
+				$url = NetCommonsUrl::actionUrl(array(
+					'controller' => $this->params['controller'],
+					'action' => 'view',
+					'block_id' => $this->data['Block']['id'],
+					'frame_id' => $this->data['Frame']['id'],
+					'key' => $circularContent['CircularNoticeContent']['key']
+				));
+				$this->redirect($url);
+				return;
+			}
+
 			$this->NetCommons->handleValidationError($this->CircularNoticeContent->validationErrors);
 
 			unset($data['CircularNoticeContent']['status']);
 			unset($content['CircularNoticeContent']['is_room_targeted_flag']);
 			unset($content['CircularNoticeContent']['target_groups']);
 			$data['CircularNoticeContent']['is_room_targeted_flag'] = $this->data['CircularNoticeContent']['is_room_targeted_flag'];
-			$data['CircularNoticeContent']['target_groups'] = $this->data['CircularNoticeContent']['target_groups'];
+//			$data['CircularNoticeContent']['target_groups'] = $this->data['CircularNoticeContent']['target_groups'];
 		}
 
 		// FIXME: グループ情報を取得（共通待ち）
@@ -241,35 +268,55 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @param int $contentId circular_notice_content.id
  * @return void
  */
-	public function edit($frameId = null, $contentId = null) {
+	public function edit($frameId = null, $key = null) {
 		$userId = (int)$this->Auth->user('id');
 		$this->initCircularNotice();
+		$frameId = Current::read('Frame.id');
+		$blockId = Current::read('Block.id');
 
-		if (! $content = $this->CircularNoticeContent->getCircularNoticeContent($contentId, $userId)) {
+		if (! $content = $this->CircularNoticeContent->getCircularNoticeContent($key, $userId)) {
 			$this->throwBadRequest();
 			return;
 		}
-		$content['CircularNoticeContent']['is_room_targeted_flag'] =
-			$content['CircularNoticeContent']['is_room_targeted_flag'] ? array('1') : null;
+//		$content['CircularNoticeContent']['is_room_targeted_flag'] =
+//		$content['CircularNoticeContent']['is_room_targeted_flag'] ? array('1') : null;
 		$content['CircularNoticeContent']['target_groups'] =
 			explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $content['CircularNoticeContent']['target_groups']);
 
 		$data = array();
 		if ($this->request->is(array('post', 'put'))) {
 
-			if (! $status = $this->NetCommonsWorkflow->parseStatus()) {
+			if (! $status = $this->Workflow->parseStatus()) {
 				$this->throwBadRequest();
 				return;
 			}
 
 			$data = $this->__parseRequestForSave();
 			$data['CircularNoticeContent']['status'] = $status;
+			
+//			unset($data['CircularNoticeContent']['id']);	// 常に新規保存？
+			$data['CircularNoticeContent']['key'] = $key;	// keyをここでセット（あとでWorkflow系の処理に置き換え？）
 
-			$this->CircularNoticeContent->saveCircularNoticeContent($data);
-			if ($this->handleValidationError($this->CircularNoticeContent->validationErrors)) {
-				$this->redirectByFrameId();
+//			$this->CircularNoticeContent->saveCircularNoticeContent($data);
+//			if ($this->handleValidationError($this->CircularNoticeContent->validationErrors)) {
+//				$this->redirectByFrameId();
+//				return;
+//			}
+
+//			$this->CircularNoticeContent->saveCircularNoticeContent($data);
+			if ($circularContent = $this->CircularNoticeContent->saveCircularNoticeContent($data)) {
+				$url = NetCommonsUrl::actionUrl(array(
+					'controller' => $this->params['controller'],
+					'action' => 'view',
+					'block_id' => $this->data['Block']['id'],
+					'frame_id' => $this->data['Frame']['id'],
+					'key' => $circularContent['CircularNoticeContent']['key']
+				));
+				$this->redirect($url);
 				return;
 			}
+
+			$this->NetCommons->handleValidationError($this->CircularNoticeContent->validationErrors);
 
 			unset($data['CircularNoticeContent']['id']);
 			unset($data['CircularNoticeContent']['status']);
@@ -288,6 +335,8 @@ class CircularNoticesController extends CircularNoticesAppController {
 		);
 		$results = $this->camelizeKeyRecursive($results);
 		$this->set($results);
+		$this->set('frameId', $frameId);
+		$this->set('blockId', $blockId);
 	}
 
 /**

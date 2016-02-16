@@ -81,6 +81,15 @@
 
 				<?php echo $this->element('CircularNotices/circular_deadline_edit_form'); ?>
 
+<!--				--><?php //echo $this->element('CircularNotices/mail_edit_form'); ?>
+
+				<!-- グループ選択 -->
+<!--				--><?php //echo $this->element('Groups.select',
+//					array(
+//						'title' => '回覧先'
+//					));
+//				?>
+
 			</div>
 
 		<?php echo $this->Workflow->buttons('CircularNotices.status'); ?>

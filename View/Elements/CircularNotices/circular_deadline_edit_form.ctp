@@ -45,11 +45,11 @@
 		</div>
 	</div>
 	<div>
-		<?php echo $this->element(
-			'NetCommons.errors', [
-				'errors' => $this->validationErrors,
-				'model' => 'CircularNoticeContent',
-				'field' => 'reply_deadline',
-			]); ?>
+<!--		--><?php //echo $this->element(
+//			'NetCommons.errors', [
+//				'errors' => $this->validationErrors,
+//				'model' => 'CircularNoticeContent',
+//				'field' => 'reply_deadline',
+//			]); ?>
 	</div>
 </div>

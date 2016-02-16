@@ -46,7 +46,8 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
 	public $components = array(
 		'Blocks.BlockTabs' => array(
 			'mainTabs' => array(
-				'block_index' => array('url' => array('controller' => 'circular_notice_blocks')),
+//				'block_index' => array('url' => array('controller' => 'circular_notice_blocks')),
+//				'circular_notice_setting' => array('url' => array('controller' => 'circular_notice_block_role_permissions')),
 				'role_permissions' => array('url' => array('controller' => 'circular_notice_block_role_permissions')),
 				'frame_settings' => array('url' => array('controller' => 'circular_notice_frame_settings')),
 			),
@@ -86,32 +87,26 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
  * @return void
  */
 	public function edit() {
-		if (! $this->NetCommonsFrame->validateFrameId()) {
-			$this->throwBadRequest();
-			return false;
-		}
-
-		if (! $frameSetting = $this->CircularNoticeFrameSetting->getCircularNoticeFrameSetting($this->viewVars['frameKey'])) {
-			$frameSetting = $this->CircularNoticeFrameSetting->create(array(
-				'frame_key' => $this->viewVars['frameKey'],
-			));
-		}
+//		if (! $this->NetCommonsFrame->validateFrameId()) {
+//			$this->throwBadRequest();
+//			return false;
+//		}
 
 		$data = array();
 		if ($this->request->is(array('post', 'put'))) {
-			$data = $this->data;
+			$data = $this->request->data;
 			$this->CircularNoticeFrameSetting->saveCircularNoticeFrameSetting($data);
 			if ($this->handleValidationError($this->CircularNoticeFrameSetting->validationErrors)) {
 				$this->redirectByFrameId();
 				return;
 			}
+			$this->NetCommons->handleValidationError($this->BbsFrameSetting->validationErrors);
+		} else {
+			$this->request->data = $this->CircularNoticeFrameSetting->getCircularNoticeFrameSetting(true);
+			$this->request->data['Frame'] = Current::read('Frame');
 		}
 
-		$data = Hash::merge(
-			$frameSetting,
-			$data
-		);
-		$results = $this->camelizeKeyRecursive($data);
+		$results = $this->camelizeKeyRecursive($this->request->data);
 		$this->set($results);
 	}
 }

@@ -47,10 +47,18 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
  */
 	public function beforeValidate($options = array()) {
 		$this->validate = Hash::merge($this->validate, array(
-			'reply_text_value' => array(
+//			'reply_text_value' => array(
+//				'notEmpty' => array(
+//					'rule' => array('validateNotEmptyReplyValue'),
+//					'last' => false,
+//					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Answer Title')),
+//				),
+//			),
+			'user_id' => array(
 				'notEmpty' => array(
-					'rule' => array('validateNotEmptyReplyValue'),
-					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Answer Title')),
+					'rule' => array('isUserSelected'),
+					'required' => true,
+					'message' => sprintf(__d('net_commons', 'ユーザを選択してください。')),
 				),
 			),
 		));
@@ -73,12 +81,22 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		return true;
 	}
 
-/**
+	public function isUserSelected($check) {
+		if (!isset($check['user_id']) || count($check['user_id']) === 0) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
  * Use behaviors
  *
  * @var array
  */
-	public $actAs = array();
+	public $actsAs = array(
+//		'NetCommons.OriginalKey',
+//		'CircularNotices.CircularNoticeTargetUser'
+	);
 
 /**
  * belongsTo associations
@@ -288,6 +306,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 				$data = array(
 					'CircularNoticeTargetUser' => array(
 						'id' => $target['CircularNoticeTargetUser']['id'],
+						'user_id' => $target['CircularNoticeTargetUser']['user_id'],
 						'read_flag' => true,
 						'read_datetime' => date('Y-m-d H:i:s'),
 					)
@@ -354,16 +373,18 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		}
 
 		// 1件ずつ保存
-		foreach ($data['CircularNoticeTargetUsers'] as $targetUser) {
-
-			$targetUser['CircularNoticeTargetUser']['circular_notice_content_id'] = $contentId;
-
-			if (! $this->validateCircularNoticeTargetUser($targetUser)) {
-				return false;
-			}
-
-			if (! $this->save(null, false)) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+		if (isset($data['CircularNoticeTargetUsers']) && count($data['CircularNoticeTargetUsers']) > 0) {
+			foreach ($data['CircularNoticeTargetUsers'] as $targetUser) {
+	
+				$targetUser['CircularNoticeTargetUser']['circular_notice_content_id'] = $contentId;
+	
+				if (! $this->validateCircularNoticeTargetUser($targetUser)) {
+					return false;
+				}
+	
+				if (! $this->save(null, false)) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				}
 			}
 		}
 

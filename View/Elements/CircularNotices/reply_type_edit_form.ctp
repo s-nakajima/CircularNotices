@@ -32,28 +32,28 @@
 		)); ?>
 	</div>
 	<div>
-		<?php echo $this->element(
-			'NetCommons.errors', [
-				'errors' => $this->validationErrors,
-				'model' => 'CircularNoticeContent',
-				'field' => 'reply_type',
-			]); ?>
+<!--		--><?php //echo $this->element(
+//			'NetCommons.errors', [
+//				'errors' => $this->validationErrors,
+//				'model' => 'CircularNoticeContent',
+//				'field' => 'reply_type',
+//			]); ?>
 	</div>
 	<div>
-		<?php echo $this->element(
-			'NetCommons.errors', [
-				'errors' => $this->validationErrors,
-				'model' => 'CircularNoticeContent',
-				'field' => 'value',
-			]); ?>
+<!--		--><?php //echo $this->element(
+//			'NetCommons.errors', [
+//				'errors' => $this->validationErrors,
+//				'model' => 'CircularNoticeContent',
+//				'field' => 'value',
+//			]); ?>
 	</div>
 	<div>
-		<?php echo $this->element(
-			'NetCommons.errors', [
-				'errors' => $this->validationErrors,
-				'model' => 'CircularNoticeContent',
-				'field' => 'weight',
-			]); ?>
+<!--		--><?php //echo $this->element(
+//			'NetCommons.errors', [
+//				'errors' => $this->validationErrors,
+//				'model' => 'CircularNoticeContent',
+//				'field' => 'weight',
+//			]); ?>
 	</div>
 </div>
 

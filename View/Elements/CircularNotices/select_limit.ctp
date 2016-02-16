@@ -10,7 +10,8 @@
  */
 
 $url = Hash::merge(
-	array('controller' => 'circular_notices', 'action' => 'index', $frameId),
+//	array('controller' => 'circular_notices', 'action' => 'index', $frameId),
+	array('controller' => 'circular_notices', 'action' => 'index', Current::read('Frame.id')),
 	$this->Paginator->params['named'],
 	['page' => 1]
 );

@@ -11,7 +11,7 @@
 ?>
 
 <?php echo $this->Form->hidden('Frame.id', array(
-	'value' => $frameId,
+	'value' => Current::read('Frame.id'),
 	)); ?>
 
 <?php echo $this->Form->hidden('CircularNoticeFrameSetting.id', array(
@@ -19,7 +19,7 @@
 	)); ?>
 
 <?php echo $this->Form->hidden('CircularNoticeFrameSetting.frame_key', array(
-	'value' => $frameKey,
+	'value' => Current::read('Frame.key'),
 	)); ?>
 
 <div class="form-group">

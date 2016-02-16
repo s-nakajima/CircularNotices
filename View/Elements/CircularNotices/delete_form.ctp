@@ -10,10 +10,20 @@
  */
 ?>
 
-<?php echo $this->Form->create('CircularNotice', array('type' => 'delete', 'action' => 'delete/' . $frameId . '/' . $circularNoticeContent['key'])); ?>
-	<?php echo $this->Form->button('<span class="glyphicon glyphicon-trash"> </span>', array(
-		'name' => 'delete',
-		'class' => 'btn btn-danger',
-		'onclick' => 'return confirm(\'' . sprintf(__d('net_commons', 'Deleting the %s. Are you sure to proceed?'), __d('circular_notices', 'Circular Notice')) . '\')'
-	)); ?>
+<?php //echo $this->NetCommonsForm->create('CircularNotice', array('type' => 'delete', 'action' => 'delete/' . $frameId . '/' . $circularNoticeContent['key'])); ?>
+<?php echo $this->NetCommonsForm->create('CircularNotice', array(
+	'type' => 'delete',
+	'url' => $this->NetCommonsHtml->url(array('action' => 'delete', 'key' => $circularNoticeContent['key']))
+)); ?>
+<?php echo $this->NetCommonsForm->hidden('Frame.id'); ?>
+<?php echo $this->NetCommonsForm->hidden('Block.id'); ?>
+<?php echo $this->NetCommonsForm->hidden('Block.key'); ?>
+
+<?php echo $this->NetCommonsForm->hidden('CircularNoticeContent.id'); ?>
+<?php echo $this->NetCommonsForm->hidden('CircularNoticeContent.key'); ?>
+<?php echo $this->NetCommonsForm->hidden('CircularNoticeContent.language_id'); ?>
+
+<?php echo $this->Button->delete('',
+	sprintf(__d('net_commons', 'Deleting the %s. Are you sure to proceed?'), __d('circular_notices', '回覧'))
+); ?>
 <?php echo $this->Form->end();

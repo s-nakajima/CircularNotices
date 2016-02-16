@@ -35,7 +35,7 @@
 	);
 ?>
 
-<div id="nc-circular-notices-<?php echo (int)$frameId; ?>" ng-controller="CircularNoticeView" ng-init="initialize()">
+<div id="nc-circular-notices-<?php echo (int)Current::read('Frame.id'); ?>" ng-controller="CircularNoticeView" ng-init="initialize()">
 
 	<h1>
 		<?php echo h($circularNoticeContent['subject']); ?>
@@ -105,7 +105,7 @@
 
 	<?php if (
 		$circularNoticeContent['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN &&
-		$myAnswer['circularNoticeTargetUser']['userStatus']
+		isset($myAnswer['circularNoticeTargetUser']['userStatus'])
 	) : ?>
 
 		<hr />
@@ -236,14 +236,14 @@
 
 		</div>
 
-		<div>
-			<?php echo $this->element(
-				'NetCommons.errors', [
-					'errors' => $this->validationErrors,
-					'model' => 'CircularNoticeTargetUser',
-					'field' => 'reply_text_value',
-				]); ?>
-		</div>
+<!--		<div>-->
+<!--			--><?php //echo $this->element(
+//				'NetCommons.errors', [
+//					'errors' => $this->validationErrors,
+//					'model' => 'CircularNoticeTargetUser',
+//					'field' => 'reply_text_value',
+//				]); ?>
+<!--		</div>-->
 
 	<?php endif; ?>
 
@@ -330,7 +330,8 @@
 					endif;
 
 					echo $this->Html->tableCells(array(
-						h($circularNoticeTargetUser['user']['username']),
+//						h($circularNoticeTargetUser['user']['username']),
+						h($circularNoticeTargetUser['user']['handlename']),
 						h($readDatetime),
 						h($replyDatetime),
 						h($answer),
@@ -342,7 +343,8 @@
 		<div class="text-center">
 			<?php echo $this->element('NetCommons.paginator', array(
 				'url' => Hash::merge(
-					array('controller' => 'circular_notices', 'action' => 'view', $frameId, $circularNoticeContent['id']),
+//					array('controller' => 'circular_notices', 'action' => 'view', $frameId, $circularNoticeContent['id']),
+					array('controller' => 'circular_notices', 'action' => 'view', Current::read('Frame.id'), $circularNoticeContent['id']),
 					$this->Paginator->params['named']
 				)
 			)); ?>
@@ -351,9 +353,23 @@
 
 	<div class="text-center">
 		<span class="nc-tooltip" tooltip="<?php echo h(__d('circular_notices', 'Back')); ?>">
-			<a href="<?php echo $this->Html->url('/') ?>" class="btn btn-default">
-				<span class="glyphicon"><?php echo h(__d('circular_notices', 'Back')); ?></span>
-			</a>
+<!--			<a href="--><?php //echo $this->Html->url('/') ?><!--" class="btn btn-default">-->
+<!--				<span class="glyphicon">--><?php //echo h(__d('circular_notices', 'Back')); ?><!--</span>-->
+<!--			</a>-->
+			<?php echo $this->NetCommonsHtml->link(
+				'<span class="glyphicon">' . __d('circular_notices', 'Back') . '</span>',
+				$this->NetCommonsHtml->url(
+					array(
+						'controller' => 'circular_notices',
+						'action' => 'index',
+					)
+				),
+				array(
+					'class' => 'btn btn-default',
+					'escape' => false
+				)
+			);
+			?>
 		</span>
 	</div>
 

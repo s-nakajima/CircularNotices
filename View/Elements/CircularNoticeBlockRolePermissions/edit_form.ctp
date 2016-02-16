@@ -22,11 +22,34 @@
 		'value' => isset($circularNoticeSetting['key']) ? $circularNoticeSetting['key'] : null,
 	)); ?>
 
-<?php echo $this->element('Blocks.block_role_setting', array(
-		'roles' => $roles,
-		'model' => 'CircularNoticeSetting',
-		'creatablePermissions' => array(
-			'contentCreatable' => __d('blocks', 'Content creatable roles'),
-		),
-		'options' => null,
-	));
+<?php //echo $this->element('Blocks.block_role_setting', array(
+//		'roles' => $roles,
+//		'model' => 'CircularNoticeSetting',
+//		'creatablePermissions' => array(
+//			'contentCreatable' => __d('blocks', 'Content creatable roles'),
+//		),
+//		'options' => null,
+//	));
+//?>
+
+<?php echo $this->element('Blocks.block_creatable_setting', array(
+	'settingPermissions' => array(
+		'content_creatable' => __d('blocks', 'Content creatable roles'),
+//		'content_comment_creatable' => __d('blocks', 'Content comment creatable roles'),
+	),
+)); ?>
+
+
+<!-- メール設定 -->
+<div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			メール設定
+		</div>
+
+		<div class="panel-body">
+			TODO メールの件名と本文を設定
+		</div>
+	</div>
+</div>
+

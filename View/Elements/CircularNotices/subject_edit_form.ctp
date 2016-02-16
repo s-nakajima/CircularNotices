@@ -17,6 +17,7 @@
 			array(
 				'label' => __d('circular_notices', 'Subject'),
 				'required' => 'required',
+				'ng-model' => 'circularNoticeContent.subject',
 			)
 		);
 	?>

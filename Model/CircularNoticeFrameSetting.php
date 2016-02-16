@@ -141,13 +141,35 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
  * @param string $frameKey circular_notice_frame_settings.frame_key
  * @return mixed
  */
-	public function getCircularNoticeFrameSetting($frameKey) {
-		return $this->find('first', array(
-			'recursive' => -1,
-			'conditions' => array(
-				'frame_key' => $frameKey,
-			),
-		));
+	public function getCircularNoticeFrameSetting($created) {
+//		return $this->find('first', array(
+//			'recursive' => -1,
+//			'conditions' => array(
+//				'frame_key' => Current::read('Frame.key'),
+//			),
+//		));
+
+		$conditions = array(
+			'frame_key' => Current::read('Frame.key')
+		);
+
+		$circularNoticeFrameSetting = $this->find('first', array(
+				'recursive' => -1,
+				'conditions' => $conditions,
+			)
+		);
+
+		if ($created && ! $circularNoticeFrameSetting) {
+			$circularNoticeFrameSetting = $this->create(array(
+				'frame_key' => Current::read('Frame.key'),
+			));
+		}
+
+		return $circularNoticeFrameSetting;
+
+
+
+
 	}
 
 /**
