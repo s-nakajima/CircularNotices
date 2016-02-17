@@ -8,6 +8,12 @@
 	margin-bottom: 10px;
 }
 
+.circular-notice-status-label {
+	display: inline-block;
+	width: 60px;
+	padding: 4px 0;
+}
+
 .nc-circular-notices-target-label {
 	display: inline-block;
 	/*width: 48%;*/

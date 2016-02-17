@@ -37,6 +37,10 @@
 
 <div id="nc-circular-notices-<?php echo (int)Current::read('Frame.id'); ?>" ng-controller="CircularNoticeView" ng-init="initialize()">
 
+	<div class="circular-notice-index-status-label">
+		<?php echo $this->element('CircularNotices/status_label', array('circularNoticeContent' => array('circularNoticeContent' => $circularNoticeContent))); ?>
+	</div>
+
 	<!-- 編集 -->
 	<?php if (Current::permission('content_creatable') && $circularNoticeContent['createdUser'] == $userId) : ?>
 		<div class="pull-right">
