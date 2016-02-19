@@ -49,8 +49,8 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
 
 		$this->validate = Hash::merge($this->validate, array(
 			'frame_key' => array(
-				'notEmpty' => array(
-					'rule' => array('notEmpty'),
+				'notBlank' => array(
+					'rule' => array('notBlank'),
 					'message' => __d('net_commons', 'Invalid request.'),
 					'required' => true,
 				)

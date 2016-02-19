@@ -55,7 +55,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 //				),
 //			),
 			'user_id' => array(
-				'notEmpty' => array(
+				'notBlank' => array(
 					'rule' => array('isUserSelected'),
 					'required' => true,
 					'message' => sprintf(__d('net_commons', 'ユーザを選択してください。')),
