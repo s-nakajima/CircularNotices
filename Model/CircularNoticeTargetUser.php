@@ -54,13 +54,13 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 //					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Answer Title')),
 //				),
 //			),
-			'user_id' => array(
-				'notBlank' => array(
-					'rule' => array('isUserSelected'),
-					'required' => true,
-					'message' => sprintf(__d('net_commons', 'ユーザを選択してください。')),
-				),
-			),
+//			'user_id' => array(
+//				'notBlank' => array(
+//					'rule' => array('isUserSelected'),
+//					'required' => true,
+//					'message' => sprintf(__d('net_commons', 'ユーザを選択してください。')),
+//				),
+//			),
 		));
 		return parent::beforeValidate($options);
 	}
@@ -335,8 +335,14 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		$dataSource->begin();
 
 		try {
-
 			// データセット＋検証
+			$this->validate['reply_text_value'] = array(
+				'notEmpty' => array(
+					'rule' => array('validateNotEmptyReplyValue'),
+					'last' => false,
+					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Answer Title')),
+				),
+			);
 			if (! $this->validateCircularNoticeTargetUser($data)) {
 				return false;
 			}

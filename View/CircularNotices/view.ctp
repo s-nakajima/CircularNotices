@@ -155,9 +155,12 @@
 
 			<hr class="circular-notice-spacer" />
 
-			<?php echo $this->Form->create('CircularNoticeTargetUser', array(
+			<?php echo $this->NetCommonsForm->create('CircularNoticeTargetUser', array(
 				'name' => 'form',
 				'novalidate' => true,
+			)); ?>
+			<?php echo $this->NetCommonsForm->hidden('CircularNoticeContent.key', array(
+				'value' => $circularNoticeContent['key'],
 			)); ?>
 
 				<div ng-hide="showReplyForm==false">

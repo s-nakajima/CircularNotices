@@ -54,9 +54,15 @@ $this->log('Behavior処理');
 			}
 			$model->data['CircularNoticeTargetUser']['user_id'] = $validUsers;
 			$model->CircularNoticeTargetUser->set($model->data['CircularNoticeTargetUser']);
+			$model->CircularNoticeTargetUser->validate['user_id'] = array(
+				'notBlank' => array(
+					'rule' => array('isUserSelected'),
+					'required' => true,
+					'message' => sprintf(__d('net_commons', 'ユーザを選択してください。')),
+				),
+			);
 			if (! $model->CircularNoticeTargetUser->validates()) {
 				$model->validationErrors = Hash::merge($model->validationErrors, $model->CircularNoticeTargetUser->validationErrors);
-$this->log($model->validationErrors);
 				return false;
 			}
 		}

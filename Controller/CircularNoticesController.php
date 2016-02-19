@@ -177,11 +177,18 @@ class CircularNoticesController extends CircularNoticesAppController {
 				['CircularNoticeTargetUser' => ['reply_flag' => true, 'reply_datetime' => date('Y-m-d H:i:s'), 'reply_text_value' => $replyTextValue, 'reply_selection_value' => $replySelectionValue]]
 			);
 
-			$this->CircularNoticeTargetUser->saveCircularNoticeTargetUser($data);
-			if ($this->handleValidationError($this->CircularNoticeTargetUser->validationErrors)) {
-				$this->redirect($this->request->here);
+			if ($this->CircularNoticeTargetUser->saveCircularNoticeTargetUser($data)) {
+				$url = NetCommonsUrl::actionUrl(array(
+					'controller' => $this->params['controller'],
+					'action' => 'view',
+					'block_id' => Current::read('Block.id'),
+					'frame_id' => Current::read('Frame.id'),
+					'key' => $this->request->data['CircularNoticeContent']['key']
+				));
+				$this->redirect($url);
 				return;
 			}
+			$this->NetCommons->handleValidationError($this->CircularNoticeTargetUser->validationErrors);
 
 			$myTargetUser['CircularNoticeTargetUser']['reply_text_value'] = $replyTextValue;
 			$myTargetUser['CircularNoticeTargetUser']['reply_selection_value'] = $replySelectionValue;
@@ -192,7 +199,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 			['MyAnswer' => $myTargetUser, 'CircularNoticeTargetUsers' => $targetUsers, 'AnswersSummary' => $answersSummary]
 		);
 		$results = $this->camelizeKeyRecursive($results);
-$this->log($results);
 		$this->set($results);
 	}
 
