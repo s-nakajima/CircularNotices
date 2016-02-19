@@ -209,7 +209,6 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @return void
  */
 	public function add($frameId = null) {
-//$this->log($this->request->data);
 		$this->view = 'edit';
 		$frameId = Current::read('Frame.id');
 		$blockId = Current::read('Block.id');

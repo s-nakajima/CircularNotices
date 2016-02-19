@@ -38,7 +38,6 @@ class CircularNoticeTargetUserBehavior extends ModelBehavior {
 			'CircularNoticeContent' => 'CircularNotices.CircularNoticeContent',
 			'CircularNoticeTargetUser' => 'CircularNotices.CircularNoticeTargetUser',
 		));
-$this->log('Behavior処理');
 
 		if (! $model->data['CircularNoticeContent']['is_room_targeted_flag']) {
 			// TODO 回覧先ユーザのバリデーション処理
