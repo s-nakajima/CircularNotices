@@ -102,12 +102,12 @@
 								);
 								?>
 							<?php endif; ?>
-							<small>
+							<div>
 								<?php echo h(__d('circular_notices', 'Circular Content Period Title')); ?>
 								<?php echo $this->Date->dateFormat($circularNoticeContent['circularNoticeContent']['openedPeriodFrom']); ?>
-								～
+								<?php echo __d('circular_notices', 'Till'); ?>
 								<?php echo $this->Date->dateFormat($circularNoticeContent['circularNoticeContent']['openedPeriodTo']); ?>
-							</small>
+							</div>
 						</div>
 						<div class="pull-right">
 							<small>
