@@ -78,9 +78,6 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
 	public function beforeFilter() {
 		parent::beforeFilter();
 		$this->Auth->deny('index');
-
-		// タブの設定
-		$this->initSettingTabs('role_permissions');
 	}
 
 /**

@@ -94,64 +94,6 @@ class CircularNoticesAppController extends AppController {
 	}
 
 /**
- * Initialize setting tabs
- *
- * @param string $activeTab Active tag name
- * @return void
- */
-	public function initSettingTabs($activeTab) {
-		$settingTabs = array(
-			'tabs' => array(
-//				'block_index' => array(
-//					'url' => array(
-//						'plugin' => $this->params['plugin'],
-//						'controller' => 'circular_notice_block_role_permissions',
-//						'action' => 'edit',
-////						$this->viewVars['frameId'],
-//						Current::read('Frame.id'),
-//					),
-//					'label' => __d('circular_notices', '回覧板設定'),
-//				),
-//				'circular_notice_setting' => array(
-//					'url' => array(
-//						'plugin' => $this->params['plugin'],
-//						'controller' => 'circular_notice_block_role_permissions',
-//						'action' => 'edit',
-////						$this->viewVars['frameId'],
-//						Current::read('Frame.id'),
-//					),
-//					'label' => __d('circular_notices', '回覧板設定'),
-//				),
-				'role_permissions' => array(
-					'url' => array(
-						'plugin' => $this->params['plugin'],
-						'controller' => 'circular_notice_block_role_permissions',
-						'action' => 'edit',
-//						$this->viewVars['frameId'],
-						Current::read('Frame.id'),
-					),
-					'label' => __d('circular_notices', 'Privilege Setting'),
-				),
-				'circular_notice_frame_settings' => array(
-					'url' => array(
-						'plugin' => $this->params['plugin'],
-						'controller' => 'circular_notice_frame_settings',
-						'action' => 'edit',
-//						$this->viewVars['frameId'],
-						Current::read('Frame.id'),
-					),
-					'label' => __d('net_commons', 'Frame settings'),
-				),
-			),
-			'active' => $activeTab,
-		);
-		$this->set('settingTabs', $settingTabs);
-		
-//		$blockSettingTabs = array();
-//		$this->set('blockSettingTabs', $blockSettingTabs);
-	}
-
-/**
  * Get groups for stub.
  *
  * @return array

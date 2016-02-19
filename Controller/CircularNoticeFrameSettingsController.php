@@ -76,9 +76,6 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
-
-		// タブの設定
-		$this->initSettingTabs('circular_notice_frame_settings');
 	}
 
 /**
