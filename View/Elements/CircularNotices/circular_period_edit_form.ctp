@@ -10,7 +10,7 @@
  */
 ?>
 
-<div class="form-group">
+<div class="form-group" style="margin-bottom: 10px;">
 	<div>
 		<?php echo $this->Form->label(
 			'CircularNoticeTargetUser.period',
@@ -18,7 +18,7 @@
 		); ?>
 	</div>
 	<div>
-		<div class="input-group inline-block" style="margin-left: 20px;">
+		<div class="input-group inline-block">
 			<div class="input-group">
 				<?php echo $this->NetCommonsForm->input('CircularNoticeContent.opened_period_from', array(
 					'type' => 'text',
