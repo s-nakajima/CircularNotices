@@ -139,7 +139,7 @@
 
 		<div>
 
-			<?php echo h(__d('circular_notices', 'Answer Title')); ?>
+<!--			--><?php //echo h(__d('circular_notices', 'Answer Title')); ?>
 			<?php
 			switch ($circularNoticeContent['replyType']) {
 				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT:
@@ -160,6 +160,9 @@
 				'novalidate' => true,
 			)); ?>
 
+				<div ng-hide="showReplyForm==false">
+					回答：
+				</div>
 				<div class="panel panel-default" ng-hide="showReplyForm==false">
 					<div class="panel-body">
 						<div class="form-group">

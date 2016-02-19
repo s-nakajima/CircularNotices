@@ -17,7 +17,7 @@
 			__d('circular_notices', 'Circular Target') . $this->element('NetCommons.required')
 		); ?>
 	</div>
-	<div class="col-xs-offset-1 col-xs-11">
+	<div class="col-xs-offset-1 col-xs-11" style="margin-bottom: 10px;">
 		<?php
 //		echo $this->NetCommonsForm->input('CircularNoticeContent.is_room_targeted_flag', array(
 //			'legend' => false,
