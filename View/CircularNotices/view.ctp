@@ -310,7 +310,7 @@
 
 		<div class="clearfix">
 			<div class="pull-left">
-				<?php echo $this->element('CircularNotices/view_select_sort'); ?>
+<!--				--><?php //echo $this->element('CircularNotices/view_select_sort'); ?>
 				<?php echo $this->element('CircularNotices/view_select_limit'); ?>
 			</div>
 			<div class="pull-right">
@@ -325,18 +325,36 @@
 
 		<hr class="circular-notice-spacer" />
 
-		<table class="table table-bordered">
+		<!-- 回覧先と回答 -->
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>
+						<?php echo $this->Paginator->sort('User.handlename', h(__d('circular_notices', 'Target User'))); ?>
+					</th>
+					<th>
+						<?php echo $this->Paginator->sort('CircularNoticeTargetUser.read_datetime', h(__d('circular_notices', 'Read Datetime'))); ?>
+					</th>
+					<th>
+						<?php echo $this->Paginator->sort('CircularNoticeTargetUser.reply_datetime', h(__d('circular_notices', 'Reply Datetime'))); ?>
+					</th>
+					<th>
+						<?php
+							switch ($circularNoticeContent['replyType']) {
+								case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT:
+									$replyType = 'reply_text_value';
+									break;
+								case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION:
+								case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION:
+									$replyType = 'reply_selection_value';
+									break;
+							}
+							echo $this->Paginator->sort('CircularNoticeTargetUser.' . $replyType, h(__d('circular_notices', 'Answer')));
+						?>
+					</th>
+				</tr>
+			</thead>
 			<?php
-				echo $this->Html->tableHeaders(
-					array(
-						h(__d('circular_notices', 'Target User')),
-						h(__d('circular_notices', 'Read Datetime')),
-						h(__d('circular_notices', 'Reply Datetime')),
-						h(__d('circular_notices', 'Answer')),
-					),
-					array('class' => 'active')
-				);
-
 				foreach ($circularNoticeTargetUsers as $circularNoticeTargetUser) :
 					$answer = null;
 					switch ($circularNoticeContent['replyType']) {
