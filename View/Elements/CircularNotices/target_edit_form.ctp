@@ -33,11 +33,12 @@
 		));
 		?>
 		<!-- グループ選択 -->
-		<div ng-if="target==0">
+		<div ng-show="target==0">
 			<?php echo $this->element('Groups.select',
 				array(
-					'title' => 'ユーザ選択',
+					'title' => '回覧先ユーザ選択',
 					'pluginModel' => 'CircularNoticeTargetUser',
+					'selectUsers' => (isset($this->request->data['selectUsers'])) ? $this->request->data['selectUsers'] : null,
 				));
 			?>
 		</div>

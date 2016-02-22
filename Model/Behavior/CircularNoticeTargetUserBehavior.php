@@ -41,7 +41,7 @@ class CircularNoticeTargetUserBehavior extends ModelBehavior {
 		));
 
 		if (! $model->data['CircularNoticeContent']['is_room_targeted_flag']) {
-			// TODO 回覧先ユーザのバリデーション処理
+			// 回覧先ユーザのバリデーション処理
 			if (! isset($model->data['CircularNoticeTargetUser']['user_id'])) {
 				$model->data['CircularNoticeTargetUser']['user_id'] = array();
 			}

@@ -17,7 +17,7 @@
 		),
 		array(
 			'plugin' => false,
-			'once' => true,
+			'once' => false,
 			'inline' => false
 		)
 	);

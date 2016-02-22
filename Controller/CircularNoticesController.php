@@ -33,6 +33,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		'CircularNotices.CircularNoticeContent',
 		'CircularNotices.CircularNoticeChoice',
 		'CircularNotices.CircularNoticeTargetUser',
+		'User' => 'Users.User',
 	);
 
 /**
@@ -49,6 +50,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 			),
 		),
 		'Paginator',
+		'UserAttributes.UserAttributeLayout',
 	);
 
 /**
@@ -212,6 +214,8 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$this->view = 'edit';
 		$frameId = Current::read('Frame.id');
 		$blockId = Current::read('Block.id');
+		$this->helpers[] = 'Users.UserSearch';
+
 		$this->initCircularNotice();
 
 		$content = $this->CircularNoticeContent->create(array(
@@ -242,23 +246,36 @@ class CircularNoticesController extends CircularNoticesAppController {
 				));
 				$this->redirect($url);
 				return;
+			} else {
+				$this->request->data['selectUsers'] = array();
+				if (isset($this->request->data['CircularNoticeTargetUser']['user_id'])) {
+					foreach ($this->request->data['CircularNoticeTargetUser']['user_id'] as $userId) {
+						$user = $this->User->getUser($userId);
+						$this->request->data['selectUsers'][] = $user;
+					}
+				}
 			}
 
 			$this->NetCommons->handleValidationError($this->CircularNoticeContent->validationErrors);
 
 			unset($data['CircularNoticeContent']['status']);
-			unset($content['CircularNoticeContent']['is_room_targeted_flag']);
-			unset($content['CircularNoticeContent']['target_groups']);
+//			unset($content['CircularNoticeContent']['is_room_targeted_flag']);
 			$data['CircularNoticeContent']['is_room_targeted_flag'] = $this->data['CircularNoticeContent']['is_room_targeted_flag'];
-//			$data['CircularNoticeContent']['target_groups'] = $this->data['CircularNoticeContent']['target_groups'];
+		} else {
+			if (! isset($data['CircularNoticeContent']['is_room_targeted_flag']) ||
+				$data['CircularNoticeContent']['is_room_targeted_flag']) {
+				// 自分自身を取得
+				$selectUsers = array(Current::read('User.id'));
+				$this->request->data['selectUsers'] = array();
+				foreach ($selectUsers as $userId) {
+					$this->request->data['selectUsers'][] = $this->User->getUser($userId);
+				}
+			}
 		}
-
-		// FIXME: グループ情報を取得（共通待ち）
-		$groups = $this->_getGroupsStub();
 
 		$results = Hash::merge(
 			$content, $data,
-			['contentStatus' => null, 'groups' => $groups]
+			['contentStatus' => null]
 		);
 		$results = $this->camelizeKeyRecursive($results);
 		$this->set($results);
@@ -278,15 +295,12 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$this->initCircularNotice();
 		$frameId = Current::read('Frame.id');
 		$blockId = Current::read('Block.id');
+		$this->helpers[] = 'Users.UserSearch';
 
 		if (! $content = $this->CircularNoticeContent->getCircularNoticeContent($key, $userId)) {
 			$this->throwBadRequest();
 			return;
 		}
-//		$content['CircularNoticeContent']['is_room_targeted_flag'] =
-//		$content['CircularNoticeContent']['is_room_targeted_flag'] ? array('1') : null;
-		$content['CircularNoticeContent']['target_groups'] =
-			explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $content['CircularNoticeContent']['target_groups']);
 
 		$data = array();
 		if ($this->request->is(array('post', 'put'))) {
@@ -298,17 +312,10 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 			$data = $this->__parseRequestForSave();
 			$data['CircularNoticeContent']['status'] = $status;
-			
+
 //			unset($data['CircularNoticeContent']['id']);	// 常に新規保存？
 			$data['CircularNoticeContent']['key'] = $key;	// keyをここでセット（あとでWorkflow系の処理に置き換え？）
 
-//			$this->CircularNoticeContent->saveCircularNoticeContent($data);
-//			if ($this->handleValidationError($this->CircularNoticeContent->validationErrors)) {
-//				$this->redirectByFrameId();
-//				return;
-//			}
-
-//			$this->CircularNoticeContent->saveCircularNoticeContent($data);
 			if ($circularContent = $this->CircularNoticeContent->saveCircularNoticeContent($data)) {
 				$url = NetCommonsUrl::actionUrl(array(
 					'controller' => $this->params['controller'],
@@ -319,24 +326,41 @@ class CircularNoticesController extends CircularNoticesAppController {
 				));
 				$this->redirect($url);
 				return;
+			} else {
+				$this->request->data['selectUsers'] = array();
+				if (isset($this->request->data['CircularNoticeTargetUser']['user_id'])) {
+					foreach ($this->request->data['CircularNoticeTargetUser']['user_id'] as $userId) {
+						$user = $this->User->getUser($userId);
+						$this->request->data['selectUsers'][] = $user;
+					}
+				}
 			}
 
 			$this->NetCommons->handleValidationError($this->CircularNoticeContent->validationErrors);
 
 			unset($data['CircularNoticeContent']['id']);
 			unset($data['CircularNoticeContent']['status']);
-			unset($content['CircularNoticeContent']['is_room_targeted_flag']);
-			unset($content['CircularNoticeContent']['target_groups']);
+//			unset($content['CircularNoticeContent']['is_room_targeted_flag']);
+//			unset($content['CircularNoticeContent']['target_groups']);
 			$data['CircularNoticeContent']['is_room_targeted_flag'] = $this->data['CircularNoticeContent']['is_room_targeted_flag'];
-			$data['CircularNoticeContent']['target_groups'] = $this->data['CircularNoticeContent']['target_groups'];
+		} else {
+			if ($content['CircularNoticeContent']['is_room_targeted_flag']) {
+				// 自分自身を取得
+				$selectUsers = array(Current::read('User.id'));
+			} else {
+				$selectUsers = array_map(function($user) {
+					return $user['user_id'];
+				}, $content['CircularNoticeTargetUser']);
+			}
+			$this->request->data['selectUsers'] = array();
+			foreach ($selectUsers as $userId) {
+				$this->request->data['selectUsers'][] = $this->User->getUser($userId);
+			}
 		}
-
-		// FIXME: グループ情報を取得（共通待ち）
-		$groups = $this->_getGroupsStub();
 
 		$results = Hash::merge(
 			$content, $data,
-			['contentStatus' => $content['CircularNoticeContent']['status'], 'groups' => $groups]
+			['contentStatus' => $content['CircularNoticeContent']['status']]
 		);
 		$results = $this->camelizeKeyRecursive($results);
 		$this->set($results);
