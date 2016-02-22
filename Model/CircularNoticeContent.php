@@ -359,6 +359,20 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 				$users = $data['CircularNoticeTargetUser']['user_id'];
 			}
 
+			// ルームに所属する全ユーザが対象の場合、ルームの参加者を取得
+			if ($data['CircularNoticeContent']['is_room_targeted_flag']) {
+				$this->loadModels([
+					'RolesRoomsUser' => 'Rooms.RolesRoomsUser',
+				]);
+				$rolesRoomsUsers = $this->RolesRoomsUser->getRolesRoomsUsers(array(
+					'Room.id' => Current::read('Room.id')
+				));
+				$targetUsers = array_map(function($roomUser) {
+					return $roomUser['RolesRoomsUser']['user_id'];
+				}, $rolesRoomsUsers);
+				$users = $targetUsers;
+			}
+
 			// 取得したUserでデータを差し替え
 			$targetUsers = array();
 			foreach ($users as $user) {
