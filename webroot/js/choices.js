@@ -20,7 +20,6 @@ NetCommonsApp.controller('CircularNoticeChoices', function($scope) {
    */
   $scope.initialize = function(data) {
     angular.forEach(data.choices, function(value) {
-      console.log(value);
       $scope.choices.push(value);
     });
   };
