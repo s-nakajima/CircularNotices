@@ -46,7 +46,7 @@
 //			'type' => 'radio',
 			'separator' => '<br />',
 			'value' => (isset($circularNoticeContent['isRoomTargetedFlag'])) ? $circularNoticeContent['isRoomTargetedFlag'] : 1,
-			'ng-click' => 'target=0',
+			'ng-click' => 'switchTarget($event)',
 		));
 		?>
 <!--		--><?php
