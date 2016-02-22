@@ -54,7 +54,7 @@ NetCommonsApp.controller('CircularNoticeTarget',
    *
    * @type {object}
    */
-  $scope.target = null;
+  $scope.target = false;
 
 /**
  * Initialize
