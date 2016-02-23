@@ -10,9 +10,9 @@
  */
 ?>
 
-<?php echo $this->Form->hidden('Frame.id', array(
-	'value' => Current::read('Frame.id'),
-	)); ?>
+<?php echo $this->NetCommonsForm->hidden('id'); ?>
+<?php echo $this->NetCommonsForm->hidden('Frame.id'); ?>
+<?php echo $this->NetCommonsForm->hidden('Block.id'); ?>
 
 <?php echo $this->Form->hidden('CircularNoticeFrameSetting.id', array(
 	'value' => isset($circularNoticeFrameSetting['id']) ? (int)$circularNoticeFrameSetting['id'] : null,

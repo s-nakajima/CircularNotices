@@ -45,8 +45,6 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
 	public $components = array(
 		'Blocks.BlockTabs' => array(
 			'mainTabs' => array(
-//				'block_index' => array('url' => array('controller' => 'circular_notice_blocks')),
-//				'circular_notice_setting' => array('url' => array('controller' => 'circular_notice_block_role_permissions', 'action' => 'edit')),
 				'role_permissions' => array('url' => array('controller' => 'circular_notice_block_role_permissions')),
 				'frame_settings' => array('url' => array('controller' => 'circular_notice_frame_settings')),
 			),
@@ -65,9 +63,8 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
  * @var array
  */
 	public $helpers = array(
-		//'NetCommons.Token',
 		'Blocks.BlockRolePermissionForm',
-		'NetCommons.Date',
+//		'NetCommons.Date',
 	);
 
 /**
@@ -86,9 +83,8 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
  * @return void
  */
 	public function edit() {
-
 		$permissions = $this->Workflow->getBlockRolePermissions(
-			array('content_creatable', 'content_publishable', /*'content_comment_creatable', *//*'content_comment_publishable'*/)
+			array('content_creatable', 'content_publishable')
 		);
 		$this->set('roles', $permissions['Roles']);
 
@@ -122,15 +118,17 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
 
 		if ($this->request->is(array('post', 'put'))) {
 			$data = $this->data;
-			$this->CircularNoticeSetting->saveCircularNoticeSetting($data);
-			if ($this->handleValidationError($this->CircularNoticeSetting->validationErrors)) {
-				if (! $this->request->is('ajax')) {
-					$this->redirectByFrameId();
-				}
+			if ($this->CircularNoticeSetting->saveCircularNoticeSetting($data)) {
+                $this->redirect(NetCommonsUrl::backToIndexUrl('default_setting_action'));
 				return;
 			}
+			$this->NetCommons->handleValidationError($this->CircularNoticeSetting->validationErrors);
+			$this->request->data['CircularNoticeRolePermission'] = Hash::merge(
+				$permissions['BlockRolePermissions'],
+				$this->request->data['BlockRolePermission']
+			);
 		} else {
-			$this->request->data['circularNoticeSetting'] = $setting['CircularNoticeSetting'];
+			$this->request->data['CircularNoticeSetting'] = $setting['CircularNoticeSetting'];
 			$this->request->data['BlockRolePermission'] = $permissions['BlockRolePermissions'];
 			$this->request->data['Frame'] = Current::read('Frame');
 		}

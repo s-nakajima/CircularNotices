@@ -34,7 +34,6 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
 	public $uses = array(
 		'Blocks.Block',
 		'Frames.Frame',
-		//'CircularNotices.CircularNotice',
 		'CircularNotices.CircularNoticeFrameSetting',
 	);
 
@@ -46,8 +45,6 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
 	public $components = array(
 		'Blocks.BlockTabs' => array(
 			'mainTabs' => array(
-//				'block_index' => array('url' => array('controller' => 'circular_notice_blocks')),
-//				'circular_notice_setting' => array('url' => array('controller' => 'circular_notice_block_role_permissions')),
 				'role_permissions' => array('url' => array('controller' => 'circular_notice_block_role_permissions')),
 				'frame_settings' => array('url' => array('controller' => 'circular_notice_frame_settings')),
 			),
@@ -55,7 +52,7 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
 		'NetCommons.Permission' => array(
 			//アクセスの権限
 			'allow' => array(
-				'edit' => 'block_permission_editable',
+				'edit' => 'page_editable',
 			),
 		),
 	);
@@ -67,6 +64,7 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
  */
 	public $helpers = array(
 		'NetCommons.Token',
+		'NetCommons.DisplayNumber',
 	);
 
 /**
@@ -84,17 +82,10 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
  * @return void
  */
 	public function edit() {
-//		if (! $this->NetCommonsFrame->validateFrameId()) {
-//			$this->throwBadRequest();
-//			return false;
-//		}
-
-		$data = array();
 		if ($this->request->is(array('post', 'put'))) {
 			$data = $this->request->data;
-			$this->CircularNoticeFrameSetting->saveCircularNoticeFrameSetting($data);
-			if ($this->handleValidationError($this->CircularNoticeFrameSetting->validationErrors)) {
-				$this->redirectByFrameId();
+			if ($this->CircularNoticeFrameSetting->saveCircularNoticeFrameSetting($data)) {
+				$this->redirect(NetCommonsUrl::backToPageUrl());
 				return;
 			}
 			$this->NetCommons->handleValidationError($this->BbsFrameSetting->validationErrors);
