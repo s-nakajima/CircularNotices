@@ -395,7 +395,8 @@ class CircularNoticesController extends CircularNoticesAppController {
 		}
 
 		$this->CircularNoticeContent->deleteCircularNoticeContent($contentKey);
-		$this->redirectByFrameId();
+		$this->redirect(NetCommonsUrl::backToPageUrl());
+		return;
 	}
 
 /**
