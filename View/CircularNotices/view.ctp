@@ -11,11 +11,9 @@
 ?>
 
 <?php
-	$this->Html->script(
+	echo $this->Html->script(
 		array(
-			'/net_commons/js/workflow.js',
-			'/net_commons/js/wysiwyg.js',
-			'/circularNotices/js/circular_notices.js'
+			'/circular_notices/js/circular_notices.js'
 		),
 		array(
 			'plugin' => false,
@@ -25,9 +23,9 @@
 	);
 ?>
 <?php
-	$this->Html->css(
+	echo $this->Html->css(
 		array(
-			'/circularNotices/css/circular_notices.css'
+			'/circular_notices/css/circular_notices.css'
 		),
 		array(
 			'plugin' => false,
@@ -37,7 +35,34 @@
 	);
 ?>
 
-<div id="nc-circular-notices-<?php echo (int)$frameId; ?>" ng-controller="CircularNoticeView" ng-init="initialize()">
+<div id="nc-circular-notices-<?php echo (int)Current::read('Frame.id'); ?>" ng-controller="CircularNoticeView" ng-init="initialize()">
+
+	<div class="circular-notice-index-status-label">
+		<?php echo $this->element('CircularNotices/status_label', array('circularNoticeContent' => array('circularNoticeContent' => $circularNoticeContent))); ?>
+	</div>
+
+	<!-- 編集 -->
+	<?php if (Current::permission('content_creatable') && $circularNoticeContent['createdUser'] == $userId) : ?>
+		<div class="pull-right">
+			<span class="nc-tooltip" tooltip="<?php echo h(__d('net_commons', 'Edit')); ?>">
+				<?php echo $this->NetCommonsHtml->link(
+					'<span class="glyphicon glyphicon-edit"> </span>',
+					$this->NetCommonsHtml->url(
+						array(
+							'controller' => 'circular_notices',
+							'action' => 'edit',
+							'key' => $circularNoticeContent['key']
+						)
+					),
+					array(
+						'class' => 'btn btn-sm btn-primary',
+						'escape' => false
+					)
+				);
+				?>
+			</span>
+		</div>
+	<?php endif; ?>
 
 	<h1>
 		<?php echo h($circularNoticeContent['subject']); ?>
@@ -68,25 +93,6 @@
 		<?php echo $circularNoticeContent['content']; ?>
 	</div>
 
-	<hr />
-
-	<div>
-		<?php echo h(__d('circular_notices', 'Reply Type Title')); ?>
-		<?php
-		switch ($circularNoticeContent['replyType']) {
-			case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT:
-				echo h(__d('circular_notices', 'Reply Type Text'));
-				break;
-			case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION:
-				echo h(__d('circular_notices', 'Reply Type Selection'));
-				break;
-			case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION:
-				echo h(__d('circular_notices', 'Reply Type Multiple Selection'));
-				break;
-		}
-		?>
-	</div>
-
 	<?php if ($circularNoticeContent['replyType'] != CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT) : ?>
 		<div class="clearfix">
 			<div class="pull-left">
@@ -107,35 +113,24 @@
 
 	<?php if (
 		$circularNoticeContent['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN &&
-		$myAnswer['circularNoticeTargetUser']['userStatus']
+		isset($myAnswer['circularNoticeTargetUser']['userStatus'])
 	) : ?>
 
 		<hr />
 
 		<div>
-
-			<?php echo h(__d('circular_notices', 'Answer Title')); ?>
-			<?php
-			switch ($circularNoticeContent['replyType']) {
-				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT:
-					echo h($myAnswer['circularNoticeTargetUser']['originReplyTextValue']);
-					break;
-				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION:
-				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION:
-					$selectionValues = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $myAnswer['circularNoticeTargetUser']['originReplySelectionValue']);
-					echo h(implode('、', $selectionValues));
-					break;
-			}
-			?>
-
 			<hr class="circular-notice-spacer" />
 
-			<?php echo $this->Form->create('CircularNoticeTargetUser', array(
+			<?php echo $this->NetCommonsForm->create('CircularNoticeTargetUser', array(
 				'name' => 'form',
 				'novalidate' => true,
 			)); ?>
+			<?php echo $this->NetCommonsForm->hidden('CircularNoticeContent.key', array(
+				'value' => $circularNoticeContent['key'],
+			)); ?>
 
-				<div class="panel panel-default" ng-hide="showReplyForm==false">
+				<?php echo h(__d('circular_notices', 'Answer Title')); ?>
+				<div class="panel panel-default">
 					<div class="panel-body">
 						<div class="form-group">
 
@@ -185,73 +180,46 @@
 									'multiple' => 'checkbox',
 									'selected' => $selected,
 									'options' => $selections,
+									'class' => 'form-input',
 								));
 								break;
 						}
 						?>
+						<?php echo $this->NetCommonsForm->error('CircularNoticeTargetUser.reply_text_value'); ?>
 
 						</div>
 					</div>
 				</div>
 
 				<div class="text-center">
-					<?php if (! $myAnswer['circularNoticeTargetUser']['replyFlag']) : ?>
-						<span class="nc-tooltip" tooltip="<?php echo h(__d('circular_notices', 'Do Answer')); ?>">
-							<button type="button" class="btn btn-success"
-								ng-click="switchReplyForm(true);"
-								ng-hide="showReplyForm!=false"
-								ng-disabled="sending">
-								<span class="glyphicon glyphicon-plus"></span>
-								<?php echo h(__d('circular_notices', 'Answer')); ?>
-							</button>
-						</span>
-					<?php else : ?>
-						<span class="nc-tooltip" tooltip="<?php echo h(__d('circular_notices', 'Change Answer')); ?>">
-							<button type="button" class="btn btn-primary"
-								ng-click="switchReplyForm(true);"
-								ng-hide="showReplyForm!=false"
-								ng-disabled="sending">
-								<span class="glyphicon glyphicon-edit"></span>
-								<?php echo h(__d('circular_notices', 'Change Answer')); ?>
-							</button>
-						</span>
-					<?php endif; ?>
-
-					<button type="button" class="btn btn-default"
-						ng-click="switchReplyForm(false);"
-						ng-hide="showReplyForm!=true"
-						ng-disabled="sending">
-						<span class="glyphicon glyphicon-remove"></span>
-						<?php echo h(__d('net_commons', 'Cancel')); ?>
-					</button>
-
-					<button type="submit" class="btn btn-primary"
-						ng-click="this.form.submit();"
-						ng-hide="showReplyForm!=true"
-						ng-disabled="sending">
-						<span class="glyphicon glyphicon-remove"></span>
-						<?php echo h(__d('net_commons', 'OK')); ?>
-					</button>
+					<?php 
+						if (! $myAnswer['circularNoticeTargetUser']['replyFlag']):
+							$labelName = __d('circular_notices', 'Answer');
+							$tooltip = __d('circular_notices', 'Do Answer');
+						else:
+							$labelName = __d('circular_notices', 'Change Answer');
+							$tooltip = __d('circular_notices', 'Change Answer');
+						endif;
+					?>
+					<span class="nc-tooltip" tooltip="<?php echo h($tooltip); ?>">
+						<button type="submit" class="btn btn-primary"
+							ng-click="this.form.submit();"
+							ng-disabled="sending">
+							<span class="glyphicon glyphicon-edit"></span>
+							<?php echo h($labelName); ?>
+						</button>
+					</span>
 				</div>
 
 			<?php echo $this->Form->end(); ?>
 
 		</div>
 
-		<div>
-			<?php echo $this->element(
-				'NetCommons.errors', [
-					'errors' => $this->validationErrors,
-					'model' => 'CircularNoticeTargetUser',
-					'field' => 'reply_text_value',
-				]); ?>
-		</div>
-
 	<?php endif; ?>
 
 	<hr />
 
-	<div class="text-center">
+	<div class="text-right">
 
 		<span class="nc-tooltip" tooltip="<?php echo h(__d('circular_notices', 'Show Other Users')); ?>">
 			<button type="button" class="btn btn-default"
@@ -279,7 +247,7 @@
 
 		<div class="clearfix">
 			<div class="pull-left">
-				<?php echo $this->element('CircularNotices/view_select_sort'); ?>
+<!--				--><?php //echo $this->element('CircularNotices/view_select_sort'); ?>
 				<?php echo $this->element('CircularNotices/view_select_limit'); ?>
 			</div>
 			<div class="pull-right">
@@ -294,18 +262,36 @@
 
 		<hr class="circular-notice-spacer" />
 
-		<table class="table table-bordered">
+		<!-- 回覧先と回答 -->
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>
+						<?php echo $this->Paginator->sort('User.handlename', h(__d('circular_notices', 'Target User'))); ?>
+					</th>
+					<th>
+						<?php echo $this->Paginator->sort('CircularNoticeTargetUser.read_datetime', h(__d('circular_notices', 'Read Datetime'))); ?>
+					</th>
+					<th>
+						<?php echo $this->Paginator->sort('CircularNoticeTargetUser.reply_datetime', h(__d('circular_notices', 'Reply Datetime'))); ?>
+					</th>
+					<th>
+						<?php
+							switch ($circularNoticeContent['replyType']) {
+								case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT:
+									$replyType = 'reply_text_value';
+									break;
+								case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION:
+								case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION:
+									$replyType = 'reply_selection_value';
+									break;
+							}
+							echo $this->Paginator->sort('CircularNoticeTargetUser.' . $replyType, h(__d('circular_notices', 'Answer')));
+						?>
+					</th>
+				</tr>
+			</thead>
 			<?php
-				echo $this->Html->tableHeaders(
-					array(
-						h(__d('circular_notices', 'Target User')),
-						h(__d('circular_notices', 'Read Datetime')),
-						h(__d('circular_notices', 'Reply Datetime')),
-						h(__d('circular_notices', 'Answer')),
-					),
-					array('class' => 'active')
-				);
-
 				foreach ($circularNoticeTargetUsers as $circularNoticeTargetUser) :
 					$answer = null;
 					switch ($circularNoticeContent['replyType']) {
@@ -332,7 +318,7 @@
 					endif;
 
 					echo $this->Html->tableCells(array(
-						h($circularNoticeTargetUser['user']['username']),
+						h($circularNoticeTargetUser['user']['handlename']),
 						h($readDatetime),
 						h($replyDatetime),
 						h($answer),
@@ -341,21 +327,25 @@
 			?>
 		</table>
 
-		<div class="text-center">
-			<?php echo $this->element('NetCommons.paginator', array(
-				'url' => Hash::merge(
-					array('controller' => 'circular_notices', 'action' => 'view', $frameId, $circularNoticeContent['id']),
-					$this->Paginator->params['named']
-				)
-			)); ?>
-		</div>
+		<?php echo $this->element('NetCommons.paginator'); ?>
 	</div>
 
 	<div class="text-center">
 		<span class="nc-tooltip" tooltip="<?php echo h(__d('circular_notices', 'Back')); ?>">
-			<a href="<?php echo $this->Html->url('/') ?>" class="btn btn-default">
-				<span class="glyphicon"><?php echo h(__d('circular_notices', 'Back')); ?></span>
-			</a>
+			<?php echo $this->NetCommonsHtml->link(
+				'<span class="glyphicon">' . __d('circular_notices', 'Back') . '</span>',
+				$this->NetCommonsHtml->url(
+					array(
+						'controller' => 'circular_notices',
+						'action' => 'index',
+					)
+				),
+				array(
+					'class' => 'btn btn-default',
+					'escape' => false
+				)
+			);
+			?>
 		</span>
 	</div>
 

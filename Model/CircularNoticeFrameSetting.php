@@ -49,8 +49,8 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
 
 		$this->validate = Hash::merge($this->validate, array(
 			'frame_key' => array(
-				'notEmpty' => array(
-					'rule' => array('notEmpty'),
+				'notBlank' => array(
+					'rule' => array('notBlank'),
 					'message' => __d('net_commons', 'Invalid request.'),
 					'required' => true,
 				)
@@ -138,16 +138,27 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
 /**
  * Get circular notice frame settings
  *
- * @param string $frameKey circular_notice_frame_settings.frame_key
+ * @param string $created circular_notice_frame_settings.created
  * @return mixed
  */
-	public function getCircularNoticeFrameSetting($frameKey) {
-		return $this->find('first', array(
-			'recursive' => -1,
-			'conditions' => array(
-				'frame_key' => $frameKey,
-			),
-		));
+	public function getCircularNoticeFrameSetting($created) {
+		$conditions = array(
+			'frame_key' => Current::read('Frame.key')
+		);
+
+		$frameSetting = $this->find('first', array(
+				'recursive' => -1,
+				'conditions' => $conditions,
+			)
+		);
+
+		if ($created && ! $frameSetting) {
+			$frameSetting = $this->create(array(
+				'frame_key' => Current::read('Frame.key'),
+			));
+		}
+
+		return $frameSetting;
 	}
 
 /**

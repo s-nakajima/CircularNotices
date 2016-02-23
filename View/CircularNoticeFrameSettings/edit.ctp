@@ -10,14 +10,13 @@
  */
 ?>
 
-<div class="modal-body">
-	<?php echo $this->element('NetCommons.setting_tabs', $settingTabs); ?>
+<article class="block-setting-body">
+	<?php echo $this->BlockTabs->main(BlockTabsComponent::MAIN_TAB_FRAME_SETTING); ?>
 	<div class="tab-content">
 		<?php echo $this->element('Blocks.edit_form', array(
-			'controller' => 'CircularNoticeFrameSettings',
-			'action' => 'edit' . '/' . $frameId,
+			'model' => 'CircularNoticeFrameSettings',
 			'callback' => 'CircularNotices.CircularNoticeFrameSettings/edit_form',
-			'cancelUrl' => $this->Html->url(isset($current['page']) ? '/' . $current['page']['permalink'] : null)
+			'cancelUrl' => NetCommonsUrl::backToPageUrl(),
 		)); ?>
 	</div>
-</div>
+</article>

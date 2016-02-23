@@ -10,7 +10,7 @@
  */
 ?>
 
-<div class="form-group">
+<div class="form-group" style="margin-bottom: 10px;">
 	<div>
 		<?php echo $this->Form->label(
 			'CircularNoticeTargetUser.period',
@@ -18,9 +18,9 @@
 		); ?>
 	</div>
 	<div>
-		<div class="input-group inline-block" style="margin-left: 20px;">
+		<div class="input-group inline-block">
 			<div class="input-group">
-				<?php echo $this->Form->input('CircularNoticeContent.opened_period_from', array(
+				<?php echo $this->NetCommonsForm->input('CircularNoticeContent.opened_period_from', array(
 					'type' => 'text',
 					'ng-model' => 'circularNoticeContent.openedPeriodFrom',
 					'datetimepicker',
@@ -31,7 +31,7 @@
 				<span class="input-group-addon">
 					<span class="glyphicon glyphicon-minus"></span>
 				</span>
-				<?php echo $this->Form->input('CircularNoticeContent.opened_period_to', array(
+				<?php echo $this->NetCommonsForm->input('CircularNoticeContent.opened_period_to', array(
 					'type' => 'text',
 					'ng-model' => 'circularNoticeContent.openedPeriodTo',
 					'datetimepicker',
@@ -41,19 +41,5 @@
 				)); ?>
 			</div>
 		</div>
-	</div>
-	<div>
-		<?php echo $this->element(
-			'NetCommons.errors', [
-				'errors' => $this->validationErrors,
-				'model' => 'CircularNoticeContent',
-				'field' => 'opened_period_from',
-		]) ?>
-		<?php echo $this->element(
-			'NetCommons.errors', [
-				'errors' => $this->validationErrors,
-				'model' => 'CircularNoticeContent',
-				'field' => 'opened_period_to',
-		]) ?>
 	</div>
 </div>

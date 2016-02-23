@@ -43,14 +43,14 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 	public function beforeValidate($options = array()) {
 		$this->validate = Hash::merge($this->validate, array(
 			'subject' => array(
-				'notEmpty' => array(
-					'rule' => array('notEmpty'),
+				'notBlank' => array(
+					'rule' => array('notBlank'),
 					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Subject')),
 				),
 			),
 			'content' => array(
-				'notEmpty' => array(
-					'rule' => array('notEmpty'),
+				'notBlank' => array(
+					'rule' => array('notBlank'),
 					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Content')),
 				),
 			),
@@ -68,15 +68,9 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Choice')),
 				),
 			),
-			'is_room_targeted_flag' => array(
-				'notEmpty' => array(
-					'rule' => array('validateNotEmptyTargetUser'),
-					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Circular Target')),
-				),
-			),
 			'opened_period_from' => array(
-				'notEmpty' => array(
-					'rule' => array('notEmpty'),
+				'notBlank' => array(
+					'rule' => array('notBlank'),
 					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Period')),
 				),
 				'datetime' => array(
@@ -85,8 +79,8 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 				),
 			),
 			'opened_period_to' => array(
-				'notEmpty' => array(
-					'rule' => array('notEmpty'),
+				'notBlank' => array(
+					'rule' => array('notBlank'),
 					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Period')),
 				),
 				'datetime' => array(
@@ -109,8 +103,8 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 		if ($this->data['CircularNoticeContent']['reply_deadline_set_flag']) {
 			$this->validate = Hash::merge($this->validate, array(
 				'reply_deadline' => array(
-					'notEmpty' => array(
-						'rule' => array('notEmpty'),
+					'notBlank' => array(
+						'rule' => array('notBlank'),
 						'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Reply Deadline')),
 					),
 					'datetime' => array(
@@ -170,6 +164,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
  */
 	public $actsAs = array(
 		'NetCommons.OriginalKey',
+		'CircularNotices.CircularNoticeTargetUser'
 	);
 
 /**
@@ -257,17 +252,17 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 /**
  * Get circular notice content
  *
- * @param int $id circular_notice_contents.id
+ * @param string $key circular_notice_contents.key
  * @param int $userId user id
  * @return mixed
  */
-	public function getCircularNoticeContent($id, $userId) {
+	public function getCircularNoticeContent($key, $userId) {
 		$this->__bindMyCircularNoticeTargetUser($userId, true);
 
 		return $this->find('first', array(
 			'recursive' => 1,
 			'conditions' => array(
-				'CircularNoticeContent.id' => $id,
+				'CircularNoticeContent.key' => $key,
 			),
 		));
 	}
@@ -348,9 +343,24 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 		$dataSource->begin();
 
 		try {
+			$users = array();
+			if (isset($data['CircularNoticeTargetUser']['user_id'])) {
+				$users = $data['CircularNoticeTargetUser']['user_id'];
+			}
 
-			// FIXME: 回覧先の取得（共通待ち）
-			$users = $this->_getUsersStub();
+			// ルームに所属する全ユーザが対象の場合、ルームの参加者を取得
+			if ($data['CircularNoticeContent']['is_room_targeted_flag']) {
+				$this->loadModels([
+					'RolesRoomsUser' => 'Rooms.RolesRoomsUser',
+				]);
+				$rolesRoomsUsers = $this->RolesRoomsUser->getRolesRoomsUsers(array(
+					'Room.id' => Current::read('Room.id')
+				));
+				$targetUsers = array_map(function ($roomUser) {
+					return $roomUser['RolesRoomsUser']['user_id'];
+				}, $rolesRoomsUsers);
+				$users = $targetUsers;
+			}
 
 			// 取得したUserでデータを差し替え
 			$targetUsers = array();
@@ -358,7 +368,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 				$targetUsers[] = array(
 					'CircularNoticeTargetUser' => array(
 						'id' => null,
-						'user_id' => $user['User']['id'],
+						'user_id' => $user,
 					)
 				);
 			}
@@ -368,9 +378,6 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			$this->validateCircularNoticeContent($data);
 			if (! $this->CircularNoticeChoice->validateCircularChoices($data)) {
 				$this->validationErrors = Hash::merge($this->validationErrors, $this->CircularNoticeChoice->validationErrors);
-			}
-			if (! $this->CircularNoticeTargetUser->validateCircularNoticeTargetUsers($data)) {
-				$this->validationErrors = Hash::merge($this->validationErrors, $this->CircularNoticeTargetUser->validationErrors);
 			}
 			if ($this->validationErrors) {
 				return false;
@@ -384,13 +391,8 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			// 保存されたCircularNoticeContentでデータを差し替え
 			$data['CircularNoticeContent'] = $content['CircularNoticeContent'];
 
-			// CircularNoticeChoicesを保存
-			if (! $this->CircularNoticeChoice->replaceCircularNoticeChoices($data)) {
-				return false;
-			}
-
-			// CircularNoticeTargetUsersを保存
-			if (! $this->CircularNoticeTargetUser->replaceCircularNoticeTargetUsers($data)) {
+			// CircularNoticeChoices・CircularNoticeTargetUsersを保存
+			if (! $this->__saveChoiceAndTargetUsers($data)) {
 				return false;
 			}
 
@@ -402,6 +404,29 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			throw $ex;
 		}
 
+		return $data;
+	}
+
+/**
+ * Save circular notice choices and target users
+ *
+ * @param array $data input data
+ * @return bool
+ */
+	private function __saveChoiceAndTargetUsers($data) {
+		// 必要なモデル読み込み
+		$this->loadModels([
+			'CircularNoticeChoice' => 'CircularNotices.CircularNoticeChoice',
+			'CircularNoticeTargetUser' => 'CircularNotices.CircularNoticeTargetUser',
+		]);
+		// CircularNoticeChoicesを保存
+		if (! $this->CircularNoticeChoice->replaceCircularNoticeChoices($data)) {
+			return false;
+		}
+		// CircularNoticeTargetUsersを保存
+		if (! $this->CircularNoticeTargetUser->replaceCircularNoticeTargetUsers($data)) {
+			return false;
+		}
 		return true;
 	}
 

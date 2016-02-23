@@ -361,3 +361,9 @@ msgstr "回答日時順（降順）"
 #: Plugins/CircularNotices/View/Elements/CircularNotices/choice_edit_form.ctp:
 msgid "No choices"
 msgstr "選択肢が設定されていません"
+
+msgid "Content creatable roles"
+msgstr "回覧を投稿できる権限"
+
+msgid "Select user"
+msgstr "回覧先を選択してください。"

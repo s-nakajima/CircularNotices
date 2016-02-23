@@ -41,6 +41,38 @@ NetCommonsApp.controller('CircularNoticeEdit',
 
 
 /**
+ * CircularNotices.target Javascript
+ *
+ * @param {string} Controller name
+ * @param {function($scope, NetCommonsWysiwyg)} Controller
+ */
+NetCommonsApp.controller('CircularNoticeTarget',
+    function($scope) {
+
+      /**
+       * tinymce
+       *
+       * @type {object}
+       */
+      $scope.target = false;
+
+      /**
+       * Initialize
+       *
+       * @param {object} CircularNoticeContents data
+       * @return {void}
+       */
+      $scope.initialize = function(value) {
+        $scope.target = value;
+      };
+
+      $scope.switchTarget = function($event) {
+        $scope.target = $event.target.value;
+      };
+    });
+
+
+/**
  * CircularNotices.view Javascript
  *
  * @param {string} Controller name

@@ -11,30 +11,9 @@
 ?>
 
 <div class="form-group">
-	<div>
-		<?php echo $this->Form->label(
-			'CircularNoticeContent.content',
-			__d('circular_notices', 'Content') . $this->element('NetCommons.required')
-		); ?>
-	</div>
-	<div>
-		<?php echo $this->Form->textarea(
-			'CircularNoticeContent.content', [
-				'label' => false,
-				'class' => 'form-control',
-				'ui-tinymce' => 'tinymce.options',
-				'ng-model' => 'circularNoticeContent.content',
-				'rows' => 5,
-				'required' => 'required',
-			]) ?>
-	</div>
-	<div>
-		<?php echo $this->element(
-			'NetCommons.errors', [
-				'errors' => $this->validationErrors,
-				'model' => 'CircularNoticeContent',
-				'field' => 'content',
-			]) ?>
-	</div>
+	<?php echo $this->NetCommonsForm->wysiwyg('CircularNoticeContent.content', array(
+		'label' => __d('circular_notices', 'Content'),
+		'required' => true,
+	));?>
 </div>
 

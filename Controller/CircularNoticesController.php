@@ -33,6 +33,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		'CircularNotices.CircularNoticeContent',
 		'CircularNotices.CircularNoticeChoice',
 		'CircularNotices.CircularNoticeTargetUser',
+		'User' => 'Users.User',
 	);
 
 /**
@@ -41,14 +42,15 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @var array
  */
 	public $components = array(
-		'NetCommons.NetCommonsWorkflow',
-		'NetCommons.NetCommonsRoomRole' => array(
-			//コンテンツの権限設定
-			'allowedActions' => array(
-				'contentCreatable' => array('add', 'edit', 'delete'),
+		'Workflow.Workflow',
+		'NetCommons.Permission' => array(
+			//アクセスの権限
+			'allow' => array(
+				'add,edit,delete' => 'content_creatable',
 			),
 		),
 		'Paginator',
+		'UserAttributes.UserAttributeLayout',
 	);
 
 /**
@@ -67,6 +69,8 @@ class CircularNoticesController extends CircularNoticesAppController {
  */
 	public $helpers = array(
 		'NetCommons.Token',
+		'NetCommons.DisplayNumber',
+		'Workflow.Workflow',
 	);
 
 /**
@@ -75,7 +79,7 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @return void
  */
 	public function index() {
-		$userId = (int)$this->Auth->user('id');
+		$userId = Current::read('User.id');
 		if (! $userId) {
 			$this->autoRender = false;
 			return;
@@ -110,20 +114,24 @@ class CircularNoticesController extends CircularNoticesAppController {
 /**
  * view action
  *
- * @param int $frameId frames.id
- * @param int $contentId circular_notice_content.id
  * @return void
  */
-	public function view($frameId = null, $contentId = null) {
-		$userId = (int)$this->Auth->user('id');
+	public function view() {
+		$userId = Current::read('User.id');
+		$contentKey = $this->params['pass'][1];
 		$this->initCircularNotice();
 
 		// 回覧を取得
-		$content = $this->CircularNoticeContent->getCircularNoticeContent($contentId, $userId);
+		$content = $this->CircularNoticeContent->getCircularNoticeContent($contentKey, $userId);
+		if (! $content) {
+			$this->throwBadRequest();
+			return false;
+		}
+		$contentId = $content['CircularNoticeContent']['id'];
+		$myTargetUser = array();
 
 		// ログイン者が回覧先に含まれる
-		if ($content['MyCircularNoticeTargetUser']) {
-
+		if (!empty($content['MyCircularNoticeTargetUser']['user_id'])) {
 			// 既読に更新
 			$this->CircularNoticeTargetUser->saveRead($contentId, $userId);
 
@@ -163,11 +171,18 @@ class CircularNoticesController extends CircularNoticesAppController {
 				['CircularNoticeTargetUser' => ['reply_flag' => true, 'reply_datetime' => date('Y-m-d H:i:s'), 'reply_text_value' => $replyTextValue, 'reply_selection_value' => $replySelectionValue]]
 			);
 
-			$this->CircularNoticeTargetUser->saveCircularNoticeTargetUser($data);
-			if ($this->handleValidationError($this->CircularNoticeTargetUser->validationErrors)) {
-				$this->redirect($this->request->here);
+			if ($this->CircularNoticeTargetUser->saveCircularNoticeTargetUser($data)) {
+				$url = NetCommonsUrl::actionUrl(array(
+					'controller' => $this->params['controller'],
+					'action' => 'view',
+					'block_id' => Current::read('Block.id'),
+					'frame_id' => Current::read('Frame.id'),
+					'key' => $this->request->data['CircularNoticeContent']['key']
+				));
+				$this->redirect($url);
 				return;
 			}
+			$this->NetCommons->handleValidationError($this->CircularNoticeTargetUser->validationErrors);
 
 			$myTargetUser['CircularNoticeTargetUser']['reply_text_value'] = $replyTextValue;
 			$myTargetUser['CircularNoticeTargetUser']['reply_selection_value'] = $replySelectionValue;
@@ -184,15 +199,18 @@ class CircularNoticesController extends CircularNoticesAppController {
 /**
  * add action
  *
- * @param int $frameId frames.id
  * @return void
  */
-	public function add($frameId = null) {
+	public function add() {
 		$this->view = 'edit';
+		$frameId = Current::read('Frame.id');
+		$blockId = Current::read('Block.id');
+		$this->helpers[] = 'Users.UserSearch';
+
 		$this->initCircularNotice();
 
 		$content = $this->CircularNoticeContent->create(array(
-			'is_room_targeted_flag' => false,
+			'is_room_targeted_flag' => true,
 			'target_groups' => ''
 		));
 		$content['CircularNoticeChoice'] = array();
@@ -200,102 +218,153 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$data = array();
 		if ($this->request->is('post')) {
 
-			if (! $status = $this->NetCommonsWorkflow->parseStatus()) {
+			if (! $status = $this->Workflow->parseStatus()) {
 				$this->throwBadRequest();
 				return;
 			}
+			// 回覧板の場合は、決定＝公開とする
+			$status = $this->__adjustmentWorkflowStatus($status);
 
 			$data = $this->__parseRequestForSave();
 			$data['CircularNoticeContent']['status'] = $status;
 
-			$this->CircularNoticeContent->saveCircularNoticeContent($data);
-			if ($this->handleValidationError($this->CircularNoticeContent->validationErrors)) {
-				$this->redirectByFrameId();
+			if ($circularContent = $this->CircularNoticeContent->saveCircularNoticeContent($data)) {
+				$url = NetCommonsUrl::actionUrl(array(
+					'controller' => $this->params['controller'],
+					'action' => 'view',
+					'frame_id' => $this->data['Frame']['id'],
+					'block_id' => $this->data['Block']['id'],
+					'key' => $circularContent['CircularNoticeContent']['key']
+				));
+				$this->redirect($url);
 				return;
+			} else {
+				$this->request->data['selectUsers'] = array();
+				if (isset($this->request->data['CircularNoticeTargetUser']['user_id'])) {
+					foreach ($this->request->data['CircularNoticeTargetUser']['user_id'] as $userId) {
+						$user = $this->User->getUser($userId);
+						$this->request->data['selectUsers'][] = $user;
+					}
+				}
 			}
+			$this->NetCommons->handleValidationError($this->CircularNoticeContent->validationErrors);
 
 			unset($data['CircularNoticeContent']['status']);
-			unset($content['CircularNoticeContent']['is_room_targeted_flag']);
-			unset($content['CircularNoticeContent']['target_groups']);
 			$data['CircularNoticeContent']['is_room_targeted_flag'] = $this->data['CircularNoticeContent']['is_room_targeted_flag'];
-			$data['CircularNoticeContent']['target_groups'] = $this->data['CircularNoticeContent']['target_groups'];
+		} else {
+			if (! isset($data['CircularNoticeContent']['is_room_targeted_flag']) ||
+				$data['CircularNoticeContent']['is_room_targeted_flag']) {
+				// 自分自身を取得
+				$selectUsers = array(Current::read('User.id'));
+				$this->request->data['selectUsers'] = array();
+				foreach ($selectUsers as $userId) {
+					$this->request->data['selectUsers'][] = $this->User->getUser($userId);
+				}
+			}
 		}
-
-		// FIXME: グループ情報を取得（共通待ち）
-		$groups = $this->_getGroupsStub();
 
 		$results = Hash::merge(
 			$content, $data,
-			['contentStatus' => null, 'groups' => $groups]
+			['contentStatus' => null]
 		);
 		$results = $this->camelizeKeyRecursive($results);
 		$this->set($results);
+		$this->set('frameId', $frameId);
+		$this->set('blockId', $blockId);
 	}
 
 /**
  * edit action
  *
- * @param int $frameId frames.id
- * @param int $contentId circular_notice_content.id
+ * @param int $blockId blocks.id
+ * @param string $key circular_notice_content.key
  * @return void
  */
-	public function edit($frameId = null, $contentId = null) {
+	public function edit($blockId = null, $key = null) {
 		$userId = (int)$this->Auth->user('id');
 		$this->initCircularNotice();
+		$frameId = Current::read('Frame.id');
+		$this->helpers[] = 'Users.UserSearch';
 
-		if (! $content = $this->CircularNoticeContent->getCircularNoticeContent($contentId, $userId)) {
+		if (! $content = $this->CircularNoticeContent->getCircularNoticeContent($key, $userId)) {
 			$this->throwBadRequest();
 			return;
 		}
-		$content['CircularNoticeContent']['is_room_targeted_flag'] =
-			$content['CircularNoticeContent']['is_room_targeted_flag'] ? array('1') : null;
-		$content['CircularNoticeContent']['target_groups'] =
-			explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $content['CircularNoticeContent']['target_groups']);
 
 		$data = array();
 		if ($this->request->is(array('post', 'put'))) {
 
-			if (! $status = $this->NetCommonsWorkflow->parseStatus()) {
+			if (! $status = $this->Workflow->parseStatus()) {
 				$this->throwBadRequest();
 				return;
 			}
+			// 回覧板の場合は、決定＝公開とする
+			$status = $this->__adjustmentWorkflowStatus($status);
 
 			$data = $this->__parseRequestForSave();
 			$data['CircularNoticeContent']['status'] = $status;
 
-			$this->CircularNoticeContent->saveCircularNoticeContent($data);
-			if ($this->handleValidationError($this->CircularNoticeContent->validationErrors)) {
-				$this->redirectByFrameId();
+			//unset($data['CircularNoticeContent']['id']);	// 常に新規保存？
+			$data['CircularNoticeContent']['key'] = $key;	// keyをここでセット（あとでWorkflow系の処理に置き換え？）
+
+			if ($circularContent = $this->CircularNoticeContent->saveCircularNoticeContent($data)) {
+				$url = NetCommonsUrl::actionUrl(array(
+					'controller' => $this->params['controller'],
+					'action' => 'view',
+					'block_id' => $this->data['Block']['id'],
+					'frame_id' => $this->data['Frame']['id'],
+					'key' => $circularContent['CircularNoticeContent']['key']
+				));
+				$this->redirect($url);
 				return;
+			} else {
+				$this->request->data['selectUsers'] = array();
+				if (isset($this->request->data['CircularNoticeTargetUser']['user_id'])) {
+					foreach ($this->request->data['CircularNoticeTargetUser']['user_id'] as $userId) {
+						$user = $this->User->getUser($userId);
+						$this->request->data['selectUsers'][] = $user;
+					}
+				}
 			}
+
+			$this->NetCommons->handleValidationError($this->CircularNoticeContent->validationErrors);
 
 			unset($data['CircularNoticeContent']['id']);
 			unset($data['CircularNoticeContent']['status']);
-			unset($content['CircularNoticeContent']['is_room_targeted_flag']);
-			unset($content['CircularNoticeContent']['target_groups']);
 			$data['CircularNoticeContent']['is_room_targeted_flag'] = $this->data['CircularNoticeContent']['is_room_targeted_flag'];
-			$data['CircularNoticeContent']['target_groups'] = $this->data['CircularNoticeContent']['target_groups'];
+		} else {
+			if ($content['CircularNoticeContent']['is_room_targeted_flag']) {
+				// 自分自身を取得
+				$selectUsers = array(Current::read('User.id'));
+			} else {
+				$selectUsers = array_map(function ($user) {
+					return $user['user_id'];
+				}, $content['CircularNoticeTargetUser']);
+			}
+			$this->request->data['selectUsers'] = array();
+			foreach ($selectUsers as $userId) {
+				$this->request->data['selectUsers'][] = $this->User->getUser($userId);
+			}
 		}
-
-		// FIXME: グループ情報を取得（共通待ち）
-		$groups = $this->_getGroupsStub();
 
 		$results = Hash::merge(
 			$content, $data,
-			['contentStatus' => $content['CircularNoticeContent']['status'], 'groups' => $groups]
+			['contentStatus' => $content['CircularNoticeContent']['status']]
 		);
 		$results = $this->camelizeKeyRecursive($results);
 		$this->set($results);
+		$this->set('frameId', $frameId);
+		$this->set('blockId', $blockId);
 	}
 
 /**
  * delete action
  *
- * @param int $frameId frames.id
+ * @param int $blockId blocks.id
  * @param string $contentKey circular_notice_content.key
  * @return void
  */
-	public function delete($frameId = null, $contentKey = null) {
+	public function delete($blockId = null, $contentKey = null) {
 		$this->initCircularNotice();
 
 		if (! $this->request->isDelete()) {
@@ -304,7 +373,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		}
 
 		$this->CircularNoticeContent->deleteCircularNoticeContent($contentKey);
-		$this->redirectByFrameId();
+		$this->redirect(NetCommonsUrl::backToPageUrl());
 	}
 
 /**
@@ -373,5 +442,20 @@ class CircularNoticesController extends CircularNoticesAppController {
 		}
 
 		return $data;
+	}
+
+/**
+ * Adjust the status
+ *
+ * @param string $status Workflowステータス
+ * @return string
+ */
+	private function __adjustmentWorkflowStatus($status) {
+		$resultStatus = $status;
+		// FIXME もっと良い方法を検討
+		if ($status === WorkflowComponent::STATUS_APPROVED) {
+			$resultStatus = WorkflowComponent::STATUS_PUBLISHED;
+		}
+		return $resultStatus;
 	}
 }

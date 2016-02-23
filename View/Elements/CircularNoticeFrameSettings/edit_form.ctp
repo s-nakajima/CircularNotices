@@ -10,16 +10,16 @@
  */
 ?>
 
-<?php echo $this->Form->hidden('Frame.id', array(
-	'value' => $frameId,
-	)); ?>
+<?php echo $this->NetCommonsForm->hidden('id'); ?>
+<?php echo $this->NetCommonsForm->hidden('Frame.id'); ?>
+<?php echo $this->NetCommonsForm->hidden('Block.id'); ?>
 
 <?php echo $this->Form->hidden('CircularNoticeFrameSetting.id', array(
 	'value' => isset($circularNoticeFrameSetting['id']) ? (int)$circularNoticeFrameSetting['id'] : null,
 	)); ?>
 
 <?php echo $this->Form->hidden('CircularNoticeFrameSetting.frame_key', array(
-	'value' => $frameKey,
+	'value' => Current::read('Frame.key'),
 	)); ?>
 
 <div class="form-group">

@@ -9,48 +9,38 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 ?>
-
-<div class="form-group">
+<?php
+	$circularNoticeContent['isRoomTargetedFlag'] = ($circularNoticeContent['isRoomTargetedFlag']) ? 1 : 0;
+?>
+<div class="form-group" ng-controller="CircularNoticeTarget" ng-init="initialize(<?php echo $circularNoticeContent['isRoomTargetedFlag']; ?>)">
 	<div>
 		<?php echo $this->Form->label(
 			'CircularNoticeContent.userId',
 			__d('circular_notices', 'Circular Target') . $this->element('NetCommons.required')
 		); ?>
 	</div>
-	<div class="col-xs-offset-1 col-xs-11">
-		<?php echo $this->Form->input('CircularNoticeContent.is_room_targeted_flag', array(
-			'div' => false,
-			'type' => 'select',
-			'label' => false,
-			'error' => false,
-			'multiple' => 'checkbox',
-			'selected' => $circularNoticeContent['isRoomTargetedFlag'],
-			'options' => array(
-				'1' => __d('circular_notices', 'All Members Belings to this Room'),
-			),
-		)); ?>
+	<div class="col-xs-offset-1 col-xs-11" style="margin-bottom: 10px;">
 		<?php
-			$options = array();
-			foreach ($groups as $group) :
-				$options[$group['group']['id']] = $group['group']['name'];
-			endforeach;
-			echo $this->Form->input('CircularNoticeContent.target_groups', array(
-				'div' => false,
-				'type' => 'select',
-				'label' => false,
-				'error' => false,
-				'multiple' => 'checkbox',
-				'selected' => $circularNoticeContent['targetGroups'],
-				'options' => $options,
-			));
+		$options = array(
+			'1' => __d('circular_notices', 'All Members Belings to this Room'),
+			'0' => __d('circular_notices', '個別に選択'),
+		);
+		echo $this->NetCommonsForm->radio('CircularNoticeContent.is_room_targeted_flag', $options, array(
+			'legend' => false,
+			'separator' => '<br />',
+			'value' => $circularNoticeContent['isRoomTargetedFlag'],
+			'ng-click' => 'switchTarget($event)',
+		));
 		?>
-	</div>
-	<div>
-		<?php echo $this->element(
-			'NetCommons.errors', [
-				'errors' => $this->validationErrors,
-				'model' => 'CircularNoticeContent',
-				'field' => 'is_room_targeted_flag',
-			]); ?>
+		<!-- グループ選択 -->
+		<div ng-show="target==0">
+			<?php echo $this->element('Groups.select',
+				array(
+					'title' => '回覧先ユーザ選択',
+					'pluginModel' => 'CircularNoticeTargetUser',
+					'selectUsers' => (isset($this->request->data['selectUsers'])) ? $this->request->data['selectUsers'] : null,
+				));
+			?>
+		</div>
 	</div>
 </div>

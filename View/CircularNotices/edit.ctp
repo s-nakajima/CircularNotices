@@ -11,24 +11,22 @@
 ?>
 
 <?php
-	$this->Html->script(
+	echo $this->Html->script(
 		array(
-			'/net_commons/js/workflow.js',
-			'/net_commons/js/wysiwyg.js',
-			'/circularNotices/js/circular_notices.js'
+			'/circular_notices/js/circular_notices.js',
 		),
 		array(
 			'plugin' => false,
-			'once' => true,
+			'once' => false,
 			'inline' => false
 		)
 	);
 ?>
 <?php echo $this->element('NetCommons.datetimepicker'); ?>
 <?php
-	$this->Html->css(
+	echo $this->Html->css(
 		array(
-			'/circularNotices/css/circular_notices.css'
+			'/circular_notices/css/circular_notices.css'
 		),
 		array(
 			'plugin' => false,
@@ -85,9 +83,7 @@
 
 			</div>
 
-			<div class="panel-footer text-center">
-				<?php echo $this->element('NetCommons.workflow_buttons'); ?>
-			</div>
+		<?php echo $this->Workflow->buttons('CircularNotices.status'); ?>
 
 		<?php echo $this->Form->end(); ?>
 

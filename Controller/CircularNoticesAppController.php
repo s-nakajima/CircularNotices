@@ -35,8 +35,6 @@ class CircularNoticesAppController extends AppController {
  * @var array
  */
 	public $components = array(
-		'NetCommons.NetCommonsFrame',
-		'NetCommons.NetCommonsBlock',
 		'Pages.PageLayout',
 		'Security',
 	);
@@ -62,9 +60,11 @@ class CircularNoticesAppController extends AppController {
 		$this->set($results);
 
 		// フレームが新規配置された場合はブロック設定／フレーム設定を初期化
-		if (! $this->viewVars['blockId']) {
-			$this->CircularNoticeSetting->prepareCircularNoticeSetting($this->viewVars['frameId']);
-			$this->CircularNoticeFrameSetting->prepareCircularNoticeFrameSetting($this->viewVars['frameId']);
+		$blockId = Current::read('Block.id');
+		if (! $blockId) {
+			$frameId = Current::read('Frame.id');
+			$this->CircularNoticeSetting->prepareCircularNoticeSetting($frameId);
+			$this->CircularNoticeFrameSetting->prepareCircularNoticeFrameSetting($frameId);
 		}
 	}
 
@@ -74,81 +74,20 @@ class CircularNoticesAppController extends AppController {
  * @return void
  */
 	public function initCircularNotice() {
-		$setting = $this->CircularNoticeSetting->getCircularNoticeSetting($this->viewVars['frameId']);
+		$frameId = Current::read('Frame.id');
+		$setting = $this->CircularNoticeSetting->getCircularNoticeSetting($frameId);
 		if (! $setting) {
 			$this->throwBadRequest();
 			return;
 		}
 		$this->set('circularNoticeSetting', $setting);
 
-		$frameSetting = $this->CircularNoticeFrameSetting->getCircularNoticeFrameSetting($this->viewVars['frameKey']);
+		$frameKey = Current::read('Frame.key');
+		$frameSetting = $this->CircularNoticeFrameSetting->getCircularNoticeFrameSetting($frameKey);
 		if (! $frameSetting) {
 			$this->throwBadRequest();
 			return;
 		}
 		$this->set('circularNoticeFrameSetting', $frameSetting);
-	}
-
-/**
- * Initialize setting tabs
- *
- * @param string $activeTab Active tag name
- * @return void
- */
-	public function initSettingTabs($activeTab) {
-		$settingTabs = array(
-			'tabs' => array(
-				'role_permissions' => array(
-					'url' => array(
-						'plugin' => $this->params['plugin'],
-						'controller' => 'circular_notice_block_role_permissions',
-						'action' => 'edit',
-						$this->viewVars['frameId'],
-					),
-					'label' => __d('circular_notices', 'Privilege Setting'),
-				),
-				'circular_notice_frame_settings' => array(
-					'url' => array(
-						'plugin' => $this->params['plugin'],
-						'controller' => 'circular_notice_frame_settings',
-						'action' => 'edit',
-						$this->viewVars['frameId'],
-					),
-					'label' => __d('net_commons', 'Frame settings'),
-				),
-			),
-			'active' => $activeTab,
-		);
-		$this->set('settingTabs', $settingTabs);
-	}
-
-/**
- * Get groups for stub.
- *
- * @return array
- */
-	protected function _getGroupsStub() {
-		return array(
-			array('Group' => array(
-				'id' => 1,
-				'name' => 'スタブグループ01'
-			)),
-			array('Group' => array(
-				'id' => 2,
-				'name' => 'スタブグループ02'
-			)),
-			array('Group' => array(
-				'id' => 3,
-				'name' => 'スタブグループ03'
-			)),
-			array('Group' => array(
-				'id' => 4,
-				'name' => 'スタブグループ04'
-			)),
-			array('Group' => array(
-				'id' => 5,
-				'name' => 'スタブグループ05'
-			)),
-		);
 	}
 }

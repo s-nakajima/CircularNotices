@@ -22,11 +22,8 @@
 		'value' => isset($circularNoticeSetting['key']) ? $circularNoticeSetting['key'] : null,
 	)); ?>
 
-<?php echo $this->element('Blocks.block_role_setting', array(
-		'roles' => $roles,
-		'model' => 'CircularNoticeSetting',
-		'creatablePermissions' => array(
-			'contentCreatable' => __d('blocks', 'Content creatable roles'),
-		),
-		'options' => null,
-	));
+<?php echo $this->element('Blocks.block_creatable_setting', array(
+	'settingPermissions' => array(
+		'content_creatable' => __d('circular_notices', 'Content creatable roles'),
+	),
+));

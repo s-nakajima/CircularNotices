@@ -32,6 +32,8 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
  * @var array
  */
 	public $uses = array(
+		'Blocks.Block',
+		'Frames.Frame',
 		'CircularNotices.CircularNoticeFrameSetting',
 	);
 
@@ -41,10 +43,16 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
  * @var array
  */
 	public $components = array(
-		'NetCommons.NetCommonsRoomRole' => array(
-			// コンテンツの権限設定
-			'allowedActions' => array(
-				'blockEditable' => array('edit')
+		'Blocks.BlockTabs' => array(
+			'mainTabs' => array(
+				'role_permissions' => array('url' => array('controller' => 'circular_notice_block_role_permissions')),
+				'frame_settings' => array('url' => array('controller' => 'circular_notice_frame_settings')),
+			),
+		),
+		'NetCommons.Permission' => array(
+			//アクセスの権限
+			'allow' => array(
+				'edit' => 'page_editable',
 			),
 		),
 	);
@@ -56,6 +64,7 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
  */
 	public $helpers = array(
 		'NetCommons.Token',
+		'NetCommons.DisplayNumber',
 	);
 
 /**
@@ -65,9 +74,6 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
-
-		// タブの設定
-		$this->initSettingTabs('circular_notice_frame_settings');
 	}
 
 /**
@@ -76,32 +82,19 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
  * @return void
  */
 	public function edit() {
-		if (! $this->NetCommonsFrame->validateFrameId()) {
-			$this->throwBadRequest();
-			return false;
-		}
-
-		if (! $frameSetting = $this->CircularNoticeFrameSetting->getCircularNoticeFrameSetting($this->viewVars['frameKey'])) {
-			$frameSetting = $this->CircularNoticeFrameSetting->create(array(
-				'frame_key' => $this->viewVars['frameKey'],
-			));
-		}
-
-		$data = array();
 		if ($this->request->is(array('post', 'put'))) {
-			$data = $this->data;
-			$this->CircularNoticeFrameSetting->saveCircularNoticeFrameSetting($data);
-			if ($this->handleValidationError($this->CircularNoticeFrameSetting->validationErrors)) {
-				$this->redirectByFrameId();
+			$data = $this->request->data;
+			if ($this->CircularNoticeFrameSetting->saveCircularNoticeFrameSetting($data)) {
+				$this->redirect(NetCommonsUrl::backToPageUrl());
 				return;
 			}
+			$this->NetCommons->handleValidationError($this->CircularNoticeFrameSetting->validationErrors);
+		} else {
+			$this->request->data = $this->CircularNoticeFrameSetting->getCircularNoticeFrameSetting(true);
+			$this->request->data['Frame'] = Current::read('Frame');
 		}
 
-		$data = Hash::merge(
-			$frameSetting,
-			$data
-		);
-		$results = $this->camelizeKeyRecursive($data);
+		$results = $this->camelizeKeyRecursive($this->request->data);
 		$this->set($results);
 	}
 }

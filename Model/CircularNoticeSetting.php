@@ -71,6 +71,7 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
  */
 	public $actsAs = array(
 		'NetCommons.OriginalKey',
+		'Blocks.BlockRolePermission',
 	);
 
 /**
@@ -115,27 +116,14 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 			if (! isset($frame['Frame']['block_id'])) {
 				// フレームとブロックが紐付いていない
 				// フレームと同じルームに紐付いている回覧板ブロックを取得
-				$block = $this->Block->find('first', array(
-					'conditions' => array(
-						'Block.room_id' => $frame['Frame']['room_id'],
-						'Block.plugin_key' => 'circular_notices',
-					)
-				));
-
-				if (! $block) {
-					// フレームと同じルームに紐付く回覧板ブロックが存在しなければ新規作成してフレームと紐付け
-					$block = $this->Block->create(array(
-						'language_id' => $frame['Frame']['language_id'],
-						'room_id' => $frame['Frame']['room_id'] ? $frame['Frame']['room_id'] : 0,
-						'plugin_key' => 'circular_notices',
-					));
-					$block = $this->Block->saveByFrameId($frameId, $block);
-				} else {
-					// 存在する場合はフレームと紐付け
-					$frame['Frame']['block_id'] = $block['Block']['id'];
-					if (! $this->Frame->save($frame, false)) {
-						throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-					}
+				if (! $block = $this->getLinkedBlockbyFrame($frame)) {
+					return false;
+				}
+				Current::$current['Block'] = $block['Block'];
+				// 存在する場合はフレームと紐付け
+				$frame['Frame']['block_id'] = $block['Block']['id'];
+				if (! $this->Frame->save($frame, false)) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				}
 			} else {
 				// 紐付いていればそのブロックを取得
@@ -168,6 +156,44 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 		return $blockSetting;
 	}
 
+/**
+ * get block
+ *
+ * @param mixed $frame frames
+ * @return mixed
+ */
+	public function getLinkedBlockbyFrame($frame) {
+		$this->loadModels([
+			'Frame' => 'Frames.Frame',
+			'Block' => 'Blocks.Block',
+		]);
+
+		$block = $this->Block->find('first', array(
+			'conditions' => array(
+				'Block.room_id' => $frame['Frame']['room_id'],
+				'Block.plugin_key' => 'circular_notices',
+			)
+		));
+
+		if (! $block) {
+			// フレームと同じルームに紐付く回覧板ブロックが存在しなければ新規作成してフレームと紐付け
+			//$block = $this->Block->create(array(
+			//	'language_id' => $frame['Frame']['language_id'],
+			//	'room_id' => $frame['Frame']['room_id'] ? $frame['Frame']['room_id'] : 0,
+			//	'plugin_key' => 'circular_notices',
+			//));
+			//$block = $this->Block->saveByFrameId($frameId, $block);
+			$block = $this->Block->save(array(
+				'language_id' => $frame['Frame']['language_id'],
+				'room_id' => $frame['Frame']['room_id'] ? $frame['Frame']['room_id'] : 0,
+				'plugin_key' => $frame['Frame']['plugin_key'],
+			));
+			if (!$block) {
+				return false;
+			}
+		}
+		return $block;
+	}
 /**
  * Get circular notice settings
  *
@@ -203,34 +229,23 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 			'BlockRolePermission' => 'Blocks.BlockRolePermission',
 		]);
 
-		$this->setDataSource('master');
-		$dataSource = $this->getDataSource();
-		$dataSource->begin();
+		$this->begin();
+
+		// バリデーション
+		$this->set($data);
+		if (! $this->validates()) {
+			$this->rollback();
+			return false;
+		}
 
 		try {
-			if (! $this->validateCircularNoticeSetting($data)) {
-				return false;
-			}
-			foreach ($data[$this->BlockRolePermission->alias] as $value) {
-				if (! $this->BlockRolePermission->validateBlockRolePermissions($value)) {
-					$this->validationErrors = Hash::merge($this->validationErrors, $this->BlockRolePermission->validationErrors);
-					return false;
-				}
-			}
-
 			if (! $this->save(null, false)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
-			foreach ($data[$this->BlockRolePermission->alias] as $value) {
-				if (! $this->BlockRolePermission->saveMany($value, ['validate' => false])) {
-					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-				}
-			}
-
-			$dataSource->commit();
+			$this->commit();
 
 		} catch (Exception $ex) {
-			$dataSource->rollback();
+			$this->rollback();
 			CakeLog::error($ex);
 			throw $ex;
 		}

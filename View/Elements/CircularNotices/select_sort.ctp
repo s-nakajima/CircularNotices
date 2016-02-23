@@ -9,11 +9,13 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-$url = Hash::merge(
-	array('controller' => 'circular_notices', 'action' => 'index', $frameId),
-	$this->Paginator->params['named'],
-	['page' => 1]
-);
+$url = NetCommonsUrl::actionUrlAsArray(Hash::merge(array(
+	'plugin' => 'circular_notices',
+	'controller' => 'circular_notices',
+	'action' => 'index',
+	'block_id' => Current::read('Block.id'),
+	'frame_id' => Current::read('Frame.id'),
+), $this->Paginator->params['named']));
 
 $curretSort = isset($this->Paginator->params['named']['sort']) ? $this->Paginator->params['named']['sort'] : 'CircularNoticeContent.modified';
 $curretDirection = isset($this->Paginator->params['named']['direction']) ? $this->Paginator->params['named']['direction'] : 'desc';

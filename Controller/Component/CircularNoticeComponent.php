@@ -31,14 +31,14 @@ class CircularNoticeComponent extends Component {
  *
  * @var string
  */
-	const CIRCULAR_NOTICE_CONTENT_STATUS_PUBLISHED = NetCommonsBlockComponent::STATUS_PUBLISHED;
+	const CIRCULAR_NOTICE_CONTENT_STATUS_PUBLISHED = WorkflowComponent::STATUS_PUBLISHED;
 
 /**
  * view in draft status
  *
  * @var string
  */
-	const CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT = NetCommonsBlockComponent::STATUS_IN_DRAFT;
+	const CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT = WorkflowComponent::STATUS_IN_DRAFT;
 
 /**
  * view status reserved
