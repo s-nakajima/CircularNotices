@@ -152,14 +152,7 @@
 			</div>
 		<?php endforeach; ?>
 
-		<div class="text-center">
-			<?php echo $this->element('NetCommons.paginator', array(
-				'url' => Hash::merge(
-					array('controller' => 'circular_notices', 'action' => 'index', Current::read('Frame.id')),
-					$this->Paginator->params['named']
-				)
-			)); ?>
-		</div>
+		<?php echo $this->element('NetCommons.paginator'); ?>
 
 	<?php else : ?>
 		<?php echo h(__d('circular_notices', 'Circular Content Data Not Found')); ?>
