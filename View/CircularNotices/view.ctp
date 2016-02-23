@@ -219,7 +219,7 @@
 
 	<hr />
 
-	<div class="text-center">
+	<div class="text-right">
 
 		<span class="nc-tooltip" tooltip="<?php echo h(__d('circular_notices', 'Show Other Users')); ?>">
 			<button type="button" class="btn btn-default"
