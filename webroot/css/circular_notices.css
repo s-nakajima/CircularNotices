@@ -13,19 +13,3 @@
 	width: 60px;
 	padding: 4px 0;
 }
-
-.nc-circular-notices-target-label {
-	display: inline-block;
-	/*width: 48%;*/
-	height: 35px;
-	line-height: 35px;
-	/*background: #eeeeff;*/
-	/*border: 1px solid #cccccc;*/
-}
-
-.nc-circular-notices-target-radio {
-	display: inline-block;
-	width: 20px;
-	height: 30px;
-	vertical-align: top;
-}

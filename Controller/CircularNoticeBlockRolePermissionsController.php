@@ -64,7 +64,6 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
  */
 	public $helpers = array(
 		'Blocks.BlockRolePermissionForm',
-//		'NetCommons.Date',
 	);
 
 /**
@@ -106,11 +105,6 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
 		$this->set('blockId', $frame['Block']['id']);
 		$this->set('blockKey', $frame['Block']['key']);
 
-		//$permissions = $this->NetCommonsBlock->getBlockRolePermissions(
-		//	$this->viewVars['blockKey'],
-		//	['content_creatable']
-		//);
-
 		if (! $setting = $this->CircularNoticeSetting->getCircularNoticeSetting($frameId)) {
 			$this->throwBadRequest();
 			return false;
@@ -132,13 +126,5 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
 			$this->request->data['BlockRolePermission'] = $permissions['BlockRolePermissions'];
 			$this->request->data['Frame'] = Current::read('Frame');
 		}
-
-		//$results = array(
-		//	'circularNoticeSetting' => $setting['CircularNoticeSetting'],
-		//	'blockRolePermissions' => $permissions['BlockRolePermissions'],
-		//	'roles' => $permissions['Roles'],
-		//);
-		//$results = $this->camelizeKeyRecursive($results);
-		//$this->set($results);
 	}
 }

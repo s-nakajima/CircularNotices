@@ -114,12 +114,9 @@ class CircularNoticesController extends CircularNoticesAppController {
 /**
  * view action
  *
- * @param int $frameId frames.id
- * @param int $contentId circular_notice_content.id
  * @return void
  */
-	public function view($frameId = null, $contentId = null, $key = null) {
-//		$userId = (int)$this->Auth->user('id');
+	public function view() {
 		$userId = Current::read('User.id');
 		$this->initCircularNotice();
 
@@ -138,9 +135,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$myTargetUser = array();
 
 		// ログイン者が回覧先に含まれる
-//		if ($content['MyCircularNoticeTargetUser']) {
 		if (!empty($content['MyCircularNoticeTargetUser']['user_id'])) {
-
 			// 既読に更新
 			$this->CircularNoticeTargetUser->saveRead($contentId, $userId);
 
@@ -208,10 +203,9 @@ class CircularNoticesController extends CircularNoticesAppController {
 /**
  * add action
  *
- * @param int $frameId frames.id
  * @return void
  */
-	public function add($frameId = null) {
+	public function add() {
 		$this->view = 'edit';
 		$frameId = Current::read('Frame.id');
 		$blockId = Current::read('Block.id');
@@ -241,7 +235,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 			$data = $this->__parseRequestForSave();
 			$data['CircularNoticeContent']['status'] = $status;
 
-//			$this->CircularNoticeContent->saveCircularNoticeContent($data);
 			if ($circularContent = $this->CircularNoticeContent->saveCircularNoticeContent($data)) {
 				$url = NetCommonsUrl::actionUrl(array(
 					'controller' => $this->params['controller'],
@@ -265,7 +258,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 			$this->NetCommons->handleValidationError($this->CircularNoticeContent->validationErrors);
 
 			unset($data['CircularNoticeContent']['status']);
-//			unset($content['CircularNoticeContent']['is_room_targeted_flag']);
 			$data['CircularNoticeContent']['is_room_targeted_flag'] = $this->data['CircularNoticeContent']['is_room_targeted_flag'];
 		} else {
 			if (! isset($data['CircularNoticeContent']['is_room_targeted_flag']) ||
@@ -292,15 +284,14 @@ class CircularNoticesController extends CircularNoticesAppController {
 /**
  * edit action
  *
- * @param int $frameId frames.id
+ * @param int $blockId blocks.id
  * @param int $contentId circular_notice_content.id
  * @return void
  */
-	public function edit($frameId = null, $key = null) {
+	public function edit($blockId = null, $key = null) {
 		$userId = (int)$this->Auth->user('id');
 		$this->initCircularNotice();
 		$frameId = Current::read('Frame.id');
-		$blockId = Current::read('Block.id');
 		$this->helpers[] = 'Users.UserSearch';
 
 		if (! $content = $this->CircularNoticeContent->getCircularNoticeContent($key, $userId)) {
@@ -351,8 +342,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 			unset($data['CircularNoticeContent']['id']);
 			unset($data['CircularNoticeContent']['status']);
-//			unset($content['CircularNoticeContent']['is_room_targeted_flag']);
-//			unset($content['CircularNoticeContent']['target_groups']);
 			$data['CircularNoticeContent']['is_room_targeted_flag'] = $this->data['CircularNoticeContent']['is_room_targeted_flag'];
 		} else {
 			if ($content['CircularNoticeContent']['is_room_targeted_flag']) {
@@ -382,11 +371,11 @@ class CircularNoticesController extends CircularNoticesAppController {
 /**
  * delete action
  *
- * @param int $frameId frames.id
+ * @param int $blockId blocks.id
  * @param string $contentKey circular_notice_content.key
  * @return void
  */
-	public function delete($frameId = null, $contentKey = null) {
+	public function delete($blockId = null, $contentKey = null) {
 		$this->initCircularNotice();
 
 		if (! $this->request->isDelete()) {

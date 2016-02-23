@@ -10,7 +10,6 @@
  */
 ?>
 
-<?php //echo $this->NetCommonsForm->create('CircularNotice', array('type' => 'delete', 'action' => 'delete/' . $frameId . '/' . $circularNoticeContent['key'])); ?>
 <?php echo $this->NetCommonsForm->create('CircularNotice', array(
 	'type' => 'delete',
 	'url' => $this->NetCommonsHtml->url(array('action' => 'delete', 'key' => $circularNoticeContent['key']))

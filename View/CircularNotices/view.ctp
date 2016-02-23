@@ -333,9 +333,6 @@
 
 	<div class="text-center">
 		<span class="nc-tooltip" tooltip="<?php echo h(__d('circular_notices', 'Back')); ?>">
-<!--			<a href="--><?php //echo $this->Html->url('/') ?><!--" class="btn btn-default">-->
-<!--				<span class="glyphicon">--><?php //echo h(__d('circular_notices', 'Back')); ?><!--</span>-->
-<!--			</a>-->
 			<?php echo $this->NetCommonsHtml->link(
 				'<span class="glyphicon">' . __d('circular_notices', 'Back') . '</span>',
 				$this->NetCommonsHtml->url(

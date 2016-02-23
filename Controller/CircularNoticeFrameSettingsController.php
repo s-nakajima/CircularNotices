@@ -88,7 +88,7 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
 				$this->redirect(NetCommonsUrl::backToPageUrl());
 				return;
 			}
-			$this->NetCommons->handleValidationError($this->BbsFrameSetting->validationErrors);
+			$this->NetCommons->handleValidationError($this->CircularNoticeFrameSetting->validationErrors);
 		} else {
 			$this->request->data = $this->CircularNoticeFrameSetting->getCircularNoticeFrameSetting(true);
 			$this->request->data['Frame'] = Current::read('Frame');

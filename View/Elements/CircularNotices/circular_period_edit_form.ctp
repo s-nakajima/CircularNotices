@@ -42,18 +42,4 @@
 			</div>
 		</div>
 	</div>
-	<div>
-<!--		--><?php //echo $this->element(
-//			'NetCommons.errors', [
-//				'errors' => $this->validationErrors,
-//				'model' => 'CircularNoticeContent',
-//				'field' => 'opened_period_from',
-//		]) ?>
-<!--		--><?php //echo $this->element(
-//			'NetCommons.errors', [
-//				'errors' => $this->validationErrors,
-//				'model' => 'CircularNoticeContent',
-//				'field' => 'opened_period_to',
-//		]) ?>
-	</div>
 </div>

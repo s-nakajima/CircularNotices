@@ -56,34 +56,4 @@ class CircularNoticesAppModel extends AppModel {
 		}
 		return false;
 	}
-
-/**
- * Get users for stub.
- *
- * @return array
- */
-	protected function _getUsersStub() {
-		return array(
-			array('User' => array(
-				'id' => 1,
-				'username' => 'system_administrator'
-			)),
-			array('User' => array(
-				'id' => 2,
-				'username' => 'room_administrator'
-			)),
-			array('User' => array(
-				'id' => 3,
-				'username' => 'chief_editor'
-			)),
-			array('User' => array(
-				'id' => 4,
-				'username' => 'editor'
-			)),
-			array('User' => array(
-				'id' => 5,
-				'username' => 'general_user'
-			)),
-		);
-	}
 }

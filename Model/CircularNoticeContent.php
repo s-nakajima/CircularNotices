@@ -68,12 +68,6 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Choice')),
 				),
 			),
-//			'is_room_targeted_flag' => array(
-//				'notBlank' => array(
-//					'rule' => array('validateNotEmptyTargetUser'),
-//					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Circular Target')),
-//				),
-//			),
 			'opened_period_from' => array(
 				'notBlank' => array(
 					'rule' => array('notBlank'),
@@ -351,9 +345,6 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 		$dataSource->begin();
 
 		try {
-
-			// FIXME: 回覧先の取得（共通待ち）
-//			$users = $this->_getUsersStub();
 			$users = array();
 			if (isset($data['CircularNoticeTargetUser']['user_id'])) {
 				$users = $data['CircularNoticeTargetUser']['user_id'];

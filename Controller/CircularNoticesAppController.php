@@ -35,8 +35,6 @@ class CircularNoticesAppController extends AppController {
  * @var array
  */
 	public $components = array(
-		//'NetCommons.NetCommonsFrame',
-		//'NetCommons.NetCommonsBlock',
 		'Pages.PageLayout',
 		'Security',
 	);
@@ -91,35 +89,5 @@ class CircularNoticesAppController extends AppController {
 			return;
 		}
 		$this->set('circularNoticeFrameSetting', $frameSetting);
-	}
-
-/**
- * Get groups for stub.
- *
- * @return array
- */
-	protected function _getGroupsStub() {
-		return array(
-			array('Group' => array(
-				'id' => 1,
-				'name' => 'スタブグループ01'
-			)),
-			array('Group' => array(
-				'id' => 2,
-				'name' => 'スタブグループ02'
-			)),
-			array('Group' => array(
-				'id' => 3,
-				'name' => 'スタブグループ03'
-			)),
-			array('Group' => array(
-				'id' => 4,
-				'name' => 'スタブグループ04'
-			)),
-			array('Group' => array(
-				'id' => 5,
-				'name' => 'スタブグループ05'
-			)),
-		);
 	}
 }

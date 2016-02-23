@@ -93,8 +93,6 @@
 									$this->NetCommonsHtml->url(
 										array(
 											'controller' => 'circular_notices',
-//											'action' => 'view' . '/' . $frameId,
-//											'action' => 'view' . '/' . Current::read('Frame.id'),
 											'action' => 'view',
 											'key' => $circularNoticeContent['circularNoticeContent']['key']
 										)
@@ -113,16 +111,11 @@
 						<?php if (Current::permission('content_creatable') && $circularNoticeContent['circularNoticeContent']['createdUser'] == $userId) : ?>
 							<div class="pull-right" style="margin: 6px 0;">
 									<span class="nc-tooltip" tooltip="<?php echo h(__d('net_commons', 'Edit')); ?>">
-	<!--									<a href="--><?php //echo $this->Html->url('/circular_notices/circular_notices/edit/' . Current::read('Frame.id') . '/' . $circularNoticeContent['circularNoticeContent']['id']) ?><!--" class="btn btn-sm btn-primary">-->
-										<!--										<span class="glyphicon glyphicon-edit"> </span>-->
-										<!--									</a>-->
 										<?php echo $this->NetCommonsHtml->link(
 											'<span class="glyphicon glyphicon-edit"> </span>',
 											$this->NetCommonsHtml->url(
 												array(
 													'controller' => 'circular_notices',
-	//											'action' => 'view' . '/' . $frameId,
-	//											'action' => 'view' . '/' . Current::read('Frame.id'),
 													'action' => 'edit',
 													'key' => $circularNoticeContent['circularNoticeContent']['key']
 												)
