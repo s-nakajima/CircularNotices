@@ -93,25 +93,6 @@
 		<?php echo $circularNoticeContent['content']; ?>
 	</div>
 
-	<hr />
-
-	<div>
-		<?php echo h(__d('circular_notices', 'Reply Type Title')); ?>
-		<?php
-		switch ($circularNoticeContent['replyType']) {
-			case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT:
-				echo h(__d('circular_notices', 'Reply Type Text'));
-				break;
-			case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION:
-				echo h(__d('circular_notices', 'Reply Type Selection'));
-				break;
-			case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION:
-				echo h(__d('circular_notices', 'Reply Type Multiple Selection'));
-				break;
-		}
-		?>
-	</div>
-
 	<?php if ($circularNoticeContent['replyType'] != CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT) : ?>
 		<div class="clearfix">
 			<div class="pull-left">
@@ -138,21 +119,6 @@
 		<hr />
 
 		<div>
-
-<!--			--><?php //echo h(__d('circular_notices', 'Answer Title')); ?>
-			<?php
-			switch ($circularNoticeContent['replyType']) {
-				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT:
-					echo h($myAnswer['circularNoticeTargetUser']['originReplyTextValue']);
-					break;
-				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION:
-				case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION:
-					$selectionValues = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $myAnswer['circularNoticeTargetUser']['originReplySelectionValue']);
-					echo h(implode('、', $selectionValues));
-					break;
-			}
-			?>
-
 			<hr class="circular-notice-spacer" />
 
 			<?php echo $this->NetCommonsForm->create('CircularNoticeTargetUser', array(
@@ -163,10 +129,8 @@
 				'value' => $circularNoticeContent['key'],
 			)); ?>
 
-				<div ng-hide="showReplyForm==false">
-					回答：
-				</div>
-				<div class="panel panel-default" ng-hide="showReplyForm==false">
+				<?php echo h(__d('circular_notices', 'Answer Title')); ?>
+				<div class="panel panel-default">
 					<div class="panel-body">
 						<div class="form-group">
 
@@ -216,67 +180,40 @@
 									'multiple' => 'checkbox',
 									'selected' => $selected,
 									'options' => $selections,
+									'class' => 'form-input',
 								));
 								break;
 						}
 						?>
+						<?php echo $this->NetCommonsForm->error('CircularNoticeTargetUser.reply_text_value'); ?>
 
 						</div>
 					</div>
 				</div>
 
 				<div class="text-center">
-					<?php if (! $myAnswer['circularNoticeTargetUser']['replyFlag']) : ?>
-						<span class="nc-tooltip" tooltip="<?php echo h(__d('circular_notices', 'Do Answer')); ?>">
-							<button type="button" class="btn btn-success"
-								ng-click="switchReplyForm(true);"
-								ng-hide="showReplyForm!=false"
-								ng-disabled="sending">
-								<span class="glyphicon glyphicon-plus"></span>
-								<?php echo h(__d('circular_notices', 'Answer')); ?>
-							</button>
-						</span>
-					<?php else : ?>
-						<span class="nc-tooltip" tooltip="<?php echo h(__d('circular_notices', 'Change Answer')); ?>">
-							<button type="button" class="btn btn-primary"
-								ng-click="switchReplyForm(true);"
-								ng-hide="showReplyForm!=false"
-								ng-disabled="sending">
-								<span class="glyphicon glyphicon-edit"></span>
-								<?php echo h(__d('circular_notices', 'Change Answer')); ?>
-							</button>
-						</span>
-					<?php endif; ?>
-
-					<button type="button" class="btn btn-default"
-						ng-click="switchReplyForm(false);"
-						ng-hide="showReplyForm!=true"
-						ng-disabled="sending">
-						<span class="glyphicon glyphicon-remove"></span>
-						<?php echo h(__d('net_commons', 'Cancel')); ?>
-					</button>
-
-					<button type="submit" class="btn btn-primary"
-						ng-click="this.form.submit();"
-						ng-hide="showReplyForm!=true"
-						ng-disabled="sending">
-						<span class="glyphicon glyphicon-remove"></span>
-						<?php echo h(__d('net_commons', 'OK')); ?>
-					</button>
+					<?php 
+						if (! $myAnswer['circularNoticeTargetUser']['replyFlag']) {
+							$labelName = __d('circular_notices', 'Answer');
+							$tooltip = __d('circular_notices', 'Do Answer');
+						} else {
+							$labelName = __d('circular_notices', 'Change Answer');
+							$tooltip = __d('circular_notices', 'Change Answer');
+						}
+					?>
+					<span class="nc-tooltip" tooltip="<?php echo h($tooltip); ?>">
+						<button type="submit" class="btn btn-primary"
+							ng-click="this.form.submit();"
+							ng-disabled="sending">
+							<span class="glyphicon glyphicon-edit"></span>
+							<?php echo h($labelName); ?>
+						</button>
+					</span>
 				</div>
 
 			<?php echo $this->Form->end(); ?>
 
 		</div>
-
-<!--		<div>-->
-<!--			--><?php //echo $this->element(
-//				'NetCommons.errors', [
-//					'errors' => $this->validationErrors,
-//					'model' => 'CircularNoticeTargetUser',
-//					'field' => 'reply_text_value',
-//				]); ?>
-<!--		</div>-->
 
 	<?php endif; ?>
 
