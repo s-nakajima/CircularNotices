@@ -232,6 +232,11 @@ class CircularNoticesController extends CircularNoticesAppController {
 				$this->throwBadRequest();
 				return;
 			}
+			// 回覧板の場合は、決定＝公開とする
+			// FIXME もっと良い方法を検討
+			if ($status === WorkflowComponent::STATUS_APPROVED) {
+				$status = WorkflowComponent::STATUS_PUBLISHED;
+			}
 
 			$data = $this->__parseRequestForSave();
 			$data['CircularNoticeContent']['status'] = $status;
@@ -309,6 +314,11 @@ class CircularNoticesController extends CircularNoticesAppController {
 			if (! $status = $this->Workflow->parseStatus()) {
 				$this->throwBadRequest();
 				return;
+			}
+			// 回覧板の場合は、決定＝公開とする
+			// FIXME もっと良い方法を検討
+			if ($status === WorkflowComponent::STATUS_APPROVED) {
+				$status = WorkflowComponent::STATUS_PUBLISHED;
 			}
 
 			$data = $this->__parseRequestForSave();
