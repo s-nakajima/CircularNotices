@@ -116,32 +116,10 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 			if (! isset($frame['Frame']['block_id'])) {
 				// フレームとブロックが紐付いていない
 				// フレームと同じルームに紐付いている回覧板ブロックを取得
-				$block = $this->Block->find('first', array(
-					'conditions' => array(
-						'Block.room_id' => $frame['Frame']['room_id'],
-						'Block.plugin_key' => 'circular_notices',
-					)
-				));
-
-				if (! $block) {
-					// フレームと同じルームに紐付く回覧板ブロックが存在しなければ新規作成してフレームと紐付け
-					//$block = $this->Block->create(array(
-					//	'language_id' => $frame['Frame']['language_id'],
-					//	'room_id' => $frame['Frame']['room_id'] ? $frame['Frame']['room_id'] : 0,
-					//	'plugin_key' => 'circular_notices',
-					//));
-					//$block = $this->Block->saveByFrameId($frameId, $block);
-					$block = $this->Block->save(array(
-						'language_id' => $frame['Frame']['language_id'],
-						'room_id' => $frame['Frame']['room_id'] ? $frame['Frame']['room_id'] : 0,
-						'plugin_key' => $frame['Frame']['plugin_key'],
-					));
-					if (!$block) {
-						return false;
-					}
-					Current::$current['Block'] = $block['Block'];
-
+				if (! $block = $this->getLinkedBlockbyFrame($frame)) {
+					return false;
 				}
+				Current::$current['Block'] = $block['Block'];
 				// 存在する場合はフレームと紐付け
 				$frame['Frame']['block_id'] = $block['Block']['id'];
 				if (! $this->Frame->save($frame, false)) {
@@ -178,6 +156,44 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 		return $blockSetting;
 	}
 
+/**
+ * get block
+ *
+ * @param mixed $frame frames
+ * @return mixed
+ */
+	public function getLinkedBlockbyFrame($frame) {
+		$this->loadModels([
+			'Frame' => 'Frames.Frame',
+			'Block' => 'Blocks.Block',
+		]);
+
+		$block = $this->Block->find('first', array(
+			'conditions' => array(
+				'Block.room_id' => $frame['Frame']['room_id'],
+				'Block.plugin_key' => 'circular_notices',
+			)
+		));
+
+		if (! $block) {
+			// フレームと同じルームに紐付く回覧板ブロックが存在しなければ新規作成してフレームと紐付け
+			//$block = $this->Block->create(array(
+			//	'language_id' => $frame['Frame']['language_id'],
+			//	'room_id' => $frame['Frame']['room_id'] ? $frame['Frame']['room_id'] : 0,
+			//	'plugin_key' => 'circular_notices',
+			//));
+			//$block = $this->Block->saveByFrameId($frameId, $block);
+			$block = $this->Block->save(array(
+				'language_id' => $frame['Frame']['language_id'],
+				'room_id' => $frame['Frame']['room_id'] ? $frame['Frame']['room_id'] : 0,
+				'plugin_key' => $frame['Frame']['plugin_key'],
+			));
+			if (!$block) {
+				return false;
+			}
+		}
+		return $block;
+	}
 /**
  * Get circular notice settings
  *

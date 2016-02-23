@@ -146,19 +146,19 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
 			'frame_key' => Current::read('Frame.key')
 		);
 
-		$circularNoticeFrameSetting = $this->find('first', array(
+		$frameSetting = $this->find('first', array(
 				'recursive' => -1,
 				'conditions' => $conditions,
 			)
 		);
 
-		if ($created && ! $circularNoticeFrameSetting) {
-			$circularNoticeFrameSetting = $this->create(array(
+		if ($created && ! $frameSetting) {
+			$frameSetting = $this->create(array(
 				'frame_key' => Current::read('Frame.key'),
 			));
 		}
 
-		return $circularNoticeFrameSetting;
+		return $frameSetting;
 	}
 
 /**

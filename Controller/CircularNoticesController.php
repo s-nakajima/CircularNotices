@@ -118,15 +118,11 @@ class CircularNoticesController extends CircularNoticesAppController {
  */
 	public function view() {
 		$userId = Current::read('User.id');
+		$contentKey = $this->params['pass'][1];
 		$this->initCircularNotice();
 
-		$circularNoticeContentKey = null;
-		if (isset($this->params['pass'][1])) {
-			$circularNoticeContentKey = $this->params['pass'][1];
-		}
-
 		// 回覧を取得
-		$content = $this->CircularNoticeContent->getCircularNoticeContent($circularNoticeContentKey, $userId);
+		$content = $this->CircularNoticeContent->getCircularNoticeContent($contentKey, $userId);
 		if (! $content) {
 			$this->throwBadRequest();
 			return false;
@@ -227,10 +223,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 				return;
 			}
 			// 回覧板の場合は、決定＝公開とする
-			// FIXME もっと良い方法を検討
-			if ($status === WorkflowComponent::STATUS_APPROVED) {
-				$status = WorkflowComponent::STATUS_PUBLISHED;
-			}
+			$status = $this->__adjustmentWorkflowStatus($status);
 
 			$data = $this->__parseRequestForSave();
 			$data['CircularNoticeContent']['status'] = $status;
@@ -239,8 +232,8 @@ class CircularNoticesController extends CircularNoticesAppController {
 				$url = NetCommonsUrl::actionUrl(array(
 					'controller' => $this->params['controller'],
 					'action' => 'view',
-					'block_id' => $this->data['Block']['id'],
 					'frame_id' => $this->data['Frame']['id'],
+					'block_id' => $this->data['Block']['id'],
 					'key' => $circularContent['CircularNoticeContent']['key']
 				));
 				$this->redirect($url);
@@ -254,7 +247,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 					}
 				}
 			}
-
 			$this->NetCommons->handleValidationError($this->CircularNoticeContent->validationErrors);
 
 			unset($data['CircularNoticeContent']['status']);
@@ -307,10 +299,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 				return;
 			}
 			// 回覧板の場合は、決定＝公開とする
-			// FIXME もっと良い方法を検討
-			if ($status === WorkflowComponent::STATUS_APPROVED) {
-				$status = WorkflowComponent::STATUS_PUBLISHED;
-			}
+			$status = $this->__adjustmentWorkflowStatus($status);
 
 			$data = $this->__parseRequestForSave();
 			$data['CircularNoticeContent']['status'] = $status;
@@ -453,5 +442,20 @@ class CircularNoticesController extends CircularNoticesAppController {
 		}
 
 		return $data;
+	}
+
+/**
+ * Adjust the status
+ *
+ * @param string $status Workflowステータス
+ * @return string
+ */
+	private function __adjustmentWorkflowStatus($status) {
+		$resultStatus = $status;
+		// FIXME もっと良い方法を検討
+		if ($status === WorkflowComponent::STATUS_APPROVED) {
+			$resultStatus = WorkflowComponent::STATUS_PUBLISHED;
+		}
+		return $resultStatus;
 	}
 }

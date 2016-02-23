@@ -391,13 +391,8 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			// 保存されたCircularNoticeContentでデータを差し替え
 			$data['CircularNoticeContent'] = $content['CircularNoticeContent'];
 
-			// CircularNoticeChoicesを保存
-			if (! $this->CircularNoticeChoice->replaceCircularNoticeChoices($data)) {
-				return false;
-			}
-
-			// CircularNoticeTargetUsersを保存
-			if (! $this->CircularNoticeTargetUser->replaceCircularNoticeTargetUsers($data)) {
+			// CircularNoticeChoices・CircularNoticeTargetUsersを保存
+			if (! $this->__saveChoiceAndTargetUsers($data)) {
 				return false;
 			}
 
@@ -410,6 +405,29 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 		}
 
 		return $data;
+	}
+
+/**
+ * Save circular notice choices and target users
+ *
+ * @param array $data input data
+ * @return bool
+ */
+	private function __saveChoiceAndTargetUsers($data) {
+		// 必要なモデル読み込み
+		$this->loadModels([
+			'CircularNoticeChoice' => 'CircularNotices.CircularNoticeChoice',
+			'CircularNoticeTargetUser' => 'CircularNotices.CircularNoticeTargetUser',
+		]);
+		// CircularNoticeChoicesを保存
+		if (! $this->CircularNoticeChoice->replaceCircularNoticeChoices($data)) {
+			return false;
+		}
+		// CircularNoticeTargetUsersを保存
+		if (! $this->CircularNoticeTargetUser->replaceCircularNoticeTargetUsers($data)) {
+			return false;
+		}
+		return true;
 	}
 
 /**
