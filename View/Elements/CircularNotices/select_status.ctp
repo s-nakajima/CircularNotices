@@ -9,19 +9,16 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-$url = Hash::merge(
-//	array('controller' => 'circular_notices', 'action' => 'index', $frameId),
-	array('controller' => 'circular_notices', 'action' => 'index', Current::read('Frame.id')),
-	$this->Paginator->params['named'],
-	['page' => 1]
-);
+$url = Hash::merge(array(
+	'controller' => 'circular_notices',
+	'action' => 'index'),
+	$this->params['named']);
 
 $currentStatus = isset($this->Paginator->params['named']['status']) ? $this->Paginator->params['named']['status'] : '';
 
 $options = array();
 
-//if (! $contentCreatable) :
-if (Current::permission('content_creatable')) :
+if (! Current::permission('content_creatable')) :
 	// コンテンツ作成権限がない場合
 	$options = array(
 		'CircularNoticeContents.status_' => array(
@@ -97,10 +94,8 @@ endif;
 	<ul class="dropdown-menu" role="menu">
 		<?php foreach ($options as $key => $status) : ?>
 			<li>
-				<?php echo $this->Paginator->link(
-					$status['label'],
-					array('status' => $status['status']),
-					array('url' => $url)
+				<?php echo $this->NetCommonsHtml->link($status['label'],
+					Hash::merge($url, array('status' => $status['status']))
 				); ?>
 			</li>
 		<?php endforeach; ?>

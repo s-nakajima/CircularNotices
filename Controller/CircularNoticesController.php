@@ -69,6 +69,7 @@ class CircularNoticesController extends CircularNoticesAppController {
  */
 	public $helpers = array(
 		'NetCommons.Token',
+		'NetCommons.DisplayNumber',
 		'Workflow.Workflow',
 	);
 
