@@ -391,15 +391,7 @@
 			?>
 		</table>
 
-		<div class="text-center">
-			<?php echo $this->element('NetCommons.paginator', array(
-				'url' => Hash::merge(
-//					array('controller' => 'circular_notices', 'action' => 'view', $frameId, $circularNoticeContent['id']),
-					array('controller' => 'circular_notices', 'action' => 'view', Current::read('Frame.id'), $circularNoticeContent['id']),
-					$this->Paginator->params['named']
-				)
-			)); ?>
-		</div>
+		<?php echo $this->element('NetCommons.paginator'); ?>
 	</div>
 
 	<div class="text-center">
