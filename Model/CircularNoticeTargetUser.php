@@ -46,22 +46,6 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
  * @see Model::save()
  */
 	public function beforeValidate($options = array()) {
-		$this->validate = Hash::merge($this->validate, array(
-//			'reply_text_value' => array(
-//				'notEmpty' => array(
-//					'rule' => array('validateNotEmptyReplyValue'),
-//					'last' => false,
-//					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Answer Title')),
-//				),
-//			),
-//			'user_id' => array(
-//				'notBlank' => array(
-//					'rule' => array('isUserSelected'),
-//					'required' => true,
-//					'message' => sprintf(__d('net_commons', 'ユーザを選択してください。')),
-//				),
-//			),
-		));
 		return parent::beforeValidate($options);
 	}
 
@@ -81,6 +65,12 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		return true;
 	}
 
+/**
+ * Validate if the user has been selected.
+ *
+ * @param array $check check fields.
+ * @return bool
+ */
 	public function isUserSelected($check) {
 		if (!isset($check['user_id']) || count($check['user_id']) === 0) {
 			return false;
@@ -88,14 +78,12 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		return true;
 	}
 
-	/**
+/**
  * Use behaviors
  *
  * @var array
  */
 	public $actsAs = array(
-//		'NetCommons.OriginalKey',
-//		'CircularNotices.CircularNoticeTargetUser'
 	);
 
 /**
@@ -381,13 +369,10 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		// 1件ずつ保存
 		if (isset($data['CircularNoticeTargetUsers']) && count($data['CircularNoticeTargetUsers']) > 0) {
 			foreach ($data['CircularNoticeTargetUsers'] as $targetUser) {
-	
 				$targetUser['CircularNoticeTargetUser']['circular_notice_content_id'] = $contentId;
-	
 				if (! $this->validateCircularNoticeTargetUser($targetUser)) {
 					return false;
 				}
-	
 				if (! $this->save(null, false)) {
 					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				}

@@ -141,14 +141,12 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 					}
 					Current::$current['Block'] = $block['Block'];
 
-				//} else {
 				}
-					// 存在する場合はフレームと紐付け
-					$frame['Frame']['block_id'] = $block['Block']['id'];
-					if (! $this->Frame->save($frame, false)) {
-						throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-					}
-				//}
+				// 存在する場合はフレームと紐付け
+				$frame['Frame']['block_id'] = $block['Block']['id'];
+				if (! $this->Frame->save($frame, false)) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				}
 			} else {
 				// 紐付いていればそのブロックを取得
 				$block = $this->Block->findById($frame['Frame']['block_id']);

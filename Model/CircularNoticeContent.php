@@ -252,18 +252,16 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 /**
  * Get circular notice content
  *
- * @param int $id circular_notice_contents.id
+ * @param string $key circular_notice_contents.key
  * @param int $userId user id
  * @return mixed
  */
-//	public function getCircularNoticeContent($id, $userId) {
 	public function getCircularNoticeContent($key, $userId) {
 		$this->__bindMyCircularNoticeTargetUser($userId, true);
 
 		return $this->find('first', array(
 			'recursive' => 1,
 			'conditions' => array(
-//				'CircularNoticeContent.id' => $id,
 				'CircularNoticeContent.key' => $key,
 			),
 		));
@@ -358,7 +356,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 				$rolesRoomsUsers = $this->RolesRoomsUser->getRolesRoomsUsers(array(
 					'Room.id' => Current::read('Room.id')
 				));
-				$targetUsers = array_map(function($roomUser) {
+				$targetUsers = array_map(function ($roomUser) {
 					return $roomUser['RolesRoomsUser']['user_id'];
 				}, $rolesRoomsUsers);
 				$users = $targetUsers;
@@ -370,7 +368,6 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 				$targetUsers[] = array(
 					'CircularNoticeTargetUser' => array(
 						'id' => null,
-//						'user_id' => $user['User']['id'],
 						'user_id' => $user,
 					)
 				);
@@ -382,9 +379,6 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			if (! $this->CircularNoticeChoice->validateCircularChoices($data)) {
 				$this->validationErrors = Hash::merge($this->validationErrors, $this->CircularNoticeChoice->validationErrors);
 			}
-//			if (! $this->CircularNoticeTargetUser->validateCircularNoticeTargetUsers($data)) {
-//				$this->validationErrors = Hash::merge($this->validationErrors, $this->CircularNoticeTargetUser->validationErrors);
-//			}
 			if ($this->validationErrors) {
 				return false;
 			}
@@ -415,7 +409,6 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			throw $ex;
 		}
 
-//		return true;
 		return $data;
 	}
 

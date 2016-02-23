@@ -49,28 +49,27 @@ NetCommonsApp.controller('CircularNoticeEdit',
 NetCommonsApp.controller('CircularNoticeTarget',
     function($scope) {
 
-  /**
-   * tinymce
-   *
-   * @type {object}
-   */
-  $scope.target = false;
+      /**
+       * tinymce
+       *
+       * @type {object}
+       */
+      $scope.target = false;
 
-/**
- * Initialize
- *
- * @param {object} CircularNoticeContents data
- * @return {void}
- */
-  $scope.initialize = function(value) {
-    $scope.target = value;
-  };
-        
-  $scope.switchTarget = function($event) {
-    $scope.target = $event.target.value;
-  };
+      /**
+       * Initialize
+       *
+       * @param {object} CircularNoticeContents data
+       * @return {void}
+       */
+      $scope.initialize = function(value) {
+        $scope.target = value;
+      };
 
-});
+      $scope.switchTarget = function($event) {
+        $scope.target = $event.target.value;
+      };
+    });
 
 
 /**

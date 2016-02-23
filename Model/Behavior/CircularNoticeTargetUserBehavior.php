@@ -33,7 +33,6 @@ class CircularNoticeTargetUserBehavior extends ModelBehavior {
  * @see Model::save()
  */
 	public function beforeValidate(Model $model, $options = array()) {
-
 		$model->loadModels(array(
 			'CircularNoticeContent' => 'CircularNotices.CircularNoticeContent',
 			'CircularNoticeTargetUser' => 'CircularNotices.CircularNoticeTargetUser',

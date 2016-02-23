@@ -285,7 +285,7 @@ class CircularNoticesController extends CircularNoticesAppController {
  * edit action
  *
  * @param int $blockId blocks.id
- * @param int $contentId circular_notice_content.id
+ * @param string $key circular_notice_content.key
  * @return void
  */
 	public function edit($blockId = null, $key = null) {
@@ -315,7 +315,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 			$data = $this->__parseRequestForSave();
 			$data['CircularNoticeContent']['status'] = $status;
 
-//			unset($data['CircularNoticeContent']['id']);	// 常に新規保存？
+			//unset($data['CircularNoticeContent']['id']);	// 常に新規保存？
 			$data['CircularNoticeContent']['key'] = $key;	// keyをここでセット（あとでWorkflow系の処理に置き換え？）
 
 			if ($circularContent = $this->CircularNoticeContent->saveCircularNoticeContent($data)) {
@@ -348,7 +348,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 				// 自分自身を取得
 				$selectUsers = array(Current::read('User.id'));
 			} else {
-				$selectUsers = array_map(function($user) {
+				$selectUsers = array_map(function ($user) {
 					return $user['user_id'];
 				}, $content['CircularNoticeTargetUser']);
 			}
@@ -385,7 +385,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 		$this->CircularNoticeContent->deleteCircularNoticeContent($contentKey);
 		$this->redirect(NetCommonsUrl::backToPageUrl());
-		return;
 	}
 
 /**

@@ -138,7 +138,7 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
 /**
  * Get circular notice frame settings
  *
- * @param string $frameKey circular_notice_frame_settings.frame_key
+ * @param string $created circular_notice_frame_settings.created
  * @return mixed
  */
 	public function getCircularNoticeFrameSetting($created) {

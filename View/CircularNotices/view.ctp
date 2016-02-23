@@ -193,13 +193,13 @@
 
 				<div class="text-center">
 					<?php 
-						if (! $myAnswer['circularNoticeTargetUser']['replyFlag']) {
+						if (! $myAnswer['circularNoticeTargetUser']['replyFlag']):
 							$labelName = __d('circular_notices', 'Answer');
 							$tooltip = __d('circular_notices', 'Do Answer');
-						} else {
+						else:
 							$labelName = __d('circular_notices', 'Change Answer');
 							$tooltip = __d('circular_notices', 'Change Answer');
-						}
+						endif;
 					?>
 					<span class="nc-tooltip" tooltip="<?php echo h($tooltip); ?>">
 						<button type="submit" class="btn btn-primary"
@@ -318,7 +318,6 @@
 					endif;
 
 					echo $this->Html->tableCells(array(
-//						h($circularNoticeTargetUser['user']['username']),
 						h($circularNoticeTargetUser['user']['handlename']),
 						h($readDatetime),
 						h($replyDatetime),
