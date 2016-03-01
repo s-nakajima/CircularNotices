@@ -116,4 +116,52 @@ class CircularNoticeComponent extends Component {
  * @var string
  */
 	const SELECTION_VALUES_DELIMITER = '|';
+
+/**
+ * export target users file extension
+ *
+ * @var string
+ */
+	const EXPORT_FILE_EXTENSION = '.csv';
+
+/**
+ * 回答先のヘッダ項目を取得
+ *
+ * @return array
+ */
+	public function getTargetUserHeader() {
+		return array(
+			h(__d('circular_notices', 'Target User')),
+			h(__d('circular_notices', 'Read Datetime')),
+			h(__d('circular_notices', 'Reply Datetime')),
+			h(__d('circular_notices', 'Answer'))
+		);
+	}
+
+/**
+ * 表示用日付フォーマットを取得
+ *
+ * @param string $dateTime date time
+ * @return array
+ */
+	public function getDisplayDateFormat($dateTime) {
+		App::import('Helper', 'NetCommons.Date');
+		$dateHelper = new DateHelper(new View());
+		return $dateHelper->dateFormat($dateTime);
+	}
+
+/**
+ * Adjust the status
+ *
+ * @param string $status Workflowステータス
+ * @return string
+ */
+	public function adjustmentWorkflowStatus($status) {
+		$resultStatus = $status;
+		// FIXME もっと良い方法を検討
+		if ($status === WorkflowComponent::STATUS_APPROVED) {
+			$resultStatus = WorkflowComponent::STATUS_PUBLISHED;
+		}
+		return $resultStatus;
+	}
 }

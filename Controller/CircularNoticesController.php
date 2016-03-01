@@ -51,6 +51,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		),
 		'Paginator',
 		'UserAttributes.UserAttributeLayout',
+		'CircularNotices.CircularNotice',
 	);
 
 /**
@@ -149,7 +150,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$targetUsers = $this->Paginator->paginate('CircularNoticeTargetUser');
 
 		// 回答を集計
-		$answersSummary = $this->__getAnswerSummary($contentId);
+		$answersSummary = $this->CircularNoticeContent->getAnswerSummary($contentId);
 
 		// 回答の登録／更新
 		if ($this->request->is(array('post', 'put'))) {
@@ -223,7 +224,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 				return;
 			}
 			// 回覧板の場合は、決定＝公開とする
-			$status = $this->__adjustmentWorkflowStatus($status);
+			$status = $this->CircularNotice->adjustmentWorkflowStatus($status);
 
 			$data = $this->__parseRequestForSave();
 			$data['CircularNoticeContent']['status'] = $status;
@@ -299,7 +300,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 				return;
 			}
 			// 回覧板の場合は、決定＝公開とする
-			$status = $this->__adjustmentWorkflowStatus($status);
+			$status = $this->CircularNotice->adjustmentWorkflowStatus($status);
 
 			$data = $this->__parseRequestForSave();
 			$data['CircularNoticeContent']['status'] = $status;
@@ -377,30 +378,90 @@ class CircularNoticesController extends CircularNoticesAppController {
 	}
 
 /**
- * Get summary of answer.
+ * download
  *
- * @param int $contentId circular_notice_content.id
- * @return array
+ * @return file
+ * @throws InternalErrorException
  */
-	private function __getAnswerSummary($contentId) {
-		$answerSummary = array();
+	public function download() {
+		App::uses('TemporaryFolder', 'Files.Utility');
+		App::uses('CsvFileWriter', 'Files.Utility');
+		App::uses('ZipDownloader', 'Files.Utility');
 
-		$targetUsers = $this->CircularNoticeTargetUser->getCircularNoticeTargetUsers($contentId);
-		foreach ($targetUsers as $targetUser) {
-			$selectionValues = $targetUser['CircularNoticeTargetUser']['reply_selection_value'];
-			if ($selectionValues) {
-				$answers = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $selectionValues);
-				foreach ($answers as $answer) {
-					if (! isset($answerSummary[$answer])) {
-						$answerSummary[$answer] = 1;
-					} else {
-						$answerSummary[$answer]++;
-					}
-				}
-			}
+		$userId = Current::read('User.id');
+		$contentKey = $this->params['pass'][1];
+		$this->initCircularNotice();
+
+		// 回覧を取得
+		$content = $this->CircularNoticeContent->getCircularNoticeContent($contentKey, $userId);
+		if (! $content) {
+			$this->throwBadRequest();
+			return false;
 		}
+		$contentId = $content['CircularNoticeContent']['id'];
 
-		return $answerSummary;
+		// Paginator経由で回答先一覧を取得
+		$this->Paginator->settings = $this->CircularNoticeTargetUser->getCircularNoticeTargetUsersForPaginator($contentId, $this->params['named'], $userId, 0);
+		$targetUsers = $this->Paginator->paginate('CircularNoticeTargetUser');
+
+		try {
+			$tmpFolder = new TemporaryFolder();
+			$csvFile = new CsvFileWriter(array(
+				'folder' => $tmpFolder->path
+			));
+
+			// ヘッダ取得
+			$header = $this->CircularNotice->getTargetUserHeader();
+			$csvFile->add($header);
+
+			// 回答データ整形
+			$content = $this->camelizeKeyRecursive($content['CircularNoticeContent']);
+			$targetUsers = $this->camelizeKeyRecursive($targetUsers);
+			foreach ($targetUsers as $targetUser) {
+				$answer = null;
+				switch ($content['replyType']) {
+					case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT:
+						$answer = $targetUser['circularNoticeTargetUser']['replyTextValue'];
+						break;
+					case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION:
+					case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION:
+						$selectionValues = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $targetUser['circularNoticeTargetUser']['replySelectionValue']);
+						$answer = implode('、', $selectionValues);
+						break;
+				}
+
+				if (! $targetUser['circularNoticeTargetUser']['readDatetime']) {
+					$readDatetime = __d('circular_notices', 'Unread');
+				} else {
+					$readDatetime = $this->CircularNotice->getDisplayDateFormat($targetUser['circularNoticeTargetUser']['readDatetime']);
+				}
+				if (! $targetUser['circularNoticeTargetUser']['replyDatetime']) {
+					$replyDatetime = __d('circular_notices', 'Unreply');
+				} else {
+					$replyDatetime = $this->CircularNotice->getDisplayDateFormat($targetUser['circularNoticeTargetUser']['replyDatetime']);
+				}
+				$data = array(
+					h($targetUser['user']['handlename']),
+					h($readDatetime),
+					h($replyDatetime),
+					h($answer),
+				);
+				$csvFile->add($data);
+			}
+		} catch (Exception $e) {
+			$this->NetCommons->setFlashNotification(__d('circular_notices', 'download error'),
+				array('interval' => NetCommonsComponent::ALERT_VALIDATE_ERROR_INTERVAL));
+			$this->redirect(NetCommonsUrl::actionUrl(array(
+				'controller' => 'circular_notices',
+				'action' => 'view',
+				'block_id' => Current::read('Block.id'),
+				'frame_id' => Current::read('Frame.id'),
+				'key' => $contentKey)));
+			return false;
+		}
+		$this->autoRender = false;
+		$fileName = $content['subject'] . CircularNoticeComponent::EXPORT_FILE_EXTENSION;
+		return $csvFile->download($fileName);
 	}
 
 /**
@@ -442,20 +503,5 @@ class CircularNoticesController extends CircularNoticesAppController {
 		}
 
 		return $data;
-	}
-
-/**
- * Adjust the status
- *
- * @param string $status Workflowステータス
- * @return string
- */
-	private function __adjustmentWorkflowStatus($status) {
-		$resultStatus = $status;
-		// FIXME もっと良い方法を検討
-		if ($status === WorkflowComponent::STATUS_APPROVED) {
-			$resultStatus = WorkflowComponent::STATUS_PUBLISHED;
-		}
-		return $resultStatus;
 	}
 }

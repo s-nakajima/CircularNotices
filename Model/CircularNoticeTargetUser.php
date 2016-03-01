@@ -218,9 +218,10 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
  * @param int $contentId circular_notice_target_users.circular_notice_content_id
  * @param array $paginatorParams paginator params
  * @param int $userId user id
+ * @param int $limit limit
  * @return array
  */
-	public function getCircularNoticeTargetUsersForPaginator($contentId, $paginatorParams, $userId) {
+	public function getCircularNoticeTargetUsersForPaginator($contentId, $paginatorParams, $userId, $limit = self::DEFAULT_DISPLAY_NUMBER) {
 		$this->virtualFields['first_order'] =
 			'CASE WHEN CircularNoticeTargetUser.user_id = ' . $userId . ' THEN 1 ELSE 2 END';
 
@@ -235,17 +236,20 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		}
 
 		// 表示件数
-		$limit = self::DEFAULT_DISPLAY_NUMBER;
 		if (isset($paginatorParams['limit'])) {
 			$limit = (int)$paginatorParams['limit'];
 		}
 
-		return array(
+		$result = array(
 			'recursive' => 0,
 			'conditions' => $conditions,
 			'order' => $order,
-			'limit' => $limit,
 		);
+		if ((int)$limit > 0) {
+			$result['limit'] = $limit;
+		}
+
+		return $result;
 	}
 
 /**
