@@ -253,7 +253,13 @@
 			<div class="pull-right">
 				<span class="nc-tooltip" tooltip="<?php echo h(__d('circular_notices', 'Download')); ?>">
 					<button type="button" class="btn btn-default"
-						ng-click="switchOtherUserView(true)">
+						onclick="location.href='<?php echo NetCommonsUrl::actionUrl(array(
+							'plugin' => 'circular_notices',
+							'controller' => 'circular_notices',
+							'action' => 'download',
+							'block_id' => Current::read('Block.id'),
+							'key' => $circularNoticeContent['key'],
+							'frame_id' => Current::read('Frame.id'))); ?>'">
 						<span class="glyphicon glyphicon-download"> </span>
 					</button>
 				</span>

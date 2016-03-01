@@ -51,6 +51,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		),
 		'Paginator',
 		'UserAttributes.UserAttributeLayout',
+		'CircularNotices.CircularNotice',
 	);
 
 /**
@@ -374,6 +375,100 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 		$this->CircularNoticeContent->deleteCircularNoticeContent($contentKey);
 		$this->redirect(NetCommonsUrl::backToPageUrl());
+	}
+
+	/**
+	 * download
+	 *
+	 * @param int $blockId blocks.id
+	 * @param string $contentKey circular_notice_content.key
+	 * @return file
+	 * @throws InternalErrorException
+	 */
+	public function download() {
+		App::uses('TemporaryFolder', 'Files.Utility');
+		App::uses('CsvFileWriter', 'Files.Utility');
+		App::uses('ZipDownloader', 'Files.Utility');
+
+		$userId = Current::read('User.id');
+		$contentKey = $this->params['pass'][1];
+		$this->initCircularNotice();
+
+		// 回覧を取得
+		$content = $this->CircularNoticeContent->getCircularNoticeContent($contentKey, $userId);
+		if (! $content) {
+			$this->throwBadRequest();
+			return false;
+		}
+		$contentId = $content['CircularNoticeContent']['id'];
+
+		// Paginator経由で回答先一覧を取得
+		$this->Paginator->settings = $this->CircularNoticeTargetUser->getCircularNoticeTargetUsersForPaginator($contentId, $this->params['named'], $userId, 0);
+		$targetUsers = $this->Paginator->paginate('CircularNoticeTargetUser');
+
+		try {
+			$tmpFolder = new TemporaryFolder();
+			$csvFile = new CsvFileWriter(array(
+				'folder' => $tmpFolder->path
+			));
+
+			// ヘッダ取得
+			$header = $this->CircularNotice->getTargetUserHeader();
+			$csvFile->add($header);
+
+			// 回答データ整形
+			App::import('Helper', 'NetCommons.Date');
+			$dateHelper = new DateHelper(new View());
+			$datas = array();
+			$content = $this->camelizeKeyRecursive($content['CircularNoticeContent']);
+			$targetUsers = $this->camelizeKeyRecursive($targetUsers);
+			foreach ($targetUsers as $targetUser) {
+				$answer = null;
+				switch ($content['replyType']) {
+					case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT:
+						$answer = $targetUser['circularNoticeTargetUser']['replyTextValue'];
+						break;
+					case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION:
+					case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION:
+						$selectionValues = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $targetUser['circularNoticeTargetUser']['replySelectionValue']);
+						$answer = implode('、', $selectionValues);
+						break;
+				}
+
+				if (! $targetUser['circularNoticeTargetUser']['readDatetime']) {
+					$readDatetime = __d('circular_notices', 'Unread');
+				} else {
+					$readDatetime = $dateHelper->dateFormat($targetUser['circularNoticeTargetUser']['readDatetime']);
+				}
+				if (! $targetUser['circularNoticeTargetUser']['replyDatetime']) {
+					$replyDatetime = __d('circular_notices', 'Unreply');
+				} else {
+					$replyDatetime = $dateHelper->dateFormat($targetUser['circularNoticeTargetUser']['replyDatetime']);
+				}
+				$datas[] = array(
+					h($targetUser['user']['handlename']),
+					h($readDatetime),
+					h($replyDatetime),
+					h($answer),
+				);
+			}
+			foreach ($datas as $data) {
+				$csvFile->add($data);
+			}
+		} catch (Exception $e) {
+			$this->NetCommons->setFlashNotification(__d('circular_notices', 'download error'),
+				array('interval' => NetCommonsComponent::ALERT_VALIDATE_ERROR_INTERVAL));
+			$this->redirect(NetCommonsUrl::actionUrl(array(
+				'controller' => 'circular_notices',
+				'action' => 'view',
+				'block_id' => Current::read('Block.id'),
+				'frame_id' => Current::read('Frame.id'),
+				'key' => $contentKey)));
+			return false;
+		}
+		$this->autoRender = false;
+		$fileName = $content['subject'] . CircularNoticeComponent::EXPORT_FILE_EXTENSION;
+		return $csvFile->download($fileName);
 	}
 
 /**

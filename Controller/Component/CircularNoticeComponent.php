@@ -116,4 +116,25 @@ class CircularNoticeComponent extends Component {
  * @var string
  */
 	const SELECTION_VALUES_DELIMITER = '|';
+
+/**
+ * export target users file extension
+ *
+ * @var string
+ */
+	const EXPORT_FILE_EXTENSION = '.csv';
+
+/**
+ * 回答先のヘッダ項目を取得
+ *
+ * @return array
+ */
+	public function getTargetUserHeader() {
+		return array(
+			h(__d('circular_notices', 'Target User')),
+			h(__d('circular_notices', 'Read Datetime')),
+			h(__d('circular_notices', 'Reply Datetime')),
+			h(__d('circular_notices', 'Answer'))
+		);
+	}
 }
