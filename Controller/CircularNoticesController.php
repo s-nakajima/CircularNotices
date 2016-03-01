@@ -150,7 +150,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$targetUsers = $this->Paginator->paginate('CircularNoticeTargetUser');
 
 		// 回答を集計
-		$answersSummary = $this->__getAnswerSummary($contentId);
+		$answersSummary = $this->CircularNoticeContent->getAnswerSummary($contentId);
 
 		// 回答の登録／更新
 		if ($this->request->is(array('post', 'put'))) {
@@ -224,7 +224,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 				return;
 			}
 			// 回覧板の場合は、決定＝公開とする
-			$status = $this->__adjustmentWorkflowStatus($status);
+			$status = $this->CircularNotice->adjustmentWorkflowStatus($status);
 
 			$data = $this->__parseRequestForSave();
 			$data['CircularNoticeContent']['status'] = $status;
@@ -300,7 +300,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 				return;
 			}
 			// 回覧板の場合は、決定＝公開とする
-			$status = $this->__adjustmentWorkflowStatus($status);
+			$status = $this->CircularNotice->adjustmentWorkflowStatus($status);
 
 			$data = $this->__parseRequestForSave();
 			$data['CircularNoticeContent']['status'] = $status;
@@ -377,14 +377,12 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$this->redirect(NetCommonsUrl::backToPageUrl());
 	}
 
-	/**
-	 * download
-	 *
-	 * @param int $blockId blocks.id
-	 * @param string $contentKey circular_notice_content.key
-	 * @return file
-	 * @throws InternalErrorException
-	 */
+/**
+ * download
+ *
+ * @return file
+ * @throws InternalErrorException
+ */
 	public function download() {
 		App::uses('TemporaryFolder', 'Files.Utility');
 		App::uses('CsvFileWriter', 'Files.Utility');
@@ -417,9 +415,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 			$csvFile->add($header);
 
 			// 回答データ整形
-			App::import('Helper', 'NetCommons.Date');
-			$dateHelper = new DateHelper(new View());
-			$datas = array();
 			$content = $this->camelizeKeyRecursive($content['CircularNoticeContent']);
 			$targetUsers = $this->camelizeKeyRecursive($targetUsers);
 			foreach ($targetUsers as $targetUser) {
@@ -438,21 +433,19 @@ class CircularNoticesController extends CircularNoticesAppController {
 				if (! $targetUser['circularNoticeTargetUser']['readDatetime']) {
 					$readDatetime = __d('circular_notices', 'Unread');
 				} else {
-					$readDatetime = $dateHelper->dateFormat($targetUser['circularNoticeTargetUser']['readDatetime']);
+					$readDatetime = $this->CircularNotice->getDisplayDateFormat($targetUser['circularNoticeTargetUser']['readDatetime']);
 				}
 				if (! $targetUser['circularNoticeTargetUser']['replyDatetime']) {
 					$replyDatetime = __d('circular_notices', 'Unreply');
 				} else {
-					$replyDatetime = $dateHelper->dateFormat($targetUser['circularNoticeTargetUser']['replyDatetime']);
+					$replyDatetime = $this->CircularNotice->getDisplayDateFormat($targetUser['circularNoticeTargetUser']['replyDatetime']);
 				}
-				$datas[] = array(
+				$data = array(
 					h($targetUser['user']['handlename']),
 					h($readDatetime),
 					h($replyDatetime),
 					h($answer),
 				);
-			}
-			foreach ($datas as $data) {
 				$csvFile->add($data);
 			}
 		} catch (Exception $e) {
@@ -469,33 +462,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$this->autoRender = false;
 		$fileName = $content['subject'] . CircularNoticeComponent::EXPORT_FILE_EXTENSION;
 		return $csvFile->download($fileName);
-	}
-
-/**
- * Get summary of answer.
- *
- * @param int $contentId circular_notice_content.id
- * @return array
- */
-	private function __getAnswerSummary($contentId) {
-		$answerSummary = array();
-
-		$targetUsers = $this->CircularNoticeTargetUser->getCircularNoticeTargetUsers($contentId);
-		foreach ($targetUsers as $targetUser) {
-			$selectionValues = $targetUser['CircularNoticeTargetUser']['reply_selection_value'];
-			if ($selectionValues) {
-				$answers = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $selectionValues);
-				foreach ($answers as $answer) {
-					if (! isset($answerSummary[$answer])) {
-						$answerSummary[$answer] = 1;
-					} else {
-						$answerSummary[$answer]++;
-					}
-				}
-			}
-		}
-
-		return $answerSummary;
 	}
 
 /**
@@ -537,20 +503,5 @@ class CircularNoticesController extends CircularNoticesAppController {
 		}
 
 		return $data;
-	}
-
-/**
- * Adjust the status
- *
- * @param string $status Workflowステータス
- * @return string
- */
-	private function __adjustmentWorkflowStatus($status) {
-		$resultStatus = $status;
-		// FIXME もっと良い方法を検討
-		if ($status === WorkflowComponent::STATUS_APPROVED) {
-			$resultStatus = WorkflowComponent::STATUS_PUBLISHED;
-		}
-		return $resultStatus;
 	}
 }

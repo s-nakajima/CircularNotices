@@ -218,6 +218,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
  * @param int $contentId circular_notice_target_users.circular_notice_content_id
  * @param array $paginatorParams paginator params
  * @param int $userId user id
+ * @param int $limit limit
  * @return array
  */
 	public function getCircularNoticeTargetUsersForPaginator($contentId, $paginatorParams, $userId, $limit = self::DEFAULT_DISPLAY_NUMBER) {

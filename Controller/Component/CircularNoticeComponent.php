@@ -137,4 +137,31 @@ class CircularNoticeComponent extends Component {
 			h(__d('circular_notices', 'Answer'))
 		);
 	}
+
+/**
+ * 表示用日付フォーマットを取得
+ *
+ * @param string $dateTime date time
+ * @return array
+ */
+	public function getDisplayDateFormat($dateTime) {
+		App::import('Helper', 'NetCommons.Date');
+		$dateHelper = new DateHelper(new View());
+		return $dateHelper->dateFormat($dateTime);
+	}
+
+/**
+ * Adjust the status
+ *
+ * @param string $status Workflowステータス
+ * @return string
+ */
+	public function adjustmentWorkflowStatus($status) {
+		$resultStatus = $status;
+		// FIXME もっと良い方法を検討
+		if ($status === WorkflowComponent::STATUS_APPROVED) {
+			$resultStatus = WorkflowComponent::STATUS_PUBLISHED;
+		}
+		return $resultStatus;
+	}
 }
