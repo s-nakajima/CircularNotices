@@ -356,9 +356,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 				$rolesRoomsUsers = $this->RolesRoomsUser->getRolesRoomsUsers(array(
 					'Room.id' => Current::read('Room.id')
 				));
-				$targetUsers = array_map(function ($roomUser) {
-					return $roomUser['RolesRoomsUser']['user_id'];
-				}, $rolesRoomsUsers);
+				$targetUsers = Hash::extract($rolesRoomsUsers, '{n}.RolesRoomsUser.user_id');
 				$users = $targetUsers;
 			}
 

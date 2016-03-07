@@ -340,9 +340,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 				// 自分自身を取得
 				$selectUsers = array(Current::read('User.id'));
 			} else {
-				$selectUsers = array_map(function ($user) {
-					return $user['user_id'];
-				}, $content['CircularNoticeTargetUser']);
+				$selectUsers = Hash::extract($content['CircularNoticeTargetUser'], '{n}.user_id');
 			}
 			$this->request->data['selectUsers'] = array();
 			foreach ($selectUsers as $userId) {
