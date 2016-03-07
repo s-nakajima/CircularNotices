@@ -47,6 +47,7 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
 			'mainTabs' => array(
 				'role_permissions' => array('url' => array('controller' => 'circular_notice_block_role_permissions')),
 				'frame_settings' => array('url' => array('controller' => 'circular_notice_frame_settings')),
+				//'mail_settings' => array('url' => array('controller' => 'circular_notice_mail_settings')),
 			),
 		),
 		'NetCommons.Permission' => array(

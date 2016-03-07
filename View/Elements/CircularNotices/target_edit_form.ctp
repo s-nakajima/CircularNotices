@@ -32,6 +32,7 @@
 			'ng-click' => 'switchTarget($event)',
 		));
 		?>
+		<?php echo $this->NetCommonsForm->error('CircularNoticeTargetUser.user_id'); ?>
 		<!-- グループ選択 -->
 		<div ng-show="target==0">
 			<?php echo $this->element('Groups.select',
