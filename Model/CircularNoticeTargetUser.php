@@ -66,19 +66,6 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 	}
 
 /**
- * Validate if the user has been selected.
- *
- * @param array $check check fields.
- * @return bool
- */
-	public function isUserSelected($check) {
-		if (!isset($check['user_id']) || count($check['user_id']) === 0) {
-			return false;
-		}
-		return true;
-	}
-
-/**
  * Use behaviors
  *
  * @var array
@@ -135,6 +122,19 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 			'ELSE ' .
 				'NULL ' .
 			'END';
+	}
+
+/**
+ * Validate if the user has been selected.
+ *
+ * @param array $userIdArr ユーザID配列
+ * @return bool
+ */
+	public function isUserSelected($userIdArr) {
+		if (!isset($userIdArr) || count($userIdArr) === 0) {
+			return false;
+		}
+		return true;
 	}
 
 /**

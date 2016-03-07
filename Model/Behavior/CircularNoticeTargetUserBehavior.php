@@ -41,22 +41,23 @@ class CircularNoticeTargetUserBehavior extends ModelBehavior {
 
 		if (! $model->data['CircularNoticeContent']['is_room_targeted_flag']) {
 			// 回覧先ユーザのバリデーション処理
-			if (! isset($model->data['CircularNoticeTargetUser']['user_id'])) {
-				$model->data['CircularNoticeTargetUser']['user_id'] = array();
+			if (! isset($model->data['CircularNoticeTargetUser'])) {
+				$model->data['CircularNoticeTargetUser'] = array();
 			}
 			$model->CircularNoticeTargetUser->set($model->data['CircularNoticeTargetUser']);
-			$model->CircularNoticeTargetUser->validate['user_id'] = array(
-				'notBlank' => array(
-					'rule' => array('isUserSelected'),
-					'required' => true,
-					'message' => sprintf(__d('circular_notices', 'Select user')),
-				),
-			);
+			// ユーザ選択チェック
+			$targetUsers = Hash::extract($model->data['CircularNoticeTargetUser'], '{n}.user_id');
+			if (! $model->CircularNoticeTargetUser->isUserSelected($targetUsers)) {
+				$model->CircularNoticeTargetUser->validationErrors['user_id'] =
+					sprintf(__d('circular_notices', 'Select user'));
+				$model->validationErrors = Hash::merge($model->validationErrors, $model->CircularNoticeTargetUser->validationErrors);
+				return false;
+			}
 			if (! $model->CircularNoticeTargetUser->validates()) {
 				$model->validationErrors = Hash::merge($model->validationErrors, $model->CircularNoticeTargetUser->validationErrors);
 				return false;
 			}
-			if (! $model->User->existsUser($model->data['CircularNoticeTargetUser']['user_id'])) {
+			if (! $model->User->existsUser($targetUsers)) {
 				$model->CircularNoticeTargetUser->validationErrors['user_id'][] =
 					sprintf(__d('net_commons', 'Failed on validation errors. Please check the input data.'));
 				$model->validationErrors = Hash::merge($model->validationErrors, $model->CircularNoticeTargetUser->validationErrors);

@@ -241,8 +241,9 @@ class CircularNoticesController extends CircularNoticesAppController {
 				return;
 			} else {
 				$this->request->data['selectUsers'] = array();
-				if (isset($this->request->data['CircularNoticeTargetUser']['user_id'])) {
-					foreach ($this->request->data['CircularNoticeTargetUser']['user_id'] as $userId) {
+				if (isset($this->request->data['CircularNoticeTargetUser'])) {
+					$selectUsers = Hash::extract($this->request->data['CircularNoticeTargetUser'], '{n}.user_id');
+					foreach ($selectUsers as $userId) {
 						$user = $this->User->getUser($userId);
 						$this->request->data['selectUsers'][] = $user;
 					}
@@ -320,8 +321,9 @@ class CircularNoticesController extends CircularNoticesAppController {
 				return;
 			} else {
 				$this->request->data['selectUsers'] = array();
-				if (isset($this->request->data['CircularNoticeTargetUser']['user_id'])) {
-					foreach ($this->request->data['CircularNoticeTargetUser']['user_id'] as $userId) {
+				if (isset($this->request->data['CircularNoticeTargetUser'])) {
+					$selectUsers = Hash::extract($this->request->data['CircularNoticeTargetUser'], '{n}.user_id');
+					foreach ($selectUsers as $userId) {
 						$user = $this->User->getUser($userId);
 						$this->request->data['selectUsers'][] = $user;
 					}
