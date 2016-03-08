@@ -126,21 +126,6 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 	}
 
 /**
- * Validate empty of target users.
- *
- * @param array $check check fields.
- * @return bool
- */
-	public function validateNotEmptyTargetUser($check) {
-		if (! $this->data['CircularNoticeContent']['is_room_targeted_flag'] &&
-			! $this->data['CircularNoticeContent']['target_groups']
-		) {
-			return false;
-		}
-		return true;
-	}
-
-/**
  * Validate choices count.
  *
  * @param array $check check fields.
@@ -344,8 +329,8 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 
 		try {
 			$users = array();
-			if (isset($data['CircularNoticeTargetUser']['user_id'])) {
-				$users = $data['CircularNoticeTargetUser']['user_id'];
+			if (isset($data['CircularNoticeTargetUser'])) {
+				$users = $data['CircularNoticeTargetUser'];
 			}
 
 			// ルームに所属する全ユーザが対象の場合、ルームの参加者を取得
@@ -358,17 +343,24 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 				));
 				$targetUsers = Hash::extract($rolesRoomsUsers, '{n}.RolesRoomsUser.user_id');
 				$users = $targetUsers;
-			}
-
-			// 取得したUserでデータを差し替え
-			$targetUsers = array();
-			foreach ($users as $user) {
-				$targetUsers[] = array(
-					'CircularNoticeTargetUser' => array(
-						'id' => null,
-						'user_id' => $user,
-					)
-				);
+				// 取得したUserでデータを差し替え
+				$targetUsers = array();
+				foreach ($users as $userId) {
+					$targetUsers[] = array(
+						'CircularNoticeTargetUser' => array(
+							'id' => null,
+							'user_id' => $userId,
+						)
+					);
+				}
+			} else {
+				$targetUsers = Hash::map($users, '{n}.user_id', function ($value) {
+					return array(
+						'CircularNoticeTargetUser' => array(
+							'id' => null,
+							'user_id' => $value,
+					));
+				});
 			}
 			$data['CircularNoticeTargetUsers'] = $targetUsers;
 
