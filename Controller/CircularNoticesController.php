@@ -306,8 +306,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 			$data = $this->__parseRequestForSave();
 			$data['CircularNoticeContent']['status'] = $status;
 
-			//unset($data['CircularNoticeContent']['id']);	// 常に新規保存？
-			$data['CircularNoticeContent']['key'] = $key;	// keyをここでセット（あとでWorkflow系の処理に置き換え？）
+			$data['CircularNoticeContent']['key'] = $key;	// keyをここでセット
 
 			if ($circularContent = $this->CircularNoticeContent->saveCircularNoticeContent($data)) {
 				$url = NetCommonsUrl::actionUrl(array(
