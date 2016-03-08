@@ -90,13 +90,13 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 	);
 
 /**
- * Prepare circular notice settings
+ * Set circular notice settings
  *
  * @param int $frameId frames.id
  * @return mixed
  * @throws InternalErrorException
  */
-	public function prepareCircularNoticeSetting($frameId) {
+	public function setCircularNoticeSetting($frameId) {
 		$this->loadModels([
 			'Frame' => 'Frames.Frame',
 			'Block' => 'Blocks.Block',
@@ -251,17 +251,5 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 		}
 
 		return true;
-	}
-
-/**
- * Validate this model
- *
- * @param array $data input data
- * @return bool
- */
-	public function validateCircularNoticeSetting($data) {
-		$this->set($data);
-		$this->validates();
-		return $this->validationErrors ? false : true;
 	}
 }

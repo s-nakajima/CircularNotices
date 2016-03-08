@@ -179,24 +179,6 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 	}
 
 /**
- * Get circular notice target user of user
- *
- * @param int $contentId circular_notice_target_users.circular_notice_content_id
- * @param int $userId user id
- * @return mixed
- */
-	public function getMyCircularNoticeTargetUser($contentId, $userId) {
-		$conditions = array(
-			'CircularNoticeTargetUser.circular_notice_content_id' => $contentId,
-			'CircularNoticeTargetUser.user_id' => $userId,
-		);
-
-		return $this->find('first', array(
-			'conditions' => $conditions
-		));
-	}
-
-/**
  * Get circular notice target users
  *
  * @param int $contentId circular_notice_target_users.circular_notice_content_id
@@ -396,23 +378,6 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		$this->set($data);
 		$this->validates();
 		return $this->validationErrors ? false : true;
-	}
-
-/**
- * Validate this models
- *
- * @param array $data input data
- * @return bool
- */
-	public function validateCircularNoticeTargetUsers($data) {
-		if (isset($data['CircularNoticeTargetUsers'])) {
-			foreach ($data['CircularNoticeTargetUsers'] as $value) {
-				if (!$this->validateCircularNoticeTargetUser($value)) {
-					return false;
-				}
-			}
-		}
-		return true;
 	}
 
 /**

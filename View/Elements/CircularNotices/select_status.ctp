@@ -9,10 +9,12 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
+$params = $this->params['named'];
+$params['page'] = 1;
 $url = Hash::merge(array(
 	'controller' => 'circular_notices',
 	'action' => 'index'),
-	$this->params['named']);
+	$params);
 
 $currentStatus = isset($this->Paginator->params['named']['status']) ? $this->Paginator->params['named']['status'] : '';
 

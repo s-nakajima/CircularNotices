@@ -1,18 +1,17 @@
 <?php
 /**
- * Category Behavior
+ * CircularNoticeTargetUser Behavior
  *
- * @author Noriko Arai <arai@nii.ac.jp>
- * @author Shohei Nakajima <nakajimashouhei@gmail.com>
+ * @author Masaki Goto <go8ogle@gmail.com>
  * @link http://www.netcommons.org NetCommons Project
  * @license http://www.netcommons.org/license.txt NetCommons License
- * @copyright Copyright 2014, NetCommons Project
+ * @copyright Copyright 2016, NetCommons Project
  */
 
 App::uses('ModelBehavior', 'Model');
 
 /**
- * CheckUser Behavior
+ * CircularNoticeTargetUser Behavior
  *
  * 選択したユーザを登録
  *
