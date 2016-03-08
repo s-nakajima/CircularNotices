@@ -20,13 +20,6 @@ App::uses('Component', 'Controller');
 class CircularNoticeComponent extends Component {
 
 /**
- * view all status
- *
- * @var string
- */
-	const CIRCULAR_NOTICE_CONTENT_STATUS_ALL = '0';
-
-/**
  * view status published
  *
  * @var string
@@ -160,7 +153,7 @@ class CircularNoticeComponent extends Component {
 		$resultStatus = $status;
 		// FIXME もっと良い方法を検討
 		if ($status === WorkflowComponent::STATUS_APPROVED) {
-			$resultStatus = WorkflowComponent::STATUS_PUBLISHED;
+			$resultStatus = CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_PUBLISHED;
 		}
 		return $resultStatus;
 	}

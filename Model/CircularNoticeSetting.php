@@ -252,16 +252,4 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 
 		return true;
 	}
-
-/**
- * Validate this model
- *
- * @param array $data input data
- * @return bool
- */
-	public function validateCircularNoticeSetting($data) {
-		$this->set($data);
-		$this->validates();
-		return $this->validationErrors ? false : true;
-	}
 }
