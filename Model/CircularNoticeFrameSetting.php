@@ -89,13 +89,13 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
 	);
 
 /**
- * Prepare circular notice frame settings
+ * Set circular notice frame settings
  *
  * @param int $frameId frames.id
  * @return mixed
  * @throws InternalErrorException
  */
-	public function prepareCircularNoticeFrameSetting($frameId) {
+	public function setCircularNoticeFrameSetting($frameId) {
 		$this->loadModels([
 			'Frame' => 'Frames.Frame',
 		]);

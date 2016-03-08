@@ -63,8 +63,8 @@ class CircularNoticesAppController extends AppController {
 		$blockId = Current::read('Block.id');
 		if (! $blockId) {
 			$frameId = Current::read('Frame.id');
-			$this->CircularNoticeSetting->prepareCircularNoticeSetting($frameId);
-			$this->CircularNoticeFrameSetting->prepareCircularNoticeFrameSetting($frameId);
+			$this->CircularNoticeSetting->setCircularNoticeSetting($frameId);
+			$this->CircularNoticeFrameSetting->setCircularNoticeFrameSetting($frameId);
 		}
 	}
 
