@@ -83,7 +83,9 @@
 
 			</div>
 
-		<?php echo $this->Workflow->buttons('CircularNotices.status'); ?>
+			<div class="panel-footer text-center">
+				<?php echo $this->Button->cancelAndSaveAndSaveTemp(); ?>
+			</div>
 
 		<?php echo $this->Form->end(); ?>
 

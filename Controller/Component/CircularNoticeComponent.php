@@ -142,19 +142,4 @@ class CircularNoticeComponent extends Component {
 		$dateHelper = new DateHelper(new View());
 		return $dateHelper->dateFormat($dateTime);
 	}
-
-/**
- * Adjust the status
- *
- * @param string $status Workflowステータス
- * @return string
- */
-	public function adjustmentWorkflowStatus($status) {
-		$resultStatus = $status;
-		// FIXME もっと良い方法を検討
-		if ($status === WorkflowComponent::STATUS_APPROVED) {
-			$resultStatus = CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_PUBLISHED;
-		}
-		return $resultStatus;
-	}
 }

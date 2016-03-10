@@ -223,9 +223,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 				$this->throwBadRequest();
 				return;
 			}
-			// 回覧板の場合は、決定＝公開とする
-			$status = $this->CircularNotice->adjustmentWorkflowStatus($status);
-
 			$data = $this->__parseRequestForSave();
 			$data['CircularNoticeContent']['status'] = $status;
 
@@ -300,9 +297,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 				$this->throwBadRequest();
 				return;
 			}
-			// 回覧板の場合は、決定＝公開とする
-			$status = $this->CircularNotice->adjustmentWorkflowStatus($status);
-
 			$data = $this->__parseRequestForSave();
 			$data['CircularNoticeContent']['status'] = $status;
 
