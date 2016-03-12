@@ -43,13 +43,6 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
  * @var array
  */
 	public $components = array(
-		'Blocks.BlockTabs' => array(
-			'mainTabs' => array(
-				'role_permissions' => array('url' => array('controller' => 'circular_notice_block_role_permissions')),
-				'frame_settings' => array('url' => array('controller' => 'circular_notice_frame_settings')),
-				//'mail_settings' => array('url' => array('controller' => 'circular_notice_mail_settings')),
-			),
-		),
 		'NetCommons.Permission' => array(
 			//アクセスの権限
 			'allow' => array(
@@ -65,6 +58,13 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
  */
 	public $helpers = array(
 		'Blocks.BlockRolePermissionForm',
+		'Blocks.BlockTabs' => array(
+			'mainTabs' => array(
+				'role_permissions' => array('url' => array('controller' => 'circular_notice_block_role_permissions')),
+				'frame_settings' => array('url' => array('controller' => 'circular_notice_frame_settings')),
+				//'mail_settings' => array('url' => array('controller' => 'circular_notice_mail_settings')),
+			),
+		),
 	);
 
 /**
