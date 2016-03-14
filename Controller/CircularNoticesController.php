@@ -237,6 +237,10 @@ class CircularNoticesController extends CircularNoticesAppController {
 				$this->redirect($url);
 				return;
 			} else {
+				// 回答の選択肢を保持
+				$content['CircularNoticeChoice'] = Hash::extract($data, 'CircularNoticeChoices.{n}.CircularNoticeChoice');
+
+				// ユーザ選択状態を保持
 				$this->request->data['selectUsers'] = array();
 				if (isset($this->request->data['CircularNoticeTargetUser'])) {
 					$selectUsers = Hash::extract($this->request->data['CircularNoticeTargetUser'], '{n}.user_id');
@@ -313,6 +317,10 @@ class CircularNoticesController extends CircularNoticesAppController {
 				$this->redirect($url);
 				return;
 			} else {
+				// 回答の選択肢を保持
+				$content['CircularNoticeChoice'] = Hash::extract($data, 'CircularNoticeChoices.{n}.CircularNoticeChoice');
+
+				// ユーザ選択状態を保持
 				$this->request->data['selectUsers'] = array();
 				if (isset($this->request->data['CircularNoticeTargetUser'])) {
 					$selectUsers = Hash::extract($this->request->data['CircularNoticeTargetUser'], '{n}.user_id');

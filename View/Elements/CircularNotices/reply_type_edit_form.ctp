@@ -35,4 +35,8 @@
 
 <div class="form-group" ng-show="circularNoticeContent.replyType!=<?php echo h(CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT); ?>">
 	<?php echo $this->element('CircularNotices/choice_edit_form'); ?>
+	<div class="has-error">
+		<?php echo $this->NetCommonsForm->error('CircularNoticeContent.reply_type', null, array('class' => 'help-block')); ?>
+	</div>
 </div>
+

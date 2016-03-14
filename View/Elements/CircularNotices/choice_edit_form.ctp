@@ -62,6 +62,9 @@
 					</div>
 				</div>
 			</article>
+			<div class="has-error">
+				<?php echo $this->NetCommonsForm->error('CircularNoticeChoice.value', null, array('class' => 'help-block')); ?>
+			</div>
 		</div>
 	</div>
 </div>

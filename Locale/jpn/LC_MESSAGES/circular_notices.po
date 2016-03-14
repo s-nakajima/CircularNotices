@@ -233,6 +233,10 @@ msgid "Period"
 msgstr "回覧期間"
 
 # 登録（編集）画面で使用
+msgid "Choice"
+msgstr "選択肢"
+
+# 登録（編集）画面で使用
 msgid "Reply Deadline"
 msgstr "回答期限"
 
