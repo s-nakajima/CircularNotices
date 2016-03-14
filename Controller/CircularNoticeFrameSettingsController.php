@@ -69,15 +69,6 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
 	);
 
 /**
- * beforeFilter
- *
- * @return void
- */
-	public function beforeFilter() {
-		parent::beforeFilter();
-	}
-
-/**
  * edit action
  *
  * @return void
