@@ -47,75 +47,6 @@ class CircularNoticeFrameSettingsControllerEditTest extends NetCommonsController
 	protected $_controller = 'circular_notice_frame_settings';
 
 /**
- * setUp method
- *
- * @return void
- */
-	public function setUp() {
-		parent::setUp();
-
-		//ログイン
-		TestAuthGeneral::login($this);
-	}
-
-/**
- * tearDown method
- *
- * @return void
- */
-	public function tearDown() {
-		//ログアウト
-		TestAuthGeneral::logout($this);
-
-		parent::tearDown();
-	}
-
-/**
- * edit()アクションのGetリクエストテスト
- *
- * @return void
- */
-	public function testEditGet() {
-		//テストデータ
-		$frameId = '6';
-		$blockId = '2';
-		$blockKey = 'block_1';
-
-		//テスト実行
-		$this->_testGetAction(array('action' => 'edit', 'block_id' => $blockId, 'frame_id' => $frameId),
-				array('method' => 'assertNotEmpty'), null, 'view');
-
-		//チェック
-		$this->__assertEditGet($frameId, $blockId, $blockKey);
-	}
-
-/**
- * edit()のチェック
- *
- * @param int $frameId フレームID
- * @param int $blockId ブロックID
- * @param string $blockKey ブロックKey
- * @return void
- */
-	private function __assertEditGet($frameId, $blockId, $blockKey) {
-		//TODO:必要に応じてassert書く
-		debug($this->view);
-		debug($this->controller->request->data);
-
-		$this->assertInput('form', null, 'circular_notices/circular_notice_frame_settings/edit/' . $blockId, $this->view);
-		$this->assertInput('input', '_method', 'PUT', $this->view);
-		$this->assertInput('input', 'data[Frame][id]', $frameId, $this->view);
-		$this->assertInput('input', 'data[Block][id]', $blockId, $this->view);
-		$this->assertInput('input', 'data[Block][key]', $blockKey, $this->view);
-
-		$this->assertEquals($frameId, Hash::get($this->controller->request->data, 'Frame.id'));
-		$this->assertEquals($blockId, Hash::get($this->controller->request->data, 'Block.id'));
-		$this->assertEquals($blockKey, Hash::get($this->controller->request->data, 'Block.key'));
-
-		//TODO:必要に応じてassert書く
-	}
-
-/**
  * POSTリクエストデータ生成
  *
  * @return array リクエストデータ
@@ -123,57 +54,237 @@ class CircularNoticeFrameSettingsControllerEditTest extends NetCommonsController
 	private function __data() {
 		$data = array(
 			'Frame' => array(
-				'id' => '6'
+				'id' => '6',
+				'key' => 'frame_1'
 			),
 			'Block' => array(
-				'id' => '2', 'key' => 'block_1'
+				'id' => '1',
+				'key' => 'block_2'
 			),
-			//TODO:必要に応じて、assertを追加する
+			'CircularNoticeFrameSetting' => array(
+				'id' => 2,
+				'frame_key' => 'frame_2',
+				'display_number' => '10',
+			),
 		);
 
 		return $data;
 	}
 
 /**
- * edit()アクションのPOSTリクエストテスト
+ * edit()アクションのGetリクエストテスト
  *
+ * @param array $urlOptions URLオプション
+ * @param array $assert テストの期待値
+ * @param string|null $exception Exception
+ * @param string $return testActionの実行後の結果
+ * @dataProvider dataProviderEditGet
  * @return void
  */
-	public function testEditPost() {
-		//テストデータ
-		$frameId = '6';
-		$blockId = '2';
+	public function testEditGet($urlOptions, $assert, $exception = null, $return = 'view') {
+		// Exception
+		if ($exception) {
+			$this->setExpectedException($exception);
+		}
 
-		//テスト実行
-		$this->_testPostAction('put', $this->__data(),
-				array('action' => 'edit', 'block_id' => $blockId, 'frame_id' => $frameId), null, 'view');
+		// テスト実施
+		$url = Hash::merge(array(
+			'plugin' => $this->plugin,
+			'controller' => $this->_controller,
+			'action' => 'edit',
+		), $urlOptions);
 
-		//チェック
-		$header = $this->controller->response->header();
-		$pattern = '/' . preg_quote('/circular_notice/circular_notice/index/' . $blockId, '/') . '/';
-		$this->assertRegExp($pattern, $header['Location']);
+		$this->_testGetAction($url, $assert, $exception, $return);
+	}
+
+/**
+ * editアクションのGETテスト(ログインなし)用DataProvider
+ *
+ * #### 戻り値
+ *  - urlOptions: URLオプション
+ *  - assert: テストの期待値
+ *  - exception: Exception
+ *  - return: testActionの実行後の結果
+ *
+ * @return array
+ */
+	public function dataProviderEditGet() {
+		$data = $this->__data();
+		$results = array();
+
+		//ログインなし
+		$results[0] = array(
+			'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'key' => $data['CircularNoticeFrameSetting']['id']),
+			'assert' => null, 'exception' => 'ForbiddenException'
+		);
+		return $results;
+	}
+
+/**
+ * editアクションのGETテスト
+ *
+ * @param array $urlOptions URLオプション
+ * @param array $assert テストの期待値
+ * @param string|null $exception Exception
+ * @param string $return testActionの実行後の結果
+ * @dataProvider dataProviderEditGetByPublishable
+ * @return void
+ */
+	public function testEditGetByPublishable($urlOptions, $assert, $exception = null, $return = 'view') {
+		//ログイン
+		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
+
+		//テスト実施
+		$url = Hash::merge(array(
+			'plugin' => $this->plugin,
+			'controller' => $this->_controller,
+			'action' => 'edit',
+		), $urlOptions);
+
+		$this->_testGetAction($url, $assert, $exception, $return);
+
+		//ログアウト
+		TestAuthGeneral::logout($this);
+	}
+
+/**
+ * editアクションのGETテスト(ログインあり)用DataProvider
+ *
+ * #### 戻り値
+ *  - urlOptions: URLオプション
+ *  - assert: テストの期待値
+ *  - exception: Exception
+ *  - return: testActionの実行後の結果
+ *
+ * @return array
+ */
+	public function dataProviderEditGetByPublishable() {
+		$data0 = $this->__data();
+		$results = array();
+
+		//ログインあり
+		$results[0] = array(
+			'urlOptions' => array('frame_id' => $data0['Frame']['id'], 'block_id' => $data0['Block']['id'], 'key' => $data0['CircularNoticeFrameSetting']['id']),
+			'assert' => null
+		);
+
+		return $results;
+	}
+
+/**
+ * edit()アクションのPOSTリクエストテスト
+ *
+ * @param array $data POSTデータ
+ * @param string $role ロール
+ * @param array $urlOptions URLオプション
+ * @param string|null $exception Exception
+ * @param string $return testActionの実行後の結果
+ * @dataProvider dataProviderEditPost
+ * @return void
+ */
+	public function testEditPost($data, $role, $urlOptions, $exception = null, $return = 'view') {
+		// ログイン
+		if (isset($role)) {
+			TestAuthGeneral::login($this, $role);
+		}
+
+		//テスト実施
+		$this->_testPostAction('put', $data, Hash::merge(array('action' => 'edit'), $urlOptions), $exception, $return);
+
+		//正常の場合、リダイレクト
+		if (! $exception) {
+			$header = $this->controller->response->header();
+			$this->assertNotEmpty($header['Location']);
+		}
+
+		//ログアウト
+		if (isset($role)) {
+			TestAuthGeneral::logout($this);
+		}
+	}
+
+/**
+ * editアクションのPOSTテスト用DataProvider
+ *
+ * #### 戻り値
+ *  - data: 登録データ
+ *  - role: ロール
+ *  - urlOptions: URLオプション
+ *  - exception: Exception
+ *  - return: testActionの実行後の結果
+ *
+ * @return array
+ */
+	public function dataProviderEditPost() {
+		$data = $this->__data();
+
+		return array(
+			// ログインなし
+			array(
+				'data' => $data, 'role' => null,
+				'urlOptions' => array('frame_id' => $data['Frame']['id']),
+				'exception' => 'ForbiddenException'
+			),
+			// 正常
+			array(
+				'data' => $data, 'role' => Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
+				'urlOptions' => array('frame_id' => $data['Frame']['id']),
+			),
+			// フレームID指定なしテスト
+			array(
+				'data' => $data, 'role' => Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
+				'urlOptions' => array('frame_id' => null),
+			),
+		);
 	}
 
 /**
  * ValidationErrorテスト
  *
+ * @param array $data POSTデータ
+ * @param array $urlOptions URLオプション
+ * @param string|null $validationError ValidationError
+ * @dataProvider dataProviderEditValidationError
  * @return void
  */
-	public function testEditPostValidationError() {
-		$this->_mockForReturnFalse('TODO:MockにするModel名書く', 'TODO:Mockにするメソッド名書く');
+	public function testEditPostValidationError($data, $urlOptions, $validationError = null) {
+		//ログイン
+		TestAuthGeneral::login($this);
 
-		//テストデータ
-		$frameId = '6';
-		$blockId = '2';
+		//テスト実施
+		$this->_testActionOnValidationError('post', $data, Hash::merge(array('action' => 'edit'), $urlOptions), $validationError);
 
-		//テスト実行
-		//TODO:処理によって必要な方を有効にする
-		$this->_testPostAction('put', $this->__data(),
-				array('action' => 'edit', 'block_id' => $blockId, 'frame_id' => $frameId), null, 'view');
-		//$this->_testPostAction('put', $this->__data(),
-		//		array('action' => 'edit', 'block_id' => $blockId, 'frame_id' => $frameId), 'BadRequestException', 'view');
-
-		//TODO:必要に応じてassert書く
+		//ログアウト
+		TestAuthGeneral::logout($this);
 	}
 
+/**
+ * ValidationErrorテスト用DataProvider
+ *
+ * #### 戻り値
+ *  - data: 登録データ
+ *  - urlOptions: URLオプション
+ *  - validationError: バリデーションエラー
+ *
+ * @return array
+ */
+	public function dataProviderEditValidationError() {
+		$data = $this->__data();
+
+		$result = array(
+			'data' => $data,
+			'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'frame_key' => $data['Frame']['key']),
+		);
+
+		return array(
+			//バリデーションエラー
+			Hash::merge($result, array(
+				'validationError' => array(
+					'field' => 'CircularNoticeFrameSetting.display_number',
+					'value' => '',
+					'message' => __d('net_commons', 'Invalid request.'),
+				)
+			)),
+		);
+	}
 }
