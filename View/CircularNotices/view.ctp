@@ -42,7 +42,7 @@
 	</div>
 
 	<!-- 編集 -->
-	<?php if (Current::permission('content_creatable') && $circularNoticeContent['createdUser'] == $userId) : ?>
+	<?php if (Current::permission('content_creatable') && $circularNoticeContent['createdUser'] == Current::read('User.id')) : ?>
 		<div class="pull-right">
 			<span class="nc-tooltip" tooltip="<?php echo h(__d('net_commons', 'Edit')); ?>">
 				<?php echo $this->NetCommonsHtml->link(

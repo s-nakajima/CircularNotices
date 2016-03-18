@@ -108,7 +108,7 @@
 							</div>
 						</div>
 						<!-- 編集リンク -->
-						<?php if (Current::permission('content_creatable') && $circularNoticeContent['circularNoticeContent']['createdUser'] == $userId) : ?>
+						<?php if (Current::permission('content_creatable') && $circularNoticeContent['circularNoticeContent']['createdUser'] == Current::read('User.id')) : ?>
 							<div class="pull-right" style="margin: 6px 0;">
 									<span class="nc-tooltip" tooltip="<?php echo h(__d('net_commons', 'Edit')); ?>">
 										<?php echo $this->NetCommonsHtml->link(
