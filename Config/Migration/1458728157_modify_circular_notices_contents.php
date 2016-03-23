@@ -1,0 +1,74 @@
+<?php
+class ModifyCircularNoticesContents extends CakeMigration {
+
+/**
+ * Migration description
+ *
+ * @var string
+ */
+	public $description = 'modify_circular_notices_contents';
+
+/**
+ * Actions to be performed
+ *
+ * @var array $migration
+ */
+	public $migration = array(
+		'up' => array(
+			'create_field' => array(
+				'circular_notice_contents' => array(
+					'language_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false, 'after' => 'circular_notice_setting_key'),
+					'is_active' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'after' => 'language_id'),
+					'is_latest' => array('type' => 'boolean', 'null' => true, 'default' => null, 'after' => 'is_active'),
+				),
+			),
+			'rename_field' => array(
+				'circular_notice_contents' => array(
+					'opened_period_from' => 'publish_start',
+					'opened_period_to' => 'publish_end',
+				),
+			),
+			'alter_field' => array(
+				'circular_notice_contents' => array(
+					'status' => array('type' => 'integer', 'null' => false, 'default' => '3', 'length' => 4, 'comment' => 'status, 1: public, 3: draft during | 公開状況  1:公開中3:下書き中、 |  | '),
+				),
+			),
+		),
+		'down' => array(
+			'drop_field' => array(
+				'circular_notice_contents' => array('language_id', 'is_active', 'is_latest'),
+			),
+			'rename_field' => array(
+				'circular_notice_contents' => array(
+					'publish_start' => 'opened_period_from',
+					'publish_end' => 'opened_period_to',
+				),
+			),
+			'alter_field' => array(
+				'circular_notice_contents' => array(
+					'status' => array('type' => 'integer', 'null' => false, 'default' => '3', 'length' => 1, 'comment' => 'status, 1: public, 3: draft during | 公開状況  1:公開中3:下書き中、 |  | '),
+				),
+			),
+		),
+	);
+
+/**
+ * Before migration callback
+ *
+ * @param string $direction Direction of migration process (up or down)
+ * @return bool Should process continue
+ */
+	public function before($direction) {
+		return true;
+	}
+
+/**
+ * After migration callback
+ *
+ * @param string $direction Direction of migration process (up or down)
+ * @return bool Should process continue
+ */
+	public function after($direction) {
+		return true;
+	}
+}

@@ -102,9 +102,9 @@
 							<?php endif; ?>
 							<div>
 								<?php echo h(__d('circular_notices', 'Circular Content Period Title')); ?>
-								<?php echo $this->Date->dateFormat($circularNoticeContent['circularNoticeContent']['openedPeriodFrom']); ?>
+								<?php echo $this->Date->dateFormat($circularNoticeContent['circularNoticeContent']['publishStart']); ?>
 								<?php echo __d('circular_notices', 'Till'); ?>
-								<?php echo $this->Date->dateFormat($circularNoticeContent['circularNoticeContent']['openedPeriodTo']); ?>
+								<?php echo $this->Date->dateFormat($circularNoticeContent['circularNoticeContent']['publishEnd']); ?>
 							</div>
 						</div>
 						<!-- 編集リンク -->

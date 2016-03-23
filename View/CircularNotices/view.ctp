@@ -71,9 +71,9 @@
 	<div class="clearfix">
 		<div class="pull-left">
 			<?php echo h(__d('circular_notices', 'Circular Content Period Title')); ?>
-			<?php echo $this->Date->dateFormat($circularNoticeContent['openedPeriodFrom']); ?>
+			<?php echo $this->Date->dateFormat($circularNoticeContent['publishStart']); ?>
 			～
-			<?php echo $this->Date->dateFormat($circularNoticeContent['openedPeriodTo']); ?><br />
+			<?php echo $this->Date->dateFormat($circularNoticeContent['publishEnd']); ?><br />
 			<?php echo h(__d('circular_notices', 'Created User Title')); ?>
 			<?php echo h($user['username']); ?><br />
 		</div>

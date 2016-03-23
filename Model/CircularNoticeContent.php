@@ -68,7 +68,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Choice')),
 				),
 			),
-			'opened_period_from' => array(
+			'publish_start' => array(
 				'notBlank' => array(
 					'rule' => array('notBlank'),
 					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Period')),
@@ -78,7 +78,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
 			),
-			'opened_period_to' => array(
+			'publish_end' => array(
 				'notBlank' => array(
 					'rule' => array('notBlank'),
 					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Period')),
@@ -88,7 +88,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
 				'fromTo' => array(
-					'rule' => array('validateDatetimeFromTo', array('from' => $this->data['CircularNoticeContent']['opened_period_from'])),
+					'rule' => array('validateDatetimeFromTo', array('from' => $this->data['CircularNoticeContent']['publish_start'])),
 					'message' => __d('net_commons', 'Invalid request.'),
 				)
 			),
@@ -113,8 +113,8 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 					),
 					'between' => array(
 						'rule' => array('validateDatetimeBetween', array(
-							'from' => $this->data['CircularNoticeContent']['opened_period_from'],
-							'to' => $this->data['CircularNoticeContent']['opened_period_to']
+							'from' => $this->data['CircularNoticeContent']['publish_start'],
+							'to' => $this->data['CircularNoticeContent']['publish_end']
 						)),
 						'message' => __d('net_commons', 'Invalid request.'),
 					)
@@ -220,10 +220,10 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			'CASE WHEN ' . $this->alias . '.status = \'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT . '\' THEN ' .
 				'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT . '\' ' .
 			'WHEN ' . $this->alias . '.status = \'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_PUBLISHED . '\' THEN ' .
-				'CASE WHEN ' . $this->alias . '.opened_period_from > \'' . $now . '\' THEN ' .
+				'CASE WHEN ' . $this->alias . '.publish_start > \'' . $now . '\' THEN ' .
 					'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED . '\' ' .
 				'ELSE ' .
-					'CASE WHEN ' . $this->alias . '.opened_period_to < \'' . $now . '\' THEN ' .
+					'CASE WHEN ' . $this->alias . '.publish_end < \'' . $now . '\' THEN ' .
 						'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_CLOSED . '\' ' .
 					'WHEN ' . $this->alias . '.reply_deadline_set_flag = 1 AND ' . $this->alias . '.reply_deadline < \'' . $now . '\' THEN ' .
 						'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED . '\' ' .
