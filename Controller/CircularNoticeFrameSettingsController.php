@@ -58,11 +58,7 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
  */
 	public $helpers = array(
 		'Blocks.BlockTabs' => array(
-			'mainTabs' => array(
-				'role_permissions' => array('url' => array('controller' => 'circular_notice_block_role_permissions')),
-				'frame_settings' => array('url' => array('controller' => 'circular_notice_frame_settings')),
-				//'mail_settings' => array('url' => array('controller' => 'circular_notice_mail_settings')),
-			),
+			'mainTabs' => array('role_permissions', 'frame_settings', 'mail_settings')
 		),
 		'NetCommons.Token',
 		'NetCommons.DisplayNumber',

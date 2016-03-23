@@ -59,11 +59,7 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
 	public $helpers = array(
 		'Blocks.BlockRolePermissionForm',
 		'Blocks.BlockTabs' => array(
-			'mainTabs' => array(
-				'role_permissions' => array('url' => array('controller' => 'circular_notice_block_role_permissions')),
-				'frame_settings' => array('url' => array('controller' => 'circular_notice_frame_settings')),
-				//'mail_settings' => array('url' => array('controller' => 'circular_notice_mail_settings')),
-			),
+			'mainTabs' => array('role_permissions', 'frame_settings', 'mail_settings')
 		),
 	);
 
