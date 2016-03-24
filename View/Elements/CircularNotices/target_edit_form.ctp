@@ -39,6 +39,7 @@
 				array(
 					'title' => '回覧先ユーザ選択',
 					'pluginModel' => 'CircularNoticeTargetUser',
+					'roomId' => Current::read('Room.id'),
 					'selectUsers' => (isset($this->request->data['selectUsers'])) ? $this->request->data['selectUsers'] : null,
 				));
 			?>
