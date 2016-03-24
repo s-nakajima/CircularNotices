@@ -323,7 +323,6 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			'CircularNoticeTargetUser' => 'CircularNotices.CircularNoticeTargetUser',
 		]);
 
-		$this->setDataSource('master');
 		$dataSource = $this->getDataSource();
 		$dataSource->begin();
 
