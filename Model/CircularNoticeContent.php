@@ -453,7 +453,6 @@ class CircularNoticeContent extends CircularNoticesAppModel {
  * @throws InternalErrorException
  */
 	public function deleteCircularNoticeContent($key) {
-		$this->setDataSource('master');
 		$dataSource = $this->getDataSource();
 		$dataSource->begin();
 
