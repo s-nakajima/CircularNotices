@@ -1,4 +1,19 @@
 <?php
+/**
+ * CircularNoticesContents CakeMigration
+ *
+ * @author Masaki Goto <go8ogle@gmail.com>
+ * @link http://www.netcommons.org NetCommons Project
+ * @license http://www.netcommons.org/license.txt NetCommons License
+ * @copyright Copyright 2016, NetCommons Project
+ */
+
+/**
+ * CircularNoticesContents CakeMigration
+ *
+ * @author Masaki Goto <go8ogle@gmail.com>
+ * @package NetCommons\CircularNotices\Config\Migration
+ */
 class ModifyCircularNoticesContents extends CakeMigration {
 
 /**
