@@ -17,7 +17,7 @@ App::uses('NetCommonsModelTestCase', 'NetCommons.TestSuite');
  * @author Masaki Goto <go8ogle@gmail.com>
  * @package NetCommons\CircularNotices\Test\Case\Model\CircularNoticesAppModel
  */
-class CircularNoticesAppModelValidateDatetimeFromToTest extends NetCommonsModelTestCase {
+class CircularNoticeContentValidateDatetimeFromToTest extends NetCommonsModelTestCase {
 
 /**
  * Fixtures
@@ -44,7 +44,7 @@ class CircularNoticesAppModelValidateDatetimeFromToTest extends NetCommonsModelT
  *
  * @var string
  */
-	protected $_modelName = 'CircularNoticesAppModel';
+	protected $_modelName = 'CircularNoticeContent';
 
 /**
  * Method name
@@ -63,15 +63,58 @@ class CircularNoticesAppModelValidateDatetimeFromToTest extends NetCommonsModelT
 		$methodName = $this->_methodName;
 
 		//データ生成
-		$check = null;
-		$params = null;
+		$check = array(
+				'reply_deadline' => '2016-03-24 00:01'
+		);
+		$params = array(
+				'from' => '2016-03-23 00:00',
+				'to' => '2016-03-24 00:00'
+		);
 
 		//テスト実施
 		$result = $this->$model->$methodName($check, $params);
 
 		//チェック
-		//TODO:Assertを書く
-		debug($result);
+		$this->assertTrue($result);
+
+		//データ生成
+		$check = array(
+				'reply_deadline' => '2016-03-23 00:00'
+		);
+		$params = array(
+				'from' => '',
+				'to' => '2016-03-23 00:00'
+		);
+
+		//テスト実施
+		$result = $this->$model->$methodName($check, $params);
+
+		//チェック
+		$this->assertTrue($result);
 	}
 
+	/**
+	 * validateDatetimeFromTo()のfalseテスト
+	 *
+	 * @return void
+	 */
+	public function testValidateDatetimeFromToFalse() {
+		$model = $this->_modelName;
+		$methodName = $this->_methodName;
+
+		//データ生成
+		$check = array(
+				'reply_deadline' => '2016-03-24 00:00'
+		);
+		$params = array(
+				'to' => '2016-03-23 23:59'
+		);
+
+		//テスト実施
+		$result = $this->$model->$methodName($check, $params);
+
+
+		//チェック
+		$this->assertFalse($result);
+	}
 }

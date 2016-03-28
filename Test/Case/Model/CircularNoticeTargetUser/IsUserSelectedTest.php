@@ -69,8 +69,14 @@ class CircularNoticeTargetUserIsUserSelectedTest extends NetCommonsModelTestCase
 		$result = $this->$model->$methodName($userIdArr);
 
 		//チェック
-		//TODO:Assertを書く
-		debug($result);
+
+		//データ生成
+		$userIdArr = array('user_id' => true);
+
+		//テスト実施
+		$result = $this->$model->$methodName($userIdArr);
+
+		//チェック
 	}
 
 }

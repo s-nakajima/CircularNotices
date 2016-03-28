@@ -69,7 +69,6 @@ class CircularNoticeFrameSettingGetDisplayNumberOptionsTest extends NetCommonsGe
 
 		//チェック
 		//TODO:Assertを書く
-		debug($result);
 	}
 
 }

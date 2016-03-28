@@ -63,14 +63,23 @@ class CircularNoticeTargetUserValidateNotEmptyReplyValueTest extends NetCommonsM
 		$methodName = $this->_methodName;
 
 		//データ生成
-		$check = null;
+		
+		$this->$model->data['CircularNoticeTargetUser'] = array();
+		$this->$model->data['CircularNoticeTargetUser']['reply_text_value'] = null;
+		$this->$model->data['CircularNoticeTargetUser']['reply_selection_value'] = null;
 
 		//テスト実施
-		$result = $this->$model->$methodName($check);
+		$result = $this->$model->$methodName();
 
 		//チェック
-		//TODO:Assertを書く
-		debug($result);
+		
+		
+		$this->$model->data['CircularNoticeTargetUser']['reply_text_value'] = true;
+		$this->$model->data['CircularNoticeTargetUser']['reply_selection_value'] = true;
+		//テスト実施
+		$result = $this->$model->$methodName();
+
+		//チェック
 	}
 
 }

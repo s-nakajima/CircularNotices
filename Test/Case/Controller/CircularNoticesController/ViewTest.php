@@ -282,7 +282,6 @@ class CircularNoticesControllerViewTest extends WorkflowControllerViewTest {
  */
 	private function __assertView($contentKey, $isLatest = false) {
 		//TODO:view(ctp)ファイルに対するassert追加
-		//debug($this->view);
 
 		if ($contentKey === 'content_key_1') {
 			if ($isLatest) {

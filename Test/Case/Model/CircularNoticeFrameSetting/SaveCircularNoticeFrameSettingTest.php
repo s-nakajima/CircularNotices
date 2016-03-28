@@ -65,14 +65,13 @@ class CircularNoticeFrameSettingSaveCircularNoticeFrameSettingTest extends NetCo
 	public function dataProviderSave() {
 		$data['CircularNoticeFrameSetting'] = (new CircularNoticeFrameSettingFixture())->records[0];
 
-		//TODO:テストパタンを書く
 		$results = array();
 		// * 編集の登録処理
 		$results[0] = array($data);
 		// * 新規の登録処理
 		$results[1] = array($data);
-		$results[1] = Hash::insert($results[1], '0.CircularNoticeFrameSetting.id', null);
-		$results[1] = Hash::insert($results[1], '0.CircularNoticeFrameSetting.key', null); //TODO:不要なら削除する
+		$results[1] = Hash::insert($results[1], '0.CircularNoticeFrameSetting.id', 1);
+		$results[1] = Hash::insert($results[1], '0.CircularNoticeFrameSetting.key', 'key'); //TODO:不要なら削除する
 		$results[1] = Hash::remove($results[1], '0.CircularNoticeFrameSetting.created_user');
 
 		return $results;
@@ -91,7 +90,6 @@ class CircularNoticeFrameSettingSaveCircularNoticeFrameSettingTest extends NetCo
 	public function dataProviderSaveOnExceptionError() {
 		$data = $this->dataProviderSave()[0][0];
 
-		//TODO:テストパタンを書く
 		return array(
 			array($data, 'CircularNotices.CircularNoticeFrameSetting', 'save'),
 		);
@@ -108,11 +106,11 @@ class CircularNoticeFrameSettingSaveCircularNoticeFrameSettingTest extends NetCo
  * @return array テストデータ
  */
 	public function dataProviderSaveOnValidationError() {
-		$data = $this->dataProviderSave()[0][0];
 
-		//TODO:テストパタンを書く
+		$data = $this->dataProviderSave();
+
 		return array(
-			array($data, 'CircularNotices.CircularNoticeFrameSetting'),
+				array($data, 'CircularNotices.CircularNoticeFrameSetting', 'save'),
 		);
 	}
 

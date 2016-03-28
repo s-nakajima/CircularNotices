@@ -70,7 +70,6 @@ class CircularNoticeTargetUserValidateCircularNoticeTargetUserTest extends NetCo
 
 		//チェック
 		//TODO:Assertを書く
-		debug($result);
 	}
 
 }

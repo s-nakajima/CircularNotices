@@ -64,16 +64,20 @@ class CircularNoticeTargetUserGetCircularNoticeTargetUsersForPaginatorTest exten
 
 		//データ生成
 		$contentId = null;
-		$paginatorParams = null;
+		$paginatorParams = array(
+			'sort' => 'desc',
+			'direction' => 'desc',
+			'limit' => 3,
+		);
 		$userId = null;
-		$limit = self::DEFAULT_DISPLAY_NUMBER;
+//		$limit = self::DEFAULT_DISPLAY_NUMBER;
+		$limit = 10;
 
 		//テスト実施
 		$result = $this->$model->$methodName($contentId, $paginatorParams, $userId, $limit);
 
 		//チェック
 		//TODO:Assertを書く
-		debug($result);
 	}
 
 }

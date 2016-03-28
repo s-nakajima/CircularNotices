@@ -79,7 +79,6 @@ class CircularNoticeComponentGetTargetUserHeaderTest extends NetCommonsControlle
 		$result = $this->controller->CircularNotice->getTargetUserHeader();
 
 		//TODO:必要に応じてassert追加する
-		debug($result);
 	}
 
 }

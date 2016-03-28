@@ -17,60 +17,149 @@ App::uses('NetCommonsModelTestCase', 'NetCommons.TestSuite');
  * @author Masaki Goto <go8ogle@gmail.com>
  * @package NetCommons\CircularNotices\Test\Case\Model\CircularNoticeTargetUser
  */
-class CircularNoticeTargetUserReplaceCircularNoticeTargetUsersTest extends NetCommonsModelTestCase {
+class CircularNoticeTargetUserReplaceCircularNoticeTargetUsersTest extends NetCommonsModelTestCase
+{
 
-/**
- * Fixtures
- *
- * @var array
- */
-	public $fixtures = array(
-		'plugin.circular_notices.circular_notice_choice',
-		'plugin.circular_notices.circular_notice_content',
-		'plugin.circular_notices.circular_notice_frame_setting',
-		'plugin.circular_notices.circular_notice_setting',
-		'plugin.circular_notices.circular_notice_target_user',
-	);
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = array(
+        'plugin.circular_notices.circular_notice_choice',
+        'plugin.circular_notices.circular_notice_content',
+        'plugin.circular_notices.circular_notice_frame_setting',
+        'plugin.circular_notices.circular_notice_setting',
+        'plugin.circular_notices.circular_notice_target_user',
+    );
 
-/**
- * Plugin name
- *
- * @var string
- */
-	public $plugin = 'circular_notices';
+    /**
+     * Plugin name
+     *
+     * @var string
+     */
+    public $plugin = 'circular_notices';
 
-/**
- * Model name
- *
- * @var string
- */
-	protected $_modelName = 'CircularNoticeTargetUser';
+    /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_modelName = 'CircularNoticeTargetUser';
 
-/**
- * Method name
- *
- * @var string
- */
-	protected $_methodName = 'replaceCircularNoticeTargetUsers';
+    /**
+     * Method name
+     *
+     * @var string
+     */
+    protected $_methodName = 'replaceCircularNoticeTargetUsers';
 
-/**
- * replaceCircularNoticeTargetUsers()のテスト
- *
- * @return void
- */
-	public function testReplaceCircularNoticeTargetUsers() {
-		$model = $this->_modelName;
-		$methodName = $this->_methodName;
+    /**
+     * replaceCircularNoticeTargetUsers()のテスト
+     *
+     * @return void
+     */
+    public function testReplaceCircularNoticeTargetUsers()
+    {
+        $model = $this->_modelName;
+        $methodName = $this->_methodName;
 
-		//データ生成
-		$data = null;
+        //データ生成
+        $data['CircularNoticeTargetUsers'] = array(
+            0 => array('CircularNoticeTargetUser' => array('circular_notice_content_id' => '1')),
+            1 => array('CircularNoticeTargetUser' => array('circular_notice_content_id' => '2')),
+            2 => array('CircularNoticeTargetUser' => array('circular_notice_content_id' => '3')),
+        );
+        $data['CircularNoticeContent']['id'] = 5;
 
-		//テスト実施
-		$result = $this->$model->$methodName($data);
+        //テスト実施
+        $result = $this->$model->$methodName($data);
 
-		//チェック
-		//TODO:Assertを書く
-		debug($result);
-	}
+        //チェック
+        //TODO:Assertを書く
+    }
 
+    /**
+     * validateCircularNoticeTargetUser()のテスト
+     *
+     * @return void
+     */
+    public function testValidateCircularNoticeTargetUser()
+    {
+        $model = $this->_modelName;
+        $methodName = $this->_methodName;
+
+        //データ生成
+        $data['CircularNoticeTargetUsers'] = array(
+            0 => array('CircularNoticeTargetUser' => array('circular_notice_content_id' => '1')),
+            1 => array('CircularNoticeTargetUser' => array('circular_notice_content_id' => '2')),
+            2 => array('CircularNoticeTargetUser' => array('circular_notice_content_id' => '3')),
+        );
+        $data['CircularNoticeContent']['id'] = 5;
+
+        // 例外を発生させるためのモック
+        $circularNoticeChoicesMock = $this->getMockForModel('CircularNotices.' . $model, ['validateCircularNoticeTargetUser']);
+        $circularNoticeChoicesMock->expects($this->any())
+            ->method('validateCircularNoticeTargetUser')
+            ->will($this->returnValue(false));
+
+        $circularNoticeChoicesMock->$methodName($data);
+
+        //チェック
+        //TODO:Assertを書く
+    }
+
+    /**
+     * データ保存 例外テスト
+     *
+     * @return void
+     */
+    public function testSaveException()
+    {
+        $model = $this->_modelName;
+        $methodName = $this->_methodName;
+        $this->setExpectedException('InternalErrorException');
+
+        $data['CircularNoticeTargetUsers'] = array(
+            0 => array('CircularNoticeTargetUser' => array('circular_notice_content_id' => '1')),
+            1 => array('CircularNoticeTargetUser' => array('circular_notice_content_id' => '2')),
+            2 => array('CircularNoticeTargetUser' => array('circular_notice_content_id' => '3')),
+        );
+        $data['CircularNoticeContent']['id'] = 5;
+
+        // 例外を発生させるためのモック
+        $circularNoticeChoicesMock = $this->getMockForModel('CircularNotices.' . $model, ['save']);
+        $circularNoticeChoicesMock->expects($this->any())
+            ->method('save')
+            ->will($this->returnValue(false));
+
+        $circularNoticeChoicesMock->$methodName($data);
+    }
+
+    /**
+     * データ一括削除 例外テスト
+     *
+     * @return void
+     */
+    public function testDeleteAllException()
+    {
+        $model = $this->_modelName;
+        $methodName = $this->_methodName;
+        $this->setExpectedException('InternalErrorException');
+
+        $data['CircularNoticeTargetUsers'] = array(
+            0 => array('CircularNoticeTargetUser' => array('circular_notice_content_id' => '1')),
+            1 => array('CircularNoticeTargetUser' => array('circular_notice_content_id' => '2')),
+            2 => array('CircularNoticeTargetUser' => array('circular_notice_content_id' => '3')),
+        );
+        $data['CircularNoticeContent']['id'] = 5;
+
+        // 例外を発生させるためのモック
+        $circularNoticeChoicesMock = $this->getMockForModel('CircularNotices.' . $model, ['deleteAll']);
+        $circularNoticeChoicesMock->expects($this->any())
+            ->method('deleteAll')
+            ->will($this->returnValue(false));
+
+        $circularNoticeChoicesMock->$methodName($data);
+    }
 }

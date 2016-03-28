@@ -44,12 +44,22 @@ class CircularNoticeChoiceFixture extends CakeTestFixture {
 		array(
 			'id' => 1,
 			'circular_notice_content_id' => 1,
-			'value' => 'Lorem ipsum dolor sit amet',
+			'value' => 'frame_1',
 			'weight' => 1,
 			'created_user' => 1,
 			'created' => '2015-03-09 09:25:18',
 			'modified_user' => 1,
 			'modified' => '2015-03-09 09:25:18'
+		),
+		array(
+			'id' => 2,
+			'circular_notice_content_id' => 2,
+			'value' => 'frame_2',
+			'weight' => 2,
+			'created_user' => 2,
+			'created' => '2015-03-09 10:25:18',
+			'modified_user' => 2,
+			'modified' => '2015-03-09 10:25:18'
 		),
 	);
 

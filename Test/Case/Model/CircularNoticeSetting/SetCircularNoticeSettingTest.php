@@ -10,6 +10,12 @@
  */
 
 App::uses('NetCommonsModelTestCase', 'NetCommons.TestSuite');
+App::uses('BlockFixture', 'Blocks.Test/Fixture');
+App::uses('FramesAppModel', 'Frames.Model');
+App::uses('FrameFixture', 'Frames.Test/Fixture');
+App::uses('BlocksAppModel', 'Blocks.Model');
+App::uses('BlockFixture', 'Blocks.Test/Fixture');
+
 
 /**
  * CircularNoticeSetting::setCircularNoticeSetting()のテスト
@@ -17,60 +23,271 @@ App::uses('NetCommonsModelTestCase', 'NetCommons.TestSuite');
  * @author Masaki Goto <go8ogle@gmail.com>
  * @package NetCommons\CircularNotices\Test\Case\Model\CircularNoticeSetting
  */
-class CircularNoticeSettingSetCircularNoticeSettingTest extends NetCommonsModelTestCase {
+class CircularNoticeSettingSetCircularNoticeSettingTest extends NetCommonsModelTestCase
+{
 
-/**
- * Fixtures
- *
- * @var array
- */
-	public $fixtures = array(
-		'plugin.circular_notices.circular_notice_choice',
-		'plugin.circular_notices.circular_notice_content',
-		'plugin.circular_notices.circular_notice_frame_setting',
-		'plugin.circular_notices.circular_notice_setting',
-		'plugin.circular_notices.circular_notice_target_user',
-	);
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = array(
+        'plugin.circular_notices.circular_notice_choice',
+        'plugin.circular_notices.circular_notice_content',
+        'plugin.circular_notices.circular_notice_frame_setting',
+        'plugin.circular_notices.circular_notice_setting',
+        'plugin.circular_notices.circular_notice_target_user',
+    );
 
-/**
- * Plugin name
- *
- * @var string
- */
-	public $plugin = 'circular_notices';
+    /**
+     * Plugin name
+     *
+     * @var string
+     */
+    public $plugin = 'circular_notices';
 
-/**
- * Model name
- *
- * @var string
- */
-	protected $_modelName = 'CircularNoticeSetting';
+    /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_modelName = 'CircularNoticeSetting';
 
-/**
- * Method name
- *
- * @var string
- */
-	protected $_methodName = 'setCircularNoticeSetting';
+    /**
+     * Method name
+     *
+     * @var string
+     */
+    protected $_methodName = 'setCircularNoticeSetting';
 
-/**
- * setCircularNoticeSetting()のテスト
- *
- * @return void
- */
-	public function testSetCircularNoticeSetting() {
-		$model = $this->_modelName;
-		$methodName = $this->_methodName;
+    /**
+     * setUp method
+     *
+     * @return void
+     */
+    public function setUp() {
+        parent::setUp();
+        $this->Frame = ClassRegistry::init('Frames.Frame');
+        $this->Block = ClassRegistry::init('Blocks.Block');
+    }
 
-		//データ生成
-		$frameId = null;
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
+    public function tearDown() {
+        unset($this->Frame);
+        unset($this->Block);
 
-		//テスト実施
-		$result = $this->$model->$methodName($frameId);
+        parent::tearDown();
+    }
 
-		//チェック
-		//TODO:Assertを書く
-		debug($result);
-	}
+//    /**
+//     * setCircularNoticeSetting()のテスト
+//     *
+//     * @return void
+//     */
+//    public function testSetCircularNoticeSetting()
+//    {
+//        $model = $this->_modelName;
+//        $methodName = $this->_methodName;
+//
+////        //データ生成
+////        $frameId = 6;
+////
+////        //テスト実施
+////        $result = $this->$model->$methodName($frameId);
+//
+////        //データ生成
+////        $frameId = 6;
+////
+////        //テスト実施
+////        $result = $this->$model->$methodName($frameId);
+//
+//        //チェック
+//        //TODO:Assertを書く
+//    }
 
+    /**
+     * フレーム取得 例外テスト
+     *
+     * @return void
+     */
+    public function testGetLinkedBlockByFrameFalse()
+    {
+        $model = $this->_modelName;
+        $methodName = $this->_methodName;
+//        $this->setExpectedException('InternalErrorException');
+
+        $frameId = 15;
+
+        // 例外を発生させるためのモック
+        $circularNoticeSettingMock = $this->getMockForModel('CircularNotices.' . $model, ['getLinkedBlockbyFrame']);
+        $circularNoticeSettingMock->expects($this->any())
+            ->method('getLinkedBlockbyFrame')
+            ->will($this->returnValue(false)
+            );
+        $result = $circularNoticeSettingMock->$methodName($frameId);
+    }
+
+    /**
+     * フレーム取得 例外テスト
+     *
+     * @return void
+     */
+    public function testFindByBlockKey()
+    {
+        $model = $this->_modelName;
+        $methodName = $this->_methodName;
+
+        $frameId = 15;
+
+        // 例外を発生させるためのモック
+        $circularNoticeSettingMock = $this->getMockForModel('CircularNotices.' . $model, ['findByBlockKey']);
+        $circularNoticeSettingMock->expects($this->any())
+            ->method('findByBlockKey')
+            ->will($this->returnValue(false));
+
+        $circularNoticeSettingMock->$methodName($frameId);
+    }
+
+    /**
+     * フレーム取得 例外テスト
+     *
+     * @return void
+     */
+    public function testGetLinkedBlockbyFrameException()
+    {
+        $model = $this->_modelName;
+        $methodName = $this->_methodName;
+		$this->setExpectedException('InternalErrorException');
+
+        $frameId = 30;
+
+        $circularNoticeSettingMock = $this->getMockForModel('CircularNotices.' . $model, ['getLinkedBlockbyFrame']);
+        $circularNoticeSettingMock->expects($this->any())
+            ->method('getLinkedBlockbyFrame')
+            ->will($this->returnValue(false));
+        $circularNoticeSettingMock->$methodName($frameId);
+    }
+
+    /**
+     * 保存処理 例外テスト
+     *
+     * @return void
+     */
+    public function testSaveException()
+    {
+        $model = $this->_modelName;
+        $methodName = $this->_methodName;
+        $this->setExpectedException('InternalErrorException');
+
+        // 例外データ作成
+        $this->Frame->save(
+            array(
+                'id' => '19',
+                'language_id' => '2',
+                'room_id' => '5',
+                'box_id' => 2,
+                'plugin_key' => 'circular_notices',
+                'block_id' => 33,
+                'key' => 'frame_19',
+                'name' => 'Test frame main',
+                'header_type' => 'default',
+                'weight' => '1',
+                'is_deleted' => false,
+                'default_action' => '',
+                'created_user' => null,
+                'created' => null,
+                'modified_user' => null,
+                'modified' => null
+            )
+        );
+        $this->Block->save(
+            array(
+                'id' => '33',
+                'language_id' => '2',
+                'room_id' => '1',
+                'plugin_key' => 'circular_notices',
+                'key' => '',
+                'name' => 'Block name 5',
+                'public_type' => '2',
+                'publish_start' => null,
+                'publish_end' => null,
+                'created_user' => null,
+                'created' => null,
+                'modified_user' => null,
+                'modified' => null
+            )
+        );
+        
+        $frameId = 19;
+
+        $circularNoticeSettingMock = $this->getMockForModel('CircularNotices.' . $model, ['save']);
+		$circularNoticeSettingMock->expects($this->any())
+				->method('save')
+				->will($this->returnValue(false));
+		$result = $circularNoticeSettingMock->$methodName($frameId);
+    }
+
+    /**
+     * フレーム保存処理 例外テスト
+     *
+     * @return void
+     */
+    public function testFrameSaveException()
+    {
+        $model = $this->_modelName;
+        $methodName = $this->_methodName;
+        $this->setExpectedException('InternalErrorException');
+
+        // 例外データ作成
+        $this->Frame->save(
+            array(
+//                'id' => '20',
+//                'language_id' => '2',
+//                'room_id' => '15',
+//                'box_id' => 2,
+//                'plugin_key' => 'circular_notices',
+//                'block_id' => null,
+//                'key' => 'frame_19',
+//                'name' => 'Test frame main',
+//                'header_type' => 'default',
+//                'weight' => '1',
+//                'is_deleted' => false,
+//                'default_action' => '',
+//                'created_user' => null,
+//                'created' => null,
+//                'modified_user' => null,
+//                'modified' => null
+            )
+        );
+        $this->Block->save(
+            array(
+                'id' => '34',
+                'language_id' => '2',
+                'room_id' => '15',
+                'plugin_key' => 'circular_notices',
+                'key' => '',
+                'name' => 'Block name 5',
+                'public_type' => '2',
+                'publish_start' => null,
+                'publish_end' => null,
+                'created_user' => null,
+                'created' => null,
+                'modified_user' => null,
+                'modified' => null
+            )
+        );
+
+        $frameId = 20;
+
+        $circularNoticeSettingMock = $this->getMockForModel('CircularNotices.' . $model, ['save']);
+//        $circularNoticeSettingMock = $this->getMockForModel('Frames.' . 'Frame', ['save']);
+        $circularNoticeSettingMock->expects($this->any())
+            ->method('save')
+            ->will($this->returnValue(false));
+        $result = $circularNoticeSettingMock->$methodName($frameId);
+    }
 }

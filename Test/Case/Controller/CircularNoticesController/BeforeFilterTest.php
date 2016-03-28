@@ -81,7 +81,6 @@ class CircularNoticesControllerBeforeFilterTest extends NetCommonsControllerTest
 
 		//チェック
 		//TODO:assert追加
-		debug($this->view);
 	}
 
 }

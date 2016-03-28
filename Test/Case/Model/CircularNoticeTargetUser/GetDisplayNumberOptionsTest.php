@@ -69,7 +69,6 @@ class CircularNoticeTargetUserGetDisplayNumberOptionsTest extends NetCommonsGetT
 
 		//チェック
 		//TODO:Assertを書く
-		debug($result);
 	}
 
 }

@@ -65,7 +65,7 @@ class CircularNoticeTargetUserPaginateTest extends NetCommonsModelTestCase {
 		//データ生成
 		$conditions = null;
 		$fields = null;
-		$order = null;
+		$order = array('id' => 'asc');;
 		$limit = null;
 		$page = 1;
 		$recursive = null;
@@ -76,7 +76,6 @@ class CircularNoticeTargetUserPaginateTest extends NetCommonsModelTestCase {
 
 		//チェック
 		//TODO:Assertを書く
-		debug($result);
 	}
 
 }

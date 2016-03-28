@@ -10,6 +10,7 @@
  */
 
 App::uses('NetCommonsGetTest', 'NetCommons.TestSuite');
+App::uses('WorkflowControllerEditTest', 'Workflow.TestSuite');
 
 /**
  * CircularNoticeContent::getAnswerSummary()のテスト
@@ -63,14 +64,13 @@ class CircularNoticeContentGetAnswerSummaryTest extends NetCommonsGetTest {
 		$methodName = $this->_methodName;
 
 		//データ生成
-		$contentId = null;
+		$contentId = 1;
 
 		//テスト実施
 		$result = $this->$model->$methodName($contentId);
 
 		//チェック
 		//TODO:Assertを書く
-		debug($result);
 	}
 
 }

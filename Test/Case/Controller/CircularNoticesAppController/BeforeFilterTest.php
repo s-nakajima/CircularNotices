@@ -18,64 +18,63 @@ App::uses('UserRole', 'UserRoles.Model');
  * @author Masaki Goto <go8ogle@gmail.com>
  * @package NetCommons\CircularNotices\Test\Case\Controller\CircularNoticesAppController
  */
-class CircularNoticesAppControllerBeforeFilterTest extends NetCommonsControllerTestCase {
+class CircularNoticesAppControllerBeforeFilterTest extends NetCommonsControllerTestCase
+{
 
-/**
- * Fixtures
- *
- * @var array
- */
-	public $fixtures = array();
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = array(
+        'plugin.circular_notices.circular_notice_choice',
+        'plugin.circular_notices.circular_notice_content',
+        'plugin.circular_notices.circular_notice_frame_setting',
+        'plugin.circular_notices.circular_notice_setting',
+        'plugin.circular_notices.circular_notice_target_user',
+    );
 
-/**
- * Plugin name
- *
- * @var string
- */
-	public $plugin = 'circular_notices';
+    /**
+     * Plugin name
+     *
+     * @var string
+     */
+    public $plugin = 'circular_notices';
 
-/**
- * setUp method
- *
- * @return void
- */
-	public function setUp() {
-		parent::setUp();
+    /**
+     * setUp method
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
 
-		//テストプラグインのロード
-		NetCommonsCakeTestCase::loadTestPlugin($this, 'CircularNotices', 'TestCircularNotices');
-		$this->generateNc('TestCircularNotices.TestCircularNoticesAppControllerIndex');
+        //テストプラグインのロード
+        NetCommonsCakeTestCase::loadTestPlugin($this, 'CircularNotices', 'TestCircularNotices');
+        $this->generateNc('TestCircularNotices.TestCircularNoticesAppControllerIndex');
+    }
 
-		//ログイン
-		TestAuthGeneral::login($this);
-	}
+    /**
+     * beforeFilter()のテスト
+     *
+     * @return void
+     */
+    public function testBeforeFilter()
+    {
+        // ログイン
+        TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
+        
+        //TODO:テストデータ
 
-/**
- * tearDown method
- *
- * @return void
- */
-	public function tearDown() {
-		//ログアウト
-		TestAuthGeneral::logout($this);
+        //テスト実行
+        $this->_testGetAction('/test_circular_notices/test_circular_notices_app_controller_index/index', null);
 
-		parent::tearDown();
-	}
-
-/**
- * beforeFilter()のテスト
- *
- * @return void
- */
-	public function testBeforeFilter() {
-		//TODO:テストデータ
-
-		//テスト実行
-		$this->_testGetAction('/test_circular_notices/test_circular_notices_app_controller_index/index', null);
-
-		//チェック
-		//TODO:assert追加
-		debug($this->view);
-	}
-
+        // ログアウト
+        TestAuthGeneral::logout($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
+        
+        
+        //チェック
+        //TODO:assert追加
+    }
 }

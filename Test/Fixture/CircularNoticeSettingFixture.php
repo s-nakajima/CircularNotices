@@ -47,19 +47,17 @@ class CircularNoticeSettingFixture extends CakeTestFixture {
  */
 	public $records = array(
 		array(
-			'id' => 1,
-			'block_key' => 'Lorem ipsum dolor sit amet',
-			'key' => 'Lorem ipsum dolor sit amet',
+			'id' => '1',
+			'block_key' => 'frame_1',
+			'key' => 'frame_1',
 			'mail_notice_flag' => 1,
-			'mail_subject' => 'Lorem ipsum dolor sit amet',
-			'mail_body' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
+			'mail_subject' => 'frame_1',
+			'mail_body' => 'frame_1, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
 			'is_auto_translated' => 1,
-			'translation_engine' => 'Lorem ipsum dolor sit amet',
-			'created_user' => 1,
+			'translation_engine' => 'frame_1',
 			'created' => '2015-03-09 09:25:26',
 			'modified_user' => 1,
 			'modified' => '2015-03-09 09:25:26'
 		),
 	);
-
 }

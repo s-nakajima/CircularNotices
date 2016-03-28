@@ -63,14 +63,48 @@ class CircularNoticeContentValidateNotEmptyChoicesTest extends NetCommonsModelTe
 		$methodName = $this->_methodName;
 
 		//データ生成
-		$check = null;
+		$this->$model->data['CircularNoticeContent']['reply_type'] = 1;
+		
+		//テスト実施
+		$result = $this->$model->$methodName();
+		//チェック
+		$this->assertTrue($result);
+
+		//データ生成
+		$this->$model->data['CircularNoticeContent']['reply_type'] = 2;
+		$this->$model->data['CircularNoticeChoices'] = true;
+		
+		//テスト実施
+		$result = $this->$model->$methodName();
+		//チェック
+		$this->assertTrue($result);
+	}
+
+	/**
+	 * validateNotEmptyChoices()のFalseテスト
+	 *
+	 * @return void
+	 */
+	public function testValidateNotEmptyChoicesFalse() {
+		$model = $this->_modelName;
+		$methodName = $this->_methodName;
+
+		//データ生成
+		$this->$model->data['CircularNoticeContent']['reply_type'] = 2;
 
 		//テスト実施
-		$result = $this->$model->$methodName($check);
-
+		$result = $this->$model->$methodName();
 		//チェック
-		//TODO:Assertを書く
-		debug($result);
+		$this->assertFalse($result);
+
+		//データ生成
+		$this->$model->data['CircularNoticeContent']['reply_type'] = 3;
+		$this->$model->data['CircularNoticeChoices'] = null;
+
+		//テスト実施
+		$result = $this->$model->$methodName();
+		//チェック
+		$this->assertFalse($result);
 	}
 
 }

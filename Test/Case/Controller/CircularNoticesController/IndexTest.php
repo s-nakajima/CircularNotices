@@ -106,7 +106,6 @@ class CircularNoticesControllerIndexTest extends WorkflowControllerIndexTest {
 
 		//チェック
 		//TODO:view(ctp)ファイルに対するassert追加
-		debug($this->view);
 	}
 
 /**
@@ -140,7 +139,6 @@ class CircularNoticesControllerIndexTest extends WorkflowControllerIndexTest {
 
 		//チェック
 		//TODO:view(ctp)ファイルに対するassert追加
-		debug($this->view);
 	}
 
 /**
@@ -174,7 +172,6 @@ class CircularNoticesControllerIndexTest extends WorkflowControllerIndexTest {
 
 		//チェック
 		//TODO:view(ctp)ファイルに対するassert追加
-		debug($this->view);
 	}
 
 }

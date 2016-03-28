@@ -357,7 +357,6 @@ class CircularNoticesControllerEditTest extends WorkflowControllerEditTest {
  */
 	private function __assertEditGet($data) {
 		//TODO:必要に応じてassert書く
-		debug($this->view);
 
 		$this->assertInput(
 			'input', 'data[Frame][id]', $data['Frame']['id'], $this->view
@@ -426,7 +425,6 @@ class CircularNoticesControllerEditTest extends WorkflowControllerEditTest {
 		$this->assertInput('input', '_method', 'DELETE', $this->view);
 
 		//TODO:上記以外に必要なassert追加
-		debug($this->view);
 
 		//ログアウト
 		TestAuthGeneral::logout($this);

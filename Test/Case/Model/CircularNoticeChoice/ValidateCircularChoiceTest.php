@@ -70,7 +70,6 @@ class CircularNoticeChoiceValidateCircularChoiceTest extends NetCommonsModelTest
 
 		//チェック
 		//TODO:Assertを書く
-		debug($result);
 	}
 
 }

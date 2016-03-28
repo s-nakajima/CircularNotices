@@ -81,7 +81,6 @@ class CircularNoticesControllerDownloadTest extends NetCommonsControllerTestCase
 
 		//チェック
 		//TODO:assert追加
-		debug($this->view);
 	}
 
 }

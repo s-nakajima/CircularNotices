@@ -116,4 +116,32 @@ class CircularNoticeTargetUserSaveCircularNoticeTargetUserTest extends NetCommon
 		);
 	}
 
+	/**
+	 * validateCircularNoticeTargetUser()のテスト
+	 *
+	 * @return void
+	 */
+	public function testValidateCircularNoticeTargetUser() {
+		$model = $this->_modelName;
+		$methodName = $this->_methodName;
+
+		//データ生成
+		$data = null;
+
+
+		// 例外を発生させるためのモック
+		$circularNoticeChoicesMock = $this->getMockForModel('CircularNotices.'.$model, ['validateCircularNoticeTargetUser']);
+		$circularNoticeChoicesMock->expects($this->any())
+				->method('validateCircularNoticeTargetUser')
+				->will($this->returnValue(false));
+
+		$circularNoticeChoicesMock->$methodName($data);
+		
+		//テスト実施
+//		$result = $this->$model->$methodName($data);
+
+		//チェック
+		//TODO:Assertを書く
+	}
+
 }

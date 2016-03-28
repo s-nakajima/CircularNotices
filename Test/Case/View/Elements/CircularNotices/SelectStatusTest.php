@@ -62,7 +62,6 @@ class CircularNoticesViewElementsCircularNoticesSelectStatusTest extends NetComm
 		$this->assertRegExp($pattern, $this->view);
 
 		//TODO:必要に応じてassert追加する
-		debug($this->view);
 	}
 
 }

@@ -63,6 +63,9 @@ class CircularNoticeTargetUserGetCircularNoticeTargetUsersTest extends NetCommon
 		$methodName = $this->_methodName;
 
 		//データ生成
+//		$contentId = array(
+//			'content_id' => 1
+//		);
 		$contentId = null;
 
 		//テスト実施
@@ -70,7 +73,6 @@ class CircularNoticeTargetUserGetCircularNoticeTargetUsersTest extends NetCommon
 
 		//チェック
 		//TODO:Assertを書く
-		debug($result);
 	}
 
 }

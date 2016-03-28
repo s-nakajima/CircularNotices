@@ -71,7 +71,6 @@ class CircularNoticeContentGetCircularNoticeContentTest extends NetCommonsGetTes
 
 		//チェック
 		//TODO:Assertを書く
-		debug($result);
 	}
 
 }

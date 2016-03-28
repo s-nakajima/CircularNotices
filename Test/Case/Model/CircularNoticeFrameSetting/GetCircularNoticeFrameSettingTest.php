@@ -70,7 +70,15 @@ class CircularNoticeFrameSettingGetCircularNoticeFrameSettingTest extends NetCom
 
 		//チェック
 		//TODO:Assertを書く
-		debug($result);
+
+		//データ生成
+		$created = true;
+
+		//テスト実施
+		$result = $this->$model->$methodName($created);
+
+		//チェック
+		//TODO:Assertを書く
 	}
 
 }

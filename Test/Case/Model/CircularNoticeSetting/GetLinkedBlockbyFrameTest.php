@@ -70,7 +70,6 @@ class CircularNoticeSettingGetLinkedBlockbyFrameTest extends NetCommonsGetTest {
 
 		//チェック
 		//TODO:Assertを書く
-		debug($result);
 	}
 
 }

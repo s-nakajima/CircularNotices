@@ -81,7 +81,6 @@ class CircularNoticeBlockRolePermissionsControllerBeforeFilterTest extends NetCo
 
 		//チェック
 		//TODO:assert追加
-		debug($this->view);
 	}
 
 }

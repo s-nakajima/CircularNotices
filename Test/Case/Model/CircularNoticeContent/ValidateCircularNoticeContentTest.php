@@ -70,7 +70,6 @@ class CircularNoticeContentValidateCircularNoticeContentTest extends NetCommonsM
 
 		//チェック
 		//TODO:Assertを書く
-		debug($result);
 	}
 
 }

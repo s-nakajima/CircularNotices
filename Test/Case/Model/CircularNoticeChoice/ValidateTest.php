@@ -67,10 +67,9 @@ class CircularNoticeChoiceValidateTest extends NetCommonsValidateTest {
  * @return array テストデータ
  */
 	public function dataProviderValidationError() {
-		$data['CircularNoticeChoice'] = (new CircularNoticeChoiceFixture())->records[0];
+		$data['CircularNoticeChoice'] = '';
 
 		//TODO:テストパタンを書く
-		debug($data);
 		return array(
 			array('data' => $data, 'field' => '', 'value' => '',
 				'message' => __d('net_commons', 'Invalid request.')),
