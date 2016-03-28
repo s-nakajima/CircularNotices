@@ -10,6 +10,7 @@
  */
 
 App::uses('CircularNoticesAppController', 'CircularNotices.Controller');
+App::uses('MailSend', 'Mails.Utility');
 
 /**
  * CircularNotices Controller
@@ -227,6 +228,9 @@ class CircularNoticesController extends CircularNoticesAppController {
 			$data['CircularNoticeContent']['status'] = $status;
 
 			if ($circularContent = $this->CircularNoticeContent->saveCircularNoticeContent($data)) {
+				// キューからメール送信
+				MailSend::send();
+
 				$url = NetCommonsUrl::actionUrl(array(
 					'controller' => $this->params['controller'],
 					'action' => 'view',
@@ -305,8 +309,12 @@ class CircularNoticesController extends CircularNoticesAppController {
 			$data['CircularNoticeContent']['status'] = $status;
 
 			$data['CircularNoticeContent']['key'] = $key;	// keyをここでセット
+			$data['CircularNoticeContent']['public_type'] = $content['CircularNoticeContent']['public_type'];
 
 			if ($circularContent = $this->CircularNoticeContent->saveCircularNoticeContent($data)) {
+				// キューからメール送信
+				MailSend::send();
+
 				$url = NetCommonsUrl::actionUrl(array(
 					'controller' => $this->params['controller'],
 					'action' => 'view',

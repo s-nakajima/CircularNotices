@@ -20,6 +20,7 @@ class ModifyCircularNoticesContents extends CakeMigration {
 					'language_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false, 'after' => 'circular_notice_setting_key'),
 					'is_active' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'after' => 'language_id'),
 					'is_latest' => array('type' => 'boolean', 'null' => true, 'default' => null, 'after' => 'is_active'),
+					'public_type' => array('type' => 'integer', 'null' => false, 'default' => '1', 'length' => 4, 'unsigned' => false, 'after' => 'target_groups'),
 				),
 			),
 			'rename_field' => array(
@@ -36,7 +37,7 @@ class ModifyCircularNoticesContents extends CakeMigration {
 		),
 		'down' => array(
 			'drop_field' => array(
-				'circular_notice_contents' => array('language_id', 'is_active', 'is_latest'),
+				'circular_notice_contents' => array('language_id', 'is_active', 'is_latest', 'public_type'),
 			),
 			'rename_field' => array(
 				'circular_notice_contents' => array(

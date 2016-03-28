@@ -15,6 +15,7 @@
 
 App::uses('CircularNoticesAppModel', 'CircularNotices.Model');
 App::uses('CircularNoticeComponent', 'CircularNotices.Controller/Component');
+App::uses('MailQueueBehavior', 'Mails.Model/Behavior');
 
 /**
  * CircularNoticeContent Model
@@ -149,7 +150,14 @@ class CircularNoticeContent extends CircularNoticesAppModel {
  */
 	public $actsAs = array(
 		'NetCommons.OriginalKey',
-		'CircularNotices.CircularNoticeTargetUser'
+		'CircularNotices.CircularNoticeTargetUser',
+		'Workflow.Workflow',
+		'Mails.MailQueue' => array(
+			'embedTags' => array(
+				'X-SUBJECT' => 'CircularNoticeContent.subject',
+				'X-BODY' => 'CircularNoticeContent.content',
+			),
+		),
 	);
 
 /**
@@ -371,6 +379,12 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			if ($this->validationErrors) {
 				return false;
 			}
+
+			// メール処理
+			$sendTimes = array($data['CircularNoticeContent']['publish_start']);
+			$this->setSendTimeReminder($sendTimes);
+			$mailSendUserIdArr = Hash::extract($data, 'CircularNoticeTargetUsers.{n}.CircularNoticeTargetUser.user_id');
+			$this->setToUserIds($mailSendUserIdArr);
 
 			// CircularNoticeContentを保存
 			if (! $content = $this->save(null, false)) {
