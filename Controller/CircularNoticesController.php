@@ -47,7 +47,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		'NetCommons.Permission' => array(
 			//アクセスの権限
 			'allow' => array(
-				'index,view,downloads' => 'null',
+				'index,view,downloads' => 'content_readable',
 				'add,edit,delete' => 'content_creatable',
 			),
 		),
