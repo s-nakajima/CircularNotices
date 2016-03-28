@@ -245,14 +245,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 				$content['CircularNoticeChoice'] = Hash::extract($data, 'CircularNoticeChoices.{n}.CircularNoticeChoice');
 
 				// ユーザ選択状態を保持
-				$this->request->data['selectUsers'] = array();
-				if (isset($this->request->data['CircularNoticeTargetUser'])) {
-					$selectUsers = Hash::extract($this->request->data['CircularNoticeTargetUser'], '{n}.user_id');
-					foreach ($selectUsers as $userId) {
-						$user = $this->User->getUser($userId);
-						$this->request->data['selectUsers'][] = $user;
-					}
-				}
+				$this->CircularNotices->setSelectUsers();
 			}
 			$this->NetCommons->handleValidationError($this->CircularNoticeContent->validationErrors);
 
@@ -329,16 +322,8 @@ class CircularNoticesController extends CircularNoticesAppController {
 				$content['CircularNoticeChoice'] = Hash::extract($data, 'CircularNoticeChoices.{n}.CircularNoticeChoice');
 
 				// ユーザ選択状態を保持
-				$this->request->data['selectUsers'] = array();
-				if (isset($this->request->data['CircularNoticeTargetUser'])) {
-					$selectUsers = Hash::extract($this->request->data['CircularNoticeTargetUser'], '{n}.user_id');
-					foreach ($selectUsers as $userId) {
-						$user = $this->User->getUser($userId);
-						$this->request->data['selectUsers'][] = $user;
-					}
-				}
+				$this->CircularNotices->setSelectUsers();
 			}
-
 			$this->NetCommons->handleValidationError($this->CircularNoticeContent->validationErrors);
 
 			unset($data['CircularNoticeContent']['id']);
@@ -485,13 +470,13 @@ class CircularNoticesController extends CircularNoticesAppController {
 			$data['CircularNoticeChoices'] = array();
 		}
 
-		if (! empty($this->data['CircularNoticeContent']['is_room_targeted_flag'])) {
+		if (!empty($this->data['CircularNoticeContent']['is_room_targeted_flag'])) {
 			$data['CircularNoticeContent']['is_room_targeted_flag'] = true;
 		} else {
 			$data['CircularNoticeContent']['is_room_targeted_flag'] = false;
 		}
 
-		if (! empty($this->data['CircularNoticeContent']['target_groups'])) {
+		if (!empty($this->data['CircularNoticeContent']['target_groups'])) {
 			$data['CircularNoticeContent']['target_groups'] =
 				implode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $data['CircularNoticeContent']['target_groups']);
 		} else {
