@@ -118,8 +118,6 @@ class CircularNoticeTargetUserSaveReadTest extends NetCommonsSaveTest
      */
     public function dataProviderSaveOnExceptionError()
     {
-//        debug($this->dataProviderSave());
-//        $data = $this->dataProviderSave()[0][0];
         $data['CircularNoticeTargetUser'] = (new CircularNoticeTargetUserFixture())->records[0];
         $data['CircularNoticeContent'] = (new CircularNoticeContentFixture())->records[0];
         //TODO:テストパタンを書く
@@ -169,7 +167,7 @@ class CircularNoticeTargetUserSaveReadTest extends NetCommonsSaveTest
         $model = $this->_modelName;
         $methodName = $this->_methodName;
         $contentId = 7;
-        $userId = 4;
+        $userId = 5;
 
         //テスト実施
         $result = $this->$model->$methodName($contentId, $userId);
@@ -190,7 +188,7 @@ class CircularNoticeTargetUserSaveReadTest extends NetCommonsSaveTest
         $methodName = $this->_methodName;
 
         $contentId = 7;
-        $userId = 4;
+        $userId = 5;
 
         // 例外モック
         $circularNoticeSettingMock = $this->getMockForModel('CircularNotices.' . $model, ['saveCircularNoticeTargetUser']);
@@ -215,7 +213,7 @@ class CircularNoticeTargetUserSaveReadTest extends NetCommonsSaveTest
         $this->setExpectedException('InternalErrorException');
 
         $contentId = 8;
-        $userId = 5;
+        $userId = 6;
 
         // 例外モック
         $circularNoticeSettingMock = $this->getMockForModel('CircularNotices.' . $model, ['saveCircularNoticeTargetUser']);

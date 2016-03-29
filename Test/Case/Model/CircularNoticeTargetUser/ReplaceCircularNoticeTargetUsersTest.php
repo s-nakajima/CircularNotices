@@ -198,7 +198,6 @@ class CircularNoticeTargetUserReplaceCircularNoticeTargetUsersTest extends NetCo
     {
         $model = $this->_modelName;
         $methodName = $this->_methodName;
-//        $this->setExpectedException('InternalErrorException');
 
         //データ生成
         $data['CircularNoticeTargetUsers'] = $this->__data();
