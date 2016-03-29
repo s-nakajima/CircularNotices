@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('WorkflowControllerEditTest', 'Workflow.TestSuite');
+App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
 
 /**
  * CircularNoticesController::edit()のテスト
@@ -17,7 +17,7 @@ App::uses('WorkflowControllerEditTest', 'Workflow.TestSuite');
  * @author Masaki Goto <go8ogle@gmail.com>
  * @package NetCommons\CircularNotices\Test\Case\Controller\CircularNoticesController
  */
-class CircularNoticesControllerEditTest extends WorkflowControllerEditTest {
+class CircularNoticesControllerEditTest extends NetCommonsControllerTestCase {
 
 /**
  * Fixtures
@@ -30,6 +30,9 @@ class CircularNoticesControllerEditTest extends WorkflowControllerEditTest {
 		'plugin.circular_notices.circular_notice_frame_setting',
 		'plugin.circular_notices.circular_notice_setting',
 		'plugin.circular_notices.circular_notice_target_user',
+		'plugin.user_attributes.user_attribute_layout',
+		'plugin.frames.frame',
+		'plugin.blocks.block',
 	);
 
 /**
@@ -52,49 +55,56 @@ class CircularNoticesControllerEditTest extends WorkflowControllerEditTest {
  * @param string $role ロール
  * @return array
  */
-	private function __data($role = null) {
-		$frameId = '6';
-		$blockId = '2';
-		$blockKey = 'block_1';
-		if ($role === Role::ROOM_ROLE_KEY_GENERAL_USER) {
-			$contentId = '3';
-			$contentKey = 'content_key_2';
-		} else {
-			$contentId = '2';
-			$contentKey = 'content_key_1';
-		}
+	private function __getData($role = null) {
+		$frameId = '5';
+		$blockId = '1';
+		$contentKey = 'circular_notice_content_1';
 
 		$data = array(
-			'save_' . WorkflowComponent::STATUS_IN_DRAFT => null,
-			'Frame' => array(
-				'id' => $frameId,
-			),
-			'Block' => array(
-				'id' => $blockId,
-				'key' => $blockKey,
-				'language_id' => '2',
-				'room_id' => '1',
-				'plugin_key' => $this->plugin,
-			),
-
-			//TODO:必要のデータセットをここに書く
-			'' => array(
-				'id' => $contentId,
-				'key' => $contentKey,
-				'language_id' => '2',
-				'status' => null,
-			),
-
-			'WorkflowComment' => array(
-				'comment' => 'WorkflowComment save test',
-			),
+			'frame_id' => $frameId,
+			'block_id' => $blockId,
+			'key' => $contentKey,
 		);
+
+//		if ($role === Role::ROOM_ROLE_KEY_GENERAL_USER) {
+//			$contentId = '3';
+//			$contentKey = 'content_key_2';
+//		} else {
+//			$contentId = '2';
+//			$contentKey = 'content_key_1';
+//		}
+
+//		$data = array(
+//			'save_' . WorkflowComponent::STATUS_IN_DRAFT => null,
+//			'Frame' => array(
+//				'id' => $frameId,
+//			),
+//			'Block' => array(
+//				'id' => $blockId,
+//				'key' => $blockKey,
+//				'language_id' => '2',
+//				'room_id' => '1',
+//				'plugin_key' => $this->plugin,
+//			),
+//
+//			//TODO:必要のデータセットをここに書く
+//			'' => array(
+//				'id' => $contentId,
+//				'key' => $contentKey,
+//				'language_id' => '2',
+//				'status' => null,
+//			),
+//
+//			'WorkflowComment' => array(
+//				'comment' => 'WorkflowComment save test',
+//			),
+//		);
 
 		return $data;
 	}
 
 /**
- * editアクションのGETテスト(ログインなし)用DataProvider
+ * editアクションテスト
  *
  * ### 戻り値
  *  - urlOptions: URLオプション
@@ -104,22 +114,144 @@ class CircularNoticesControllerEditTest extends WorkflowControllerEditTest {
  *
  * @return array
  */
-	public function dataProviderEditGet() {
-		$data = $this->__data();
+	public function dataProviderEdit() {
+		$data = $this->__getData();
 
 		//テストデータ
 		$results = array();
-		// * ログインなし
 		$results[0] = array(
-			'urlOptions' => array(
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id'],
-				'key' => 'content_key_1'
-			),
-			'assert' => null, 'exception' => 'ForbiddenException'
+			'urlOptions' => Hash::insert($data, 'frame_id', ''),
+			'assert' => null,
+			'exception' => 'BadRequestException'
+		);
+		$results[1] = array(
+			'urlOptions' => Hash::insert($data, 'key', 'A'),
+			'assert' => null,
+			'exception' => 'BadRequestException'
+		);
+		$results[2] = array(
+			'urlOptions' => $data,
+			'assert' => array('method' => 'assertNotEmpty'),
+		);
+		$results[3] = array(
+			'urlOptions' => Hash::insert($data, 'key', 'circular_notice_content_4'),
+			'assert' => array('method' => 'assertNotEmpty'),
 		);
 
 		return $results;
+	}
+
+/**
+ * editアクションのテスト
+ *
+ * @param array $urlOptions URLオプション
+ * @param array $assert テストの期待値
+ * @param string|null $exception Exception
+ * @param string $return testActionの実行後の結果
+ * @dataProvider dataProviderEdit
+ * @return void
+ */
+	public function testEdit($urlOptions, $assert, $exception = null, $return = 'view') {
+		//ログイン
+		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_GENERAL_USER);
+
+		//テスト実施
+		$url = Hash::merge(array(
+			'plugin' => $this->plugin,
+			'controller' => $this->_controller,
+			'action' => 'edit',
+		), $urlOptions);
+		$this->_testGetAction($url, $assert, $exception, $return);
+
+		//ログアウト
+		TestAuthGeneral::logout($this);
+	}
+
+/**
+ * editアクションテスト
+ *
+ * ### 戻り値
+ *  - urlOptions: URLオプション
+ *  - assert: テストの期待値
+ *  - exception: Exception
+ *  - return: testActionの実行後の結果
+ *
+ * @return array
+ */
+	public function dataProviderEditPost() {
+		$data = $this->__getData();
+
+		//テストデータ
+		$results = array();
+		$results[0] = array(
+			'urlOptions' => $data,
+			'data' => array('save_0' => 1),
+			'assert' => null,
+			'exception' => 'BadRequestException'
+		);
+		$results[1] = array(
+			'urlOptions' => $data,
+			'data' => array(
+				'save_1' => 1,
+				'CircularNoticeContent'  => array(
+					'reply_type' => 1,
+					'is_room_targeted_flag' => '',
+					'target_groups' => '',
+					'publish_start' => '',
+					'publish_end' => '',
+					'reply_deadline_set_flag' => 0,
+					'reply_deadline' => ''
+				),
+				'CircularNoticeTargetUser' => array(
+					0 => array('user_id' => 1),
+				),
+			),
+			'assert' => array('method' => 'assertNotEmpty'),
+		);
+		$results[2] = array(
+			'urlOptions' => $data,
+			'data' => array(
+				'save_1' => 1,
+				'Block' => array('id' => $data['block_id']),
+				'Frame' => array('id' => $data['frame_id']),
+				'CircularNoticeContent'  => array(
+					'key' => $data['key'],
+					'reply_type' => '1',
+					'is_room_targeted_flag' => 1,
+					'target_groups' => array(1, 2),
+					'publish_start' => '2016-01-01',
+					'publish_end' => '2016-02-01',
+					'reply_deadline_set_flag' => 1,
+					'reply_deadline' => '2016-01-28'
+				),
+				'CircularNoticeTargetUser' => array(
+					0 => array('user_id' => 1),
+				),
+			),
+			'assert' => array('method' => 'assertNotEmpty'),
+		);
+
+		return $results;
+	}
+
+	/**
+	 * editアクションのPOSTテスト
+	 *
+	 * @param array $urlOptions URLオプション
+	 * @param array $data POSTデータ
+	 * @param array $assert テストの期待値
+	 * @param string|null $exception Exception
+	 * @param string $return testActionの実行後の結果
+	 * @dataProvider dataProviderEditPost
+	 * @return void
+	 */
+	public function testEditPost($urlOptions, $data, $assert, $exception = null, $return = 'view') {
+		//ログイン
+		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_GENERAL_USER);
+		//テスト実施
+		$this->_testPostAction('put', $data, Hash::merge(array('action' => 'edit'), $urlOptions), $exception, $return);
+		//ログイン
+		TestAuthGeneral::logout($this);
 	}
 
 /**
@@ -133,33 +265,33 @@ class CircularNoticesControllerEditTest extends WorkflowControllerEditTest {
  *
  * @return array
  */
-	public function dataProviderEditGetByCreatable() {
-		$data = $this->__data();
-
-		//テストデータ
-		// * 作成権限のみ
-		$results = array();
-		// ** 他人の記事
-		$results[0] = array(
-			'urlOptions' => array(
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id'],
-				'key' => 'content_key_1'
-			),
-			'assert' => null, 'exception' => 'BadRequestException'
-		);
-		// ** 自分の記事
-		$results[1] = array(
-			'urlOptions' => array(
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id'],
-				'key' => 'content_key_2'
-			),
-			'assert' => array('method' => 'assertNotEmpty'),
-		);
-
-		return $results;
-	}
+//	public function dataProviderEditGetByCreatable() {
+//		$data = $this->__getData();
+//
+//		//テストデータ
+//		// * 作成権限のみ
+//		$results = array();
+//		// ** 他人の記事
+//		$results[0] = array(
+//			'urlOptions' => array(
+//				'frame_id' => $data['Frame']['id'],
+//				'block_id' => $data['Block']['id'],
+//				'key' => 'content_key_1'
+//			),
+//			'assert' => null, 'exception' => 'BadRequestException'
+//		);
+//		// ** 自分の記事
+//		$results[1] = array(
+//			'urlOptions' => array(
+//				'frame_id' => $data['Frame']['id'],
+//				'block_id' => $data['Block']['id'],
+//				'key' => 'content_key_2'
+//			),
+//			'assert' => array('method' => 'assertNotEmpty'),
+//		);
+//
+//		return $results;
+//	}
 
 /**
  * editアクションのGETテスト(編集権限あり、公開権限なし)用DataProvider
@@ -172,36 +304,36 @@ class CircularNoticesControllerEditTest extends WorkflowControllerEditTest {
  *
  * @return array
  */
-	public function dataProviderEditGetByEditable() {
-		$data = $this->__data();
-
-		//テストデータ
-		// * 編集権限あり
-		$results = array();
-		// ** コンテンツあり
-		$base = 0;
-		$results[0] = array(
-			'urlOptions' => array(
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id'],
-				'key' => 'content_key_1'
-			),
-			'assert' => array('method' => 'assertNotEmpty'),
-		);
-
-		// ** コンテンツなし
-		$results[count($results)] = array(
-			'urlOptions' => array(
-				'frame_id' => '14',
-				'block_id' => null,
-				'key' => null
-			),
-			'assert' => array('method' => 'assertEquals', 'expected' => 'emptyRender'),
-			'exception' => null, 'return' => 'viewFile'
-		);
-
-		return $results;
-	}
+//	public function dataProviderEditGetByEditable() {
+//		$data = $this->__getData();
+//
+//		//テストデータ
+//		// * 編集権限あり
+//		$results = array();
+//		// ** コンテンツあり
+//		$base = 0;
+//		$results[0] = array(
+//			'urlOptions' => array(
+//				'frame_id' => $data['Frame']['id'],
+//				'block_id' => $data['Block']['id'],
+//				'key' => 'content_key_1'
+//			),
+//			'assert' => array('method' => 'assertNotEmpty'),
+//		);
+//
+//		// ** コンテンツなし
+//		$results[count($results)] = array(
+//			'urlOptions' => array(
+//				'frame_id' => '14',
+//				'block_id' => null,
+//				'key' => null
+//			),
+//			'assert' => array('method' => 'assertEquals', 'expected' => 'emptyRender'),
+//			'exception' => null, 'return' => 'viewFile'
+//		);
+//
+//		return $results;
+//	}
 
 /**
  * editアクションのGETテスト(公開権限あり)用DataProvider
@@ -214,23 +346,23 @@ class CircularNoticesControllerEditTest extends WorkflowControllerEditTest {
  *
  * @return array
  */
-	public function dataProviderEditGetByPublishable() {
-		$data = $this->__data();
-
-		//テストデータ
-		// * フレームID指定なしテスト
-		$results = array();
-		$results[0] = array(
-			'urlOptions' => array(
-				'frame_id' => null,
-				'block_id' => $data['Block']['id'],
-				'key' => 'content_key_1'
-			),
-			'assert' => array('method' => 'assertNotEmpty'),
-		);
-
-		return $results;
-	}
+//	public function dataProviderEditGetByPublishable() {
+//		$data = $this->__getData();
+//
+//		//テストデータ
+//		// * フレームID指定なしテスト
+//		$results = array();
+//		$results[0] = array(
+//			'urlOptions' => array(
+//				'frame_id' => null,
+//				'block_id' => $data['Block']['id'],
+//				'key' => 'content_key_1'
+//			),
+//			'assert' => array('method' => 'assertNotEmpty'),
+//		);
+//
+//		return $results;
+//	}
 
 /**
  * editアクションのPOSTテスト用DataProvider
@@ -244,73 +376,73 @@ class CircularNoticesControllerEditTest extends WorkflowControllerEditTest {
  *
  * @return array
  */
-	public function dataProviderEditPost() {
-		$data = $this->__data();
-
-		//テストデータ
-		$results = array();
-		// * ログインなし
-		$contentKey = 'content_key_1';
-		array_push($results, array(
-			'data' => $data,
-			'role' => null,
-			'urlOptions' => array(
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id'],
-				'key' => $contentKey,
-			),
-			'exception' => 'ForbiddenException'
-		));
-		// * 作成権限のみ
-		// ** 他人の記事
-		$contentKey = 'content_key_1';
-		array_push($results, array(
-			'data' => $data,
-			'role' => Role::ROOM_ROLE_KEY_GENERAL_USER,
-			'urlOptions' => array(
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id'],
-				'key' => $contentKey,
-			),
-			'exception' => 'BadRequestException'
-		));
-		// ** 自分の記事
-		$contentKey = 'content_key_2';
-		array_push($results, array(
-			'data' => $this->__data(Role::ROOM_ROLE_KEY_GENERAL_USER),
-			'role' => Role::ROOM_ROLE_KEY_GENERAL_USER,
-			'urlOptions' => array(
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id'],
-				'key' => $contentKey,
-			),
-		));
-		// * 編集権限あり
-		// ** コンテンツあり
-		$contentKey = 'content_key_1';
-		array_push($results, array(
-			'data' => $data,
-			'role' => Role::ROOM_ROLE_KEY_EDITOR,
-			'urlOptions' => array(
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id'],
-				'key' => $contentKey,
-			),
-		));
-		// ** フレームID指定なしテスト
-		$contentKey = 'content_key_1';
-		array_push($results, array(
-			'data' => $data,
-			'role' => Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
-			'urlOptions' => array(
-				'frame_id' => null,
-				'block_id' => $data['Block']['id'],
-				'key' => $contentKey,
-			),
-		));
-
-		return $results;
-	}
+//	public function dataProviderEditPost() {
+//		$data = $this->__getData();
+//
+//		//テストデータ
+//		$results = array();
+//		// * ログインなし
+//		$contentKey = 'content_key_1';
+//		array_push($results, array(
+//			'data' => $data,
+//			'role' => null,
+//			'urlOptions' => array(
+//				'frame_id' => $data['Frame']['id'],
+//				'block_id' => $data['Block']['id'],
+//				'key' => $contentKey,
+//			),
+//			'exception' => 'ForbiddenException'
+//		));
+//		// * 作成権限のみ
+//		// ** 他人の記事
+//		$contentKey = 'content_key_1';
+//		array_push($results, array(
+//			'data' => $data,
+//			'role' => Role::ROOM_ROLE_KEY_GENERAL_USER,
+//			'urlOptions' => array(
+//				'frame_id' => $data['Frame']['id'],
+//				'block_id' => $data['Block']['id'],
+//				'key' => $contentKey,
+//			),
+//			'exception' => 'BadRequestException'
+//		));
+//		// ** 自分の記事
+//		$contentKey = 'content_key_2';
+//		array_push($results, array(
+//			'data' => $this->__getData(Role::ROOM_ROLE_KEY_GENERAL_USER),
+//			'role' => Role::ROOM_ROLE_KEY_GENERAL_USER,
+//			'urlOptions' => array(
+//				'frame_id' => $data['Frame']['id'],
+//				'block_id' => $data['Block']['id'],
+//				'key' => $contentKey,
+//			),
+//		));
+//		// * 編集権限あり
+//		// ** コンテンツあり
+//		$contentKey = 'content_key_1';
+//		array_push($results, array(
+//			'data' => $data,
+//			'role' => Role::ROOM_ROLE_KEY_EDITOR,
+//			'urlOptions' => array(
+//				'frame_id' => $data['Frame']['id'],
+//				'block_id' => $data['Block']['id'],
+//				'key' => $contentKey,
+//			),
+//		));
+//		// ** フレームID指定なしテスト
+//		$contentKey = 'content_key_1';
+//		array_push($results, array(
+//			'data' => $data,
+//			'role' => Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
+//			'urlOptions' => array(
+//				'frame_id' => null,
+//				'block_id' => $data['Block']['id'],
+//				'key' => $contentKey,
+//			),
+//		));
+//
+//		return $results;
+//	}
 
 /**
  * editアクションのValidationErrorテスト用DataProvider
@@ -322,32 +454,32 @@ class CircularNoticesControllerEditTest extends WorkflowControllerEditTest {
  *
  * @return array
  */
-	public function dataProviderEditValidationError() {
-		$data = $this->__data();
-		$result = array(
-			'data' => $data,
-			'urlOptions' => array(
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id'],
-				'key' => 'content_key_1',
-			),
-			'validationError' => array(),
-		);
-
-		//テストデータ
-		$results = array();
-		array_push($results, Hash::merge($result, array(
-			'validationError' => array(
-				'field' => '', //TODO:フィールド指定(Hashのpath形式)
-				'value' => '',
-				'message' => '' //TODO:メッセージ追加
-			)
-		)));
-
-		//TODO:必要なテストデータ追加
-
-		return $results;
-	}
+//	public function dataProviderEditValidationError() {
+//		$data = $this->__getData();
+//		$result = array(
+//			'data' => $data,
+//			'urlOptions' => array(
+//				'frame_id' => $data['Frame']['id'],
+//				'block_id' => $data['Block']['id'],
+//				'key' => 'content_key_1',
+//			),
+//			'validationError' => array(),
+//		);
+//
+//		//テストデータ
+//		$results = array();
+//		array_push($results, Hash::merge($result, array(
+//			'validationError' => array(
+//				'field' => '', //TODO:フィールド指定(Hashのpath形式)
+//				'value' => '',
+//				'message' => '' //TODO:メッセージ追加
+//			)
+//		)));
+//
+//		//TODO:必要なテストデータ追加
+//
+//		return $results;
+//	}
 
 /**
  * Viewのアサーション
@@ -355,79 +487,79 @@ class CircularNoticesControllerEditTest extends WorkflowControllerEditTest {
  * @param array $data テストデータ
  * @return void
  */
-	private function __assertEditGet($data) {
-		//TODO:必要に応じてassert書く
-
-		$this->assertInput(
-			'input', 'data[Frame][id]', $data['Frame']['id'], $this->view
-		);
-		$this->assertInput(
-			'input', 'data[Block][id]', $data['Block']['id'], $this->view
-		);
-
-		//TODO:上記以外に必要なassert追加
-	}
+//	private function __assertEditGet($data) {
+//		//TODO:必要に応じてassert書く
+//
+//		$this->assertInput(
+//			'input', 'data[Frame][id]', $data['Frame']['id'], $this->view
+//		);
+//		$this->assertInput(
+//			'input', 'data[Block][id]', $data['Block']['id'], $this->view
+//		);
+//
+//		//TODO:上記以外に必要なassert追加
+//	}
 
 /**
  * view(ctp)ファイルのテスト(公開権限なし)
  *
  * @return void
  */
-	public function testViewFileByEditable() {
-		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_EDITOR);
-
-		//テスト実行
-		$data = $this->__data();
-		$this->_testGetAction(
-			array(
-				'action' => 'edit',
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id'],
-				'key' => 'content_key_1',
-			),
-			array('method' => 'assertNotEmpty')
-		);
-
-		//チェック
-		$this->__assertEditGet($data);
-		$this->assertInput('button', 'save_' . WorkflowComponent::STATUS_IN_DRAFT, null, $this->view);
-		$this->assertInput('button', 'save_' . WorkflowComponent::STATUS_APPROVED, null, $this->view);
-		$this->assertNotRegExp('/<input.*?name="_method" value="DELETE".*?>/', $this->view);
-
-		//TODO:上記以外に必要なassert追加
-
-		TestAuthGeneral::logout($this);
-	}
+//	public function testViewFileByEditable() {
+//		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_EDITOR);
+//
+//		//テスト実行
+//		$data = $this->__getData();
+//		$this->_testGetAction(
+//			array(
+//				'action' => 'edit',
+//				'frame_id' => $data['Frame']['id'],
+//				'block_id' => $data['Block']['id'],
+//				'key' => 'content_key_1',
+//			),
+//			array('method' => 'assertNotEmpty')
+//		);
+//
+//		//チェック
+//		$this->__assertEditGet($data);
+//		$this->assertInput('button', 'save_' . WorkflowComponent::STATUS_IN_DRAFT, null, $this->view);
+//		$this->assertInput('button', 'save_' . WorkflowComponent::STATUS_APPROVED, null, $this->view);
+/*		$this->assertNotRegExp('/<input.*?name="_method" value="DELETE".*?>/', $this->view);
+//
+//		//TODO:上記以外に必要なassert追加
+//
+//		TestAuthGeneral::logout($this);
+//	}
 
 /**
  * view(ctp)ファイルのテスト(公開権限あり)
  *
  * @return void
  */
-	public function testViewFileByPublishable() {
-		//ログイン
-		TestAuthGeneral::login($this);
-
-		//テスト実行
-		$data = $this->__data();
-		$urlOptions = array(
-			'action' => 'edit',
-			'block_id' => $data['Block']['id'],
-			'frame_id' => $data['Frame']['id'],
-			'key' => 'content_key_1',
-		);
-		$this->_testGetAction($urlOptions, array('method' => 'assertNotEmpty'));
-
-		//チェック
-		$this->__assertEditGet($data);
-		$this->assertInput('button', 'save_' . WorkflowComponent::STATUS_IN_DRAFT, null, $this->view);
-		$this->assertInput('button', 'save_' . WorkflowComponent::STATUS_PUBLISHED, null, $this->view);
-		$this->assertInput('input', '_method', 'DELETE', $this->view);
-
-		//TODO:上記以外に必要なassert追加
-
-		//ログアウト
-		TestAuthGeneral::logout($this);
-	}
+//	public function testViewFileByPublishable() {
+//		//ログイン
+//		TestAuthGeneral::login($this);
+//
+//		//テスト実行
+//		$data = $this->__getData();
+//		$urlOptions = array(
+//			'action' => 'edit',
+//			'block_id' => $data['Block']['id'],
+//			'frame_id' => $data['Frame']['id'],
+//			'key' => 'content_key_1',
+//		);
+//		$this->_testGetAction($urlOptions, array('method' => 'assertNotEmpty'));
+//
+//		//チェック
+//		$this->__assertEditGet($data);
+//		$this->assertInput('button', 'save_' . WorkflowComponent::STATUS_IN_DRAFT, null, $this->view);
+//		$this->assertInput('button', 'save_' . WorkflowComponent::STATUS_PUBLISHED, null, $this->view);
+//		$this->assertInput('input', '_method', 'DELETE', $this->view);
+//
+//		//TODO:上記以外に必要なassert追加
+//
+//		//ログアウト
+//		TestAuthGeneral::logout($this);
+//	}
 
 }

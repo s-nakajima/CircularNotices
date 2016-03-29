@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('WorkflowControllerIndexTest', 'Workflow.TestSuite');
+App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
 
 /**
  * CircularNoticesController::index()のテスト
@@ -17,7 +17,7 @@ App::uses('WorkflowControllerIndexTest', 'Workflow.TestSuite');
  * @author Masaki Goto <go8ogle@gmail.com>
  * @package NetCommons\CircularNotices\Test\Case\Controller\CircularNoticesController
  */
-class CircularNoticesControllerIndexTest extends WorkflowControllerIndexTest {
+class CircularNoticesControllerIndexTest extends NetCommonsControllerTestCase {
 
 /**
  * Fixtures
@@ -30,6 +30,9 @@ class CircularNoticesControllerIndexTest extends WorkflowControllerIndexTest {
 		'plugin.circular_notices.circular_notice_frame_setting',
 		'plugin.circular_notices.circular_notice_setting',
 		'plugin.circular_notices.circular_notice_target_user',
+		'plugin.user_attributes.user_attribute_layout',
+		'plugin.frames.frame',
+		'plugin.blocks.block',
 	);
 
 /**
@@ -51,16 +54,12 @@ class CircularNoticesControllerIndexTest extends WorkflowControllerIndexTest {
  *
  * @return array
  */
-	private function __data() {
+	private function __getData() {
 		$frameId = '6';
-		$blockId = '2';
-
 		$data = array(
 			'action' => 'index',
 			'frame_id' => $frameId,
-			'block_id' => $blockId,
 		);
-
 		return $data;
 	}
 
@@ -76,40 +75,39 @@ class CircularNoticesControllerIndexTest extends WorkflowControllerIndexTest {
  * @return array
  */
 	public function dataProviderIndex() {
-		$data = $this->__data();
-
+		$data = $this->__getData();
 		//テストデータ
 		$results = array();
-		$results[0] = array(
-			'urlOptions' => $data,
-			'assert' => array('method' => 'assertNotEmpty'),
+		$results[0]= array(
+			'urlOptions' => array(
+				'frame_id' => $data['frame_id']
+			),
+			'assert' => array('method' => 'assertEmpty')
 		);
-
-		//TODO:必要なテストデータ追加
-
 		return $results;
 	}
 
 /**
- * indexアクションのテスト
+ * indexアクションのテスト(ログインなし)
  *
- * @param array $urlOptions URLオプション
- * @param array $assert テストの期待値
- * @param string|null $exception Exception
- * @param string $return testActionの実行後の結果
+ * @param $urlOptions
+ * @param array $assert
+ * @param null $exception
+ * @param string $return
  * @dataProvider dataProviderIndex
- * @return void
  */
-	public function testIndex($urlOptions, $assert, $exception = null, $return = 'view') {
-		//テスト実行
-		parent::testIndex($urlOptions, $assert, $exception, $return);
-
-		//チェック
-		//TODO:view(ctp)ファイルに対するassert追加
+	public function testIndex($urlOptions, $assert, $exception=null, $return='view') {
+		//テスト実施
+		$url = Hash::merge(array(
+			'plugin' => $this->plugin,
+			'controller' => $this->_controller,
+			'action' => 'index',
+		), $urlOptions);
+		$this->_testGetAction($url, $assert, $exception, $return);
 	}
 
 /**
- * indexアクションのテスト(作成権限あり)用DataProvider
+ * indexアクションのテスト(ログインあり)用DataProvider
  *
  * ### 戻り値
  *  - urlOptions: URLオプション
@@ -119,59 +117,41 @@ class CircularNoticesControllerIndexTest extends WorkflowControllerIndexTest {
  *
  * @return array
  */
-	public function dataProviderIndexByCreatable() {
-		return array($this->dataProviderIndex()[0]);
+	public function dataProviderIndexLogin() {
+		$data = $this->__getData();
+		//テストデータ
+		$results = array();
+		$results[0]= array(
+			'urlOptions' => array(
+				'frame_id' => $data['frame_id']
+			),
+			'assert' => array('method' => 'assertNotEmpty'),
+		);
+		return $results;
 	}
 
 /**
- * indexアクションのテスト(作成権限のみ)
+ * indexアクションのテスト(ログインあり)
  *
- * @param array $urlOptions URLオプション
- * @param array $assert テストの期待値
- * @param string|null $exception Exception
- * @param string $return testActionの実行後の結果
- * @dataProvider dataProviderIndexByCreatable
- * @return void
+ * @param $urlOptions
+ * @param array $assert
+ * @param null $exception
+ * @param string $return
+ * @dataProvider dataProviderIndexLogin
  */
-	public function testIndexByCreatable($urlOptions, $assert, $exception = null, $return = 'view') {
-		//テスト実行
-		parent::testIndexByCreatable($urlOptions, $assert, $exception, $return);
+	public function testIndexLogin($urlOptions, $assert, $exception=null, $return='view') {
+		//ログイン
+		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_GENERAL_USER);
 
-		//チェック
-		//TODO:view(ctp)ファイルに対するassert追加
+		//テスト実施
+		$url = Hash::merge(array(
+			'plugin' => $this->plugin,
+			'controller' => $this->_controller,
+			'action' => 'index',
+		), $urlOptions);
+		$this->_testGetAction($url, $assert, $exception, $return);
+
+		//ログアウト
+		TestAuthGeneral::logout($this);
 	}
-
-/**
- * indexアクションのテスト(編集権限あり)用DataProvider
- *
- * ### 戻り値
- *  - urlOptions: URLオプション
- *  - assert: テストの期待値
- *  - exception: Exception
- *  - return: testActionの実行後の結果
- *
- * @return array
- */
-	public function dataProviderIndexByEditable() {
-		return array($this->dataProviderIndex()[0]);
-	}
-
-/**
- * indexアクションのテスト(編集権限あり)
- *
- * @param array $urlOptions URLオプション
- * @param array $assert テストの期待値
- * @param string|null $exception Exception
- * @param string $return testActionの実行後の結果
- * @dataProvider dataProviderIndexByEditable
- * @return void
- */
-	public function testIndexByEditable($urlOptions, $assert, $exception = null, $return = 'view') {
-		//テスト実行
-		parent::testIndexByEditable($urlOptions, $assert, $exception, $return);
-
-		//チェック
-		//TODO:view(ctp)ファイルに対するassert追加
-	}
-
 }
