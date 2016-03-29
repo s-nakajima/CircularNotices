@@ -66,40 +66,6 @@ class CircularNoticesControllerEditTest extends NetCommonsControllerTestCase {
 			'key' => $contentKey,
 		);
 
-//		if ($role === Role::ROOM_ROLE_KEY_GENERAL_USER) {
-//			$contentId = '3';
-//			$contentKey = 'content_key_2';
-//		} else {
-//			$contentId = '2';
-//			$contentKey = 'content_key_1';
-//		}
-
-//		$data = array(
-//			'save_' . WorkflowComponent::STATUS_IN_DRAFT => null,
-//			'Frame' => array(
-//				'id' => $frameId,
-//			),
-//			'Block' => array(
-//				'id' => $blockId,
-//				'key' => $blockKey,
-//				'language_id' => '2',
-//				'room_id' => '1',
-//				'plugin_key' => $this->plugin,
-//			),
-//
-//			//TODO:必要のデータセットをここに書く
-//			'' => array(
-//				'id' => $contentId,
-//				'key' => $contentKey,
-//				'language_id' => '2',
-//				'status' => null,
-//			),
-//
-//			'WorkflowComment' => array(
-//				'comment' => 'WorkflowComment save test',
-//			),
-//		);
-
 		return $data;
 	}
 
@@ -153,7 +119,7 @@ class CircularNoticesControllerEditTest extends NetCommonsControllerTestCase {
  */
 	public function testEdit($urlOptions, $assert, $exception = null, $return = 'view') {
 		//ログイン
-		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_GENERAL_USER);
+		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
 
 		//テスト実施
 		$url = Hash::merge(array(
@@ -185,14 +151,16 @@ class CircularNoticesControllerEditTest extends NetCommonsControllerTestCase {
 		$results = array();
 		$results[0] = array(
 			'urlOptions' => $data,
-			'data' => array('save_0' => 1),
+			'data' => array('save_0' => ''),
 			'assert' => null,
 			'exception' => 'BadRequestException'
 		);
 		$results[1] = array(
 			'urlOptions' => $data,
 			'data' => array(
-				'save_1' => 1,
+				'save_1' => '',
+				'Frame' => array('id' => $data['frame_id']),
+				'Block' => array('id' => $data['block_id']),
 				'CircularNoticeContent'  => array(
 					'reply_type' => 1,
 					'is_room_targeted_flag' => '',
@@ -211,18 +179,46 @@ class CircularNoticesControllerEditTest extends NetCommonsControllerTestCase {
 		$results[2] = array(
 			'urlOptions' => $data,
 			'data' => array(
-				'save_1' => 1,
-				'Block' => array('id' => $data['block_id']),
+				'save_1' => '',
 				'Frame' => array('id' => $data['frame_id']),
+				'Block' => array('id' => $data['block_id']),
 				'CircularNoticeContent'  => array(
-					'key' => $data['key'],
+					'id' => 1,
+					'circular_notice_setting_key' => 'circular_notice_setting_1',
+					'subject' => 'Lorem ipsum dolor sit amet',
+					'content' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
 					'reply_type' => '1',
 					'is_room_targeted_flag' => 1,
 					'target_groups' => array(1, 2),
-					'publish_start' => '2016-01-01',
-					'publish_end' => '2016-02-01',
-					'reply_deadline_set_flag' => 1,
-					'reply_deadline' => '2016-01-28'
+					'publish_start' => '2016-01-01 00:00',
+					'publish_end' => '2016-12-01 00:00',
+					'reply_deadline_set_flag' => '1',
+					'reply_deadline' => '2016-06-28 00:00'
+				),
+				'CircularNoticeTargetUser' => array(
+					0 => array('user_id' => 1),
+				),
+			),
+			'assert' => array('method' => 'assertNotEmpty'),
+		);
+		$results[3] = array(
+			'urlOptions' => $data,
+			'data' => array(
+				'save_1' => '',
+				'Frame' => array('id' => $data['frame_id']),
+				'Block' => array('id' => $data['block_id']),
+				'CircularNoticeContent'  => array(
+					'id' => 1,
+					'circular_notice_setting_key' => 'circular_notice_setting_1',
+					'subject' => 'Lorem ipsum dolor sit amet',
+					'content' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
+					'reply_type' => '1',
+					'is_room_targeted_flag' => 1,
+					'target_groups' => array(1, 2),
+					'publish_start' => '2016-01-01 00:00',
+					'publish_end' => '2016-12-01 00:00',
+					'reply_deadline_set_flag' => '1',
+					'reply_deadline' => '2016-06-28 00:00'
 				),
 				'CircularNoticeTargetUser' => array(
 					0 => array('user_id' => 1),
@@ -234,332 +230,23 @@ class CircularNoticesControllerEditTest extends NetCommonsControllerTestCase {
 		return $results;
 	}
 
-	/**
-	 * editアクションのPOSTテスト
-	 *
-	 * @param array $urlOptions URLオプション
-	 * @param array $data POSTデータ
-	 * @param array $assert テストの期待値
-	 * @param string|null $exception Exception
-	 * @param string $return testActionの実行後の結果
-	 * @dataProvider dataProviderEditPost
-	 * @return void
-	 */
+/**
+ * editアクションのPOSTテスト
+ *
+ * @param array $urlOptions URLオプション
+ * @param array $data POSTデータ
+ * @param array $assert テストの期待値
+ * @param string|null $exception Exception
+ * @param string $return testActionの実行後の結果
+ * @dataProvider dataProviderEditPost
+ * @return void
+ */
 	public function testEditPost($urlOptions, $data, $assert, $exception = null, $return = 'view') {
 		//ログイン
-		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_GENERAL_USER);
+		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
 		//テスト実施
 		$this->_testPostAction('put', $data, Hash::merge(array('action' => 'edit'), $urlOptions), $exception, $return);
 		//ログイン
 		TestAuthGeneral::logout($this);
 	}
-
-/**
- * editアクションのGETテスト(作成権限のみ)用DataProvider
- *
- * ### 戻り値
- *  - urlOptions: URLオプション
- *  - assert: テストの期待値
- *  - exception: Exception
- *  - return: testActionの実行後の結果
- *
- * @return array
- */
-//	public function dataProviderEditGetByCreatable() {
-//		$data = $this->__getData();
-//
-//		//テストデータ
-//		// * 作成権限のみ
-//		$results = array();
-//		// ** 他人の記事
-//		$results[0] = array(
-//			'urlOptions' => array(
-//				'frame_id' => $data['Frame']['id'],
-//				'block_id' => $data['Block']['id'],
-//				'key' => 'content_key_1'
-//			),
-//			'assert' => null, 'exception' => 'BadRequestException'
-//		);
-//		// ** 自分の記事
-//		$results[1] = array(
-//			'urlOptions' => array(
-//				'frame_id' => $data['Frame']['id'],
-//				'block_id' => $data['Block']['id'],
-//				'key' => 'content_key_2'
-//			),
-//			'assert' => array('method' => 'assertNotEmpty'),
-//		);
-//
-//		return $results;
-//	}
-
-/**
- * editアクションのGETテスト(編集権限あり、公開権限なし)用DataProvider
- *
- * ### 戻り値
- *  - urlOptions: URLオプション
- *  - assert: テストの期待値
- *  - exception: Exception
- *  - return: testActionの実行後の結果
- *
- * @return array
- */
-//	public function dataProviderEditGetByEditable() {
-//		$data = $this->__getData();
-//
-//		//テストデータ
-//		// * 編集権限あり
-//		$results = array();
-//		// ** コンテンツあり
-//		$base = 0;
-//		$results[0] = array(
-//			'urlOptions' => array(
-//				'frame_id' => $data['Frame']['id'],
-//				'block_id' => $data['Block']['id'],
-//				'key' => 'content_key_1'
-//			),
-//			'assert' => array('method' => 'assertNotEmpty'),
-//		);
-//
-//		// ** コンテンツなし
-//		$results[count($results)] = array(
-//			'urlOptions' => array(
-//				'frame_id' => '14',
-//				'block_id' => null,
-//				'key' => null
-//			),
-//			'assert' => array('method' => 'assertEquals', 'expected' => 'emptyRender'),
-//			'exception' => null, 'return' => 'viewFile'
-//		);
-//
-//		return $results;
-//	}
-
-/**
- * editアクションのGETテスト(公開権限あり)用DataProvider
- *
- * ### 戻り値
- *  - urlOptions: URLオプション
- *  - assert: テストの期待値
- *  - exception: Exception
- *  - return: testActionの実行後の結果
- *
- * @return array
- */
-//	public function dataProviderEditGetByPublishable() {
-//		$data = $this->__getData();
-//
-//		//テストデータ
-//		// * フレームID指定なしテスト
-//		$results = array();
-//		$results[0] = array(
-//			'urlOptions' => array(
-//				'frame_id' => null,
-//				'block_id' => $data['Block']['id'],
-//				'key' => 'content_key_1'
-//			),
-//			'assert' => array('method' => 'assertNotEmpty'),
-//		);
-//
-//		return $results;
-//	}
-
-/**
- * editアクションのPOSTテスト用DataProvider
- *
- * ### 戻り値
- *  - data: 登録データ
- *  - role: ロール
- *  - urlOptions: URLオプション
- *  - exception: Exception
- *  - return: testActionの実行後の結果
- *
- * @return array
- */
-//	public function dataProviderEditPost() {
-//		$data = $this->__getData();
-//
-//		//テストデータ
-//		$results = array();
-//		// * ログインなし
-//		$contentKey = 'content_key_1';
-//		array_push($results, array(
-//			'data' => $data,
-//			'role' => null,
-//			'urlOptions' => array(
-//				'frame_id' => $data['Frame']['id'],
-//				'block_id' => $data['Block']['id'],
-//				'key' => $contentKey,
-//			),
-//			'exception' => 'ForbiddenException'
-//		));
-//		// * 作成権限のみ
-//		// ** 他人の記事
-//		$contentKey = 'content_key_1';
-//		array_push($results, array(
-//			'data' => $data,
-//			'role' => Role::ROOM_ROLE_KEY_GENERAL_USER,
-//			'urlOptions' => array(
-//				'frame_id' => $data['Frame']['id'],
-//				'block_id' => $data['Block']['id'],
-//				'key' => $contentKey,
-//			),
-//			'exception' => 'BadRequestException'
-//		));
-//		// ** 自分の記事
-//		$contentKey = 'content_key_2';
-//		array_push($results, array(
-//			'data' => $this->__getData(Role::ROOM_ROLE_KEY_GENERAL_USER),
-//			'role' => Role::ROOM_ROLE_KEY_GENERAL_USER,
-//			'urlOptions' => array(
-//				'frame_id' => $data['Frame']['id'],
-//				'block_id' => $data['Block']['id'],
-//				'key' => $contentKey,
-//			),
-//		));
-//		// * 編集権限あり
-//		// ** コンテンツあり
-//		$contentKey = 'content_key_1';
-//		array_push($results, array(
-//			'data' => $data,
-//			'role' => Role::ROOM_ROLE_KEY_EDITOR,
-//			'urlOptions' => array(
-//				'frame_id' => $data['Frame']['id'],
-//				'block_id' => $data['Block']['id'],
-//				'key' => $contentKey,
-//			),
-//		));
-//		// ** フレームID指定なしテスト
-//		$contentKey = 'content_key_1';
-//		array_push($results, array(
-//			'data' => $data,
-//			'role' => Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
-//			'urlOptions' => array(
-//				'frame_id' => null,
-//				'block_id' => $data['Block']['id'],
-//				'key' => $contentKey,
-//			),
-//		));
-//
-//		return $results;
-//	}
-
-/**
- * editアクションのValidationErrorテスト用DataProvider
- *
- * ### 戻り値
- *  - data: 登録データ
- *  - urlOptions: URLオプション
- *  - validationError: バリデーションエラー
- *
- * @return array
- */
-//	public function dataProviderEditValidationError() {
-//		$data = $this->__getData();
-//		$result = array(
-//			'data' => $data,
-//			'urlOptions' => array(
-//				'frame_id' => $data['Frame']['id'],
-//				'block_id' => $data['Block']['id'],
-//				'key' => 'content_key_1',
-//			),
-//			'validationError' => array(),
-//		);
-//
-//		//テストデータ
-//		$results = array();
-//		array_push($results, Hash::merge($result, array(
-//			'validationError' => array(
-//				'field' => '', //TODO:フィールド指定(Hashのpath形式)
-//				'value' => '',
-//				'message' => '' //TODO:メッセージ追加
-//			)
-//		)));
-//
-//		//TODO:必要なテストデータ追加
-//
-//		return $results;
-//	}
-
-/**
- * Viewのアサーション
- *
- * @param array $data テストデータ
- * @return void
- */
-//	private function __assertEditGet($data) {
-//		//TODO:必要に応じてassert書く
-//
-//		$this->assertInput(
-//			'input', 'data[Frame][id]', $data['Frame']['id'], $this->view
-//		);
-//		$this->assertInput(
-//			'input', 'data[Block][id]', $data['Block']['id'], $this->view
-//		);
-//
-//		//TODO:上記以外に必要なassert追加
-//	}
-
-/**
- * view(ctp)ファイルのテスト(公開権限なし)
- *
- * @return void
- */
-//	public function testViewFileByEditable() {
-//		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_EDITOR);
-//
-//		//テスト実行
-//		$data = $this->__getData();
-//		$this->_testGetAction(
-//			array(
-//				'action' => 'edit',
-//				'frame_id' => $data['Frame']['id'],
-//				'block_id' => $data['Block']['id'],
-//				'key' => 'content_key_1',
-//			),
-//			array('method' => 'assertNotEmpty')
-//		);
-//
-//		//チェック
-//		$this->__assertEditGet($data);
-//		$this->assertInput('button', 'save_' . WorkflowComponent::STATUS_IN_DRAFT, null, $this->view);
-//		$this->assertInput('button', 'save_' . WorkflowComponent::STATUS_APPROVED, null, $this->view);
-/*		$this->assertNotRegExp('/<input.*?name="_method" value="DELETE".*?>/', $this->view);
-//
-//		//TODO:上記以外に必要なassert追加
-//
-//		TestAuthGeneral::logout($this);
-//	}
-
-/**
- * view(ctp)ファイルのテスト(公開権限あり)
- *
- * @return void
- */
-//	public function testViewFileByPublishable() {
-//		//ログイン
-//		TestAuthGeneral::login($this);
-//
-//		//テスト実行
-//		$data = $this->__getData();
-//		$urlOptions = array(
-//			'action' => 'edit',
-//			'block_id' => $data['Block']['id'],
-//			'frame_id' => $data['Frame']['id'],
-//			'key' => 'content_key_1',
-//		);
-//		$this->_testGetAction($urlOptions, array('method' => 'assertNotEmpty'));
-//
-//		//チェック
-//		$this->__assertEditGet($data);
-//		$this->assertInput('button', 'save_' . WorkflowComponent::STATUS_IN_DRAFT, null, $this->view);
-//		$this->assertInput('button', 'save_' . WorkflowComponent::STATUS_PUBLISHED, null, $this->view);
-//		$this->assertInput('input', '_method', 'DELETE', $this->view);
-//
-//		//TODO:上記以外に必要なassert追加
-//
-//		//ログアウト
-//		TestAuthGeneral::logout($this);
-//	}
-
 }
