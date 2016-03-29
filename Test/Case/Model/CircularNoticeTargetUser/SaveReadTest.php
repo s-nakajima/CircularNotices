@@ -13,7 +13,6 @@ App::uses('NetCommonsSaveTest', 'NetCommons.TestSuite');
 App::uses('CircularNoticesAppModel', 'CircularNotices.Model');
 App::uses('CircularNoticeTargetUserFixture', 'CircularNotices.Test/Fixture');
 App::uses('CircularNoticeContentFixture', 'CircularNotices.Test/Fixture');
-App::uses('CircularNoticeTargetUserFixture', 'CircularNotices.Test/Fixture');
 
 /**
  * CircularNoticeTargetUser::saveRead()のテスト
@@ -65,8 +64,6 @@ class CircularNoticeTargetUserSaveReadTest extends NetCommonsSaveTest
      */
     public function setUp() {
         parent::setUp();
-        $this->CircularNoticeContent = ClassRegistry::init('CircularNotices.CircularNoticeContent');
-        $this->TargetUser = ClassRegistry::init('CircularNotices.CircularNoticeTargetUser');
     }
 
     /**
@@ -121,8 +118,6 @@ class CircularNoticeTargetUserSaveReadTest extends NetCommonsSaveTest
      */
     public function dataProviderSaveOnExceptionError()
     {
-//        debug($this->dataProviderSave());
-//        $data = $this->dataProviderSave()[0][0];
         $data['CircularNoticeTargetUser'] = (new CircularNoticeTargetUserFixture())->records[0];
         $data['CircularNoticeContent'] = (new CircularNoticeContentFixture())->records[0];
         //TODO:テストパタンを書く
@@ -171,61 +166,8 @@ class CircularNoticeTargetUserSaveReadTest extends NetCommonsSaveTest
     {
         $model = $this->_modelName;
         $methodName = $this->_methodName;
-//        $this->setExpectedException('InternalErrorException');
-
-        $this->TargetUser->save(
-            array('id' => '4',
-                'user_id' => 4,
-                'circular_notice_content_id' => 7,
-                'read_flag' => 0,
-                'read_datetime' => '2015-03-09 09:25:24',
-                'reply_flag' => 1,
-                'reply_datetime' => '2015-03-09 09:25:24',
-                'reply_text_value' => 'Lorem ipsum dolor sit amet',
-                'reply_selection_value' => 'Lorem ipsum dolor sit amet',
-                'created_user' => 1,
-                'created' => '2015-03-09 09:25:24',
-                'modified_user' => 1,
-                'modified' => '2015-03-09 09:25:24'
-            )
-        );
-        $this->CircularNoticeContent->save(
-            array(
-                'id' => '7',
-                'key' => 'frame_4',
-                'circular_notice_setting_key' => 'frame_4',
-                'subject' => true,
-                'content' => 'frame_4',
-                'reply_type' => '1',
-                'is_room_targeted_flag' => true,
-                'target_groups' => 'frame_4',
-                'publish_start' => '2015-03-31 09:25:20',
-                'publish_end' => '2017-04-01 23:59:59',
-                'reply_deadline_set_flag' => 1,
-                'reply_deadline' => '2017-04-01 23:25:20',
-                'status' => '1',
-                'is_auto_translated' => true,
-                'translation_engine' => 'frame_4',
-                'created_user' => '1',
-                'created' => '2015-03-09 09:25:20',
-                'modified_user' => '1',
-                'modified' => '2015-03-09 09:25:20',
-                'current_status' => '7'
-            )
-        );
-
         $contentId = 7;
-        $userId = 4;
-
-        // 例外モック
-//        $circularNoticeSettingMock = $this->getMockForModel('CircularNotices.' . $model, ['saveCircularNoticeTargetUser']);
-//        $circularNoticeSettingMock->expects($this->any())
-//            ->method('saveCircularNoticeTargetUser')
-//            ->will($this->returnValue(false));
-//        $result = $circularNoticeSettingMock->$methodName($contentId,$userId);
-
-
-
+        $userId = 5;
 
         //テスト実施
         $result = $this->$model->$methodName($contentId, $userId);
@@ -241,52 +183,12 @@ class CircularNoticeTargetUserSaveReadTest extends NetCommonsSaveTest
     public function testSaveReadExceptionError()
     {
         $this->setExpectedException('InternalErrorException');
-        $this->TargetUser->save(
-            array('id' => '4',
-					'user_id' => 4,
-					'circular_notice_content_id' => 7,
-					'read_flag' => 0,
-					'read_datetime' => '2015-03-09 09:25:24',
-					'reply_flag' => 1,
-					'reply_datetime' => '2015-03-09 09:25:24',
-					'reply_text_value' => 'Lorem ipsum dolor sit amet',
-					'reply_selection_value' => 'Lorem ipsum dolor sit amet',
-					'created_user' => 1,
-					'created' => '2015-03-09 09:25:24',
-					'modified_user' => 1,
-					'modified' => '2015-03-09 09:25:24'
-                )
-        );
-        $this->CircularNoticeContent->save(
-            array(
-                'id' => '7',
-                'key' => 'frame_4',
-                'circular_notice_setting_key' => 'frame_4',
-                'subject' => true,
-                'content' => 'frame_4',
-                'reply_type' => '1',
-                'is_room_targeted_flag' => true,
-                'target_groups' => 'frame_4',
-                'publish_start' => '2015-03-31 09:25:20',
-                'publish_end' => '2017-04-01 23:59:59',
-                'reply_deadline_set_flag' => 1,
-                'reply_deadline' => '2017-04-01 23:25:20',
-                'status' => '1',
-                'is_auto_translated' => true,
-                'translation_engine' => 'frame_4',
-                'created_user' => '1',
-                'created' => '2015-03-09 09:25:20',
-                'modified_user' => '1',
-                'modified' => '2015-03-09 09:25:20',
-                'current_status' => '7'
-                )
-        );
 
         $model = $this->_modelName;
         $methodName = $this->_methodName;
 
         $contentId = 7;
-        $userId = 4;
+        $userId = 5;
 
         // 例外モック
         $circularNoticeSettingMock = $this->getMockForModel('CircularNotices.' . $model, ['saveCircularNoticeTargetUser']);
@@ -310,49 +212,8 @@ class CircularNoticeTargetUserSaveReadTest extends NetCommonsSaveTest
         $methodName = $this->_methodName;
         $this->setExpectedException('InternalErrorException');
 
-        $this->TargetUser->save(
-            array('id' => '5',
-                'user_id' => 5,
-                'circular_notice_content_id' => 8,
-                'read_flag' => 0,
-                'read_datetime' => '2015-03-09 09:25:24',
-                'reply_flag' => 1,
-                'reply_datetime' => '2015-03-09 09:25:24',
-                'reply_text_value' => 'Lorem ipsum dolor sit amet',
-                'reply_selection_value' => 'Lorem ipsum dolor sit amet',
-                'created_user' => 1,
-                'created' => '2015-03-09 09:25:24',
-                'modified_user' => 1,
-                'modified' => '2015-03-09 09:25:24'
-            )
-        );
-        $this->CircularNoticeContent->save(
-            array(
-                'id' => '8',
-                'key' => 'frame_4',
-                'circular_notice_setting_key' => 'frame_4',
-                'subject' => true,
-                'content' => 'frame_4',
-                'reply_type' => '1',
-                'is_room_targeted_flag' => true,
-                'target_groups' => 'frame_4',
-                'publish_start' => '2016-03-10 09:25:20',
-                'publish_end' => '2017-04-01 23:59:59',
-                'reply_deadline_set_flag' => 1,
-                'reply_deadline' => '2016-03-24 23:25:20',
-                'status' => '1',
-                'is_auto_translated' => true,
-                'translation_engine' => 'frame_4',
-                'created_user' => '1',
-                'created' => '2015-03-09 09:25:20',
-                'modified_user' => '1',
-                'modified' => '2015-03-09 09:25:20',
-                'current_status' => '6'
-            )
-        );
-
         $contentId = 8;
-        $userId = 5;
+        $userId = 6;
 
         // 例外モック
         $circularNoticeSettingMock = $this->getMockForModel('CircularNotices.' . $model, ['saveCircularNoticeTargetUser']);
@@ -360,10 +221,6 @@ class CircularNoticeTargetUserSaveReadTest extends NetCommonsSaveTest
             ->method('saveCircularNoticeTargetUser')
             ->will($this->returnValue(false));
         $result = $circularNoticeSettingMock->$methodName($contentId,$userId);
-
-
-
-
 
         //チェック
         //TODO:Assertを書く

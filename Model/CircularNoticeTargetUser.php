@@ -156,7 +156,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 
 		// 閲覧済件数を取得するため条件を追加
 		$conditions += array(
-			'CircularNoticeTargetUser.read_flag' => true,
+			'CircularNoticeTargetUser.read_flag' => true
 		);
 
 		// 閲覧済件数を取得
@@ -166,7 +166,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 
 		// 回答済件数を取得するため条件を追加
 		$conditions += array(
-			'CircularNoticeTargetUser.reply_flag' => true,
+			'CircularNoticeTargetUser.reply_flag' => true
 		);
 
 		// 回答済件数を取得

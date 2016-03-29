@@ -69,6 +69,9 @@ class CircularNoticeSettingSetCircularNoticeSettingTest extends NetCommonsModelT
         parent::setUp();
         $this->Frame = ClassRegistry::init('Frames.Frame');
         $this->Block = ClassRegistry::init('Blocks.Block');
+        
+        
+        
     }
 
     /**
@@ -83,32 +86,6 @@ class CircularNoticeSettingSetCircularNoticeSettingTest extends NetCommonsModelT
         parent::tearDown();
     }
 
-//    /**
-//     * setCircularNoticeSetting()のテスト
-//     *
-//     * @return void
-//     */
-//    public function testSetCircularNoticeSetting()
-//    {
-//        $model = $this->_modelName;
-//        $methodName = $this->_methodName;
-//
-////        //データ生成
-////        $frameId = 6;
-////
-////        //テスト実施
-////        $result = $this->$model->$methodName($frameId);
-//
-////        //データ生成
-////        $frameId = 6;
-////
-////        //テスト実施
-////        $result = $this->$model->$methodName($frameId);
-//
-//        //チェック
-//        //TODO:Assertを書く
-//    }
-
     /**
      * フレーム取得 例外テスト
      *
@@ -118,7 +95,6 @@ class CircularNoticeSettingSetCircularNoticeSettingTest extends NetCommonsModelT
     {
         $model = $this->_modelName;
         $methodName = $this->_methodName;
-//        $this->setExpectedException('InternalErrorException');
 
         $frameId = 15;
 
@@ -210,7 +186,7 @@ class CircularNoticeSettingSetCircularNoticeSettingTest extends NetCommonsModelT
                 'language_id' => '2',
                 'room_id' => '1',
                 'plugin_key' => 'circular_notices',
-                'key' => '',
+                'key' => 'false_key',
                 'name' => 'Block name 5',
                 'public_type' => '2',
                 'publish_start' => null,
@@ -232,37 +208,17 @@ class CircularNoticeSettingSetCircularNoticeSettingTest extends NetCommonsModelT
     }
 
     /**
-     * フレーム保存処理 例外テスト
-     *
-     * @return void
-     */
-    public function testFrameSaveException()
+ * フレーム保存処理 例外テスト
+ *
+ * @return void
+ */
+    public function testFrameSave()
     {
         $model = $this->_modelName;
         $methodName = $this->_methodName;
         $this->setExpectedException('InternalErrorException');
 
         // 例外データ作成
-        $this->Frame->save(
-            array(
-//                'id' => '20',
-//                'language_id' => '2',
-//                'room_id' => '15',
-//                'box_id' => 2,
-//                'plugin_key' => 'circular_notices',
-//                'block_id' => null,
-//                'key' => 'frame_19',
-//                'name' => 'Test frame main',
-//                'header_type' => 'default',
-//                'weight' => '1',
-//                'is_deleted' => false,
-//                'default_action' => '',
-//                'created_user' => null,
-//                'created' => null,
-//                'modified_user' => null,
-//                'modified' => null
-            )
-        );
         $this->Block->save(
             array(
                 'id' => '34',
@@ -284,10 +240,51 @@ class CircularNoticeSettingSetCircularNoticeSettingTest extends NetCommonsModelT
         $frameId = 20;
 
         $circularNoticeSettingMock = $this->getMockForModel('CircularNotices.' . $model, ['save']);
-//        $circularNoticeSettingMock = $this->getMockForModel('Frames.' . 'Frame', ['save']);
         $circularNoticeSettingMock->expects($this->any())
             ->method('save')
             ->will($this->returnValue(false));
         $result = $circularNoticeSettingMock->$methodName($frameId);
+    }
+
+    /**
+     * SaveのExceptionErrorテスト
+     *
+     * @param array $data 登録データ
+     * @param string $mockModel Mockのモデル
+     * @param string $mockMethod Mockのメソッド
+     * @return void
+     */
+    public function testFrameSaveOnExceptionError()
+    {
+        $model = $this->_modelName;
+        $methodName = $this->_methodName;
+
+        // 例外データ作成
+        $this->Frame->save(
+            array(
+                'id' => '20',
+                'language_id' => '2',
+                'room_id' => '5',
+                'box_id' => 2,
+                'plugin_key' => 'circular_notices',
+                'block_id' => null,
+                'key' => 'frame_19',
+                'name' => 'Test frame main',
+                'header_type' => 'default',
+                'weight' => '1',
+                'is_deleted' => false,
+                'default_action' => '',
+                'created_user' => null,
+                'created' => null,
+                'modified_user' => null,
+                'modified' => null
+            )
+        );
+
+        $frameId = 20;
+        $this->_mockForReturnFalse($model, 'Frames.Frame', 'save');
+        $this->setExpectedException('InternalErrorException');
+        
+        $this->$model->$methodName($frameId);
     }
 }

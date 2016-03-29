@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('WorkflowControllerViewTest', 'Workflow.TestSuite');
+App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
 
 /**
  * CircularNoticesController::view()のテスト
@@ -17,7 +17,7 @@ App::uses('WorkflowControllerViewTest', 'Workflow.TestSuite');
  * @author Masaki Goto <go8ogle@gmail.com>
  * @package NetCommons\CircularNotices\Test\Case\Controller\CircularNoticesController
  */
-class CircularNoticesControllerViewTest extends WorkflowControllerViewTest {
+class CircularNoticesControllerViewTest extends NetCommonsControllerTestCase {
 
 /**
  * Fixtures
@@ -30,6 +30,9 @@ class CircularNoticesControllerViewTest extends WorkflowControllerViewTest {
 		'plugin.circular_notices.circular_notice_frame_setting',
 		'plugin.circular_notices.circular_notice_setting',
 		'plugin.circular_notices.circular_notice_target_user',
+		'plugin.user_attributes.user_attribute_layout',
+		'plugin.frames.frame',
+		'plugin.blocks.block',
 	);
 
 /**
@@ -51,84 +54,18 @@ class CircularNoticesControllerViewTest extends WorkflowControllerViewTest {
  *
  * @return array
  */
-	private function __data() {
-		$frameId = '6';
-		$blockId = '2';
-		$contentKey = 'content_key_1';
+	private function __getData() {
+		$frameId = '5';
+		$blockId = '1';
+		$contentKey = 'circular_notice_content_1';
 
 		$data = array(
-			'action' => 'view',
 			'frame_id' => $frameId,
 			'block_id' => $blockId,
 			'key' => $contentKey,
 		);
 
 		return $data;
-	}
-
-/**
- * viewアクションのテスト用DataProvider
- *
- * ### 戻り値
- *  - urlOptions: URLオプション
- *  - assert: テストの期待値
- *  - exception: Exception
- *  - return: testActionの実行後の結果
- *
- * @return array
- */
-	public function dataProviderView() {
-		$data = $this->__data();
-
-		//テストデータ
-		$results = array();
-		$results[0] = array(
-			'urlOptions' => Hash::insert($data, 'key', 'content_key_1'),
-			'assert' => array('method' => 'assertNotEmpty'),
-		);
-		$results[1] = array(
-			'urlOptions' => Hash::insert($data, 'key', 'content_key_2'),
-			'assert' => null, 'exception' => 'BadRequestException'
-		);
-		$results[2] = array(
-			'urlOptions' => Hash::insert($data, 'key', 'content_key_3'),
-			'assert' => array('method' => 'assertNotEmpty'),
-		);
-		$results[3] = array(
-			'urlOptions' => Hash::insert($data, 'key', 'content_key_4'),
-			'assert' => array('method' => 'assertNotEmpty'),
-		);
-		$results[4] = array(
-			'urlOptions' => Hash::insert($data, 'key', 'content_key_5'),
-			'assert' => null, 'exception' => 'BadRequestException'
-		);
-		$results[5] = array(
-			'urlOptions' => Hash::insert($data, 'key', 'content_key_999'),
-			'assert' => null, 'exception' => 'BadRequestException'
-		);
-
-		return $results;
-	}
-
-/**
- * viewアクションのテスト
- *
- * @param array $urlOptions URLオプション
- * @param array $assert テストの期待値
- * @param string|null $exception Exception
- * @param string $return testActionの実行後の結果
- * @dataProvider dataProviderView
- * @return void
- */
-	public function testView($urlOptions, $assert, $exception = null, $return = 'view') {
-		//テスト実行
-		parent::testView($urlOptions, $assert, $exception, $return);
-		if ($exception) {
-			return;
-		}
-
-		//チェック
-		$this->__assertView($urlOptions['key'], false);
 	}
 
 /**
@@ -142,34 +79,25 @@ class CircularNoticesControllerViewTest extends WorkflowControllerViewTest {
  *
  * @return array
  */
-	public function dataProviderViewByCreatable() {
-		$data = $this->__data();
+	public function dataProviderView() {
+		$data = $this->__getData();
 
 		//テストデータ
 		$results = array();
+
 		$results[0] = array(
-			'urlOptions' => Hash::insert($data, 'key', 'content_key_1'),
-			'assert' => array('method' => 'assertNotEmpty'),
+			'urlOptions' => Hash::insert($data, 'frame_id', ''),
+			'assert' => null,
+			'exception' => 'BadRequestException'
 		);
 		$results[1] = array(
-			'urlOptions' => Hash::insert($data, 'key', 'content_key_2'),
-			'assert' => array('method' => 'assertNotEmpty'),
+			'urlOptions' => Hash::insert($data, 'key', 'a'),
+			'assert' => null,
+			'exception' => 'BadRequestException'
 		);
 		$results[2] = array(
-			'urlOptions' => Hash::insert($data, 'key', 'content_key_3'),
+			'urlOptions' => $data,
 			'assert' => array('method' => 'assertNotEmpty'),
-		);
-		$results[3] = array(
-			'urlOptions' => Hash::insert($data, 'key', 'content_key_4'),
-			'assert' => array('method' => 'assertNotEmpty'),
-		);
-		$results[4] = array(
-			'urlOptions' => Hash::insert($data, 'key', 'content_key_5'),
-			'assert' => null, 'exception' => 'BadRequestException'
-		);
-		$results[5] = array(
-			'urlOptions' => Hash::insert($data, 'key', 'content_key_999'),
-			'assert' => null, 'exception' => 'BadRequestException'
 		);
 
 		return $results;
@@ -182,33 +110,28 @@ class CircularNoticesControllerViewTest extends WorkflowControllerViewTest {
  * @param array $assert テストの期待値
  * @param string|null $exception Exception
  * @param string $return testActionの実行後の結果
- * @dataProvider dataProviderViewByCreatable
+ * @dataProvider dataProviderView
  * @return void
  */
-	public function testViewByCreatable($urlOptions, $assert, $exception = null, $return = 'view') {
-		//テスト実行
-		parent::testViewByCreatable($urlOptions, $assert, $exception, $return);
-		if ($exception) {
-			return;
-		}
+	public function testView($urlOptions, $assert, $exception = null, $return = 'view') {
+		//ログイン
+		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_GENERAL_USER);
 
-		//チェック
-		if ($urlOptions['key'] === 'content_key_1') {
-			$this->__assertView($urlOptions['key'], false);
+		//テスト実施
+		$url = Hash::merge(array(
+			'plugin' => $this->plugin,
+			'controller' => $this->_controller,
+			'action' => 'view',
+		), $urlOptions);
+		$this->_testGetAction($url, $assert, $exception, $return);
 
-		} elseif ($urlOptions['key'] === 'content_key_3') {
-			$this->__assertView($urlOptions['key'], true);
-
-		} elseif ($urlOptions['key'] === 'content_key_4') {
-			$this->__assertView($urlOptions['key'], false);
-
-		} else {
-			$this->__assertView($urlOptions['key'], false);
-		}
+		//ログアウト
+		TestAuthGeneral::logout($this);
 	}
 
+
 /**
- * viewアクションのテスト用DataProvider
+ * view回答アクションのテスト用DataProvider
  *
  * ### 戻り値
  *  - urlOptions: URLオプション
@@ -218,106 +141,87 @@ class CircularNoticesControllerViewTest extends WorkflowControllerViewTest {
  *
  * @return array
  */
-	public function dataProviderViewByEditable() {
-		$data = $this->__data();
+	public function dataProviderViewPost() {
+		$data = $this->__getData();
 
 		//テストデータ
 		$results = array();
+
 		$results[0] = array(
-			'urlOptions' => Hash::insert($data, 'key', 'content_key_1'),
+			'urlOptions' => Hash::insert($data, 'key', 'circular_notice_content_1'),
+			'data' => array(
+				'CircularNoticeContent' => array(
+					'key' => 'circular_notice_content_1',
+				),
+				'CircularNoticeTargetUser' => array(
+					'id' => 1,
+					'reply_text_value' => '',
+				),
+			),
 			'assert' => array('method' => 'assertNotEmpty'),
 		);
 		$results[1] = array(
-			'urlOptions' => Hash::insert($data, 'key', 'content_key_2'),
+			'urlOptions' => Hash::insert($data, 'key', 'circular_notice_content_1'),
+			'data' => array(
+				'CircularNoticeContent' => array(
+					'key' => 'circular_notice_content_1',
+				),
+				'CircularNoticeTargetUser' => array(
+					'id' => 1,
+					'reply_text_value' => 'Lorem ipsum dolor sit amet',
+				),
+			),
 			'assert' => array('method' => 'assertNotEmpty'),
 		);
 		$results[2] = array(
-			'urlOptions' => Hash::insert($data, 'key', 'content_key_3'),
+			'urlOptions' => Hash::insert($data, 'key', 'circular_notice_content_2'),
+			'data' => array(
+				'CircularNoticeContent' => array(
+					'key' => 'circular_notice_content_2',
+				),
+				'CircularNoticeTargetUser' => array(
+					'id' => 2,
+					'reply_selection_value' => 'Lorem ipsum dolor sit amet',
+				),
+			),
 			'assert' => array('method' => 'assertNotEmpty'),
 		);
 		$results[3] = array(
-			'urlOptions' => Hash::insert($data, 'key', 'content_key_4'),
+			'urlOptions' => Hash::insert($data, 'key', 'circular_notice_content_3'),
+			'data' => array(
+				'CircularNoticeContent' => array(
+					'key' => 'circular_notice_content_3',
+				),
+				'CircularNoticeTargetUser' => array(
+					'id' => 3,
+					'reply_selection_value' => array(
+						'Lorem ipsum dolor sit amet',
+						'Convallis morbi fringilla gravida'
+					),
+				),
+			),
 			'assert' => array('method' => 'assertNotEmpty'),
 		);
-		$results[4] = array(
-			'urlOptions' => Hash::insert($data, 'key', 'content_key_5'),
-			'assert' => array('method' => 'assertNotEmpty'),
-		);
-		$results[5] = array(
-			'urlOptions' => Hash::insert($data, 'key', 'content_key_999'),
-			'assert' => null, 'exception' => 'BadRequestException'
-		);
-
 		return $results;
 	}
 
 /**
- * viewアクションのテスト(編集権限あり)
+ * editアクションのPOSTテスト
  *
  * @param array $urlOptions URLオプション
+ * @param array $data POSTデータ
  * @param array $assert テストの期待値
  * @param string|null $exception Exception
  * @param string $return testActionの実行後の結果
- * @dataProvider dataProviderViewByEditable
+ * @dataProvider dataProviderViewPost
  * @return void
  */
-	public function testViewByEditable($urlOptions, $assert, $exception = null, $return = 'view') {
-		//テスト実行
-		parent::testViewByEditable($urlOptions, $assert, $exception, $return);
-		if ($exception) {
-			return;
-		}
-
-		//チェック
-		$this->__assertView($urlOptions['key'], true);
+	public function testViewPost($urlOptions, $data, $assert, $exception = null, $return = 'view') {
+		//ログイン
+		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_GENERAL_USER);
+		//テスト実施
+		$this->_testPostAction('put', $data, Hash::merge(array('action' => 'view'), $urlOptions), $exception, $return);
+		//ログイン
+		TestAuthGeneral::logout($this);
 	}
-
-/**
- * view()のassert
- *
- * @param string $contentKey コンテンツキー
- * @param bool $isLatest 最終コンテンツかどうか
- * @return void
- * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
- */
-	private function __assertView($contentKey, $isLatest = false) {
-		//TODO:view(ctp)ファイルに対するassert追加
-
-		if ($contentKey === 'content_key_1') {
-			if ($isLatest) {
-				//TODO: コンテンツのデータ(id=2, key=content_key_1)に対する期待値
-				$this->assertTextContains('Title 2', $this->view);
-			} else {
-				//TODO: コンテンツのデータ(id=1, key=content_key_1)に対する期待値
-				$this->assertTextContains('Title 1', $this->view);
-			}
-
-		} elseif ($contentKey === 'content_key_2') {
-			//TODO: コンテンツのデータ(id=3, key=content_key_2)に対する期待値
-			$this->assertTextContains('Title 3', $this->view);
-
-		} elseif ($contentKey === 'content_key_3') {
-			if ($isLatest) {
-				//TODO: コンテンツのデータ(id=5, key=content_key_3)に対する期待値
-				$this->assertTextContains('', $this->view);
-			} else {
-				//TODO: コンテンツのデータ(id=4, key=content_key_3)に対する期待値
-				$this->assertTextContains('', $this->view);
-			}
-
-		} elseif ($contentKey === 'content_key_4') {
-			if ($isLatest) {
-				//TODO: コンテンツのデータ(id=7, key=content_key_4)に対する期待値
-				$this->assertTextContains('', $this->view);
-			} else {
-				//TODO: コンテンツのデータ(id=6, key=content_key_4)に対する期待値
-				$this->assertTextContains('', $this->view);
-			}
-
-		} elseif ($contentKey === 'content_key_5') {
-			//TODO: コンテンツのデータ(id=8, key=content_key_5)に対する期待値
-			$this->assertTextContains('', $this->view);
-		}
-	}
-
 }
