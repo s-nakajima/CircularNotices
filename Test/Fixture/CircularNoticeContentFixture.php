@@ -221,7 +221,7 @@ class CircularNoticeContentFixture extends CakeTestFixture
             'public_type' => 1,
             'subject' => true,
             'content' => 'frame_4',
-            'reply_type' => 1,
+            'reply_type' => 3,
             'is_room_targeted_flag' => true,
             'target_groups' => 'frame_4',
             'publish_start' => '2016-03-10 09:25:20',

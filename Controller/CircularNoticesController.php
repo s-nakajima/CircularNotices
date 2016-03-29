@@ -378,22 +378,22 @@ class CircularNoticesController extends CircularNoticesAppController {
 		App::uses('CsvFileWriter', 'Files.Utility');
 		App::uses('ZipDownloader', 'Files.Utility');
 
-		$userId = Current::read('User.id');
-		$contentKey = $this->params['pass'][1];
-		$this->initCircularNotice();
-
-		// 回覧を取得
-		$content = $this->CircularNoticeContent->getCircularNoticeContent($contentKey, $userId);
-		if (! $content) {
-			$this->throwBadRequest();
-		}
-		$contentId = $content['CircularNoticeContent']['id'];
-
-		// Paginator経由で回答先一覧を取得
-		$this->Paginator->settings = $this->CircularNoticeTargetUser->getCircularNoticeTargetUsersForPaginator($contentId, $this->params['named'], $userId, 0);
-		$targetUsers = $this->Paginator->paginate('CircularNoticeTargetUser');
-
 		try {
+			$userId = Current::read('User.id');
+			$contentKey = $this->params['pass'][1];
+			$this->initCircularNotice();
+
+			// 回覧を取得
+			$content = $this->CircularNoticeContent->getCircularNoticeContent($contentKey, $userId);
+			if (! $content) {
+				$this->throwBadRequest();
+			}
+			$contentId = $content['CircularNoticeContent']['id'];
+
+			// Paginator経由で回答先一覧を取得
+			$this->Paginator->settings = $this->CircularNoticeTargetUser->getCircularNoticeTargetUsersForPaginator($contentId, $this->params['named'], $userId, 0);
+			$targetUsers = $this->Paginator->paginate('CircularNoticeTargetUser');
+
 			$tmpFolder = new TemporaryFolder();
 			$csvFile = new CsvFileWriter(array(
 				'folder' => $tmpFolder->path
