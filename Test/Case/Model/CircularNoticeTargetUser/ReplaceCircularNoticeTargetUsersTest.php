@@ -205,25 +205,6 @@ class CircularNoticeTargetUserReplaceCircularNoticeTargetUsersTest extends NetCo
         // $contentIdの値設定
         $data['CircularNoticeContent']['id'] = 1;
         
-//        $this->$model->$methodName($data);
-        
-
-        // 例外を発生させるためのモック
-        $circularNoticeChoicesMock = $this->getMockForModel('CircularNotices.' . $model, ['find']);
-        $circularNoticeChoicesMock->expects($this->any())
-            ->method('find')
-            ->will($this->returnValue(array(
-                'CircularNoticeTargetUser' => array(
-                    'user_id' => '1',
-                    'read_flag' => true,
-                    'read_datetime' => '2015-03-09 09:25:24',
-                    'reply_flag' => true,
-                    'reply_datetime' => '2015-03-09 09:25:24',
-                    'reply_text_value' => 'Lorem ipsum dolor sit amet',
-                    'reply_selection_value' => 'form_1|form_2|form_3||'
-                )
-            )));
-
-        $circularNoticeChoicesMock->$methodName($data);
+        $result = $this->$model->$methodName($data);
     }
 }
