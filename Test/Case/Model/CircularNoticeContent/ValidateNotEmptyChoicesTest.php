@@ -61,12 +61,14 @@ class CircularNoticeContentValidateNotEmptyChoicesTest extends NetCommonsModelTe
 	public function testValidateNotEmptyChoices() {
 		$model = $this->_modelName;
 		$methodName = $this->_methodName;
+		// 仮入用の引数作成
+		$check = 'fields';
 
 		//データ生成
 		$this->$model->data['CircularNoticeContent']['reply_type'] = 1;
 		
 		//テスト実施
-		$result = $this->$model->$methodName();
+		$result = $this->$model->$methodName($check);
 		//チェック
 		$this->assertTrue($result);
 
@@ -75,7 +77,7 @@ class CircularNoticeContentValidateNotEmptyChoicesTest extends NetCommonsModelTe
 		$this->$model->data['CircularNoticeChoices'] = true;
 		
 		//テスト実施
-		$result = $this->$model->$methodName();
+		$result = $this->$model->$methodName($check);
 		//チェック
 		$this->assertTrue($result);
 	}
@@ -88,12 +90,14 @@ class CircularNoticeContentValidateNotEmptyChoicesTest extends NetCommonsModelTe
 	public function testValidateNotEmptyChoicesFalse() {
 		$model = $this->_modelName;
 		$methodName = $this->_methodName;
+		// 仮入用の引数作成
+		$check = 'fields';
 
 		//データ生成
 		$this->$model->data['CircularNoticeContent']['reply_type'] = 2;
 
 		//テスト実施
-		$result = $this->$model->$methodName();
+		$result = $this->$model->$methodName($check);
 		//チェック
 		$this->assertFalse($result);
 
@@ -102,7 +106,7 @@ class CircularNoticeContentValidateNotEmptyChoicesTest extends NetCommonsModelTe
 		$this->$model->data['CircularNoticeChoices'] = null;
 
 		//テスト実施
-		$result = $this->$model->$methodName();
+		$result = $this->$model->$methodName($check);
 		//チェック
 		$this->assertFalse($result);
 	}

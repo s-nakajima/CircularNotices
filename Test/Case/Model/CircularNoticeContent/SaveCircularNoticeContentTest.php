@@ -57,6 +57,12 @@ class CircularNoticeContentSaveCircularNoticeContentTest extends NetCommonsSaveT
  */
 	protected $_methodName = 'saveCircularNoticeContent';
 
+	public function setUp() {
+		parent::setUp();
+		Current::$current['Room']['id'] = '1';
+	}
+
+
 /**
  * Save用DataProvider
  *
@@ -129,6 +135,34 @@ class CircularNoticeContentSaveCircularNoticeContentTest extends NetCommonsSaveT
 	}
 	
 	/**
+// * SaveのValidationError用DataProvider
+ *
+// * ### 戻り値
+// *  - data 登録データ
+// *  - mockModel Mockのモデル
+// *  - mockMethod Mockのメソッド(省略可：デフォルト validates)
+ *
+// * @return array テストデータ
+ * @return void
+ */
+	public function testSaveCircularNoticeContent() {
+		$model = $this->_modelName;
+		$methodName = $this->_methodName;
+
+		$data['CircularNoticeContent'] = (new CircularNoticeContentFixture())->records[0];
+		$data['CircularNoticeTargetUser'] = (new CircularNoticeTargetUserFixture())->records;
+		$data['CircularNoticeChoices'] =  (new CircularNoticeChoiceFixture())->records[0];
+
+		//テスト実施
+		$result = $this->$model->$methodName($data);
+
+		//TODO:テストパタンを書く
+//		return array(
+//			array($data, 'CircularNotices.CircularNoticeContent'),
+//		);
+	}
+
+	/**
 	// * SaveのValidationError用DataProvider
 	 *
 	// * ### 戻り値
@@ -139,7 +173,7 @@ class CircularNoticeContentSaveCircularNoticeContentTest extends NetCommonsSaveT
 	// * @return array テストデータ
 	 * @return void
 	 */
-	public function testSaveCircularNoticeContent() {
+	public function testCircularNoticeChoiceValidateCircularChoices() {
 		$model = $this->_modelName;
 		$methodName = $this->_methodName;
 
@@ -147,6 +181,7 @@ class CircularNoticeContentSaveCircularNoticeContentTest extends NetCommonsSaveT
 		$data['CircularNoticeTargetUser'] = (new CircularNoticeTargetUserFixture())->records;
 		$data['CircularNoticeChoices'] =  (new CircularNoticeChoiceFixture())->records[0];
 
+		$this->_mockForReturnFalse($model, 'CircularNotices.CircularNoticeChoices', 'validateCircularChoices');
 		//テスト実施
 		$result = $this->$model->$methodName($data);
 
@@ -170,21 +205,44 @@ class CircularNoticeContentSaveCircularNoticeContentTest extends NetCommonsSaveT
 	public function testSaveCircularNoticeContentException() {
 		$model = $this->_modelName;
 		$methodName = $this->_methodName;
-//		$this->setExpectedException('InternalErrorException');
+		$this->setExpectedException('InternalErrorException');
 
-		$data['CircularNoticeContent'] = (new CircularNoticeContentFixture())->records;
+		$data['CircularNoticeContent'] = (new CircularNoticeContentFixture())->records[0];
 		$data['CircularNoticeTargetUser'] = (new CircularNoticeTargetUserFixture())->records;
-		$data['CircularNoticeChoices'] =  (new CircularNoticeChoiceFixture())->records;
+		$data['CircularNoticeChoices'] =  (new CircularNoticeChoiceFixture())->records[0];
 
 
+		// 例外を発生させるためのモック
+		$circularCircularNoticeContentMock = $this->getMockForModel('CircularNotices.' . $model, ['save']);
+		$circularCircularNoticeContentMock->expects($this->any())
+				->method('save')
+				->will($this->returnValue(false));
 
+		//テスト実施
+		$result = $circularCircularNoticeContentMock->$methodName($data);
 
-//			$content = $this->createAll(array(
-//					'Block' => array(
-//							'room_id' => 5,
-//					),
-//			));
-//			$content = Hash::merge($content, $this->CircularNoticeContent->create());
+		//TODO:テストパタンを書く
+	}
+
+	/**
+	// * Saveの例外テスト
+	 *
+	// * ### 戻り値
+	// *  - data 登録データ
+	// *  - mockModel Mockのモデル
+	// *  - mockMethod Mockのメソッド(省略可：デフォルト validates)
+	 *
+	// * @return array テストデータ
+	 * @return void
+	 */
+	public function testSaveChoiceAndTargetUsersFalse() {
+		
+		$model = $this->_modelName;
+		$methodName = $this->_methodName;
+
+		$data['CircularNoticeContent'] = (new CircularNoticeContentFixture())->records[0];
+		$data['CircularNoticeTargetUser'] = (new CircularNoticeTargetUserFixture())->records;
+		$data['CircularNoticeChoices'] =  (new CircularNoticeChoiceFixture())->records[0];
 
 
 		// 例外を発生させるためのモック
@@ -193,17 +251,9 @@ class CircularNoticeContentSaveCircularNoticeContentTest extends NetCommonsSaveT
 				->method('__saveChoiceAndTargetUsers')
 				->will($this->returnValue(false));
 
-//		$circularCircularNoticeContentMock->create(array(
-//				'Block' => array(
-//						'room_id' => 5,
-//				),
-//		));
 		//テスト実施
 		$result = $circularCircularNoticeContentMock->$methodName($data);
 
 		//TODO:テストパタンを書く
-//		return array(
-//			array($data, 'CircularNotices.CircularNoticeContent'),
-//		);
 	}
 }

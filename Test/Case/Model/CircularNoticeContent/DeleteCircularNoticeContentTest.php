@@ -10,7 +10,6 @@
  */
 
 App::uses('NetCommonsDeleteTest', 'NetCommons.TestSuite');
-App::uses('CircularNoticeContentFixture', 'CircularNotices.Test/Fixture');
 App::uses('CircularNoticesAppModel', 'CircularNotices.Model');
 App::uses('CircularNoticeTargetUserFixture', 'CircularNotices.Test/Fixture');
 App::uses('CircularNoticeContentFixture', 'CircularNotices.Test/Fixture');
@@ -66,8 +65,6 @@ class CircularNoticeContentDeleteCircularNoticeContentTest extends NetCommonsDel
  */
 public function setUp() {
 	parent::setUp();
-	$this->CircularNoticeContent = ClassRegistry::init('CircularNotices.CircularNoticeContent');
-	$this->TargetUser = ClassRegistry::init('CircularNotices.CircularNoticeTargetUser');
 }
 
 /**
@@ -119,83 +116,61 @@ public function tearDown() {
 		$this->setExpectedException('InternalErrorException');
 
 		$data = $this->dataProviderDelete()[0][0];
-//		$data['CircularNoticeContent'] = (new CircularNoticeContentFixture())->records[0];
-		$key = 1;
-		$model = $this->_modelName;
-		$methodName = $this->_methodName;
-		//テスト実施
-//		$result = $this->$model->$methodName($key);
-		     
-		
 		return array(
 			array($data[0]['key'], 'CircularNotices.CircularNoticeContent', 'deleteAll'),
 		);
 	}
-	
+
+	/**
+	// * ExceptionError
+	 *
+	 * @return void
+	 */
+	public function testCircularNoticeTargetUserDeleteExceptionError() {
+
+		$key = 'frame_4';
+		$model = $this->_modelName;
+		$methodName = $this->_methodName;
+		$this->setExpectedException('InternalErrorException');
+
+		$this->_mockForReturnFalse($model, 'CircularNoticeTargetUser', 'deleteAll');
+		$this->$model->$methodName($key);
+	}
+
+	/**
+	// * ExceptionError
+	 *
+	 * @return void
+	 */
+	public function testCircularNoticeChoiceDeleteExceptionError() {
+
+		$key = 'frame_4';
+		$model = $this->_modelName;
+		$methodName = $this->_methodName;
+		$this->setExpectedException('InternalErrorException');
+
+		$this->_mockForReturnFalse($model, 'CircularNoticeChoice', 'deleteAll');
+		$this->$model->$methodName($key);
+	}
 	
 	/**
 // * ExceptionError
  *
  * @return void
  */
-	public function testCircularNoticeContentDelete() {
-		$this->TargetUser->save(
-				array('id' => '4',
-						'user_id' => 4,
-						'circular_notice_content_id' => 7,
-						'read_flag' => 0,
-						'read_datetime' => '2015-03-09 09:25:24',
-						'reply_flag' => 1,
-						'reply_datetime' => '2015-03-09 09:25:24',
-						'reply_text_value' => 'Lorem ipsum dolor sit amet',
-						'reply_selection_value' => 'Lorem ipsum dolor sit amet',
-						'created_user' => 1,
-						'created' => '2015-03-09 09:25:24',
-						'modified_user' => 1,
-						'modified' => '2015-03-09 09:25:24'
-				)
-		);
-		$this->CircularNoticeContent->save(
-				array(
-						'id' => '7',
-						'key' => 'frame_4',
-						'circular_notice_setting_key' => 'frame_4',
-						'subject' => true,
-						'content' => 'frame_4',
-						'reply_type' => '1',
-						'is_room_targeted_flag' => true,
-						'target_groups' => 'frame_4',
-						'publish_start' => '2015-03-31 09:25:20',
-						'publish_end' => '2017-04-01 23:59:59',
-						'reply_deadline_set_flag' => 1,
-						'reply_deadline' => '2017-04-01 23:25:20',
-						'status' => '1',
-						'is_auto_translated' => true,
-						'translation_engine' => 'frame_4',
-						'created_user' => '1',
-						'created' => '2015-03-09 09:25:20',
-						'modified_user' => '1',
-						'modified' => '2015-03-09 09:25:20',
-						'current_status' => '7'
-				)
-		);
+	public function testCircularNoticeContentDeleteExceptionError() {
 		
-		$result = $this->CircularNoticeContent->find('all');
-		
-		
-
-//		$data['CircularNoticeContent'] = $this->dataProviderDelete()[0][0];
-		$key = 'frame_4';
-//		$this->setExpectedException('InternalErrorException');
+		$key = 'frame_5';
 		$model = $this->_modelName;
 		$methodName = $this->_methodName;
-		$result = $this->$model->$methodName($key);
+		$this->setExpectedException('InternalErrorException');
+
+		$circularNoticeChoicesMock = $this->getMockForModel('CircularNotices.'.$model, ['delete']);
+		$circularNoticeChoicesMock->expects($this->any())
+				->method('delete')
+				->will($this->returnValue(false));
+		$circularNoticeChoicesMock->$methodName($key);
 		
-//		$circularNoticeSettingMock = $this->getMockForModel('CircularNotices.' . $model, ['find']);
-//		$circularNoticeSettingMock->expects($this->any())
-//				->method('find')
-//				->will($this->returnValue(1));
-//		$result = $circularNoticeSettingMock->$methodName('frame_1');
 	}
 
 }

@@ -16,6 +16,7 @@
 App::uses('CircularNoticesAppModel', 'CircularNotices.Model');
 App::uses('CircularNoticeComponent', 'CircularNotices.Controller/Component');
 App::uses('MailQueueBehavior', 'Mails.Model/Behavior');
+App::uses('WorkflowComponent', 'Workflow.Controller/Component');
 
 /**
  * CircularNoticeContent Model
