@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('WorkflowControllerDeleteTest', 'Workflow.TestSuite');
+App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
 
 /**
  * CircularNoticesController::delete()のテスト
@@ -17,7 +17,7 @@ App::uses('WorkflowControllerDeleteTest', 'Workflow.TestSuite');
  * @author Masaki Goto <go8ogle@gmail.com>
  * @package NetCommons\CircularNotices\Test\Case\Controller\CircularNoticesController
  */
-class CircularNoticesControllerDeleteTest extends WorkflowControllerDeleteTest {
+class CircularNoticesControllerDeleteTest extends NetCommonsControllerTestCase {
 
 /**
  * Fixtures
@@ -30,6 +30,9 @@ class CircularNoticesControllerDeleteTest extends WorkflowControllerDeleteTest {
 		'plugin.circular_notices.circular_notice_frame_setting',
 		'plugin.circular_notices.circular_notice_setting',
 		'plugin.circular_notices.circular_notice_target_user',
+		'plugin.user_attributes.user_attribute_layout',
+		'plugin.frames.frame',
+		'plugin.blocks.block',
 	);
 
 /**
@@ -49,43 +52,25 @@ class CircularNoticesControllerDeleteTest extends WorkflowControllerDeleteTest {
 /**
  * テストDataの取得
  *
- * @param string $contentKey キー
+ * @param string $role ロール
  * @return array
  */
-	private function __data($contentKey = null) {
-		$frameId = '6';
-		$blockId = '2';
-		$blockKey = 'block_1';
-		if ($contentKey === 'content_key_2') {
-			$contentId = '3';
-		} elseif ($contentKey === 'content_key_4') {
-			$contentId = '5';
-		} else {
-			$contentId = '2';
-		}
+	private function __getData($role = null) {
+		$frameId = '5';
+		$blockId = '1';
+		$contentKey = 'circular_notice_content_1';
 
 		$data = array(
-			'delete' => null,
-			'Frame' => array(
-				'id' => $frameId,
-			),
-			'Block' => array(
-				'id' => $blockId,
-				'key' => $blockKey,
-			),
-
-			//TODO:必要のデータセットをここに書く
-			'' => array(
-				'id' => $contentId,
-				'key' => $contentKey,
-			),
+			'frame_id' => $frameId,
+			'block_id' => $blockId,
+			'key' => $contentKey,
 		);
 
 		return $data;
 	}
 
 /**
- * deleteアクションのGETテスト用DataProvider
+ * deleteアクションのテスト用DataProvider
  *
  * ### 戻り値
  *  - role: ロール
@@ -96,183 +81,91 @@ class CircularNoticesControllerDeleteTest extends WorkflowControllerDeleteTest {
  *
  * @return array
  */
-	public function dataProviderDeleteGet() {
-		$data = $this->__data();
+	public function dataProviderDelete() {
+		$data = $this->__getData();
 
 		//テストデータ
 		$results = array();
-		// * ログインなし
-		$results[0] = array('role' => null,
-			'urlOptions' => array(
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id'],
-				'key' => 'content_key_1',
-			),
-			'assert' => null, 'exception' => 'ForbiddenException'
+		$results[0] = array(
+			'urlOptions' => Hash::insert($data, 'frame_id', 6),
+			'assert' => null,
+			'exception' => 'BadRequestException'
 		);
-		// * 作成権限のみ(自分自身)
-		array_push($results, Hash::merge($results[0], array(
-			'role' => Role::ROOM_ROLE_KEY_GENERAL_USER,
-			'urlOptions' => array(
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id'],
-				'key' => 'content_key_2',
-			),
-			'assert' => null, 'exception' => 'BadRequestException'
-		)));
-		// * 編集権限、公開権限なし
-		array_push($results, Hash::merge($results[0], array(
-			'role' => Role::ROOM_ROLE_KEY_EDITOR,
-			'assert' => null, 'exception' => 'BadRequestException'
-		)));
-		// * 公開権限あり
-		array_push($results, Hash::merge($results[0], array(
-			'role' => Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
-			'assert' => null, 'exception' => 'BadRequestException'
-		)));
 
 		return $results;
 	}
 
 /**
- * deleteアクションのPOSTテスト用DataProvider
+ * deleteアクションのテスト
+ *
+ * @param array $urlOptions URLオプション
+ * @param array $assert テストの期待値
+ * @param string|null $exception Exception
+ * @param string $return testActionの実行後の結果
+ * @dataProvider dataProviderDelete
+ * @return void
+ */
+	public function testDelete($urlOptions, $assert, $exception = null, $return = 'view') {
+		//ログイン
+		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
+
+		//テスト実施
+		$url = Hash::merge(array(
+			'plugin' => $this->plugin,
+			'controller' => $this->_controller,
+			'action' => 'delete',
+		), $urlOptions);
+		$this->_testGetAction($url, $assert, $exception, $return);
+
+		//ログアウト
+		TestAuthGeneral::logout($this);
+	}
+
+/**
+ * deleteアクションのテスト用DataProvider
  *
  * ### 戻り値
- *  - data: 登録データ
  *  - role: ロール
  *  - urlOptions: URLオプション
+ *  - assert: テストの期待値
  *  - exception: Exception
  *  - return: testActionの実行後の結果
  *
  * @return array
  */
 	public function dataProviderDeletePost() {
-		$data = $this->__data();
+		$data = $this->__getData();
 
 		//テストデータ
 		$results = array();
-		// * ログインなし
-		$contentKey = 'content_key_1';
-		array_push($results, array(
-			'data' => $this->__data($contentKey),
-			'role' => null,
-			'urlOptions' => array(
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id'],
-				'key' => $contentKey
-			),
-			'exception' => 'ForbiddenException'
-		));
-		// * 作成権限のみ
-		// ** 他人の記事
-		$contentKey = 'content_key_1';
-		array_push($results, array(
-			'data' => $this->__data($contentKey),
-			'role' => Role::ROOM_ROLE_KEY_GENERAL_USER,
-			'urlOptions' => array(
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id'],
-				'key' => $contentKey
-			),
-			'exception' => 'BadRequestException'
-		));
-		// ** 自分の記事＆一度も公開されていない
-		$contentKey = 'content_key_2';
-		array_push($results, array(
-			'data' => $this->__data($contentKey),
-			'role' => Role::ROOM_ROLE_KEY_GENERAL_USER,
-			'urlOptions' => array(
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id'],
-				'key' => $contentKey
-			),
-		));
-		// ** 自分の記事＆一度公開している
-		$contentKey = 'content_key_4';
-		array_push($results, array(
-			'data' => $this->__data($contentKey),
-			'role' => Role::ROOM_ROLE_KEY_GENERAL_USER,
-			'urlOptions' => array(
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id'],
-				'key' => $contentKey
-			),
-			'exception' => 'BadRequestException'
-		));
-		// * 編集権限あり
-		// ** 公開していない
-		$contentKey = 'content_key_2';
-		array_push($results, array(
-			'data' => $this->__data($contentKey),
-			'role' => Role::ROOM_ROLE_KEY_EDITOR,
-			'urlOptions' => array(
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id'],
-				'key' => $contentKey
-			),
-		));
-		// ** 公開している
-		$contentKey = 'content_key_4';
-		array_push($results, array(
-			'data' => $this->__data($contentKey),
-			'role' => Role::ROOM_ROLE_KEY_EDITOR,
-			'urlOptions' => array(
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id'],
-				'key' => $contentKey
-			),
-			'exception' => 'BadRequestException'
-		));
-		// * 公開権限あり
-		// ** フレームID指定なしテスト
-		$contentKey = 'content_key_1';
-		array_push($results, array(
-			'data' => $this->__data($contentKey),
-			'role' => Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
-			'urlOptions' => array(
-				'frame_id' => null,
-				'block_id' => $data['Block']['id'],
-				'key' => $contentKey
-			),
-		));
+		$results[0] = array(
+			'urlOptions' => $data,
+			'data' => array(),
+			'assert' => array('method' => 'assertNotEmpty'),
+		);
 
 		return $results;
 	}
 
 /**
- * deleteアクションのExceptionErrorテスト用DataProvider
+ * deleteアクションのテスト
  *
- * ### 戻り値
- *  - mockModel: Mockのモデル
- *  - mockMethod: Mockのメソッド
- *  - data: 登録データ
- *  - urlOptions: URLオプション
- *  - exception: Exception
- *  - return: testActionの実行後の結果
- *
- * @return array
+ * @param array $urlOptions URLオプション
+ * @param array $data POSTデータ
+ * @param array $assert テストの期待値
+ * @param string|null $exception Exception
+ * @param string $return testActionの実行後の結果
+ * @dataProvider dataProviderDeletePost
+ * @return void
  */
-	public function dataProviderDeleteExceptionError() {
-		$data = $this->__data();
+	public function testDeletePost($urlOptions, $data, $assert, $exception = null, $return = 'view') {
+		//ログイン
+		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
 
-		//テストデータ
-		$results = array();
-		$results[0] = array(
-			'mockModel' => 'CircularNotices.Xxxxxx', //TODO:Mockモデルをセットする
-			'mockMethod' => 'deleteXxxxxx', //TODO:Mockメソッドをセットする
-			'data' => $data,
-			'urlOptions' => array(
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id'],
-				'key' => 'content_key_1',
-			),
-			'exception' => 'BadRequestException',
-			'return' => 'view'
-		);
+		//テスト実施
+		$this->_testPostAction('delete', $data, Hash::merge(array('action' => 'delete'), $urlOptions), $exception, $return);
 
-		//TODO:必要なデータをここに書く
-
-		return $results;
+		//ログアウト
+		TestAuthGeneral::logout($this);
 	}
-
 }

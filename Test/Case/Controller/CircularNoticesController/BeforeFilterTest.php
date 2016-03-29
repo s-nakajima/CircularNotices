@@ -30,6 +30,9 @@ class CircularNoticesControllerBeforeFilterTest extends NetCommonsControllerTest
 		'plugin.circular_notices.circular_notice_frame_setting',
 		'plugin.circular_notices.circular_notice_setting',
 		'plugin.circular_notices.circular_notice_target_user',
+		'plugin.user_attributes.user_attribute_layout',
+		'plugin.frames.frame',
+		'plugin.blocks.block',
 	);
 
 /**
@@ -47,40 +50,72 @@ class CircularNoticesControllerBeforeFilterTest extends NetCommonsControllerTest
 	protected $_controller = 'circular_notices';
 
 /**
- * setUp method
+ * テストDataの取得
  *
- * @return void
+ * @param string $role ロール
+ * @return array
  */
-	public function setUp() {
-		parent::setUp();
+	private function __getData($role = null) {
+		$frameId = '5';
+		$blockId = '1';
+		$contentKey = 'circular_notice_content_1';
 
-		//ログイン
-		TestAuthGeneral::login($this);
+		$data = array(
+			'frame_id' => $frameId,
+			'block_id' => $blockId,
+			'key' => $contentKey,
+		);
+
+		return $data;
 	}
 
 /**
- * tearDown method
+* editアクションテスト
+*
+* ### 戻り値
+*  - urlOptions: URLオプション
+*  - assert: テストの期待値
+*  - exception: Exception
+*  - return: testActionの実行後の結果
+*
+* @return array
+*/
+	public function dataProviderBeforeFilter() {
+		$data = $this->__getData();
+
+		//テストデータ
+		$results = array();
+		$results[0] = array(
+			'urlOptions' => $data,
+			'assert' => array('method' => 'assertNotEmpty'),
+		);
+
+		return $results;
+	}
+
+/**
+ * editアクションのテスト
  *
+ * @param array $urlOptions URLオプション
+ * @param array $assert テストの期待値
+ * @param string|null $exception Exception
+ * @param string $return testActionの実行後の結果
+ * @dataProvider dataProviderBeforeFilter
  * @return void
  */
-	public function tearDown() {
+	public function testBeforeFilter($urlOptions, $assert, $exception = null, $return = 'view') {
+		//ログイン
+		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
+
+		//テスト実施
+		$url = Hash::merge(array(
+			'plugin' => $this->plugin,
+			'controller' => $this->_controller,
+			'action' => 'index',
+		), $urlOptions);
+		$this->_testGetAction($url, $assert, $exception, $return);
+
 		//ログアウト
 		TestAuthGeneral::logout($this);
-
-		parent::tearDown();
 	}
-
-/**
- * index()アクションのGetリクエストテスト
- *
- * @return void
- */
-	public function testBeforeFilterGet() {
-		//テスト実行
-		$this->_testGetAction(array('action' => 'index'), array('method' => 'assertNotEmpty'), null, 'view');
-
-		//チェック
-		//TODO:assert追加
-	}
-
 }

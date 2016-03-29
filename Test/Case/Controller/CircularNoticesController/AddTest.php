@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('WorkflowControllerAddTest', 'Workflow.TestSuite');
+App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
 
 /**
  * CircularNoticesController::add()のテスト
@@ -17,7 +17,7 @@ App::uses('WorkflowControllerAddTest', 'Workflow.TestSuite');
  * @author Masaki Goto <go8ogle@gmail.com>
  * @package NetCommons\CircularNotices\Test\Case\Controller\CircularNoticesController
  */
-class CircularNoticesControllerAddTest extends WorkflowControllerAddTest {
+class CircularNoticesControllerAddTest extends NetCommonsControllerTestCase {
 
 /**
  * Fixtures
@@ -30,6 +30,9 @@ class CircularNoticesControllerAddTest extends WorkflowControllerAddTest {
 		'plugin.circular_notices.circular_notice_frame_setting',
 		'plugin.circular_notices.circular_notice_setting',
 		'plugin.circular_notices.circular_notice_target_user',
+		'plugin.user_attributes.user_attribute_layout',
+		'plugin.frames.frame',
+		'plugin.blocks.block',
 	);
 
 /**
@@ -51,42 +54,20 @@ class CircularNoticesControllerAddTest extends WorkflowControllerAddTest {
  *
  * @return array
  */
-	private function __data() {
-		$frameId = '6';
-		$blockId = '2';
-		$blockKey = 'block_1';
+	private function __getData() {
+		$frameId = '5';
+		$blockId = '1';
 
 		$data = array(
-			'save_' . WorkflowComponent::STATUS_IN_DRAFT => null,
-			'Frame' => array(
-				'id' => $frameId,
-			),
-			'Block' => array(
-				'id' => $blockId,
-				'key' => $blockKey,
-				'language_id' => '2',
-				'room_id' => '1',
-				'plugin_key' => $this->plugin,
-			),
-
-			//TODO:必要のデータセットをここに書く
-			'' => array(
-				'id' => null,
-				'key' => null,
-				'language_id' => '2',
-				'status' => null,
-			),
-
-			'WorkflowComment' => array(
-				'comment' => 'WorkflowComment save test',
-			),
+			'frame_id' => $frameId,
+			'block_id' => $blockId,
 		);
 
 		return $data;
 	}
 
 /**
- * addアクションのGETテスト(ログインなし)用DataProvider
+ * addアクションのGET用DataProvider
  *
  * ### 戻り値
  *  - urlOptions: URLオプション
@@ -96,212 +77,121 @@ class CircularNoticesControllerAddTest extends WorkflowControllerAddTest {
  *
  * @return array
  */
-	public function dataProviderAddGet() {
-		$data = $this->__data();
+	public function dataProviderAdd() {
+		$data = $this->__getData();
 
 		//テストデータ
 		$results = array();
-		// * ログインなし
 		$results[0] = array(
-			'urlOptions' => array(
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id']
-			),
-			'assert' => null, 'exception' => 'ForbiddenException',
+			'urlOptions' => $data,
+			'assert' => array('method' => 'assertNotEmpty'),
 		);
 
 		return $results;
 	}
 
 /**
- * addアクションのGETテスト(作成権限あり)用DataProvider
+ * addアクションのテスト
+ *
+ * @param array $urlOptions URLオプション
+ * @param array $assert テストの期待値
+ * @param string|null $exception Exception
+ * @param string $return testActionの実行後の結果
+ * @dataProvider dataProviderAdd
+ * @return void
+ */
+	public function testAdd($urlOptions, $assert, $exception = null, $return = 'view') {
+		//ログイン
+		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
+
+		//テスト実施
+		$url = Hash::merge(array(
+			'plugin' => $this->plugin,
+			'controller' => $this->_controller,
+			'action' => 'add',
+		), $urlOptions);
+		$this->_testGetAction($url, $assert, $exception, $return);
+
+		//ログアウト
+		TestAuthGeneral::logout($this);
+	}
+
+/**
+ * addアクションのPost用DataProvider
  *
  * ### 戻り値
  *  - urlOptions: URLオプション
  *  - assert: テストの期待値
- *  - exception: Exception
- *  - return: testActionの実行後の結果
- *
- * @return array
- */
-	public function dataProviderAddGetByCreatable() {
-		$data = $this->__data();
-
-		//テストデータ
-		$results = array();
-		$results[0] = array(
-			'urlOptions' => array(
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id'],
-			),
-			'assert' => array('method' => 'assertNotEmpty'),
-		);
-
-		// * フレームID指定なしテスト
-		array_push($results, Hash::merge($results[0], array(
-			'urlOptions' => array('frame_id' => null, 'block_id' => $data['Block']['id']),
-			'assert' => array('method' => 'assertNotEmpty'),
-		)));
-
-		return $results;
-	}
-
-/**
- * addアクションのPOSTテスト用DataProvider
- *
- * ### 戻り値
- *  - data: 登録データ
- *  - role: ロール
- *  - urlOptions: URLオプション
  *  - exception: Exception
  *  - return: testActionの実行後の結果
  *
  * @return array
  */
 	public function dataProviderAddPost() {
-		$data = $this->__data();
+		$data = $this->__getData();
 
 		//テストデータ
 		$results = array();
-		// * ログインなし
 		$results[0] = array(
-			'data' => $data, 'role' => null,
-			'urlOptions' => array(
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id']
+			'urlOptions' => $data,
+			'data' => array(
+				'save_0' => '',
 			),
-			'exception' => 'ForbiddenException'
+			'assert' => null,
+			'exception' => 'BadRequestException'
 		);
-		// * 作成権限あり
 		$results[1] = array(
-			'data' => $data, 'role' => Role::ROOM_ROLE_KEY_GENERAL_USER,
-			'urlOptions' => array(
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id']
+			'urlOptions' => $data,
+			'data' => array(
+				'save_1' => '',
+				'Frame' => array('id' => $data['frame_id']),
+				'Block' => array('id' => $data['block_id']),
+				'CircularNoticeContent' => array(
+					'id' => '',
+					'circular_notice_setting_key' => 'circular_notice_setting_1',
+					'subject' => 'Lorem ipsum dolor sit amet',
+					'content' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
+					'reply_type' => '1',
+					'is_room_targeted_flag' => 1,
+					'target_groups' => array(1, 2),
+					'publish_start' => '2016-01-01 00:00',
+					'publish_end' => '2016-12-01 00:00',
+					'reply_deadline_set_flag' => '1',
+					'reply_deadline' => '2016-06-28 00:00',
+				),
+				'CircularNoticeTargetUser' => array(
+					0 => array('user_id' => 1),
+				),
 			),
-		);
-		// * フレームID指定なしテスト
-		$results[2] = array(
-			'data' => $data, 'role' => Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
-			'urlOptions' => array(
-				'frame_id' => null,
-				'block_id' => $data['Block']['id']),
+			'assert' => array('method' => 'assertNotEmpty'),
 		);
 
 		return $results;
 	}
 
 /**
- * addアクションのValidationErrorテスト用DataProvider
+ * editアクションのPOSTテスト
  *
- * ### 戻り値
- *  - data: 登録データ
- *  - urlOptions: URLオプション
- *  - validationError: バリデーションエラー
- *
- * @return array
- */
-	public function dataProviderAddValidationError() {
-		$data = $this->__data();
-		$result = array(
-			'data' => $data,
-			'urlOptions' => array(
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id']
-			),
-			'validationError' => array(),
-		);
-
-		//テストデータ
-		$results = array();
-		array_push($results, Hash::merge($result, array(
-			'validationError' => array(
-				'field' => '', //TODO:エラーにするフィールド指定
-				'value' => '',
-				'message' => '' //TODO:エラーメッセージ指定
-			)
-		)));
-
-		//TODO:必要なテストデータ追加
-
-		return $results;
-	}
-
-/**
- * Viewのアサーション
- *
- * @param array $data テストデータ
+ * @param array $urlOptions URLオプション
+ * @param array $data POSTデータ
+ * @param array $assert テストの期待値
+ * @param string|null $exception Exception
+ * @param string $return testActionの実行後の結果
+ * @dataProvider dataProviderAddPost
  * @return void
  */
-	private function __assertAddGet($data) {
-		$this->assertInput(
-			'input', 'data[Frame][id]', $data['Frame']['id'], $this->view
-		);
-		$this->assertInput(
-			'input', 'data[Block][id]', $data['Block']['id'], $this->view
-		);
-
-		//TODO:上記以外に必要なassert追加
-	}
-
-/**
- * view(ctp)ファイルのテスト(公開権限なし)
- *
- * @return void
- */
-	public function testViewFileByCreatable() {
-		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_GENERAL_USER);
-
-		//テスト実行
-		$data = $this->__data();
-		$this->_testGetAction(
-			array(
-				'action' => 'add',
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id'],
-			),
-			array('method' => 'assertNotEmpty')
-		);
-
-		//チェック
-		$this->__assertAddGet($data);
-		$this->assertInput('button', 'save_' . WorkflowComponent::STATUS_IN_DRAFT, null, $this->view);
-		$this->assertInput('button', 'save_' . WorkflowComponent::STATUS_APPROVED, null, $this->view);
-
-		//TODO:上記以外に必要なassert追加
-
-		TestAuthGeneral::logout($this);
-	}
-
-/**
- * view(ctp)ファイルのテスト(公開権限あり)
- *
- * @return void
- */
-	public function testViewFileByPublishable() {
+	public function testAddPost($urlOptions, $data, $assert, $exception = null, $return = 'view') {
 		//ログイン
-		TestAuthGeneral::login($this);
-
-		//テスト実行
-		$data = $this->__data();
-		$this->_testGetAction(
-			array(
-				'action' => 'add',
-				'frame_id' => $data['Frame']['id'],
-				'block_id' => $data['Block']['id'],
-			),
-			array('method' => 'assertNotEmpty')
-		);
-
-		//チェック
-		$this->__assertAddGet($data);
-		$this->assertInput('button', 'save_' . WorkflowComponent::STATUS_IN_DRAFT, null, $this->view);
-		$this->assertInput('button', 'save_' . WorkflowComponent::STATUS_PUBLISHED, null, $this->view);
-
-		//TODO:上記以外に必要なassert追加
-
-		//ログアウト
+		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
+		//テスト実施
+		$this->_testPostAction('post', $data, Hash::merge(array('action' => 'add'), $urlOptions), $exception, $return);
+		//ログイン
 		TestAuthGeneral::logout($this);
 	}
+
+
+
+
+
 
 }
