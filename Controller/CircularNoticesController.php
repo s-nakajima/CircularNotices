@@ -128,7 +128,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$content = $this->CircularNoticeContent->getCircularNoticeContent($contentKey, $userId);
 		if (! $content) {
 			$this->throwBadRequest();
-			return false;
 		}
 		$contentId = $content['CircularNoticeContent']['id'];
 		$myTargetUser = array();
@@ -223,7 +222,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 			if (! $status = $this->Workflow->parseStatus()) {
 				$this->throwBadRequest();
-				return;
 			}
 			$data = $this->__parseRequestForSave();
 			$data['CircularNoticeContent']['status'] = $status;
@@ -289,7 +287,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 		if (! $content = $this->CircularNoticeContent->getCircularNoticeContent($key, $userId)) {
 			$this->throwBadRequest();
-			return;
 		}
 
 		$data = array();
@@ -297,7 +294,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 			if (! $status = $this->Workflow->parseStatus()) {
 				$this->throwBadRequest();
-				return;
 			}
 			$data = $this->__parseRequestForSave();
 			$data['CircularNoticeContent']['status'] = $status;
@@ -365,7 +361,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 		if (! $this->request->isDelete()) {
 			$this->throwBadRequest();
-			return;
 		}
 
 		$this->CircularNoticeContent->deleteCircularNoticeContent($contentKey);
@@ -391,7 +386,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$content = $this->CircularNoticeContent->getCircularNoticeContent($contentKey, $userId);
 		if (! $content) {
 			$this->throwBadRequest();
-			return false;
 		}
 		$contentId = $content['CircularNoticeContent']['id'];
 

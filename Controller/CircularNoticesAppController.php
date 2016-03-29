@@ -78,7 +78,6 @@ class CircularNoticesAppController extends AppController {
 		$setting = $this->CircularNoticeSetting->getCircularNoticeSetting($frameId);
 		if (! $setting) {
 			$this->throwBadRequest();
-			return;
 		}
 		$this->set('circularNoticeSetting', $setting);
 
