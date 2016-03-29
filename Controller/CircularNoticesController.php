@@ -323,7 +323,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 				$content['CircularNoticeChoice'] = Hash::extract($data, 'CircularNoticeChoices.{n}.CircularNoticeChoice');
 
 				// ユーザ選択状態を保持
-				$this->CircularNotices->setSelectUsers();
+				$this->CircularNotice->setSelectUsers($this);
 			}
 			$this->NetCommons->handleValidationError($this->CircularNoticeContent->validationErrors);
 
