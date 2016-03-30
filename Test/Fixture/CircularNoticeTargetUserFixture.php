@@ -135,6 +135,34 @@ class CircularNoticeTargetUserFixture extends CakeTestFixture
             'created' => '2015-03-09 09:25:24',
             'modified_user' => 1,
             'modified' => '2015-03-09 09:25:24'
+        ),
+        array('id' => 7,
+            'user_id' => 1,
+            'circular_notice_content_id' => 1,
+            'read_flag' => 0,
+            'read_datetime' => '2015-03-09 09:25:24',
+            'reply_flag' => 1,
+            'reply_datetime' => '2015-03-09 09:25:24',
+            'reply_text_value' => 'Lorem ipsum dolor sit amet',
+            'reply_selection_value' => 'Lorem ipsum dolor sit amet',
+            'created_user' => 1,
+            'created' => '2015-03-09 09:25:24',
+            'modified_user' => 1,
+            'modified' => '2015-03-09 09:25:24'
+        ),
+        array('id' => 8,
+            'user_id' => 2,
+            'circular_notice_content_id' => 1,
+            'read_flag' => 0,
+            'read_datetime' => '2015-03-09 09:25:24',
+            'reply_flag' => 1,
+            'reply_datetime' => '2015-03-09 09:25:24',
+            'reply_text_value' => 'Lorem ipsum dolor sit amet',
+            'reply_selection_value' => 'Lorem ipsum dolor sit amet',
+            'created_user' => 1,
+            'created' => '2015-03-09 09:25:24',
+            'modified_user' => 1,
+            'modified' => '2015-03-09 09:25:24'
         )
     );
 }

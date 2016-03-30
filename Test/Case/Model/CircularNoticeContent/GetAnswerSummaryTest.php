@@ -70,7 +70,7 @@ class CircularNoticeContentGetAnswerSummaryTest extends NetCommonsGetTest {
 		$result = $this->$model->$methodName($contentId);
 
 		//チェック
-		//TODO:Assertを書く
+		$this->assertNotEmpty($result);
 	}
 
 }
