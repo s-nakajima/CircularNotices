@@ -231,104 +231,104 @@ class CircularNoticeBlockRolePermissionsControllerEditTest extends NetCommonsCon
         return $data;
     }
 
-//    /**
-//     * edit()アクションDataProvider
-//     *
-//     * ### 戻り値
-//     *  - approvalFields コンテンツ承認の利用有無のフィールド
-//     *  - exception Exception
-//     *  - return testActionの実行後の結果
-//     *
-//     * @return array
-//     */
-//    public function dataProviderEditFieldGet()
-//    {
-//        return array(
-//            array('approvalFields' => $this->__approvalFields())
-//        );
-//    }
-//
-//    /**
-//     * edit()アクションDataProvider
-//     *
-//     * ### 戻り値
-//     *  - approvalFields コンテンツ承認の利用有無のフィールド
-//     *  - exception Exception
-//     *  - return testActionの実行後の結果
-//     *
-//     * @return array
-//     */
-//    public function dataProviderDataEditGet()
-//    {
-//        return array(
-//            array('data' => $this->__data())
-//        );
-//    }
+    /**
+     * edit()アクションDataProvider
+     *
+     * ### 戻り値
+     *  - approvalFields コンテンツ承認の利用有無のフィールド
+     *  - exception Exception
+     *  - return testActionの実行後の結果
+     *
+     * @return array
+     */
+    public function dataProviderEditFieldGet()
+    {
+        return array(
+            array('approvalFields' => $this->__approvalFields())
+        );
+    }
 
-//    /**
-//     * edit()アクションのGetリクエストテスト
-//     *
-//     * @param array $urlOptions URLオプション
-//     * @param array $assert テストの期待値
-//     * @param string|null $exception Exception
-//     * @param string $return testActionの実行後の結果
-//     * @dataProvider dataProviderEditGet
-//     * @return void
-//     */
-//    public function testEditGet($urlOptions, $assert, $exception = null, $return = 'view') {
-//
-//        //ログイン
-//        TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
-//        // Exception
-//        if ($exception) {
-//            $this->setExpectedException($exception);
-//        }
-//
-//        // テスト実施
-//        $url = Hash::merge(array(
-//            'plugin' => $this->plugin,
-//            'controller' => $this->_controller,
-//            'action' => 'edit',
-//        ), $urlOptions);
-//
-//        $this->_testGetAction($url, $assert, $exception, $return);
-//        //ログアウト
-//        TestAuthGeneral::logout($this);
-//    }
-//
-//    /**
-//     * editアクションのGETテスト
-//     *
-//     * #### 戻り値
-//     *  - urlOptions: URLオプション
-//     *  - assert: テストの期待値
-//     *  - exception: Exception
-//     *  - return: testActionの実行後の結果
-//     *
-//     * @return array
-//     */
-//    public function dataProviderEditGet() {
-//        $results = array();
-//
-//        $results[0] = array(
-//            'urlOptions' => array('block_id' => 10),
+    /**
+     * edit()アクションDataProvider
+     *
+     * ### 戻り値
+     *  - approvalFields コンテンツ承認の利用有無のフィールド
+     *  - exception Exception
+     *  - return testActionの実行後の結果
+     *
+     * @return array
+     */
+    public function dataProviderDataEditGet()
+    {
+        return array(
+            array('data' => $this->__data())
+        );
+    }
+
+    /**
+     * edit()アクションのGetリクエストテスト
+     *
+     * @param array $urlOptions URLオプション
+     * @param array $assert テストの期待値
+     * @param string|null $exception Exception
+     * @param string $return testActionの実行後の結果
+     * @dataProvider dataProviderEditGet
+     * @return void
+     */
+    public function testEditGet($urlOptions, $assert, $exception = null, $return = 'view') {
+
+        //ログイン
+        TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
+        // Exception
+        if ($exception) {
+            $this->setExpectedException($exception);
+        }
+
+        // テスト実施
+        $url = Hash::merge(array(
+            'plugin' => $this->plugin,
+            'controller' => $this->_controller,
+            'action' => 'edit',
+        ), $urlOptions);
+
+        $this->_testGetAction($url, $assert, $exception, $return);
+        //ログアウト
+        TestAuthGeneral::logout($this);
+    }
+
+    /**
+     * editアクションのGETテスト
+     *
+     * #### 戻り値
+     *  - urlOptions: URLオプション
+     *  - assert: テストの期待値
+     *  - exception: Exception
+     *  - return: testActionの実行後の結果
+     *
+     * @return array
+     */
+    public function dataProviderEditGet() {
+        $results = array();
+
+        $results[0] = array(
+            'urlOptions' => array('block_id' => 10),
+            'assert' => null, 'exception' => 'BadRequestException'
+        );
+//        $results[1] = array(
+//            'urlOptions' => array('frame_id' => 19),
 //            'assert' => null, 'exception' => 'BadRequestException'
 //        );
-////        $results[1] = array(
-////            'urlOptions' => array('frame_id' => 19),
-////            'assert' => null, 'exception' => 'BadRequestException'
-////        );
-//        $results[2] = array(
-//            'urlOptions' => array('frame_id' => 20),
+        $results[2] = array(
+            'urlOptions' => array('frame_id' => 20),
+            'assert' => null, 'exception' => 'BadRequestException'
+//            'assert' => null, 'exception' => null
+        );
+//        $results[3] = array(
+//            'urlOptions' => array('frame_id' => 13),
 //            'assert' => null, 'exception' => 'BadRequestException'
-////            'assert' => null, 'exception' => null
 //        );
-////        $results[3] = array(
-////            'urlOptions' => array('frame_id' => 13),
-////            'assert' => null, 'exception' => 'BadRequestException'
-////        );
-//        return $results;
-//    }
+        return $results;
+    }
 
     /**
      * edit()アクションのPOSTリクエストテスト
