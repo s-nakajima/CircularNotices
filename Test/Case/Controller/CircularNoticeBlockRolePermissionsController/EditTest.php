@@ -12,10 +12,10 @@
 App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
 
 //App::uses('BlockRolePermissionsControllerEditTest', 'Blocks.TestSuite');
-//App::uses('FramesAppModel', 'Frames.Model');
-//App::uses('FrameFixture', 'Frames.Test/Fixture');
-//App::uses('BlocksAppModel', 'Blocks.Model');
-//App::uses('BlockFixture', 'Blocks.Test/Fixture');
+App::uses('FramesAppModel', 'Frames.Model');
+App::uses('FrameFixture', 'Frames.Test/Fixture');
+App::uses('BlocksAppModel', 'Blocks.Model');
+App::uses('BlockFixture', 'Blocks.Test/Fixture');
 
 /**
  * CircularNoticeBlockRolePermissionsController::edit()のテスト
@@ -61,59 +61,24 @@ class CircularNoticeBlockRolePermissionsControllerEditTest extends NetCommonsCon
      *
      * @return void
      */
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->Frame = ClassRegistry::init('Frames.Frame');
         $this->Block = ClassRegistry::init('Blocks.Block');
         // 例外データ作成
         $this->Frame->save(
             array(
-                'id' => '19',
-                'language_id' => '2',
-                'room_id' => '5',
+                'id' => 19,
+                'language_id' => 2,
+                'room_id' => 5,
                 'box_id' => 2,
                 'plugin_key' => 'circular_notices',
-                'block_id' => 33,
+                'block_id' => 5,
                 'key' => 'frame_19',
                 'name' => 'Test frame main',
                 'header_type' => 'default',
-                'weight' => '1',
-                'is_deleted' => false,
-                'default_action' => '',
-                'created_user' => null,
-                'created' => null,
-                'modified_user' => null,
-                'modified' => null
-            ),
-            array(
-                'id' => 20,
-                'language_id' => '2',
-                'room_id' => '5',
-                'box_id' => 2,
-                'plugin_key' => 'circular_notices',
-                'block_id' => null,
-                'key' => 'frame_20',
-                'name' => 'Test frame main',
-                'header_type' => 'default',
-                'weight' => '1',
-                'is_deleted' => false,
-                'default_action' => '',
-                'created_user' => null,
-                'created' => null,
-                'modified_user' => null,
-                'modified' => null
-            ),
-            array(
-                'id' => 21,
-                'language_id' => '2',
-                'room_id' => '5',
-                'box_id' => 2,
-                'plugin_key' => 'circular_notices',
-                'block_id' => null,
-                'key' => 'frame_21',
-                'name' => 'Test frame main',
-                'header_type' => 'default',
-                'weight' => '1',
+                'weight' => 1,
                 'is_deleted' => false,
                 'default_action' => '',
                 'created_user' => null,
@@ -124,13 +89,13 @@ class CircularNoticeBlockRolePermissionsControllerEditTest extends NetCommonsCon
         );
         $this->Block->save(
             array(
-                'id' => '33',
-                'language_id' => '2',
-                'room_id' => '1',
+                'id' => 33,
+                'language_id' => 2,
+                'room_id' => 1,
                 'plugin_key' => 'circular_notices',
                 'key' => 'false_key',
-                'name' => 'Block name 5',
-                'public_type' => '2',
+                'name' => 'Block_name_5',
+                'public_type' => 2,
                 'publish_start' => null,
                 'publish_end' => null,
                 'created_user' => null,
@@ -141,129 +106,75 @@ class CircularNoticeBlockRolePermissionsControllerEditTest extends NetCommonsCon
         );
     }
 
-    /**
-     * tearDown method
-     *
-     * @return void
-     */
-    public function tearDown() {
-        unset($this->Frame);
-        unset($this->Block);
-
-        parent::tearDown();
-    }
-//
-//    /**
-//     * 権限設定で使用するFieldsの取得
-//     *
-//     * @return array
-//     */
-//    private function __approvalFields()
-//    {
-//        $data = array(
-//            'CircularNoticeSetting' => array(
-//                'use_workflow',
-//                'use_comment_approval',
-//                'approval_type',
-//            )
-//        );
-//
-//        return $data;
-//    }
 
     /**
-     * テストDataの取得
+     * POSTリクエストデータ生成
      *
-     * @return array
+     * @return array リクエストデータ
      */
     private function __data()
     {
         $data = array(
-            'CircularNoticeSetting' => array(
-                'id' => '5',
-                'block_key' => 'block_1',
-                'key' => 'circular_notice_4',
-                'mail_notice_flag' => 1,
-                'mail_subject' => 'frame_1',
-                'mail_body' => 'frame_1',
-                'is_auto_translated' => 1,
-                'translation_engine' => 'frame_1',
+            'Frame' => array(
+                'id' => 6,
+                'language_id' => '2',
+                'room_id' => '1',
+                'box_id' => '2',
+                'plugin_key' => 'circular_notices',
+                'block_id' => 6,
+                'key' => 'circular_notices',
+                'name' => '回覧板フレーム',
+                'header_type' => 'default',
+                'weight' => '2',
+                'is_deleted' => false,
+                'default_action' => '',
                 'created_user' => '1',
-                'created' => '2015-03-09 09:25:26',
-                'modified_user' => 1,
-                'modified' => '2015-03-09 09:25:26',
-//                'id' => 2,
-//                'circular_notice_key' => 'circular_notice_key_2',
-                'use_workflow' => true,
-                'use_comment_approval' => true,
-                'approval_type' => true,
+                'created' => '2016-03-30 04:03:29',
+                'modified_user' => '1',
+                'modified' => '2016-03-30 04:03:29'
             ),
-//            'BlockRolePermission' => array(
-//                'id' => '1',
-//                'roles_room_id' => '4',
-//                'block_key' => 'block_1',
-//                'permission' => 'content_creatable',
-//                'value' => true,
+//            'Plugin' => array(
+//                'id' => '11',
+//                'language_id' => '2',
+//                'key' => 'circular_notices',
+//                'name' => '回覧板',
+//                'namespace' => 'netcommons/circular-notices',
+//                'weight' => null,
+//                'type' => '1',
+//                'default_action' => 'circular_notices/index',
+//                'default_setting_action' => 'circular_notice_frame_settings/edit',
+//                'created_user' => null,
+//                'created' => '2016-03-29 07:43:23',
+//                'modified_user' => null,
+//                'modified' => '2016-03-29 07:43:23'
 //            ),
-//            'Block' => array(
-//                'id' => '8',
+            'Block' => array(
+                'id' => 5,
 //                'language_id' => '2',
 //                'room_id' => '1',
 //                'plugin_key' => 'circular_notices',
-//                'key' => 'false_key',
-//                'name' => 'Block_name_5',
-//                'public_type' => '2',
+                'key' => 'db84b462a08a4265b459d74c39998054',
+//                'name' => null,
+//                'public_type' => '1',
 //                'publish_start' => null,
 //                'publish_end' => null,
-//                'created_user' => null,
-//                'created' => '2016-03-29 11:34:07',
-//                'modified_user' => null,
-//                'modified' => '2016-03-29 11:34:07'
-//            ),
-            array(
-                'Frame' => array(
-                    'id' => 19,
-                )
+//                'created_user' => '1',
+//                'created' => '2016-03-29 07:51:58',
+//                'modified_user' => '1',
+//                'modified' => '2016-03-29 07:51:58'
+            ),
+            'CircularNoticeFrameSetting' => array(
+                'id' => 1,
+                'frame_key' => 'frame_1',
+                'display_number' => 10,
+            ),
+            'CircularNoticeSetting' => array(
+                'id' => '1',
+                'key' => 'circular_notices'
             )
-            
         );
-
         return $data;
     }
-
-//    /**
-//     * edit()アクションDataProvider
-//     *
-//     * ### 戻り値
-//     *  - approvalFields コンテンツ承認の利用有無のフィールド
-//     *  - exception Exception
-//     *  - return testActionの実行後の結果
-//     *
-//     * @return array
-//     */
-//    public function dataProviderEditFieldGet()
-//    {
-//        return array(
-//            array('approvalFields' => $this->__approvalFields())
-//        );
-//    }
-//
-//    /**
-//     * edit()アクションDataProvider
-//     *
-//     * ### 戻り値
-//     *  - approvalFields コンテンツ承認の利用有無のフィールド
-//     *  - exception Exception
-//     *  - return testActionの実行後の結果
-//     *
-//     * @return array
-//     */
-//    public function dataProviderDataEditGet()
-//    {
-//        return array(
-//            array('data' => $this->__data())
-//        );
-//    }
 
 //    /**
 //     * edit()アクションのGetリクエストテスト
@@ -276,6 +187,110 @@ class CircularNoticeBlockRolePermissionsControllerEditTest extends NetCommonsCon
 //     * @return void
 //     */
 //    public function testEditGet($urlOptions, $assert, $exception = null, $return = 'view') {
+//        // Exception
+//        if ($exception) {
+//            $this->setExpectedException($exception);
+//        }
+//
+//        // テスト実施
+//        $url = Hash::merge(array(
+//            'plugin' => $this->plugin,
+//            'controller' => $this->_controller,
+//            'action' => 'edit',
+//        ), $urlOptions);
+//
+//        $this->_testGetAction($url, $assert, $exception, $return);
+//    }
+//
+//    /**
+//     * editアクションのGETテスト(ログインなし)用DataProvider
+//     *
+//     * #### 戻り値
+//     *  - urlOptions: URLオプション
+//     *  - assert: テストの期待値
+//     *  - exception: Exception
+//     *  - return: testActionの実行後の結果
+//     *
+//     * @return array
+//     */
+//    public function dataProviderEditGet() {
+//        $data = $this->__data();
+//        $results = array();
+//
+//        //ログインなし
+//        $results[0] = array(
+//            'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'key' => $data['CircularNoticeFrameSetting']['id']),
+//            'assert' => null, 'exception' => 'ForbiddenException'
+//        );
+//        return $results;
+//    }
+//
+//    /**
+//     * editアクションのGETテスト
+//     *
+//     * @param array $urlOptions URLオプション
+//     * @param array $assert テストの期待値
+//     * @param string|null $exception Exception
+//     * @param string $return testActionの実行後の結果
+//     * @dataProvider dataProviderEditGetByPublishable
+//     * @return void
+//     */
+//    public function testEditGetByPublishable($urlOptions, $assert, $exception = null, $return = 'view') {
+//        //ログイン
+//        TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
+//
+//        // Exception
+//        if ($exception) {
+//            $this->setExpectedException($exception);
+//        }
+//        //テスト実施
+//        $url = Hash::merge(array(
+//            'plugin' => $this->plugin,
+//            'controller' => $this->_controller,
+//            'action' => 'edit',
+//        ), $urlOptions);
+//
+//        $this->_testGetAction($url, $assert, $exception, $return);
+//
+//        //ログアウト
+//        TestAuthGeneral::logout($this);
+//    }
+//
+//    /**
+//     * editアクションのGETテスト(ログインあり)用DataProvider
+//     *
+//     * #### 戻り値
+//     *  - urlOptions: URLオプション
+//     *  - assert: テストの期待値
+//     *  - exception: Exception
+//     *  - return: testActionの実行後の結果
+//     *
+//     * @return array
+//     */
+//    public function dataProviderEditGetByPublishable() {
+//        $data0 = $this->__data();
+//        $results = array();
+//
+//        //ログインあり
+//        $results[0] = array(
+//            'urlOptions' => array('frame_id' => $data0['Frame']['id'], 'block_id' => $data0['Block']['id'], 'key' => $data0['CircularNoticeFrameSetting']['id']),
+//            'assert' => null, 'exception' => 'BadRequestException'
+//        );
+//
+//        return $results;
+//    }
+//
+//    /**
+//     * edit()アクションのGetリクエストテスト
+//     *
+//     * @param array $urlOptions URLオプション
+//     * @param array $assert テストの期待値
+//     * @param string|null $exception Exception
+//     * @param string $return testActionの実行後の結果
+//     * @dataProvider dataProviderEditGetOnException
+//     * @return void
+//     */
+//    public function testEditGetOnException($urlOptions, $assert, $exception = null, $return = 'view') {
 //
 //        //ログイン
 //        TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
@@ -307,95 +322,141 @@ class CircularNoticeBlockRolePermissionsControllerEditTest extends NetCommonsCon
 //     *
 //     * @return array
 //     */
-//    public function dataProviderEditGet() {
+//    public function dataProviderEditGetOnException() {
 //        $results = array();
 //
 //        $results[0] = array(
-//            'urlOptions' => array('block_id' => 10),
-//            'assert' => null, 'exception' => 'BadRequestException'
+//            'urlOptions' => array('block_id' => 5),
+//            'assert' => null, 'exception' => 'BadRequest'
 //        );
-////        $results[1] = array(
+//        $results[1] = array(
+//            'urlOptions' => array('frame_id' => 19),
+//            'assert' => null, 'exception' => 'InternalServerErrorException'
+//        );
+////        $results[2] = array(
 ////            'urlOptions' => array('frame_id' => 19),
-////            'assert' => null, 'exception' => 'BadRequestException'
-////        );
-//        $results[2] = array(
-//            'urlOptions' => array('frame_id' => 20),
-//            'assert' => null, 'exception' => 'BadRequestException'
 ////            'assert' => null, 'exception' => null
-//        );
-////        $results[3] = array(
-////            'urlOptions' => array('frame_id' => 13),
-////            'assert' => null, 'exception' => 'BadRequestException'
 ////        );
 //        return $results;
 //    }
-
-    /**
-     * edit()アクションのPOSTリクエストテスト
-     *
-     * @param array $data POSTデータ
-     * @param string $role ロール
-     * @param array $urlOptions URLオプション
-     * @param string|null $exception Exception
-     * @param string $return testActionの実行後の結果
-     * @dataProvider dataProviderEditPost
-     * @return void
-     */
-    public function testEditPost($data, $role, $urlOptions, $exception = null, $return = 'view') {
-        // ログイン
+//
+//    /**
+//     * edit()アクションのPOSTリクエストテスト
+//     *
+//     * @param array $data POSTデータ
+//     * @param string $role ロール
+//     * @param array $urlOptions URLオプション
+//     * @param string|null $exception Exception
+//     * @param string $return testActionの実行後の結果
+//     * @dataProvider dataProviderEditPost
+//     * @return void
+//     */
+//    public function testEditPost($data, $role, $urlOptions, $exception = null, $return = 'view') {
+//        // ログイン
 //        if (isset($role)) {
 //            TestAuthGeneral::login($this, $role);
 //        }
-
-        //ログイン
-        TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
-        //テスト実施
+//
+//        //テスト実施
 //        $this->_testPostAction('put', $data, Hash::merge(array('action' => 'edit'), $urlOptions), $exception, $return);
-        $this->_testPostAction('put', $data, array('action' => 'edit'), $exception, $return);
-
-        //正常の場合、リダイレクト
-        if (! $exception) {
-            $header = $this->controller->response->header();
-            $this->assertNotEmpty($header['Location']);
-        }
-
+//
+//        //正常の場合、リダイレクト
+//        if (! $exception) {
+//            $header = $this->controller->response->header();
+//            $this->assertNotEmpty($header['Location']);
+//        }
+//
 //        //ログアウト
 //        if (isset($role)) {
 //            TestAuthGeneral::logout($this);
 //        }
+//    }
+//
+//    /**
+//     * editアクションのPOSTテスト用DataProvider
+//     *
+//     * #### 戻り値
+//     *  - data: 登録データ
+//     *  - role: ロール
+//     *  - urlOptions: URLオプション
+//     *  - exception: Exception
+//     *  - return: testActionの実行後の結果
+//     *
+//     * @return array
+//     */
+//    public function dataProviderEditPost() {
+//        $data = $this->__data();
+//
+//        return array(
+//            // ログインなし
+//            array(
+//                'data' => $data, 'role' => null,
+//                'urlOptions' => array('frame_id' => $data['Frame']['id']),
+//                'exception' => 'ForbiddenException'
+//            ),
+//            // 正常
+//            array(
+//                'data' => $data, 'role' => Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
+//                'urlOptions' => array('frame_id' => $data['Frame']['id']),
+//            ),
+////            // フレームID指定なしテスト
+//            array(
+//                'data' => array(), 'role' => Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
+//                'urlOptions' => array('frame_id' => $data['Frame']['id']),
+//            ),
+//        );
+//    }
+
+    /**
+     * ValidationErrorテスト
+     *
+     * @param array $data POSTデータ
+     * @param array $urlOptions URLオプション
+     * @param string|null $validationError ValidationError
+     * @dataProvider dataProviderEditValidationError
+     * @return void
+     */
+    public function testEditPostValidationError($data, $urlOptions, $validationError = null)
+    {
+        //ログイン
+        TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
+
+        //テスト実施
+        $this->_testActionOnValidationError('post', $data, Hash::merge(array('action' => 'edit'), $urlOptions), $validationError);
+
         //ログアウト
         TestAuthGeneral::logout($this);
     }
 
     /**
-     * editアクションのPOSTテスト用DataProvider
+     * ValidationErrorテスト用DataProvider
      *
      * #### 戻り値
      *  - data: 登録データ
-     *  - role: ロール
      *  - urlOptions: URLオプション
-     *  - exception: Exception
-     *  - return: testActionの実行後の結果
+     *  - validationError: バリデーションエラー
      *
      * @return array
      */
-    public function dataProviderEditPost() {
+    public function dataProviderEditValidationError()
+    {
         $data = $this->__data();
 
+
+        $result = array(
+            'data' => $data,
+            'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'frame_key' => $data['Frame']['key']),
+        );
+
         return array(
-            // ログインなし
-//            array(
-//                'data' => $data, 'role' => null,
-//                'urlOptions' => array('frame_id' => 6),
-//                'exception' => 'ForbiddenException'
-//            ),
-            // 正常
-            array(
-                'data' => $data, 'role' => Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
-                'urlOptions' => array('frame_id' => 6),
-                'exception' => null
-//                'exception' => 'ForbiddenException'
-            ),
+            //バリデーションエラー
+            Hash::merge($result, array(
+                'validationError' => array(
+                    'field' => 'CircularNoticeFrameSetting.display_number',
+                    'value' => '',
+                    'message' => __d('net_commons', 'Invalid request.'),
+                )
+            )),
         );
     }
 }

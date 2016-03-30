@@ -85,16 +85,8 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
 		$this->set('roles', $permissions['Roles']);
 
 		$frameId = Current::read('Frame.id');
-		debug($frameId);
-		if (! $frameId) {
-			$this->throwBadRequest();
-		}
 
-		if (! $frame = $this->Frame->findById($frameId)) {
-			$this->throwBadRequest();
-		}
-
-		if (! $frame['Block'] || ! $frame['Block']['id']) {
+		if (! $frameId || ! $frame = $this->Frame->findById($frameId)) {
 			$this->throwBadRequest();
 		}
 		$this->set('blockId', $frame['Block']['id']);
