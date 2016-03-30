@@ -10,6 +10,7 @@
  */
 
 App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
+
 //App::uses('BlockRolePermissionsControllerEditTest', 'Blocks.TestSuite');
 //App::uses('FramesAppModel', 'Frames.Model');
 //App::uses('FrameFixture', 'Frames.Test/Fixture');
@@ -397,5 +398,4 @@ class CircularNoticeBlockRolePermissionsControllerEditTest extends NetCommonsCon
             ),
         );
     }
-
 }
