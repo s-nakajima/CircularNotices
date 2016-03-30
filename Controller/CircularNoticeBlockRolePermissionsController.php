@@ -64,37 +64,21 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
 	);
 
 /**
- * beforeFilter
- *
- * @return void
- */
-	public function beforeFilter() {
-		parent::beforeFilter();
-		$this->Auth->deny('index');
-	}
-
-/**
  * edit action
  *
  * @return void
  */
 	public function edit() {
+		$frameId = Current::read('Frame.id');
+		if (!$frameId || !$setting = $this->CircularNoticeSetting->getCircularNoticeSetting($frameId)) {
+			$this->setAction('throwBadRequest');
+			return false;
+		}
+
 		$permissions = $this->Workflow->getBlockRolePermissions(
 			array('content_creatable', 'content_publishable')
 		);
 		$this->set('roles', $permissions['Roles']);
-
-		$frameId = Current::read('Frame.id');
-
-		if (! $frameId || ! $frame = $this->Frame->findById($frameId)) {
-			$this->throwBadRequest();
-		}
-		$this->set('blockId', $frame['Block']['id']);
-		$this->set('blockKey', $frame['Block']['key']);
-
-		if (! $setting = $this->CircularNoticeSetting->getCircularNoticeSetting($frameId)) {
-			$this->throwBadRequest();
-		}
 
 		if ($this->request->is(array('post', 'put'))) {
 			$data = $this->data;
