@@ -248,8 +248,8 @@ class CircularNoticesController extends CircularNoticesAppController {
 			unset($data['CircularNoticeContent']['status']);
 			$data['CircularNoticeContent']['is_room_targeted_flag'] = $this->data['CircularNoticeContent']['is_room_targeted_flag'];
 		} else {
-			if (! isset($data['CircularNoticeContent']['is_room_targeted_flag']) ||
-				$data['CircularNoticeContent']['is_room_targeted_flag']) {
+			if (!isset($data['CircularNoticeContent']['is_room_targeted_flag'])
+					|| $data['CircularNoticeContent']['is_room_targeted_flag']) {
 				// 自分自身を取得
 				$selectUsers = array(Current::read('User.id'));
 				$this->request->data['selectUsers'] = array();
