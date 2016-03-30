@@ -109,7 +109,7 @@ class CircularNoticeTargetUserFixture extends CakeTestFixture
             'modified' => '2015-03-09 09:25:24'
         ),
         array('id' => 5,
-            'user_id' => 4,
+            'user_id' => 5,
             'circular_notice_content_id' => 7,
             'read_flag' => 0,
             'read_datetime' => '2015-03-09 09:25:24',
@@ -123,7 +123,7 @@ class CircularNoticeTargetUserFixture extends CakeTestFixture
             'modified' => '2015-03-09 09:25:24'
         ),
         array('id' => 6,
-            'user_id' => 5,
+            'user_id' => 6,
             'circular_notice_content_id' => 8,
             'read_flag' => 0,
             'read_datetime' => '2015-03-09 09:25:24',
