@@ -374,7 +374,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 		try {
 			$userId = Current::read('User.id');
-			$contentKey = $this->params['pass'][1];
+			$contentKey = $this->params->params['pass'][1];
 			$this->initCircularNotice();
 
 			// 回覧を取得
