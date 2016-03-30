@@ -10,7 +10,7 @@
  */
 
 App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
-App::uses('UserRole', 'UserRoles.Model');
+App::uses('CircularNoticesAppController', 'CircularNotices.Controller');
 
 /**
  * CircularNoticesAppController::beforeFilter()のテスト
@@ -21,60 +21,71 @@ App::uses('UserRole', 'UserRoles.Model');
 class CircularNoticesAppControllerBeforeFilterTest extends NetCommonsControllerTestCase
 {
 
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
+/**
+ * Fixtures
+ *
+ * @var array
+ */
     public $fixtures = array(
         'plugin.circular_notices.circular_notice_choice',
         'plugin.circular_notices.circular_notice_content',
         'plugin.circular_notices.circular_notice_frame_setting',
         'plugin.circular_notices.circular_notice_setting',
         'plugin.circular_notices.circular_notice_target_user',
+        'plugin.user_attributes.user_attribute_layout',
+        'plugin.frames.frame',
+        'plugin.blocks.block',
     );
 
-    /**
-     * Plugin name
-     *
-     * @var string
-     */
+/**
+ * Plugin name
+ *
+ * @var string
+ */
     public $plugin = 'circular_notices';
 
-    /**
-     * setUp method
-     *
-     * @return void
-     */
-    public function setUp()
-    {
-        parent::setUp();
+/**
+ * beforeFilterメソッド用DataProvider
+ *
+ * #### 戻り値
+ *  - data: テストデータ
+ *  - assert: テストの期待値
+ *  - exception: Exception
+ *
+ * @return array
+ */
+    public function dataBeforeFilter() {
+        $results = array();
+        $results[1] = array(
+            'urlOptions' => array(
+                'frame_id' => 13,
+            ),
+            'assert' => array(
+                'method' => 'assertEmpty',
+            ),
+        );
 
-        //テストプラグインのロード
-        NetCommonsCakeTestCase::loadTestPlugin($this, 'CircularNotices', 'TestCircularNotices');
-        $this->generateNc('TestCircularNotices.TestCircularNoticesAppControllerIndex');
+        return $results;
     }
 
-    /**
-     * beforeFilter()のテスト
-     *
-     * @return void
-     */
-    public function testBeforeFilter()
-    {
-        // ログイン
-        TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
-        
-        //TODO:テストデータ
+/**
+ * beforeFilterメソッドテスト
+ *
+ * @param array $urlOptions URLオプション
+ * @param array $assert テストの期待値
+ * @param string|null $exception Exception
+ * @param string $return testActionの実行後の結果
+ * @dataProvider dataBeforeFilter
+ * @return void
+ */
+    public function testBeforeFilter($urlOptions, $assert, $exception = null, $return = 'view') {
 
-        //テスト実行
-        $this->_testGetAction('/test_circular_notices/test_circular_notices_app_controller_index/index', null);
-
-        // ログアウト
-        TestAuthGeneral::logout($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
-        
-        
-        //チェック
-        //TODO:assert追加
+        //テスト実施
+        $url = Hash::merge(array(
+            'plugin' => $this->plugin,
+            'controller' => $this->_controller,
+            'action' => 'index',
+        ), $urlOptions);
+        $this->_testGetAction($url, $assert, $exception, $return);
     }
 }
