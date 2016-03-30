@@ -220,11 +220,8 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$data = array();
 		if ($this->request->is('post')) {
 
-			if (! $status = $this->Workflow->parseStatus()) {
-				$this->throwBadRequest();
-			}
 			$data = $this->__parseRequestForSave();
-			$data['CircularNoticeContent']['status'] = $status;
+			$data['CircularNoticeContent']['status'] = $this->Workflow->parseStatus();
 
 			if ($circularContent = $this->CircularNoticeContent->saveCircularNoticeContent($data)) {
 				// キューからメール送信
@@ -244,7 +241,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 				$content['CircularNoticeChoice'] = Hash::extract($data, 'CircularNoticeChoices.{n}.CircularNoticeChoice');
 
 				// ユーザ選択状態を保持
-				$this->CircularNotices->setSelectUsers();
+				$this->CircularNotice->setSelectUsers($this);
 			}
 			$this->NetCommons->handleValidationError($this->CircularNoticeContent->validationErrors);
 
@@ -286,17 +283,14 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$this->helpers[] = 'Users.UserSearch';
 
 		if (! $content = $this->CircularNoticeContent->getCircularNoticeContent($key, $userId)) {
-			$this->throwBadRequest();
+			return $this->throwBadRequest();
 		}
 
 		$data = array();
 		if ($this->request->is(array('post', 'put'))) {
 
-			if (! $status = $this->Workflow->parseStatus()) {
-				$this->throwBadRequest();
-			}
 			$data = $this->__parseRequestForSave();
-			$data['CircularNoticeContent']['status'] = $status;
+			$data['CircularNoticeContent']['status'] = $this->Workflow->parseStatus();
 
 			$data['CircularNoticeContent']['key'] = $key;	// keyをここでセット
 			$data['CircularNoticeContent']['public_type'] = $content['CircularNoticeContent']['public_type'];
@@ -480,15 +474,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 		if ($this->data['CircularNoticeContent']['reply_deadline_set_flag'] !== '1') {
 			$data['CircularNoticeContent']['reply_deadline'] = null;
-		}
-
-		if (isset($data['CircularNoticeChoices'])) {
-			foreach ($data['CircularNoticeChoices'] as $i => $choice) {
-				$data['CircularNoticeChoices'][$i]['CircularNoticeChoice']['value'] =
-					str_replace(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, '', $choice['CircularNoticeChoice']['value']);
-			}
-		} else {
-			$data['CircularNoticeChoices'] = array();
 		}
 
 		return $data;

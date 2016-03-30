@@ -25,6 +25,11 @@ class CircularNoticesControllerEditTest extends NetCommonsControllerTestCase {
  * @var array
  */
 	public $fixtures = array(
+		'plugin.site_manager.site_setting',
+		'plugin.users.user',
+		'plugin.mails.mail_setting',
+		'plugin.mails.mail_queue',
+		'plugin.mails.mail_queue_user',
 		'plugin.circular_notices.circular_notice_choice',
 		'plugin.circular_notices.circular_notice_content',
 		'plugin.circular_notices.circular_notice_frame_setting',
@@ -151,9 +156,24 @@ class CircularNoticesControllerEditTest extends NetCommonsControllerTestCase {
 		$results = array();
 		$results[0] = array(
 			'urlOptions' => $data,
-			'data' => array('save_0' => ''),
-			'assert' => null,
-			'exception' => 'BadRequestException'
+			'data' => array(
+				'save_1' => '',
+				'Frame' => array('id' => $data['frame_id']),
+				'Block' => array('id' => $data['block_id']),
+				'CircularNoticeContent'  => array(
+					'reply_type' => '1',
+					'is_room_targeted_flag' => '',
+					'target_groups' => '',
+					'publish_start' => '',
+					'publish_end' => '',
+					'reply_deadline_set_flag' => 0,
+					'reply_deadline' => ''
+				),
+				'CircularNoticeTargetUser' => array(
+					0 => array('user_id' => 1),
+				),
+			),
+			'assert' => array('method' => 'assertNotEmpty'),
 		);
 		$results[1] = array(
 			'urlOptions' => $data,
@@ -162,13 +182,33 @@ class CircularNoticesControllerEditTest extends NetCommonsControllerTestCase {
 				'Frame' => array('id' => $data['frame_id']),
 				'Block' => array('id' => $data['block_id']),
 				'CircularNoticeContent'  => array(
-					'reply_type' => 1,
-					'is_room_targeted_flag' => '',
-					'target_groups' => '',
-					'publish_start' => '',
-					'publish_end' => '',
-					'reply_deadline_set_flag' => 0,
-					'reply_deadline' => ''
+					'id' => 1,
+					'circular_notice_setting_key' => 'circular_notice_setting_1',
+					'subject' => 'Lorem ipsum dolor sit amet',
+					'content' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
+					'reply_type' => '2',
+					'is_room_targeted_flag' => 1,
+					'target_groups' => array(1, 2),
+					'publish_start' => '2016-01-01 00:00',
+					'publish_end' => '2016-12-01 00:00',
+					'reply_deadline_set_flag' => '1',
+					'reply_deadline' => '2016-06-28 00:00'
+				),
+				'CircularNoticeChoices' => array(
+					0 => array(
+						'CircularNoticeChoice' => array(
+							'id' => '',
+							'weight' => '1',
+							'value' => 'aaa',
+						),
+					),
+					1 => array(
+						'CircularNoticeChoice' => array(
+							'id' => '',
+							'weight' => '2',
+							'value' => 'bbb',
+						),
+					),
 				),
 				'CircularNoticeTargetUser' => array(
 					0 => array('user_id' => 1),
@@ -187,13 +227,29 @@ class CircularNoticesControllerEditTest extends NetCommonsControllerTestCase {
 					'circular_notice_setting_key' => 'circular_notice_setting_1',
 					'subject' => 'Lorem ipsum dolor sit amet',
 					'content' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
-					'reply_type' => '1',
+					'reply_type' => '3',
 					'is_room_targeted_flag' => 1,
 					'target_groups' => array(1, 2),
 					'publish_start' => '2016-01-01 00:00',
 					'publish_end' => '2016-12-01 00:00',
 					'reply_deadline_set_flag' => '1',
 					'reply_deadline' => '2016-06-28 00:00'
+				),
+				'CircularNoticeChoices' => array(
+					0 => array(
+						'CircularNoticeChoice' => array(
+							'id' => '',
+							'weight' => '1',
+							'value' => 'aaa',
+						),
+					),
+					1 => array(
+						'CircularNoticeChoice' => array(
+							'id' => '',
+							'weight' => '2',
+							'value' => 'bbb',
+						),
+					),
 				),
 				'CircularNoticeTargetUser' => array(
 					0 => array('user_id' => 1),
@@ -204,7 +260,7 @@ class CircularNoticesControllerEditTest extends NetCommonsControllerTestCase {
 		$results[3] = array(
 			'urlOptions' => $data,
 			'data' => array(
-				'save_1' => '',
+				'save_99' => '',
 				'Frame' => array('id' => $data['frame_id']),
 				'Block' => array('id' => $data['block_id']),
 				'CircularNoticeContent'  => array(
@@ -246,7 +302,7 @@ class CircularNoticesControllerEditTest extends NetCommonsControllerTestCase {
 		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
 		//テスト実施
 		$this->_testPostAction('put', $data, Hash::merge(array('action' => 'edit'), $urlOptions), $exception, $return);
-		//ログイン
+		//ログアウト
 		TestAuthGeneral::logout($this);
 	}
 }
