@@ -423,12 +423,9 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			'CircularNoticeChoice' => 'CircularNotices.CircularNoticeChoice',
 			'CircularNoticeTargetUser' => 'CircularNotices.CircularNoticeTargetUser',
 		]);
-		// CircularNoticeChoicesを保存
-		if (! $this->CircularNoticeChoice->replaceCircularNoticeChoices($data)) {
-			return false;
-		}
-		// CircularNoticeTargetUsersを保存
-		if (! $this->CircularNoticeTargetUser->replaceCircularNoticeTargetUsers($data)) {
+		// CircularNoticeChoicesとCircularNoticeTargetUsersを保存
+		if (!$this->CircularNoticeChoice->replaceCircularNoticeChoices($data)
+			|| !$this->CircularNoticeTargetUser->replaceCircularNoticeTargetUsers($data)) {
 			return false;
 		}
 		return true;
