@@ -10,6 +10,7 @@
  */
 
 App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
+App::uses('NetCommonsComponent', 'NetCommons.Controller/Component');
 
 /**
  * CircularNoticesController::download()のテスト
@@ -149,19 +150,25 @@ class CircularNoticesControllerDownloadTest extends NetCommonsControllerTestCase
 		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_GENERAL_USER);
 
 		//テスト実施
-		ob_start();
-		$url = Hash::merge(array(
-			'plugin' => $this->plugin,
-			'controller' => $this->_controller,
-			'action' => 'download',
-		), $urlOptions);
-		$this->_testGetAction($url, $assert, $exception, $return);
-		ob_end_clean();
+		$this->controller->request->params = Hash::merge(
+			$this->controller->request->params,
+			$urlOptions
+		);
+		$this->controller->request->params['pass'][1] = $urlOptions['key'];
+		Current::initialize($this->controller->request);
+		$id = empty($urlOptions['frame_id']) ? '5' : $urlOptions['frame_id'];
+		Current::write('Frame', [
+			'id' => $id,
+			'key' => $urlOptions['key'],
+		]);
+		$response = $this->controller->download();
+		$this->assertInstanceOf('CakeResponse', $response);
+		$this->assertEquals('text/csv', $response->type());
+		$this->assertEquals($assert, $response->body());
 
 		//ログアウト
 		TestAuthGeneral::logout($this);
 	}
-
 
 /**
  *
