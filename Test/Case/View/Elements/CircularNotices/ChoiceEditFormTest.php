@@ -54,7 +54,6 @@ class CircularNoticesViewElementsCircularNoticesChoiceEditFormTest extends NetCo
  */
 	public function testChoiceEditForm() {
 		$this->controller->set('circularNoticeChoice', array(1, 2, 3));
-		$this->controller->view->plugin = 'CircularNotices';
 
 		//テスト実行
 		$this->_testGetAction('/test_circular_notices/test_view_elements_circular_notices_choice_edit_form/choice_edit_form',

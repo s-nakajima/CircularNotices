@@ -56,7 +56,10 @@ class CircularNoticesViewElementsCircularNoticesReplyTypeEditFormTest extends Ne
  * @return void
  */
 	public function testReplyTypeEditForm() {
-		App::load('CircularNoticeContent');
+		if (!class_exists('CircularNoticeContent')) {
+			App::load('CircularNoticeContent');
+		}
+
 		$this->controller->set('circularNoticeChoice', array(1, 2, 3));
 
 		//テスト実行
