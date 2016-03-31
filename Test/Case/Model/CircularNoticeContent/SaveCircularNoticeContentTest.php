@@ -66,116 +66,6 @@ class CircularNoticeContentSaveCircularNoticeContentTest extends NetCommonsModel
     }
 
     /**
-     * data
-     *
-     * @var array
-     */
-    private $__data = array(
-        'Frame' => array(
-            'id' => '6'
-        ),
-        'Block' => array(
-            'id' => '1',
-            'key' => 'block_2',
-            'language_id' => '2',
-            'room_id' => '1',
-            'plugin_key' => 'access_counters',
-            'key' => 'block_2',
-            'public_type' => '1',
-        ),
-        'CircularNoticeContent' => array(
-            'id' => 7,
-            'key' => 'frame_4',
-            'circular_notice_setting_key' => 'frame_4',
-            'public_type' => 1,
-            'subject' => true,
-            'content' => 'frame_4',
-            'reply_type' => 1,
-            'is_room_targeted_flag' => true,
-            'target_groups' => 'frame_4',
-            'publish_start' => '2015-03-31 09:25:20',
-            'publish_end' => '2017-04-01 23:59:59',
-            'reply_deadline_set_flag' => 1,
-            'reply_deadline' => '2017-04-01 23:25:20',
-            'status' => 1,
-            'is_auto_translated' => true,
-            'translation_engine' => 'frame_4',
-            'created_user' => 1,
-            'created' => '2015-03-09 09:25:20',
-            'modified_user' => 1,
-            'modified' => '2015-03-09 09:25:20'
-        ),
-        'CircularNoticeChoices' => array(
-            0 => array(
-                'CircularNoticeChoice' => array(
-                    'id' => '1',
-                    'weight' => '1',
-                    'value' => 'test'
-                )
-            ),
-            1 => array(
-                'CircularNoticeChoice' => array(
-                    'id' => '2',
-                    'weight' => '2',
-                    'value' => 'tst'
-                )
-            ),
-            2 => array(
-                'CircularNoticeChoice' => array(
-                    'id' => '',
-                    'weight' => '3',
-                    'value' => 'aaaaa'
-                )
-            )
-        ),
-        'CircularNoticeTargetUser' => array(
-            0 => array(
-                'user_id' => '1'
-            )
-        ),
-        'CircularNoticeTargetUsers' => array(
-            0 => array(
-                'CircularNoticeTargetUser' => array(
-                    'id' => null,
-                    'user_id' => '1'
-                )
-            )
-        )
-    );
-
-//    /**
-//     * Save用DataProvider
-//     *
-//     * ### 戻り値
-//     *  - data 登録データ
-//     *
-//     * @return array テストデータ
-//     */
-//    public function dataProviderSave()
-//    {
-//        return array(
-//            array($this->__data, 0),
-//        );
-//    }
-//
-//    /**
-//     * SaveのExceptionError用DataProvider
-//     *
-//     * ### 戻り値
-//     *  - data 登録データ
-//     *  - mockModel Mockのモデル
-//     *  - mockMethod Mockのメソッド
-//     *
-//     * @return array テストデータ
-//     */
-//    public function dataProviderSaveOnExceptionError()
-//    {
-//        return array(
-//            array($this->__data, 'CircularNotices.CircularNoticeContent', 'save'),
-//        );
-//    }
-
-    /**
      * SaveCircularNoticeContentのテスト
      *
      * @return void
@@ -193,11 +83,11 @@ class CircularNoticeContentSaveCircularNoticeContentTest extends NetCommonsModel
         $result = $this->$model->$methodName($data);
     }
 
-/**
- * SaveCircularNoticeContentのFalseテスト
- *
- * @return void
- */
+	/**
+	 * SaveCircularNoticeContentのFalseテスト
+	 *
+	 * @return void
+	 */
 	public function testSaveCircularNoticeContentFalse() {
 		$model = $this->_modelName;
 		$methodName = $this->_methodName;
@@ -218,7 +108,6 @@ class CircularNoticeContentSaveCircularNoticeContentTest extends NetCommonsModel
 	 *  - mockModel Mockのモデル
 	 *  - mockMethod Mockのメソッド(省略可：デフォルト validates)
 	 *
-	// * @return array テストデータ
 	 * @return void
 	 */
 	public function testCircularNoticeChoiceValidateCircularChoices() {
@@ -235,14 +124,9 @@ class CircularNoticeContentSaveCircularNoticeContentTest extends NetCommonsModel
 	}
 
 	/**
-	// * Saveの例外テスト
+	 * SaveCircularNoticeContentの例外テスト
 	 *
-	// * ### 戻り値
-	// *  - data 登録データ
-	// *  - mockModel Mockのモデル
-	// *  - mockMethod Mockのメソッド(省略可：デフォルト validates)
 	 *
-	// * @return array テストデータ
 	 * @return void
 	 */
 	public function testSaveCircularNoticeContentException() {
@@ -282,7 +166,6 @@ class CircularNoticeContentSaveCircularNoticeContentTest extends NetCommonsModel
 		$this->_mockForReturnFalse($model, 'CircularNotices.CircularNoticeChoice', 'replaceCircularNoticeChoices');
 
 		//テスト実施
-//		$this->_mockForReturnFalse($model, 'CircularNotices.CircularNoticeChoice', 'replaceCircularNoticeChoices');
 		$this->$model->$methodName($data);
 	}
 }
