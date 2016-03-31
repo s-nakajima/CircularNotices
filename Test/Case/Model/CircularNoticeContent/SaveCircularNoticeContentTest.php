@@ -149,7 +149,6 @@ class CircularNoticeContentSaveCircularNoticeContentTest extends NetCommonsModel
 		$data['CircularNoticeChoices'] = (new CircularNoticeChoiceFixture())->records[0];
 		$this->_mockForReturnFalse($model, 'CircularNotices.CircularNoticeChoice', 'replaceCircularNoticeChoices');
 		//テスト実施
-		//$this->_mockForReturnFalse($model, 'CircularNotices.CircularNoticeChoice', 'replaceCircularNoticeChoices');
 		$this->$model->$methodName($data);
 	}
 }

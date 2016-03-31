@@ -56,7 +56,7 @@ class CircularNoticesViewElementsCircularNoticeFrameSettingsEditFormTest extends
  * @return void
  */
 	public function testEditForm() {
-		App::load('CircularNoticeFrameSetting');
+//		App::load('CircularNoticeFrameSetting');
 		$this->controller->set('circularNoticeFrameSetting', array('id' => '', 'displayNumber' => 5));
 
 		//テスト実行
