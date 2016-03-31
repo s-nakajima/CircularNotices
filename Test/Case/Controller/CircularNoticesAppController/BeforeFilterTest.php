@@ -18,31 +18,30 @@ App::uses('CircularNoticesAppController', 'CircularNotices.Controller');
  * @author Masaki Goto <go8ogle@gmail.com>
  * @package NetCommons\CircularNotices\Test\Case\Controller\CircularNoticesAppController
  */
-class CircularNoticesAppControllerBeforeFilterTest extends NetCommonsControllerTestCase
-{
+class CircularNoticesAppControllerBeforeFilterTest extends NetCommonsControllerTestCase {
 
 /**
  * Fixtures
  *
  * @var array
  */
-    public $fixtures = array(
-        'plugin.circular_notices.circular_notice_choice',
-        'plugin.circular_notices.circular_notice_content',
-        'plugin.circular_notices.circular_notice_frame_setting',
-        'plugin.circular_notices.circular_notice_setting',
-        'plugin.circular_notices.circular_notice_target_user',
-        'plugin.user_attributes.user_attribute_layout',
-        'plugin.frames.frame',
-        'plugin.blocks.block',
-    );
+	public $fixtures = array(
+		'plugin.circular_notices.circular_notice_choice',
+		'plugin.circular_notices.circular_notice_content',
+		'plugin.circular_notices.circular_notice_frame_setting',
+		'plugin.circular_notices.circular_notice_setting',
+		'plugin.circular_notices.circular_notice_target_user',
+		'plugin.user_attributes.user_attribute_layout',
+		'plugin.frames.frame',
+		'plugin.blocks.block',
+	);
 
 /**
  * Plugin name
  *
  * @var string
  */
-    public $plugin = 'circular_notices';
+	public $plugin = 'circular_notices';
 
 /**
  * beforeFilterメソッド用DataProvider
@@ -54,19 +53,19 @@ class CircularNoticesAppControllerBeforeFilterTest extends NetCommonsControllerT
  *
  * @return array
  */
-    public function dataBeforeFilter() {
-        $results = array();
-        $results[1] = array(
-            'urlOptions' => array(
-                'frame_id' => 13,
-            ),
-            'assert' => array(
-                'method' => 'assertEmpty',
-            ),
-        );
+	public function dataBeforeFilter() {
+		$results = array();
+		$results[1] = array(
+			'urlOptions' => array(
+				'frame_id' => 13,
+			),
+			'assert' => array(
+				'method' => 'assertEmpty',
+			),
+		);
 
-        return $results;
-    }
+		return $results;
+	}
 
 /**
  * beforeFilterメソッドテスト
@@ -78,14 +77,13 @@ class CircularNoticesAppControllerBeforeFilterTest extends NetCommonsControllerT
  * @dataProvider dataBeforeFilter
  * @return void
  */
-    public function testBeforeFilter($urlOptions, $assert, $exception = null, $return = 'view') {
-
-        //テスト実施
-        $url = Hash::merge(array(
-            'plugin' => $this->plugin,
-            'controller' => $this->_controller,
-            'action' => 'index',
-        ), $urlOptions);
-        $this->_testGetAction($url, $assert, $exception, $return);
-    }
+	public function testBeforeFilter($urlOptions, $assert, $exception = null, $return = 'view') {
+		//テスト実施
+		$url = Hash::merge(array(
+			'plugin' => $this->plugin,
+			'controller' => $this->_controller,
+			'action' => 'index',
+		), $urlOptions);
+		$this->_testGetAction($url, $assert, $exception, $return);
+	}
 }

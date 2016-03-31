@@ -60,8 +60,6 @@ class CircularNoticesViewElementsCircularNoticesStatusLabelTest extends NetCommo
 		//チェック
 		$pattern = '/' . preg_quote('View/Elements/CircularNotices/status_label', '/') . '/';
 		$this->assertRegExp($pattern, $this->view);
-
-		//TODO:必要に応じてassert追加する
 	}
 
 }

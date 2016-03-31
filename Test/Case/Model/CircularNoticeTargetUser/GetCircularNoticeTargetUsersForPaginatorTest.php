@@ -70,14 +70,12 @@ class CircularNoticeTargetUserGetCircularNoticeTargetUsersForPaginatorTest exten
 			'limit' => 3,
 		);
 		$userId = null;
-//		$limit = self::DEFAULT_DISPLAY_NUMBER;
 		$limit = 10;
 
 		//テスト実施
 		$result = $this->$model->$methodName($contentId, $paginatorParams, $userId, $limit);
 
 		//チェック
-		//TODO:Assertを書く
 	}
 
 }

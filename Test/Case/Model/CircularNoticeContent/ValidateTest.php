@@ -69,40 +69,30 @@ class CircularNoticeContentValidateTest extends NetCommonsValidateTest {
 	public function dataProviderValidationError() {
 		$data['CircularNoticeContent'] = (new CircularNoticeContentFixture())->records[0];
 
-		//TODO:テストパタンを書く
 		return array(
 			array('data' => $data, 'field' => '', 'value' => '',
 				'message' => __d('net_commons', 'Invalid request.')),
 		);
 	}
 
-
-	/**
-	 * ValidationErrorのDataProvider
-	 *
-	 * ### 戻り値
-	 *  - data 登録データ
-	 *  - field フィールド名
-	 *  - value セットする値
-	 *  - message エラーメッセージ
-	 *  - overwrite 上書きするデータ(省略可)
-	 *
-	 * @return array テストデータ
-	 */
+/**
+ * ValidationErrorのDataProvider
+ *
+ * ### 戻り値
+ *  - data 登録データ
+ *  - field フィールド名
+ *  - value セットする値
+ *  - message エラーメッセージ
+ *  - overwrite 上書きするデータ(省略可)
+ *
+ * @return array テストデータ
+ */
 	public function testValidateNotEmptyCircularNoticeChoices() {
-
 		$model = $this->_modelName;
 		$methodName = $this->_methodName;
-		
+
 		$data['CircularNoticeContent'] = (new CircularNoticeContentFixture())->records[1];
 		$data['CircularNoticeChoices'] = '';
 		$result = $this->$model->$methodName($data);
-		
-
-		//TODO:テストパタンを書く
-//		return array(
-//				array('data' => $data, 'field' => '', 'value' => '',
-//						'message' => __d('net_commons', 'Invalid request.')),
-//		);
 	}
 }

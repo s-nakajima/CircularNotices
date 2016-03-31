@@ -68,9 +68,5 @@ class CircularNoticeContentGetCircularNoticeContentTest extends NetCommonsGetTes
 
 		//テスト実施
 		$result = $this->$model->$methodName($key, $userId);
-
-		//チェック
-		//TODO:Assertを書く
 	}
-
 }

@@ -69,7 +69,6 @@ class CircularNoticeFrameSettingValidateTest extends NetCommonsValidateTest {
 	public function dataProviderValidationError() {
 		$data['CircularNoticeFrameSetting'] = (new CircularNoticeFrameSettingFixture())->records[0];
 
-		//TODO:テストパタンを書く
 		return array(
 			array('data' => $data, 'field' => '', 'value' => '',
 				'message' => __d('net_commons', 'Invalid request.')),

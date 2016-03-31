@@ -64,14 +64,11 @@ class CircularNoticeTargetUserGetCircularNoticeTargetUserCountTest extends NetCo
 
 		//データ生成
 		$contentId = null;
-//		$contentId['CircularNoticeTargetUser.read_flag'] = false;
-//		$contentId['CircularNoticeTargetUser.reply_flag'] = false;
 
 		//テスト実施
 		$result = $this->$model->$methodName($contentId);
 
 		//チェック
-		//TODO:Assertを書く
 	}
 
 }

@@ -17,8 +17,7 @@ App::uses('BlockRolePermissionsControllerEditTest', 'Blocks.TestSuite');
  * @author Masaki Goto <go8ogle@gmail.com>
  * @package NetCommons\CircularNotices\Test\Case\Controller\CircularNoticeBlockRolePermissionsController
  */
-class CircularNoticeBlockRolePermissionsControllerEditTest extends BlockRolePermissionsControllerEditTest
-{
+class CircularNoticeBlockRolePermissionsControllerEditTest extends BlockRolePermissionsControllerEditTest {
 
 /**
  * Fixtures

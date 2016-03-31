@@ -70,16 +70,13 @@ class CircularNoticeContentGetCircularNoticeContentsForPaginateTest extends NetC
 
 		//テスト実施
 		$result = $this->$model->$methodName($blockKey, $userId, $paginatorParams, $defaultLimit);
-
-		//チェック
-		//TODO:Assertを書く
 	}
 
-	/**
-	 * PaginatorParams()のCheckテスト
-	 *
-	 * @return void
-	 */
+/**
+ * PaginatorParams()のCheckテスト
+ *
+ * @return void
+ */
 	public function testPaginatorParamsCheck() {
 		$model = $this->_modelName;
 		$methodName = $this->_methodName;
@@ -128,7 +125,6 @@ class CircularNoticeContentGetCircularNoticeContentsForPaginateTest extends NetC
 		//テスト実施
 		$result = $this->$model->$methodName($blockKey, $userId, $paginatorParams, $defaultLimit);
 
-		
 		//sort
 		//データ生成
 		$blockKey = null;
@@ -142,9 +138,6 @@ class CircularNoticeContentGetCircularNoticeContentsForPaginateTest extends NetC
 		//テスト実施
 		$result = $this->$model->$methodName($blockKey, $userId, $paginatorParams, $defaultLimit);
 
-		//チェック
-		//TODO:Assertを書く
-
 		//limit
 		//データ生成
 		$blockKey = null;
@@ -156,8 +149,5 @@ class CircularNoticeContentGetCircularNoticeContentsForPaginateTest extends NetC
 
 		//テスト実施
 		$result = $this->$model->$methodName($blockKey, $userId, $paginatorParams, $defaultLimit);
-
-		//チェック
-		//TODO:Assertを書く
 	}
 }

@@ -25,23 +25,21 @@ class CircularNoticesControllerParseRequestForSaveTest extends NetCommonsControl
  *
  * @var array
  */
-    public $fixtures = array(
-    );
+	public $fixtures = array();
 
 /**
  * Plugin name
  *
  * @var string
  */
-    public $plugin = 'circular_notices';
+	public $plugin = 'circular_notices';
 
 /**
  * Controller name
  *
  * @var string
  */
-    protected $_controller = 'circular_notices';
-
+	protected $_controller = 'circular_notices';
 
 /**
  * __parseRequestForSaveメソッドのテスト用DataProvider
@@ -54,53 +52,53 @@ class CircularNoticesControllerParseRequestForSaveTest extends NetCommonsControl
  *
  * @return array
  */
-    public function dataProviderParseRequestForSave() {
-        //テストデータ
-        $results = array();
-        $results[1]= array(
-            'data' => array(
-                'CircularNoticeContent' => array(
-                    'reply_type' => '1',
-                    'is_room_targeted_flag' => 1,
-                    'target_groups' => array(),
-                    'reply_deadline_set_flag' => 1,
-                ),
-            ),
-            'assert' => array('method' => 'assertNotEmpty')
-        );
-        $results[2]= array(
-            'data' => array(
-                'CircularNoticeContent' => array(
-                    'reply_type' => '2',
-                    'is_room_targeted_flag' => 0,
-                    'target_groups' => array(1,2,3),
-                    'reply_deadline_set_flag' => 1,
-                ),
-            ),
-            'assert' => array('method' => 'assertNotEmpty')
-        );
-        $results[3]= array(
-            'data' => array(
-                'CircularNoticeContent' => array(
-                    'reply_type' => '2',
-                    'is_room_targeted_flag' => 0,
-                    'target_groups' => array(1,2,3),
-                    'reply_deadline_set_flag' => 0,
-                ),
-                'CircularNoticeChoices' => array(
-                    1 => array(
-                        'CircularNoticeChoice' => array('value' => 'ccc'),
-                    ),
-                    2 => array(
-                        'CircularNoticeChoice' => array('value' => 'bbb'),
-                    ),
-                ),
-            ),
-            'assert' => array('method' => 'assertNotEmpty')
-        );
+	public function dataProviderParseRequestForSave() {
+		//テストデータ
+		$results = array();
+		$results[1] = array(
+			'data' => array(
+				'CircularNoticeContent' => array(
+					'reply_type' => '1',
+					'is_room_targeted_flag' => 1,
+					'target_groups' => array(),
+					'reply_deadline_set_flag' => 1,
+				),
+			),
+			'assert' => array('method' => 'assertNotEmpty')
+		);
+		$results[2] = array(
+			'data' => array(
+				'CircularNoticeContent' => array(
+					'reply_type' => '2',
+					'is_room_targeted_flag' => 0,
+					'target_groups' => array(1, 2, 3),
+					'reply_deadline_set_flag' => 1,
+				),
+			),
+			'assert' => array('method' => 'assertNotEmpty')
+		);
+		$results[3] = array(
+			'data' => array(
+				'CircularNoticeContent' => array(
+					'reply_type' => '2',
+					'is_room_targeted_flag' => 0,
+					'target_groups' => array(1, 2, 3),
+					'reply_deadline_set_flag' => 0,
+				),
+				'CircularNoticeChoices' => array(
+					1 => array(
+						'CircularNoticeChoice' => array('value' => 'ccc'),
+					),
+					2 => array(
+						'CircularNoticeChoice' => array('value' => 'bbb'),
+					),
+				),
+			),
+			'assert' => array('method' => 'assertNotEmpty')
+		);
 
-        return $results;
-    }
+		return $results;
+	}
 
 /**
  * __parseRequestForSaveアクションのテスト(ログインなし)
@@ -110,27 +108,26 @@ class CircularNoticesControllerParseRequestForSaveTest extends NetCommonsControl
  * @param null $exception
  * @dataProvider dataProviderParseRequestForSave
  */
-    public function testParseRequestForSave($data, $assert, $exception=null) {
-        //テスト実施
+	public function testParseRequestForSave($data, $assert, $exception = null) {
+		//テスト実施
+		$stub = $this->getMockBuilder('CircularNoticesControllerParseRequestForSaveMock')
+			->setMethods(null)
+			->getMock();
+		$stub->data = $data;
+		$method = new ReflectionMethod($stub, '__parseRequestForSave');
+		$method->setAccessible(true);
+		$method->invoke($stub);
 
-        $stub = $this->getMockBuilder('CircularNoticesControllerParseRequestForSaveMock')
-            ->setMethods(null)
-            ->getMock();
-        $stub->data = $data;
-        $method = new ReflectionMethod($stub, '__parseRequestForSave');
-        $method->setAccessible(true);
-        $method->invoke($stub);
-
-        $this->$assert['method']($stub->data);
-
-
-    }
+		$this->$assert['method']($stub->data);
+	}
 }
-
 /**
  * CircularNoticesControllerParseRequestForSaveMock
- * CircularNoticesController 継承
+ *
+ * @author Masaki Goto <go8ogle@gmail.com>
+ * @package NetCommons\CircularNotices\Test\Case\Controller\CircularNoticesController
  */
 class CircularNoticesControllerParseRequestForSaveMock extends CircularNoticesController {
-    public $data;
+
+	public $data;
 }

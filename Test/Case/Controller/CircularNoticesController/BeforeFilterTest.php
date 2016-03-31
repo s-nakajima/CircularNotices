@@ -70,16 +70,16 @@ class CircularNoticesControllerBeforeFilterTest extends NetCommonsControllerTest
 	}
 
 /**
-* editアクションテスト
-*
-* ### 戻り値
-*  - urlOptions: URLオプション
-*  - assert: テストの期待値
-*  - exception: Exception
-*  - return: testActionの実行後の結果
-*
-* @return array
-*/
+ * editアクションテスト
+ *
+ * ### 戻り値
+ *  - urlOptions: URLオプション
+ *  - assert: テストの期待値
+ *  - exception: Exception
+ *  - return: testActionの実行後の結果
+ *
+ * @return array
+ */
 	public function dataProviderBeforeFilter() {
 		$data = $this->__getData();
 

@@ -62,13 +62,10 @@ class CircularNoticeFrameSettingGetDisplayNumberOptionsTest extends NetCommonsGe
 		$model = $this->_modelName;
 		$methodName = $this->_methodName;
 
-		//データ生成
-
 		//テスト実施
 		$result = $this->$model->$methodName();
 
 		//チェック
-		//TODO:Assertを書く
 	}
 
 }

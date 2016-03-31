@@ -60,8 +60,6 @@ class CircularNoticesViewElementsCircularNoticesCircularDeadlineEditFormTest ext
 		//チェック
 		$pattern = '/' . preg_quote('View/Elements/CircularNotices/circular_deadline_edit_form', '/') . '/';
 		$this->assertRegExp($pattern, $this->view);
-
-		//TODO:必要に応じてassert追加する
 	}
 
 }

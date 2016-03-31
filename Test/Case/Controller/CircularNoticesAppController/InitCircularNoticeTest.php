@@ -81,16 +81,18 @@ class CircularNoticesAppControllerInitCircularNoticeTest extends NetCommonsContr
  * @param string|null $exception Exception
  * @dataProvider dataInitCircularNotice
  * @return void
+ * @throws BadRequestException
  */
 	public function testInitCircularNotice($data, $assert, $exception = null) {
-
 		if ($exception) {
 			$this->setExpectedException($exception);
 		}
 
 		$stub = $this->getMockBuilder('CircularNoticesAppController')->setMethods(['throwBadRequest'])->getMock();
 		$stub->expects($this->any())->method('throwBadRequest')->will($this->returnCallback(
-			function() { throw new BadRequestException('test');}
+			function () {
+				throw new BadRequestException('test');
+			}
 		));
 
 		foreach ($data as $key => $value) {

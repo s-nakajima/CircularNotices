@@ -25,28 +25,27 @@ class CircularNoticesMailSettingsControllerTest extends NetCommonsControllerTest
  *
  * @var array
  */
-    public $fixtures = array(
-    );
+	public $fixtures = array();
 
 /**
  * Plugin name
  *
  * @var string
  */
-    public $plugin = 'circular_notices';
+	public $plugin = 'circular_notices';
 
 /**
  * Controller name
  *
  * @var string
  */
-    protected $_controller = 'circular_notices';
+	protected $_controller = 'circular_notices';
 
 /**
  * CircularNoticeMailSettingsControllerのテスト
  */
-    public function testCircularNoticeMailSettingsController() {
-        $stub = $this->getMockBuilder('CircularNoticeMailSettingsController')->getMock();
-        $this->assertNotEmpty($stub->helpers);
-    }
+	public function testCircularNoticeMailSettingsController() {
+		$stub = $this->getMockBuilder('CircularNoticeMailSettingsController')->getMock();
+		$this->assertNotEmpty($stub->helpers);
+	}
 }

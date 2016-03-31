@@ -60,8 +60,6 @@ class CircularNoticesViewElementsCircularNoticeBlockRolePermissionsEditFormTest 
 		//チェック
 		$pattern = '/' . preg_quote('View/Elements/CircularNoticeBlockRolePermissions/edit_form', '/') . '/';
 		$this->assertRegExp($pattern, $this->view);
-
-		//TODO:必要に応じてassert追加する
 	}
 
 }

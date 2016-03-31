@@ -60,8 +60,6 @@ class CircularNoticesViewElementsCircularNoticesViewSelectSortTest extends NetCo
 		//チェック
 		$pattern = '/' . preg_quote('View/Elements/CircularNotices/view_select_sort', '/') . '/';
 		$this->assertRegExp($pattern, $this->view);
-
-		//TODO:必要に応じてassert追加する
 	}
 
 }

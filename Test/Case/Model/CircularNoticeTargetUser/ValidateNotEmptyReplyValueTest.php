@@ -64,7 +64,6 @@ class CircularNoticeTargetUserValidateNotEmptyReplyValueTest extends NetCommonsM
 		$check = 'fields';
 
 		//データ生成
-		
 		$this->$model->data['CircularNoticeTargetUser'] = array();
 		$this->$model->data['CircularNoticeTargetUser']['reply_text_value'] = null;
 		$this->$model->data['CircularNoticeTargetUser']['reply_selection_value'] = null;
@@ -73,8 +72,7 @@ class CircularNoticeTargetUserValidateNotEmptyReplyValueTest extends NetCommonsM
 		$result = $this->$model->$methodName($check);
 
 		//チェック
-		
-		
+
 		$this->$model->data['CircularNoticeTargetUser']['reply_text_value'] = true;
 		$this->$model->data['CircularNoticeTargetUser']['reply_selection_value'] = true;
 		//テスト実施
@@ -82,5 +80,4 @@ class CircularNoticeTargetUserValidateNotEmptyReplyValueTest extends NetCommonsM
 
 		//チェック
 	}
-
 }

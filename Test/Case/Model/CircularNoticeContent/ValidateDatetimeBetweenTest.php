@@ -17,87 +17,84 @@ App::uses('NetCommonsModelTestCase', 'NetCommons.TestSuite');
  * @author Masaki Goto <go8ogle@gmail.com>
  * @package NetCommons\CircularNotices\Test\Case\Model\CircularNoticesAppModel
  */
-class CircularNoticeContentValidateDatetimeBetweenTest extends NetCommonsModelTestCase
-{
+class CircularNoticeContentValidateDatetimeBetweenTest extends NetCommonsModelTestCase {
 
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = array(
-        'plugin.circular_notices.circular_notice_choice',
-        'plugin.circular_notices.circular_notice_content',
-        'plugin.circular_notices.circular_notice_frame_setting',
-        'plugin.circular_notices.circular_notice_setting',
-        'plugin.circular_notices.circular_notice_target_user',
-    );
+/**
+ * Fixtures
+ *
+ * @var array
+ */
+	public $fixtures = array(
+		'plugin.circular_notices.circular_notice_choice',
+		'plugin.circular_notices.circular_notice_content',
+		'plugin.circular_notices.circular_notice_frame_setting',
+		'plugin.circular_notices.circular_notice_setting',
+		'plugin.circular_notices.circular_notice_target_user',
+	);
 
-    /**
-     * Plugin name
-     *
-     * @var string
-     */
-    public $plugin = 'circular_notices';
+/**
+ * Plugin name
+ *
+ * @var string
+ */
+	public $plugin = 'circular_notices';
 
-    /**
-     * Model name
-     *
-     * @var string
-     */
-    protected $_modelName = 'CircularNoticeContent';
+/**
+ * Model name
+ *
+ * @var string
+ */
+	protected $_modelName = 'CircularNoticeContent';
 
-    /**
-     * Method name
-     *
-     * @var string
-     */
-    protected $_methodName = 'validateDatetimeBetween';
+/**
+ * Method name
+ *
+ * @var string
+ */
+	protected $_methodName = 'validateDatetimeBetween';
 
-    /**
-     * validateDatetimeBetween()のテスト
-     *
-     * @return void
-     */
-    public function testValidateDatetimeBetween()
-    {
-        $model = $this->_modelName;
-        $methodName = $this->_methodName;
+/**
+ * validateDatetimeBetween()のテスト
+ *
+ * @return void
+ */
+	public function testValidateDatetimeBetween() {
+		$model = $this->_modelName;
+		$methodName = $this->_methodName;
 
-        //データ生成
-        $check = array(
-            'reply_deadline' => '2016-03-23 23:59'
-        );
-        $params = array(
-            'from' => '2016-03-23 00:00',
-            'to' => '2016-03-24 00:00'
-        );
+		//データ生成
+		$check = array(
+			'reply_deadline' => '2016-03-23 23:59'
+		);
+		$params = array(
+			'from' => '2016-03-23 00:00',
+			'to' => '2016-03-24 00:00'
+		);
 
-        //テスト実施
-        $result = $this->$model->$methodName($check, $params);
+		//テスト実施
+		$result = $this->$model->$methodName($check, $params);
 
-        //チェック
-        $this->assertTrue($result);
-    }
+		//チェック
+		$this->assertTrue($result);
+	}
 
-    public function testValidateDatetimeBetweenFalse()
-    {
-        $model = $this->_modelName;
-        $methodName = $this->_methodName;
+	public function testValidateDatetimeBetweenFalse() {
+		$model = $this->_modelName;
+		$methodName = $this->_methodName;
 
-        //データ生成
-        $check = array(
-            'reply_deadline' => ''
-        );
-        $params = array(
-            'from' => '2016-03-24 00:00',
-            'to' => '2016-03-23 00:00'
-        );
+		//データ生成
+		$check = array(
+			'reply_deadline' => ''
+		);
+		$params = array(
+			'from' => '2016-03-24 00:00',
+			'to' => '2016-03-23 00:00'
+		);
 
-        //テスト実施
-        $result = $this->$model->$methodName($check, $params);
+		//テスト実施
+		$result = $this->$model->$methodName($check, $params);
 
-        //チェック
-        $this->assertFalse($result);
-    }
+		//チェック
+		$this->assertFalse($result);
+	}
 }

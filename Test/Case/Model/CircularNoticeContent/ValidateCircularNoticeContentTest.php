@@ -67,9 +67,6 @@ class CircularNoticeContentValidateCircularNoticeContentTest extends NetCommonsM
 
 		//テスト実施
 		$result = $this->$model->$methodName($data);
-
-		//チェック
-		//TODO:Assertを書く
 	}
 
 }

@@ -78,7 +78,7 @@ class CircularNoticesControllerIndexTest extends NetCommonsControllerTestCase {
 		$data = $this->__getData();
 		//テストデータ
 		$results = array();
-		$results[0]= array(
+		$results[0] = array(
 			'urlOptions' => array(
 				'frame_id' => $data['frame_id']
 			),
@@ -96,7 +96,7 @@ class CircularNoticesControllerIndexTest extends NetCommonsControllerTestCase {
  * @param string $return
  * @dataProvider dataProviderIndex
  */
-	public function testIndex($urlOptions, $assert, $exception=null, $return='view') {
+	public function testIndex($urlOptions, $assert, $exception = null, $return = 'view') {
 		//テスト実施
 		$url = Hash::merge(array(
 			'plugin' => $this->plugin,
@@ -121,7 +121,7 @@ class CircularNoticesControllerIndexTest extends NetCommonsControllerTestCase {
 		$data = $this->__getData();
 		//テストデータ
 		$results = array();
-		$results[0]= array(
+		$results[0] = array(
 			'urlOptions' => array(
 				'frame_id' => $data['frame_id']
 			),
@@ -139,7 +139,7 @@ class CircularNoticesControllerIndexTest extends NetCommonsControllerTestCase {
  * @param string $return
  * @dataProvider dataProviderIndexLogin
  */
-	public function testIndexLogin($urlOptions, $assert, $exception=null, $return='view') {
+	public function testIndexLogin($urlOptions, $assert, $exception = null, $return = 'view') {
 		//ログイン
 		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_GENERAL_USER);
 

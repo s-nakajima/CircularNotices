@@ -129,7 +129,6 @@ class CircularNoticesControllerViewTest extends NetCommonsControllerTestCase {
 		TestAuthGeneral::logout($this);
 	}
 
-
 /**
  * view回答アクションのテスト用DataProvider
  *

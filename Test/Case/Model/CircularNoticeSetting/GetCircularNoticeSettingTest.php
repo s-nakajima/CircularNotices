@@ -69,7 +69,6 @@ class CircularNoticeSettingGetCircularNoticeSettingTest extends NetCommonsGetTes
 		$result = $this->$model->$methodName($frameId);
 
 		//チェック
-		//TODO:Assertを書く
 
 		//データ生成
 		$frameId = null;
@@ -78,6 +77,5 @@ class CircularNoticeSettingGetCircularNoticeSettingTest extends NetCommonsGetTes
 		$result = $this->$model->$methodName($frameId);
 
 		//チェック
-		//TODO:Assertを書く
 	}
 }

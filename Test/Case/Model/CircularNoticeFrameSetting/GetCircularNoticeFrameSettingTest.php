@@ -69,7 +69,6 @@ class CircularNoticeFrameSettingGetCircularNoticeFrameSettingTest extends NetCom
 		$result = $this->$model->$methodName($created);
 
 		//チェック
-		//TODO:Assertを書く
 
 		//データ生成
 		$created = true;
@@ -78,7 +77,6 @@ class CircularNoticeFrameSettingGetCircularNoticeFrameSettingTest extends NetCom
 		$result = $this->$model->$methodName($created);
 
 		//チェック
-		//TODO:Assertを書く
 	}
 
 }

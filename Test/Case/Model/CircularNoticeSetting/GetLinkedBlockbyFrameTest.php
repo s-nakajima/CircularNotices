@@ -69,7 +69,6 @@ class CircularNoticeSettingGetLinkedBlockbyFrameTest extends NetCommonsGetTest {
 		$result = $this->$model->$methodName($frame);
 
 		//チェック
-		//TODO:Assertを書く
 	}
 
 }

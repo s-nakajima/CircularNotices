@@ -152,10 +152,9 @@ class CircularNoticesControllerAddTest extends NetCommonsControllerTestCase {
 				'save_1' => '',
 				'Frame' => array('id' => $data['frame_id']),
 				'Block' => array('id' => $data['block_id']),
-				'CircularNoticeContent'  => array(
+				'CircularNoticeContent' => array(
 					'reply_type' => 1,
 					'is_room_targeted_flag' => '',
-					'target_groups' => '',
 					'publish_start' => '',
 					'publish_end' => '',
 					'reply_deadline_set_flag' => 0,
@@ -173,14 +172,13 @@ class CircularNoticesControllerAddTest extends NetCommonsControllerTestCase {
 				'save_1' => '',
 				'Frame' => array('id' => $data['frame_id']),
 				'Block' => array('id' => $data['block_id']),
-				'CircularNoticeContent'  => array(
+				'CircularNoticeContent' => array(
 					'id' => '',
 					'circular_notice_setting_key' => 'circular_notice_setting_1',
 					'subject' => 'Lorem ipsum dolor sit amet',
 					'content' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
 					'reply_type' => '2',
 					'is_room_targeted_flag' => 1,
-					'target_groups' => array(1, 2),
 					'publish_start' => '2016-01-01 00:00',
 					'publish_end' => '2016-12-01 00:00',
 					'reply_deadline_set_flag' => '1',
@@ -214,18 +212,16 @@ class CircularNoticesControllerAddTest extends NetCommonsControllerTestCase {
 				'save_1' => '',
 				'Frame' => array('id' => $data['frame_id']),
 				'Block' => array('id' => $data['block_id']),
-				'CircularNoticeContent'  => array(
+				'CircularNoticeContent' => array(
 					'id' => '',
 					'circular_notice_setting_key' => 'circular_notice_setting_1',
 					'subject' => 'Lorem ipsum dolor sit amet',
 					'content' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
 					'reply_type' => '3',
 					'is_room_targeted_flag' => 1,
-					'target_groups' => array(1, 2),
 					'publish_start' => '2016-01-01 00:00',
 					'publish_end' => '2016-12-01 00:00',
-					'reply_deadline_set_flag' => '1',
-					'reply_deadline' => '2016-06-28 00:00'
+					'reply_deadline_set_flag' => '0',
 				),
 				'CircularNoticeChoices' => array(
 					0 => array(
@@ -235,13 +231,6 @@ class CircularNoticesControllerAddTest extends NetCommonsControllerTestCase {
 							'value' => 'aaa',
 						),
 					),
-					1 => array(
-						'CircularNoticeChoice' => array(
-							'id' => '',
-							'weight' => '2',
-							'value' => 'bbb',
-						),
-					),
 				),
 				'CircularNoticeTargetUser' => array(
 					0 => array('user_id' => 1),
@@ -249,32 +238,6 @@ class CircularNoticesControllerAddTest extends NetCommonsControllerTestCase {
 			),
 			'assert' => array('method' => 'assertNotEmpty'),
 		);
-		$results[3] = array(
-			'urlOptions' => $data,
-			'data' => array(
-				'save_99' => '',
-				'Frame' => array('id' => $data['frame_id']),
-				'Block' => array('id' => $data['block_id']),
-				'CircularNoticeContent'  => array(
-					'id' => '',
-					'circular_notice_setting_key' => 'circular_notice_setting_1',
-					'subject' => 'Lorem ipsum dolor sit amet',
-					'content' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
-					'reply_type' => '1',
-					'is_room_targeted_flag' => 1,
-					'target_groups' => array(1, 2),
-					'publish_start' => '2016-01-01 00:00',
-					'publish_end' => '2016-12-01 00:00',
-					'reply_deadline_set_flag' => '1',
-					'reply_deadline' => '2016-06-28 00:00'
-				),
-				'CircularNoticeTargetUser' => array(
-					0 => array('user_id' => 1),
-				),
-			),
-			'assert' => array('method' => 'assertNotEmpty'),
-		);
-
 		return $results;
 	}
 
@@ -297,10 +260,4 @@ class CircularNoticesControllerAddTest extends NetCommonsControllerTestCase {
 		//ログアウト
 		TestAuthGeneral::logout($this);
 	}
-
-
-
-
-
-
 }

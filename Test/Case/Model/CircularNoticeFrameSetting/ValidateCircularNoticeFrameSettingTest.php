@@ -69,7 +69,6 @@ class CircularNoticeFrameSettingValidateCircularNoticeFrameSettingTest extends N
 		$result = $this->$model->$methodName($data);
 
 		//チェック
-		//TODO:Assertを書く
 	}
 
 }

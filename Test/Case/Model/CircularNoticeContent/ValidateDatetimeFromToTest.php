@@ -93,11 +93,11 @@ class CircularNoticeContentValidateDatetimeFromToTest extends NetCommonsModelTes
 		$this->assertTrue($result);
 	}
 
-	/**
-	 * validateDatetimeFromTo()のfalseテスト
-	 *
-	 * @return void
-	 */
+/**
+ * validateDatetimeFromTo()のfalseテスト
+ *
+ * @return void
+ */
 	public function testValidateDatetimeFromToFalse() {
 		$model = $this->_modelName;
 		$methodName = $this->_methodName;
@@ -112,7 +112,6 @@ class CircularNoticeContentValidateDatetimeFromToTest extends NetCommonsModelTes
 
 		//テスト実施
 		$result = $this->$model->$methodName($check, $params);
-
 
 		//チェック
 		$this->assertFalse($result);
