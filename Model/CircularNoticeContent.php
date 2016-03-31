@@ -123,7 +123,6 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 				),
 			));
 		}
-
 		return parent::beforeValidate($options);
 	}
 
@@ -370,6 +369,8 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 					));
 				});
 			}
+			debug('$targetUsers');
+			debug($targetUsers);
 			$data['CircularNoticeTargetUsers'] = $targetUsers;
 
 			// データセット＋検証
@@ -377,6 +378,8 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			if (! $this->CircularNoticeChoice->validateCircularChoices($data)) {
 				$this->validationErrors = Hash::merge($this->validationErrors, $this->CircularNoticeChoice->validationErrors);
 			}
+			debug($data);
+			debug($this->validationErrors);
 			if ($this->validationErrors) {
 				return false;
 			}
@@ -388,6 +391,9 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			$this->setToUserIds($mailSendUserIdArr);
 
 			// CircularNoticeContentを保存
+			debug('$content = $this->save(null, false)');
+			$this->set($data);
+			debug($content = $this->save(null, false));
 			if (! $content = $this->save(null, false)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
