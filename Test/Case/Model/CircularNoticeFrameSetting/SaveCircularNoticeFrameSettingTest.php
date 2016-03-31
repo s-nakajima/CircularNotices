@@ -71,7 +71,6 @@ class CircularNoticeFrameSettingSaveCircularNoticeFrameSettingTest extends NetCo
 		// * 新規の登録処理
 		$results[1] = array($data);
 		$results[1] = Hash::insert($results[1], '0.CircularNoticeFrameSetting.id', 1);
-		$results[1] = Hash::insert($results[1], '0.CircularNoticeFrameSetting.key', 'key');
 		$results[1] = Hash::remove($results[1], '0.CircularNoticeFrameSetting.created_user');
 
 		return $results;
@@ -106,11 +105,10 @@ class CircularNoticeFrameSettingSaveCircularNoticeFrameSettingTest extends NetCo
  * @return array テストデータ
  */
 	public function dataProviderSaveOnValidationError() {
-
-		$data = $this->dataProviderSave();
+		$data = $this->dataProviderSave()[0][0];
 
 		return array(
-				array($data, 'CircularNotices.CircularNoticeFrameSetting', 'save'),
+				array($data, 'CircularNotices.CircularNoticeFrameSetting','validateCircularNoticeFrameSetting'),
 		);
 	}
 
