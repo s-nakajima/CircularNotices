@@ -65,14 +65,12 @@ class CircularNoticeTargetUserSaveCircularNoticeTargetUserTest extends NetCommon
 	public function dataProviderSave() {
 		$data['CircularNoticeTargetUser'] = (new CircularNoticeTargetUserFixture())->records[0];
 
-		//TODO:テストパタンを書く
 		$results = array();
 		// * 編集の登録処理
 		$results[0] = array($data);
 		// * 新規の登録処理
 		$results[1] = array($data);
 		$results[1] = Hash::insert($results[1], '0.CircularNoticeTargetUser.id', null);
-		$results[1] = Hash::insert($results[1], '0.CircularNoticeTargetUser.key', null); //TODO:不要なら削除する
 		$results[1] = Hash::remove($results[1], '0.CircularNoticeTargetUser.created_user');
 
 		return $results;
@@ -91,7 +89,6 @@ class CircularNoticeTargetUserSaveCircularNoticeTargetUserTest extends NetCommon
 	public function dataProviderSaveOnExceptionError() {
 		$data = $this->dataProviderSave()[0][0];
 
-		//TODO:テストパタンを書く
 		return array(
 			array($data, 'CircularNotices.CircularNoticeTargetUser', 'save'),
 		);
@@ -110,7 +107,6 @@ class CircularNoticeTargetUserSaveCircularNoticeTargetUserTest extends NetCommon
 	public function dataProviderSaveOnValidationError() {
 		$data = $this->dataProviderSave()[0][0];
 
-		//TODO:テストパタンを書く
 		return array(
 			array($data, 'CircularNotices.CircularNoticeTargetUser'),
 		);
@@ -141,7 +137,6 @@ class CircularNoticeTargetUserSaveCircularNoticeTargetUserTest extends NetCommon
 //		$result = $this->$model->$methodName($data);
 
 		//チェック
-		//TODO:Assertを書く
 	}
 
 }

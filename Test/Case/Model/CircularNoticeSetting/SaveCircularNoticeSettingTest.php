@@ -65,14 +65,13 @@ class CircularNoticeSettingSaveCircularNoticeSettingTest extends NetCommonsSaveT
 	public function dataProviderSave() {
 		$data['CircularNoticeSetting'] = (new CircularNoticeSettingFixture())->records[0];
 
-		//TODO:テストパタンを書く
 		$results = array();
 		// * 編集の登録処理
 		$results[0] = array($data);
 		// * 新規の登録処理
 		$results[1] = array($data);
 		$results[1] = Hash::insert($results[1], '0.CircularNoticeSetting.id', null);
-		$results[1] = Hash::insert($results[1], '0.CircularNoticeSetting.key', null); //TODO:不要なら削除する
+		$results[1] = Hash::insert($results[1], '0.CircularNoticeSetting.key', null);
 		$results[1] = Hash::remove($results[1], '0.CircularNoticeSetting.created_user');
 
 		return $results;
@@ -91,7 +90,6 @@ class CircularNoticeSettingSaveCircularNoticeSettingTest extends NetCommonsSaveT
 	public function dataProviderSaveOnExceptionError() {
 		$data = $this->dataProviderSave()[0][0];
 
-		//TODO:テストパタンを書く
 		return array(
 			array($data, 'CircularNotices.CircularNoticeSetting', 'save'),
 		);
@@ -110,7 +108,6 @@ class CircularNoticeSettingSaveCircularNoticeSettingTest extends NetCommonsSaveT
 	public function dataProviderSaveOnValidationError() {
 		$data = $this->dataProviderSave()[0][0];
 
-		//TODO:テストパタンを書く
 		return array(
 			array($data, 'CircularNotices.CircularNoticeSetting'),
 		);

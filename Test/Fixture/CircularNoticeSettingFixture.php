@@ -58,7 +58,7 @@ class CircularNoticeSettingFixture extends CakeTestFixture {
 			'created_user' => '1',
 			'created' => '2015-03-09 09:25:26',
 			'modified_user' => '1',
-			'modified' => '2015-03-09 09:25:26'
+			'modified' => '2015-03-09 09:25:27'
 		),
 		array(
 			'id' => '2',
@@ -72,7 +72,7 @@ class CircularNoticeSettingFixture extends CakeTestFixture {
 			'created_user' => '1',
 			'created' => '2015-03-09 09:25:26',
 			'modified_user' => '1',
-			'modified' => '2015-03-09 09:25:26'
+			'modified' => '2015-03-09 09:25:27'
 		),
 		array(
 			'id' => '3',
@@ -86,7 +86,7 @@ class CircularNoticeSettingFixture extends CakeTestFixture {
 			'created_user' => '1',
 			'created' => '2015-03-09 09:25:26',
 			'modified_user' => '1',
-			'modified' => '2015-03-09 09:25:26'
+			'modified' => '2015-03-09 09:25:27'
 		),
 		array(
 			'id' => '4',
@@ -100,7 +100,7 @@ class CircularNoticeSettingFixture extends CakeTestFixture {
 			'created_user' => '1',
 			'created' => '2015-03-09 09:25:26',
 			'modified_user' => '1',
-			'modified' => '2015-03-09 09:25:26'
+			'modified' => '2015-03-09 09:25:27'
 		),
 	);
 }
