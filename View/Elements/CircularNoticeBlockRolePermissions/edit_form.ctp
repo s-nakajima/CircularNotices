@@ -11,7 +11,7 @@
 ?>
 
 <?php echo $this->Form->hidden('Block.id', array(
-		'value' => $blockId,
+		'value' => Current::read('Block.id'),
 	)); ?>
 
 <?php echo $this->Form->hidden('CircularNoticeSetting.id', array(
