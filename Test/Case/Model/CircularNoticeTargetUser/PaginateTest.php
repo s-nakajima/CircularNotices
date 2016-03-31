@@ -65,17 +65,15 @@ class CircularNoticeTargetUserPaginateTest extends NetCommonsModelTestCase {
 		//データ生成
 		$conditions = null;
 		$fields = null;
-		$order = array('id' => 'asc');;
+		$order = array('user_id' => 'asc');
 		$limit = null;
 		$page = 1;
 		$recursive = null;
 		$extra = array();
 
 		//テスト実施
-		$result = $this->$model->$methodName($conditions, $fields, $order, $limit, $page, $recursive, $extra);
-
-		//チェック
-		//TODO:Assertを書く
+		$this->$model->virtualFields['first_order'] = 'CASE WHEN CircularNoticeTargetUser.user_id = 1 THEN 1 ELSE 2 END';
+		$this->$model->$methodName($conditions, $fields, $order, $limit, $page, $recursive, $extra);
 	}
 
 }
