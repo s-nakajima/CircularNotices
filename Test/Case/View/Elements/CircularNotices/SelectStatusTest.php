@@ -10,6 +10,7 @@
  */
 
 App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
+App::uses('CircularNoticeComponent', 'CircularNotices.Controller/Component');
 
 /**
  * View/Elements/CircularNotices/select_statusのテスト
@@ -45,6 +46,8 @@ class CircularNoticesViewElementsCircularNoticesSelectStatusTest extends NetComm
 		NetCommonsCakeTestCase::loadTestPlugin($this, 'CircularNotices', 'TestCircularNotices');
 		//テストコントローラ生成
 		$this->generateNc('TestCircularNotices.TestViewElementsCircularNoticesSelectStatus');
+
+
 	}
 
 /**
@@ -53,6 +56,10 @@ class CircularNoticesViewElementsCircularNoticesSelectStatusTest extends NetComm
  * @return void
  */
 	public function testSelectStatus() {
+		if (!class_exists('CircularNoticeComponent')) {
+			App::load('CircularNoticeComponent');
+		}
+
 		//テスト実行
 		$this->_testGetAction('/test_circular_notices/test_view_elements_circular_notices_select_status/select_status',
 				array('method' => 'assertNotEmpty'), null, 'view');
@@ -60,8 +67,5 @@ class CircularNoticesViewElementsCircularNoticesSelectStatusTest extends NetComm
 		//チェック
 		$pattern = '/' . preg_quote('View/Elements/CircularNotices/select_status', '/') . '/';
 		$this->assertRegExp($pattern, $this->view);
-
-		//TODO:必要に応じてassert追加する
 	}
-
 }

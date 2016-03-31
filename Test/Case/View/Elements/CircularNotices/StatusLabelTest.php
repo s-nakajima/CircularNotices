@@ -10,6 +10,7 @@
  */
 
 App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
+App::uses('CircularNoticeComponent', 'CircularNotices.Controller/Component');
 
 /**
  * View/Elements/CircularNotices/status_labelのテスト
@@ -48,11 +49,44 @@ class CircularNoticesViewElementsCircularNoticesStatusLabelTest extends NetCommo
 	}
 
 /**
+ * View/Elements/CircularNotices/status_labelのテスト用DataProvider
+ *
+ * @return array
+ */
+	public function dataProviderStatusLabel() {
+		$results = array();
+
+		$results[0] = array(
+			'circularNoticeContent' => array(
+				'circularNoticeContent' => array(
+					'currentStatus' => 1,
+				)
+			)
+		);
+		$results[1] = array(
+			'circularNoticeContent' => array(
+				'circularNoticeContent' => array(
+					'currentStatus' => 6,
+					'userStatus' => 1
+				)
+			)
+		);
+
+		return $results;
+	}
+
+
+/**
  * View/Elements/CircularNotices/status_labelのテスト
  *
+ * @param $data
  * @return void
+ * @dataProvider dataProviderStatusLabel
  */
-	public function testStatusLabel() {
+	public function testStatusLabel($data) {
+
+		$this->controller->set('circularNoticeContent', $data);
+
 		//テスト実行
 		$this->_testGetAction('/test_circular_notices/test_view_elements_circular_notices_status_label/status_label',
 				array('method' => 'assertNotEmpty'), null, 'view');

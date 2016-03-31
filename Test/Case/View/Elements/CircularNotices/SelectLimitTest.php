@@ -10,6 +10,7 @@
  */
 
 App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
+App::uses('CircularNoticeFrameSetting', 'CircularNotices.Model');
 
 /**
  * View/Elements/CircularNotices/select_limitのテスト
@@ -24,7 +25,9 @@ class CircularNoticesViewElementsCircularNoticesSelectLimitTest extends NetCommo
  *
  * @var array
  */
-	public $fixtures = array();
+	public $fixtures = array(
+		'plugin.circular_notices.circular_notice_frame_setting',
+	);
 
 /**
  * Plugin name
@@ -53,6 +56,13 @@ class CircularNoticesViewElementsCircularNoticesSelectLimitTest extends NetCommo
  * @return void
  */
 	public function testSelectLimit() {
+		if (!class_exists('CircularNoticeFrameSetting')) {
+			App::load('CircularNoticeFrameSetting');
+		}
+		$this->controller->helpers = array(
+			'NetCommons.DisplayNumber',
+		);
+
 		//テスト実行
 		$this->_testGetAction('/test_circular_notices/test_view_elements_circular_notices_select_limit/select_limit',
 				array('method' => 'assertNotEmpty'), null, 'view');
@@ -60,8 +70,5 @@ class CircularNoticesViewElementsCircularNoticesSelectLimitTest extends NetCommo
 		//チェック
 		$pattern = '/' . preg_quote('View/Elements/CircularNotices/select_limit', '/') . '/';
 		$this->assertRegExp($pattern, $this->view);
-
-		//TODO:必要に応じてassert追加する
 	}
-
 }
