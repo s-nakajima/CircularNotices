@@ -387,7 +387,6 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			$this->setToUserIds($mailSendUserIdArr);
 
 			// CircularNoticeContentを保存
-			$this->set($data);
 			if (! $content = $this->save(null, false)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
