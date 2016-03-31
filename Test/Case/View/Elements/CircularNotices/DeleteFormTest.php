@@ -53,6 +53,8 @@ class CircularNoticesViewElementsCircularNoticesDeleteFormTest extends NetCommon
  * @return void
  */
 	public function testDeleteForm() {
+		$this->controller->set('circularNoticeContent', array('key' => 'circular_notice_content_1'));
+
 		//テスト実行
 		$this->_testGetAction('/test_circular_notices/test_view_elements_circular_notices_delete_form/delete_form',
 				array('method' => 'assertNotEmpty'), null, 'view');
@@ -60,8 +62,6 @@ class CircularNoticesViewElementsCircularNoticesDeleteFormTest extends NetCommon
 		//チェック
 		$pattern = '/' . preg_quote('View/Elements/CircularNotices/delete_form', '/') . '/';
 		$this->assertRegExp($pattern, $this->view);
-
-		//TODO:必要に応じてassert追加する
 	}
 
 }

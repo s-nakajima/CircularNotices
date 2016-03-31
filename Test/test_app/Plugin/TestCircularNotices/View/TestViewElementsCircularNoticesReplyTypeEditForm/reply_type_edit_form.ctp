@@ -12,5 +12,5 @@
 ?>
 
 View/Elements/CircularNotices/reply_type_edit_form
-
+<?php $this->plugin = 'CircularNotices'; ?>
 <?php echo $this->element('CircularNotices.CircularNotices/reply_type_edit_form');
