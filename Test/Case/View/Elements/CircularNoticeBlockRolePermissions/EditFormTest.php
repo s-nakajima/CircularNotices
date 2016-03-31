@@ -53,6 +53,13 @@ class CircularNoticesViewElementsCircularNoticeBlockRolePermissionsEditFormTest 
  * @return void
  */
 	public function testEditForm() {
+
+		$this->controller->helpers = array(
+			'Blocks.BlockRolePermissionForm',
+		);
+		$this->controller->set('blockId', 1);
+		$this->controller->set('roles', array(1,2,3));
+
 		//テスト実行
 		$this->_testGetAction('/test_circular_notices/test_view_elements_circular_notice_block_role_permissions_edit_form/edit_form',
 				array('method' => 'assertNotEmpty'), null, 'view');
@@ -60,8 +67,5 @@ class CircularNoticesViewElementsCircularNoticeBlockRolePermissionsEditFormTest 
 		//チェック
 		$pattern = '/' . preg_quote('View/Elements/CircularNoticeBlockRolePermissions/edit_form', '/') . '/';
 		$this->assertRegExp($pattern, $this->view);
-
-		//TODO:必要に応じてassert追加する
 	}
-
 }
