@@ -69,23 +69,40 @@ class CircularNoticeContentValidateTest extends NetCommonsValidateTest {
 	public function dataProviderValidationError() {
 		$data['CircularNoticeContent'] = (new CircularNoticeContentFixture())->records[0];
 
-		return array(
-			array('data' => $data, 'field' => '', 'value' => '',
-				'message' => __d('net_commons', 'Invalid request.')),
+		return array([
+			'data' => $data,
+			'field' => '',
+			'value' => '',
+			'message' => null,
+		]);
+	}
+
+/**
+ * testValidateSelectUserCircularNoticeChoices
+ *
+ * @return void
+ */
+	public function testValidateSelectUserCircularNoticeChoices() {
+		$model = $this->_modelName;
+		$field = 'user_id';
+		$data['CircularNoticeContent'] = (new CircularNoticeContentFixture())->records[0];
+		$data[$model][$field] = '';
+
+		//validate処理実行
+		$this->$model->set($data);
+		$result = $this->$model->validates();
+		$this->assertFalse($result);
+
+		$this->assertEquals(
+		$this->$model->validationErrors[$field],
+			__d('circular_notices', 'Select user')
 		);
 	}
 
 /**
- * ValidationErrorのDataProvider
- *
- * ### 戻り値
- *  - data 登録データ
- *  - field フィールド名
- *  - value セットする値
- *  - message エラーメッセージ
- *  - overwrite 上書きするデータ(省略可)
- *
- * @return array テストデータ
+ * testValidateNotEmptyCircularNoticeChoices
+ * 
+ * @return void
  */
 	public function testValidateNotEmptyCircularNoticeChoices() {
 		$model = $this->_modelName;
@@ -93,6 +110,12 @@ class CircularNoticeContentValidateTest extends NetCommonsValidateTest {
 
 		$data['CircularNoticeContent'] = (new CircularNoticeContentFixture())->records[1];
 		$data['CircularNoticeChoices'] = '';
-		$result = $this->$model->$methodName($data);
+		$this->$model->data = $data;
+		$this->$model->$methodName();
+
+		//return array(
+		//array('data' => $data, 'field' => '', 'value' => '',
+		//'message' => __d('net_commons', 'Invalid request.')),
+		//);
 	}
 }

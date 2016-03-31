@@ -10,6 +10,7 @@
  */
 
 App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
+App::uses('CircularNoticeContent', 'CircularNotices.Model');
 
 /**
  * View/Elements/CircularNotices/reply_type_edit_formのテスト
@@ -24,7 +25,9 @@ class CircularNoticesViewElementsCircularNoticesReplyTypeEditFormTest extends Ne
  *
  * @var array
  */
-	public $fixtures = array();
+	public $fixtures = array(
+		'plugin.circular_notices.circular_notice_content',
+	);
 
 /**
  * Plugin name
@@ -53,6 +56,9 @@ class CircularNoticesViewElementsCircularNoticesReplyTypeEditFormTest extends Ne
  * @return void
  */
 	public function testReplyTypeEditForm() {
+		App::load('CircularNoticeContent');
+		$this->controller->set('circularNoticeChoice', array(1, 2, 3));
+
 		//テスト実行
 		$this->_testGetAction('/test_circular_notices/test_view_elements_circular_notices_reply_type_edit_form/reply_type_edit_form',
 				array('method' => 'assertNotEmpty'), null, 'view');
@@ -61,5 +67,4 @@ class CircularNoticesViewElementsCircularNoticesReplyTypeEditFormTest extends Ne
 		$pattern = '/' . preg_quote('View/Elements/CircularNotices/reply_type_edit_form', '/') . '/';
 		$this->assertRegExp($pattern, $this->view);
 	}
-
 }

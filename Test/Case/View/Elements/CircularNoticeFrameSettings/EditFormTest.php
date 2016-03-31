@@ -10,6 +10,7 @@
  */
 
 App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
+App::uses('CircularNoticeFrameSetting', 'CircularNotices.Model');
 
 /**
  * View/Elements/CircularNoticeFrameSettings/edit_formのテスト
@@ -24,7 +25,9 @@ class CircularNoticesViewElementsCircularNoticeFrameSettingsEditFormTest extends
  *
  * @var array
  */
-	public $fixtures = array();
+	public $fixtures = array(
+		'plugin.circular_notices.circular_notice_frame_setting',
+	);
 
 /**
  * Plugin name
@@ -53,6 +56,9 @@ class CircularNoticesViewElementsCircularNoticeFrameSettingsEditFormTest extends
  * @return void
  */
 	public function testEditForm() {
+//		App::load('CircularNoticeFrameSetting');
+		$this->controller->set('circularNoticeFrameSetting', array('id' => '', 'displayNumber' => 5));
+
 		//テスト実行
 		$this->_testGetAction('/test_circular_notices/test_view_elements_circular_notice_frame_settings_edit_form/edit_form',
 				array('method' => 'assertNotEmpty'), null, 'view');
@@ -61,5 +67,4 @@ class CircularNoticesViewElementsCircularNoticeFrameSettingsEditFormTest extends
 		$pattern = '/' . preg_quote('View/Elements/CircularNoticeFrameSettings/edit_form', '/') . '/';
 		$this->assertRegExp($pattern, $this->view);
 	}
-
 }
