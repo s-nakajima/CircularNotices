@@ -12,14 +12,13 @@
 /**
  * CircularNoticeTargetUserFixture
  */
-class CircularNoticeTargetUserFixture extends CakeTestFixture
-{
+class CircularNoticeTargetUserFixture extends CakeTestFixture {
 
-    /**
-     * Fields
-     *
-     * @var array
-     */
+/**
+ * Fields
+ *
+ * @var array
+ */
     public $fields = array(
         'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary', 'comment' => 'ID |  |  | '),
         'user_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'index', 'comment' => 'circular notice target user id | 回覧先 | users.id | '),
@@ -42,11 +41,11 @@ class CircularNoticeTargetUserFixture extends CakeTestFixture
         'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
     );
 
-    /**
-     * Records
-     *
-     * @var array
-     */
+/**
+ * Records
+ *
+ * @var array
+ */
     public $records = array(
         array(
             'id' => '1',
@@ -159,6 +158,65 @@ class CircularNoticeTargetUserFixture extends CakeTestFixture
             'reply_datetime' => '2015-03-09 09:25:24',
             'reply_text_value' => 'Lorem ipsum dolor sit amet',
             'reply_selection_value' => 'Lorem ipsum dolor sit amet',
+            'created_user' => '1',
+            'created' => '2015-03-09 09:25:24',
+            'modified_user' => '1',
+            'modified' => '2015-03-09 09:25:24'
+        ),
+        array('id' => '9',
+            'user_id' => '2',
+            'circular_notice_content_id' => '10',
+            'read_flag' => false,
+            'read_datetime' => '2015-03-09 09:25:24',
+            'reply_flag' => true,
+            'reply_datetime' => '2015-03-09 09:25:24',
+            'reply_text_value' => '',
+            'reply_selection_value' => 'Lorem|dolor|amet',
+            'created_user' => '1',
+            'created' => '2015-03-09 09:25:24',
+            'modified_user' => '1',
+            'modified' => '2015-03-09 09:25:24'
+        ),
+        array(
+            'id' => '10',
+            'user_id' => '4',
+            'circular_notice_content_id' => '10',
+            'read_flag' => true,
+            'read_datetime' => null,
+            'reply_flag' => true,
+            'reply_datetime' => null,
+            'reply_text_value' => 'Lorem ipsum dolor sit amet',
+            'reply_selection_value' => '',
+            'created_user' => '1',
+            'created' => '2015-03-09 09:25:24',
+            'modified_user' => '1',
+            'modified' => '2015-03-09 09:25:24'
+        ),
+        array(
+            'id' => '11',
+            'user_id' => '4',
+            'circular_notice_content_id' => '11',
+            'read_flag' => false,
+            'read_datetime' => '2015-03-09 09:25:24',
+            'reply_flag' => false,
+            'reply_datetime' => '2015-03-09 09:25:24',
+            'reply_text_value' => 'Lorem ipsum dolor sit amet',
+            'reply_selection_value' => '',
+            'created_user' => '1',
+            'created' => '2015-03-09 09:25:24',
+            'modified_user' => '1',
+            'modified' => '2015-03-09 09:25:24'
+        ),
+        array(
+            'id' => '12',
+            'user_id' => '4',
+            'circular_notice_content_id' => '12',
+            'read_flag' => false,
+            'read_datetime' => '2015-03-09 09:25:24',
+            'reply_flag' => true,
+            'reply_datetime' => '2015-03-09 09:25:24',
+            'reply_text_value' => 'Lorem ipsum dolor sit amet',
+            'reply_selection_value' => '',
             'created_user' => '1',
             'created' => '2015-03-09 09:25:24',
             'modified_user' => '1',

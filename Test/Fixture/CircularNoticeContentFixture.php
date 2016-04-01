@@ -15,11 +15,11 @@
 class CircularNoticeContentFixture extends CakeTestFixture
 {
 
-    /**
-     * Fields
-     *
-     * @var array
-     */
+/**
+ * Fields
+ *
+ * @var array
+ */
     public $fields = array(
         'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary', 'comment' => 'ID |  |  | '),
         'key' => array('type' => 'string', 'null' => false, 'default' => null, 'key' => 'index', 'collate' => 'utf8_general_ci', 'comment' => 'circulat notice content key | 回覧キー | Hash値 | ', 'charset' => 'utf8'),
@@ -52,13 +52,13 @@ class CircularNoticeContentFixture extends CakeTestFixture
         'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
     );
 
-    /**
-     * Records
-     *
-     * @var array
-     */
+/**
+ * Records
+ *
+ * @var array
+ */
     public $records = array(
-        // reply type. 1:text field , 2:selection, 3:multiple selection | 回答方式 1:記述方式、2:択一方式、3:選択方式 | |
+// reply type. 1:text field , 2:selection, 3:multiple selection | 回答方式 1:記述方式、2:択一方式、3:選択方式 | |
 
         array(
             'id' => '1',
@@ -251,6 +251,72 @@ class CircularNoticeContentFixture extends CakeTestFixture
             'reply_deadline_set_flag' => '1',
             'reply_deadline' => '2070-04-01 23:25:20',
             'status' => '3',
+            'is_auto_translated' => true,
+            'translation_engine' => 'frame_4',
+            'created_user' => '1',
+            'created' => '2015-03-09 09:25:20',
+            'modified_user' => '1',
+            'modified' => '2015-03-09 09:25:20',
+        ),
+        array(
+            'id' => '10',
+            'key' => 'circular_notice_content_10',
+            'circular_notice_setting_key' => 'circular_notice_content_10',
+            'public_type' => '1',
+            'subject' => true,
+            'content' => 'frame_4',
+            'reply_type' => '1',
+            'is_room_targeted_flag' => true,
+            'target_groups' => 'frame_4',
+            'publish_start' => '2016-03-10 09:25:20',
+            'publish_end' => '2070-04-01 23:59:59',
+            'reply_deadline_set_flag' => '0',
+            'reply_deadline' => '2016-03-24 23:25:20',
+            'status' => '1',
+            'is_auto_translated' => true,
+            'translation_engine' => 'frame_4',
+            'created_user' => '1',
+            'created' => '2015-03-09 09:25:20',
+            'modified_user' => '1',
+            'modified' => '2015-03-09 09:25:20',
+        ),
+        array(
+            'id' => '11',
+            'key' => 'circular_notice_content_11',
+            'circular_notice_setting_key' => 'circular_notice_content_11',
+            'public_type' => '1',
+            'subject' => true,
+            'content' => 'frame_11',
+            'reply_type' => '2',
+            'is_room_targeted_flag' => true,
+            'target_groups' => 'frame_4',
+            'publish_start' => '2016-03-10 09:25:20',
+            'publish_end' => '2070-04-01 23:59:59',
+            'reply_deadline_set_flag' => '0',
+            'reply_deadline' => '2016-03-24 23:25:20',
+            'status' => '1',
+            'is_auto_translated' => true,
+            'translation_engine' => 'frame_4',
+            'created_user' => '1',
+            'created' => '2015-03-09 09:25:20',
+            'modified_user' => '1',
+            'modified' => '2015-03-09 09:25:20',
+        ),
+        array(
+            'id' => '12',
+            'key' => 'circular_notice_content_12',
+            'circular_notice_setting_key' => 'circular_notice_content_12',
+            'public_type' => '1',
+            'subject' => true,
+            'content' => 'frame_11',
+            'reply_type' => '3',
+            'is_room_targeted_flag' => true,
+            'target_groups' => 'frame_4',
+            'publish_start' => '2016-03-10 09:25:20',
+            'publish_end' => '2070-04-01 23:59:59',
+            'reply_deadline_set_flag' => '0',
+            'reply_deadline' => '2016-03-24 23:25:20',
+            'status' => '1',
             'is_auto_translated' => true,
             'translation_engine' => 'frame_4',
             'created_user' => '1',

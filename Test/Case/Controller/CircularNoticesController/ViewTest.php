@@ -202,6 +202,46 @@ class CircularNoticesControllerViewTest extends NetCommonsControllerTestCase {
 			),
 			'assert' => array('method' => 'assertNotEmpty'),
 		);
+		$results[4] = array(
+				'urlOptions' => Hash::insert($data, 'key', 'circular_notice_content_10'),
+				'data' => array(
+						'CircularNoticeContent' => array(
+								'key' => 'circular_notice_content_10',
+						),
+						'CircularNoticeTargetUser' => array(
+								'id' => 10,
+								'reply_text_value' => '',
+						),
+				),
+				'assert' => array('method' => 'assertNotEmpty'),
+		);
+		$results[5] = array(
+				'urlOptions' => Hash::insert($data, 'key', 'circular_notice_content_11'),
+				'data' => array(
+						'CircularNoticeContent' => array(
+								'key' => 'circular_notice_content_11',
+						),
+						'CircularNoticeTargetUser' => array(
+								'id' => 11,
+								'reply_text_value' => '',
+								'reply_selection_value' => '',
+						),
+				),
+				'assert' => array('method' => 'assertNotEmpty'),
+		);
+		$results[6] = array(
+				'urlOptions' => Hash::insert($data, 'key', 'circular_notice_content_12'),
+				'data' => array(
+						'CircularNoticeContent' => array(
+								'key' => 'circular_notice_content_12',
+						),
+						'CircularNoticeTargetUser' => array(
+								'id' => 12,
+								'reply_selection_value' => array(),
+						),
+				),
+				'assert' => array('method' => 'assertNotEmpty'),
+		);
 		return $results;
 	}
 
