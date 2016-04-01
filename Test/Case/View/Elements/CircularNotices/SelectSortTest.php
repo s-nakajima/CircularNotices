@@ -61,5 +61,4 @@ class CircularNoticesViewElementsCircularNoticesSelectSortTest extends NetCommon
 		$pattern = '/' . preg_quote('View/Elements/CircularNotices/select_sort', '/') . '/';
 		$this->assertRegExp($pattern, $this->view);
 	}
-
 }

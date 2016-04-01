@@ -50,57 +50,57 @@ class CircularNoticeSettingFixture extends CakeTestFixture {
 			'id' => '1',
 			'block_key' => 'block_1',
 			'key' => 'circular_notice_setting_1',
-			'mail_notice_flag' => 1,
+			'mail_notice_flag' => true,
 			'mail_subject' => 'Lorem ipsum dolor sit amet,',
 			'mail_body' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
-			'is_auto_translated' => 1,
+			'is_auto_translated' => true,
 			'translation_engine' => 'frame_1',
 			'created_user' => '1',
 			'created' => '2015-03-09 09:25:26',
-			'modified_user' => 1,
-			'modified' => '2015-03-09 09:25:26'
+			'modified_user' => '1',
+			'modified' => '2015-03-09 09:25:27'
 		),
 		array(
 			'id' => '2',
 			'block_key' => 'block_1',
 			'key' => 'circular_notice_setting_2',
-			'mail_notice_flag' => 1,
+			'mail_notice_flag' => true,
 			'mail_subject' => 'Lorem ipsum dolor sit amet,',
 			'mail_body' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
-			'is_auto_translated' => 1,
+			'is_auto_translated' => true,
 			'translation_engine' => 'frame_1',
 			'created_user' => '1',
 			'created' => '2015-03-09 09:25:26',
-			'modified_user' => 1,
-			'modified' => '2015-03-09 09:25:26'
+			'modified_user' => '1',
+			'modified' => '2015-03-09 09:25:27'
 		),
 		array(
 			'id' => '3',
 			'block_key' => 'block_1',
 			'key' => 'circular_notice_3',
-			'mail_notice_flag' => 1,
+			'mail_notice_flag' => true,
 			'mail_subject' => 'Lorem ipsum dolor sit amet,',
 			'mail_body' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
-			'is_auto_translated' => 1,
+			'is_auto_translated' => true,
 			'translation_engine' => 'frame_1',
 			'created_user' => '1',
 			'created' => '2015-03-09 09:25:26',
-			'modified_user' => 1,
-			'modified' => '2015-03-09 09:25:26'
+			'modified_user' => '1',
+			'modified' => '2015-03-09 09:25:27'
 		),
 		array(
 			'id' => '4',
 			'block_key' => 'block_1',
 			'key' => 'circular_notice_4',
-			'mail_notice_flag' => 1,
+			'mail_notice_flag' => true,
 			'mail_subject' => 'Lorem ipsum dolor sit amet,',
 			'mail_body' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
-			'is_auto_translated' => 1,
+			'is_auto_translated' => true,
 			'translation_engine' => 'frame_1',
 			'created_user' => '1',
 			'created' => '2015-03-09 09:25:26',
-			'modified_user' => 1,
-			'modified' => '2015-03-09 09:25:26'
+			'modified_user' => '1',
+			'modified' => '2015-03-09 09:25:27'
 		),
 	);
 }

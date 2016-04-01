@@ -71,7 +71,6 @@ class CircularNoticeTargetUserSaveCircularNoticeTargetUserTest extends NetCommon
 		// * 新規の登録処理
 		$results[1] = array($data);
 		$results[1] = Hash::insert($results[1], '0.CircularNoticeTargetUser.id', null);
-		$results[1] = Hash::insert($results[1], '0.CircularNoticeTargetUser.key', null);
 		$results[1] = Hash::remove($results[1], '0.CircularNoticeTargetUser.created_user');
 
 		return $results;
@@ -113,11 +112,11 @@ class CircularNoticeTargetUserSaveCircularNoticeTargetUserTest extends NetCommon
 		);
 	}
 
-/**
- * validateCircularNoticeTargetUser()のテスト
- *
- * @return void
- */
+	/**
+	 * validateCircularNoticeTargetUser()のテスト
+	 *
+	 * @return void
+	 */
 	public function testValidateCircularNoticeTargetUser() {
 		$model = $this->_modelName;
 		$methodName = $this->_methodName;
@@ -125,17 +124,19 @@ class CircularNoticeTargetUserSaveCircularNoticeTargetUserTest extends NetCommon
 		//データ生成
 		$data = null;
 
+
 		// 例外を発生させるためのモック
-		$circularNoticeChoicesMock = $this->getMockForModel('CircularNotices.' . $model, ['validateCircularNoticeTargetUser']);
+		$circularNoticeChoicesMock = $this->getMockForModel('CircularNotices.'.$model, ['validateCircularNoticeTargetUser']);
 		$circularNoticeChoicesMock->expects($this->any())
 				->method('validateCircularNoticeTargetUser')
 				->will($this->returnValue(false));
 
 		$circularNoticeChoicesMock->$methodName($data);
-
+		
 		//テスト実施
-		//$result = $this->$model->$methodName($data);
+//		$result = $this->$model->$methodName($data);
 
 		//チェック
 	}
+
 }

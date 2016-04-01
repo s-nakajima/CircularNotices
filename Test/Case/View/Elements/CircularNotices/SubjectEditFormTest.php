@@ -61,5 +61,4 @@ class CircularNoticesViewElementsCircularNoticesSubjectEditFormTest extends NetC
 		$pattern = '/' . preg_quote('View/Elements/CircularNotices/subject_edit_form', '/') . '/';
 		$this->assertRegExp($pattern, $this->view);
 	}
-
 }

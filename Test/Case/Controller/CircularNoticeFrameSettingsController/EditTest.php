@@ -164,7 +164,7 @@ class CircularNoticeFrameSettingsControllerEditTest extends NetCommonsController
 
 		//ログインあり
 		$results[0] = array(
-			'urlOptions' => array('frame_id' => $data0['Frame']['id'], 'block_id' => $data0['Block']['id'], 'key' => $data0['CircularNoticeFrameSetting']['id']),
+			'urlOptions' => array('frame_id' => $data0['Frame']['id']),
 			'assert' => null
 		);
 
@@ -273,7 +273,7 @@ class CircularNoticeFrameSettingsControllerEditTest extends NetCommonsController
 
 		$result = array(
 			'data' => $data,
-			'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'frame_key' => $data['Frame']['key']),
+			'urlOptions' => array('frame_id' => $data['Frame']['id']),
 		);
 
 		return array(

@@ -43,10 +43,10 @@ class CircularNoticeFrameSettingFixture extends CakeTestFixture {
 		array(
 			'id' => '1',
 			'frame_key' => 'frame_1',
-			'display_number' => 10,
-			'created_user' => 1,
+			'display_number' => '10',
+			'created_user' => '1',
 			'created' => '2015-03-09 09:25:22',
-			'modified_user' => 1,
+			'modified_user' => 's',
 			'modified' => '2015-03-09 09:25:22'
 		),
 	);

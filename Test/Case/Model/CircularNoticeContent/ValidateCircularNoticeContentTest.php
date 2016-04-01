@@ -62,11 +62,11 @@ class CircularNoticeContentValidateCircularNoticeContentTest extends NetCommonsM
 		$model = $this->_modelName;
 		$methodName = $this->_methodName;
 
-		//データ生成
-		$data = null;
-
 		//テスト実施
-		$result = $this->$model->$methodName($data);
+		$this->$model->data = array(
+			'CircularNoticeContent' => null
+		);
+		$this->$model->$methodName($this->$model->data);
 	}
 
 }

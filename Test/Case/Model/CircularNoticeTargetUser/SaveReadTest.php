@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('NetCommonsSaveTest', 'NetCommons.TestSuite');
+App::uses('NetCommonsModelTestCase', 'NetCommons.TestSuite');
 App::uses('CircularNoticesAppModel', 'CircularNotices.Model');
 App::uses('CircularNoticeTargetUserFixture', 'CircularNotices.Test/Fixture');
 App::uses('CircularNoticeContentFixture', 'CircularNotices.Test/Fixture');
@@ -20,7 +20,7 @@ App::uses('CircularNoticeContentFixture', 'CircularNotices.Test/Fixture');
  * @author Masaki Goto <go8ogle@gmail.com>
  * @package NetCommons\CircularNotices\Test\Case\Model\CircularNoticeTargetUser
  */
-class CircularNoticeTargetUserSaveReadTest extends NetCommonsSaveTest {
+class CircularNoticeTargetUserSaveReadTest extends NetCommonsModelTestCase {
 
 /**
  * Fixtures
@@ -106,7 +106,7 @@ class CircularNoticeTargetUserSaveReadTest extends NetCommonsSaveTest {
  *  - data 登録データ
  *  - mockModel Mockのモデル
  *  - mockMethod Mockのメソッド
- * //     * @dataProvider dataProviderSave
+ * //@dataProvider dataProviderSave
  * @return array テストデータ
  */
 	public function dataProviderSaveOnExceptionError() {
@@ -157,8 +157,7 @@ class CircularNoticeTargetUserSaveReadTest extends NetCommonsSaveTest {
 		$userId = 5;
 
 		//テスト実施
-		$result = $this->$model->$methodName($contentId, $userId);
-		//チェック
+		$this->$model->$methodName($contentId, $userId);
 	}
 
 /**
@@ -176,13 +175,11 @@ class CircularNoticeTargetUserSaveReadTest extends NetCommonsSaveTest {
 		$userId = 5;
 
 		// 例外モック
-		$circularNoticeSettingMock = $this->getMockForModel('CircularNotices.' . $model, ['saveCircularNoticeTargetUser']);
-		$circularNoticeSettingMock->expects($this->any())
-			->method('saveCircularNoticeTargetUser')
-			->will($this->returnValue(false));
-		$result = $circularNoticeSettingMock->$methodName($contentId, $userId);
-
-		//チェック
+		$thisModelMock = $this->getMockForModel('CircularNotices.' . $model, ['saveCircularNoticeTargetUser']);
+		$thisModelMock->expects($this->any())
+				->method('saveCircularNoticeTargetUser')
+				->will($this->returnValue(false));
+		$thisModelMock->$methodName($contentId, $userId);
 	}
 
 /**
@@ -199,12 +196,11 @@ class CircularNoticeTargetUserSaveReadTest extends NetCommonsSaveTest {
 		$userId = 6;
 
 		// 例外モック
-		$circularNoticeSettingMock = $this->getMockForModel('CircularNotices.' . $model, ['saveCircularNoticeTargetUser']);
-		$circularNoticeSettingMock->expects($this->any())
+		$thisModelMock = $this->getMockForModel('CircularNotices.' . $model, ['saveCircularNoticeTargetUser']);
+		$thisModelMock->expects($this->any())
 			->method('saveCircularNoticeTargetUser')
 			->will($this->returnValue(false));
-		$result = $circularNoticeSettingMock->$methodName($contentId, $userId);
-
-		//チェック
+		$thisModelMock->$methodName($contentId, $userId);
 	}
+
 }

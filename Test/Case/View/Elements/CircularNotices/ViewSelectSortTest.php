@@ -53,6 +53,9 @@ class CircularNoticesViewElementsCircularNoticesViewSelectSortTest extends NetCo
  * @return void
  */
 	public function testViewSelectSort() {
+
+		$this->controller->set('circularNoticeContent', array('id' => 1));
+
 		//テスト実行
 		$this->_testGetAction('/test_circular_notices/test_view_elements_circular_notices_view_select_sort/view_select_sort',
 				array('method' => 'assertNotEmpty'), null, 'view');
@@ -61,5 +64,4 @@ class CircularNoticesViewElementsCircularNoticesViewSelectSortTest extends NetCo
 		$pattern = '/' . preg_quote('View/Elements/CircularNotices/view_select_sort', '/') . '/';
 		$this->assertRegExp($pattern, $this->view);
 	}
-
 }
