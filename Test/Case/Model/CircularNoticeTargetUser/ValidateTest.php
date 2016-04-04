@@ -67,10 +67,10 @@ class CircularNoticeTargetUserValidateTest extends NetCommonsValidateTest {
  * @return array テストデータ
  */
 	public function dataProviderValidationError() {
-		$data['CircularNoticeTargetUser'] = (new CircularNoticeTargetUserFixture())->records[0];
+		$data['CircularNoticeTargetUser'] = (new CircularNoticeTargetUserFixture())->records[12];
 
 		return array(
-			array('data' => $data, 'field' => '', 'value' => '',
+			array('data' => $data, 'field' => 'user_id', 'value' => '',
 				'message' => __d('net_commons', 'Invalid request.')),
 		);
 	}

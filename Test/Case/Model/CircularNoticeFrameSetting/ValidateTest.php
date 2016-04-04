@@ -70,8 +70,10 @@ class CircularNoticeFrameSettingValidateTest extends NetCommonsValidateTest {
 		$data['CircularNoticeFrameSetting'] = (new CircularNoticeFrameSettingFixture())->records[0];
 
 		return array(
-			array('data' => $data, 'field' => '', 'value' => '',
+			array('data' => $data, 'field' => 'frame_key', 'value' => '',
 				'message' => __d('net_commons', 'Invalid request.')),
+			array('data' => $data, 'field' => 'display_number', 'value' => '99',
+			'message' => __d('net_commons', 'Invalid request.')),
 		);
 	}
 
