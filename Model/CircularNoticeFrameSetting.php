@@ -26,7 +26,7 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
  *
  * @var int
  */
-	const DEFAULT_DISPLAY_NUMBER = 10;
+	const DEFAULT_DISPLAY_NUMBER = 5;
 
 /**
  * Validation rules

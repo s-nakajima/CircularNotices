@@ -10,6 +10,7 @@
  */
 
 App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
+App::uses('CircularNoticeFrameSettingFixture', 'CircularNotices.Test/Fixture');
 
 /**
  * CircularNoticeFrameSettingsController::edit()のテスト
@@ -65,6 +66,10 @@ class CircularNoticeFrameSettingsControllerEditTest extends NetCommonsController
 				'id' => 2,
 				'frame_key' => 'frame_2',
 				'display_number' => '10',
+				'created_user' => '1',
+				'created' => '2015-03-09 09:25:22',
+				'modified_user' => 's',
+				'modified' => '2015-03-09 09:25:22'
 			),
 		);
 
@@ -239,52 +244,38 @@ class CircularNoticeFrameSettingsControllerEditTest extends NetCommonsController
 	}
 
 /**
- * ValidationErrorテスト
+ * editアクションのValidateionErrorテスト
  *
- * @param array $data POSTデータ
- * @param array $urlOptions URLオプション
- * @param string|null $validationError ValidationError
- * @dataProvider dataProviderEditValidationError
- * @return void
+ * @return mixed テスト結果
  */
-	public function testEditPostValidationError($data, $urlOptions, $validationError = null) {
+	public function testValidationError() {
 		//ログイン
-		TestAuthGeneral::login($this);
+		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
+		
+		$data = $this->__data();
+		$urlOptions = array('frame_id' => $data['Frame']['id']);
+
+		//バリデーションエラー
+		$validationError = array(
+			'field' => 'CircularNoticeFrameSetting.display_number',
+			'value' => '99',
+			'message' => array(__d('net_commons', 'Invalid request.')
+			)
+		);
+				
+		$data = Hash::remove($data, $validationError['field']);
+		$data = Hash::insert($data, $validationError['field'], $validationError['value']);
 
 		//テスト実施
-		$this->_testActionOnValidationError('post', $data, Hash::merge(array('action' => 'edit'), $urlOptions), $validationError);
+		$url = Hash::merge(array(
+				'plugin' => $this->plugin,
+				'controller' => $this->_controller,
+				'action' => 'edit',
+		), $urlOptions);
+		$result = $this->_testNcAction($url, array('method' => 'put', 'data' => $data));
 
 		//ログアウト
 		TestAuthGeneral::logout($this);
 	}
 
-/**
- * ValidationErrorテスト用DataProvider
- *
- * #### 戻り値
- *  - data: 登録データ
- *  - urlOptions: URLオプション
- *  - validationError: バリデーションエラー
- *
- * @return array
- */
-	public function dataProviderEditValidationError() {
-		$data = $this->__data();
-
-		$result = array(
-			'data' => $data,
-			'urlOptions' => array('frame_id' => $data['Frame']['id']),
-		);
-
-		return array(
-			//バリデーションエラー
-			Hash::merge($result, array(
-				'validationError' => array(
-					'field' => 'CircularNoticeFrameSetting.display_number',
-					'value' => '',
-					'message' => __d('net_commons', 'Invalid request.'),
-				)
-			)),
-		);
-	}
 }
