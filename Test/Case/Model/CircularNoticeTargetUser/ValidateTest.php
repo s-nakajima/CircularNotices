@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('NetCommonsValidateTest', 'NetCommons.TestSuite');
+App::uses('NetCommonsModelTestCase', 'NetCommons.TestSuite');
 App::uses('CircularNoticeTargetUserFixture', 'CircularNotices.Test/Fixture');
 
 /**
@@ -18,7 +18,7 @@ App::uses('CircularNoticeTargetUserFixture', 'CircularNotices.Test/Fixture');
  * @author Masaki Goto <go8ogle@gmail.com>
  * @package NetCommons\CircularNotices\Test\Case\Model\CircularNoticeTargetUser
  */
-class CircularNoticeTargetUserValidateTest extends NetCommonsValidateTest {
+class CircularNoticeTargetUserValidateTest extends NetCommonsModelTestCase {
 
 /**
  * Fixtures
@@ -55,24 +55,20 @@ class CircularNoticeTargetUserValidateTest extends NetCommonsValidateTest {
 	protected $_methodName = 'validates';
 
 /**
- * ValidationErrorのDataProvider
+ * validateCircularNoticeFrameSetting()のテスト
  *
- * ### 戻り値
- *  - data 登録データ
- *  - field フィールド名
- *  - value セットする値
- *  - message エラーメッセージ
- *  - overwrite 上書きするデータ(省略可)
- *
- * @return array テストデータ
+ * @return void
  */
-	public function dataProviderValidationError() {
-		$data['CircularNoticeTargetUser'] = (new CircularNoticeTargetUserFixture())->records[12];
+	public function testValidateCircularNoticeFrameSetting() {
+		$model = $this->_modelName;
+		$methodName = $this->_methodName;
 
-		return array(
-			array('data' => $data, 'field' => 'user_id', 'value' => '',
-				'message' => __d('net_commons', 'Invalid request.')),
-		);
+		//データ生成
+		$data['CircularNoticeSetting'] = (new CircularNoticeSettingFixture())->records[0];
+
+		//テスト実施
+		$result = $this->$model->$methodName($data);
+		//チェック
+		$this->assertTrue($result);
 	}
-
 }
