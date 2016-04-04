@@ -65,10 +65,7 @@ class CircularNoticeTargetUserBehaviorValidatesTest extends NetCommonsModelTestC
 		);
 
 		//テスト実施
-		$result = $this->TestModel->set($data);
-		//チェック
-		//$this->assertFalse($result);
-		//テスト実施
+		$this->TestModel->set($data);
 		$result = $this->TestModel->validates();
 		//チェック
 		$this->assertFalse($result);
@@ -79,10 +76,7 @@ class CircularNoticeTargetUserBehaviorValidatesTest extends NetCommonsModelTestC
 		);
 
 		//テスト実施
-		$result = $this->TestModel->set($data);
-		//チェック
-		//$this->assertFalse($result);
-		//テスト実施
+		$this->TestModel->set($data);
 		$result = $this->TestModel->validates();
 		//チェック
 		$this->assertFalse($result);
@@ -96,10 +90,7 @@ class CircularNoticeTargetUserBehaviorValidatesTest extends NetCommonsModelTestC
 		);
 
 		//テスト実施
-		$result = $this->TestModel->set($data);
-		//チェック
-		//$this->assertTrue($result);
-		//テスト実施
+		$this->TestModel->set($data);
 		$result = $this->TestModel->validates();
 		//チェック
 		$this->assertTrue($result);
@@ -121,10 +112,7 @@ class CircularNoticeTargetUserBehaviorValidatesTest extends NetCommonsModelTestC
 			->will($this->returnValue(true));
 
 		//テスト実施
-		$result = $this->TestModel->set($data);
-		//チェック
-		//$this->assertFalse($result);
-		//テスト実施
+		$this->TestModel->set($data);
 		$result = $this->TestModel->validates();
 		//チェック
 		$this->assertFalse($result);
