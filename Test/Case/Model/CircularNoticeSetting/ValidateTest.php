@@ -70,7 +70,7 @@ class CircularNoticeSettingValidateTest extends NetCommonsValidateTest {
 		$data['CircularNoticeSetting'] = (new CircularNoticeSettingFixture())->records[0];
 
 		return array(
-			array('data' => $data, 'field' => '', 'value' => '',
+			array('data' => $data, 'field' => 'block_key', 'value' => '',
 				'message' => __d('net_commons', 'Invalid request.')),
 		);
 	}

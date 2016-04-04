@@ -180,27 +180,12 @@ class CircularNoticeTargetUserSaveReadTest extends NetCommonsModelTestCase {
 				->method('saveCircularNoticeTargetUser')
 				->will($this->returnValue(false));
 		$thisModelMock->$methodName($contentId, $userId);
-	}
-
-/**
- * SaveRead()の例外テスト
- *
- * @return void
- */
-	public function testSaveReadSecondExceptionError() {
-		$model = $this->_modelName;
-		$methodName = $this->_methodName;
-		$this->setExpectedException('InternalErrorException');
 
 		$contentId = 8;
 		$userId = 6;
 
-		// 例外モック
-		$thisModelMock = $this->getMockForModel('CircularNotices.' . $model, ['saveCircularNoticeTargetUser']);
-		$thisModelMock->expects($this->any())
-			->method('saveCircularNoticeTargetUser')
-			->will($this->returnValue(false));
 		$thisModelMock->$methodName($contentId, $userId);
+		
+		
 	}
-
 }

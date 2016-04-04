@@ -72,6 +72,7 @@ class CircularNoticeSettingSaveCircularNoticeSettingTest extends NetCommonsSaveT
 		$results[1] = array($data);
 		$results[1] = Hash::insert($results[1], '0.CircularNoticeSetting.id', null);
 		$results[1] = Hash::insert($results[1], '0.CircularNoticeSetting.key', null);
+		$results[1] = Hash::remove($results[1], '0.CircularNoticeSetting.created', null);
 		$results[1] = Hash::remove($results[1], '0.CircularNoticeSetting.created_user');
 
 		return $results;
