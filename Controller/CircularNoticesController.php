@@ -74,6 +74,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		'NetCommons.Token',
 		'NetCommons.DisplayNumber',
 		'Workflow.Workflow',
+		'Groups.GroupUserList',
 	);
 
 /**
