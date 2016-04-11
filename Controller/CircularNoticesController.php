@@ -10,6 +10,7 @@
  */
 
 App::uses('CircularNoticesAppController', 'CircularNotices.Controller');
+App::uses('MailSend', 'Mails.Utility');
 
 /**
  * CircularNotices Controller
@@ -46,6 +47,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		'NetCommons.Permission' => array(
 			//アクセスの権限
 			'allow' => array(
+				'index,view,downloads' => 'content_readable',
 				'add,edit,delete' => 'content_creatable',
 			),
 		),
@@ -72,6 +74,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		'NetCommons.Token',
 		'NetCommons.DisplayNumber',
 		'Workflow.Workflow',
+		'Groups.GroupUserList',
 	);
 
 /**
@@ -126,7 +129,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$content = $this->CircularNoticeContent->getCircularNoticeContent($contentKey, $userId);
 		if (! $content) {
 			$this->throwBadRequest();
-			return false;
 		}
 		$contentId = $content['CircularNoticeContent']['id'];
 		$myTargetUser = array();
@@ -219,14 +221,13 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$data = array();
 		if ($this->request->is('post')) {
 
-			if (! $status = $this->Workflow->parseStatus()) {
-				$this->throwBadRequest();
-				return;
-			}
 			$data = $this->__parseRequestForSave();
-			$data['CircularNoticeContent']['status'] = $status;
+			$data['CircularNoticeContent']['status'] = $this->Workflow->parseStatus();
 
 			if ($circularContent = $this->CircularNoticeContent->saveCircularNoticeContent($data)) {
+				// キューからメール送信
+				MailSend::send();
+
 				$url = NetCommonsUrl::actionUrl(array(
 					'controller' => $this->params['controller'],
 					'action' => 'view',
@@ -237,22 +238,19 @@ class CircularNoticesController extends CircularNoticesAppController {
 				$this->redirect($url);
 				return;
 			} else {
-				$this->request->data['selectUsers'] = array();
-				if (isset($this->request->data['CircularNoticeTargetUser'])) {
-					$selectUsers = Hash::extract($this->request->data['CircularNoticeTargetUser'], '{n}.user_id');
-					foreach ($selectUsers as $userId) {
-						$user = $this->User->getUser($userId);
-						$this->request->data['selectUsers'][] = $user;
-					}
-				}
+				// 回答の選択肢を保持
+				$content['CircularNoticeChoice'] = Hash::extract($data, 'CircularNoticeChoices.{n}.CircularNoticeChoice');
+
+				// ユーザ選択状態を保持
+				$this->CircularNotice->setSelectUsers($this);
 			}
 			$this->NetCommons->handleValidationError($this->CircularNoticeContent->validationErrors);
 
 			unset($data['CircularNoticeContent']['status']);
 			$data['CircularNoticeContent']['is_room_targeted_flag'] = $this->data['CircularNoticeContent']['is_room_targeted_flag'];
 		} else {
-			if (! isset($data['CircularNoticeContent']['is_room_targeted_flag']) ||
-				$data['CircularNoticeContent']['is_room_targeted_flag']) {
+			if (!isset($data['CircularNoticeContent']['is_room_targeted_flag'])
+					|| $data['CircularNoticeContent']['is_room_targeted_flag']) {
 				// 自分自身を取得
 				$selectUsers = array(Current::read('User.id'));
 				$this->request->data['selectUsers'] = array();
@@ -286,23 +284,22 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$this->helpers[] = 'Users.UserSearch';
 
 		if (! $content = $this->CircularNoticeContent->getCircularNoticeContent($key, $userId)) {
-			$this->throwBadRequest();
-			return;
+			return $this->throwBadRequest();
 		}
 
 		$data = array();
 		if ($this->request->is(array('post', 'put'))) {
 
-			if (! $status = $this->Workflow->parseStatus()) {
-				$this->throwBadRequest();
-				return;
-			}
 			$data = $this->__parseRequestForSave();
-			$data['CircularNoticeContent']['status'] = $status;
+			$data['CircularNoticeContent']['status'] = $this->Workflow->parseStatus();
 
 			$data['CircularNoticeContent']['key'] = $key;	// keyをここでセット
+			$data['CircularNoticeContent']['public_type'] = $content['CircularNoticeContent']['public_type'];
 
 			if ($circularContent = $this->CircularNoticeContent->saveCircularNoticeContent($data)) {
+				// キューからメール送信
+				MailSend::send();
+
 				$url = NetCommonsUrl::actionUrl(array(
 					'controller' => $this->params['controller'],
 					'action' => 'view',
@@ -313,16 +310,12 @@ class CircularNoticesController extends CircularNoticesAppController {
 				$this->redirect($url);
 				return;
 			} else {
-				$this->request->data['selectUsers'] = array();
-				if (isset($this->request->data['CircularNoticeTargetUser'])) {
-					$selectUsers = Hash::extract($this->request->data['CircularNoticeTargetUser'], '{n}.user_id');
-					foreach ($selectUsers as $userId) {
-						$user = $this->User->getUser($userId);
-						$this->request->data['selectUsers'][] = $user;
-					}
-				}
-			}
+				// 回答の選択肢を保持
+				$content['CircularNoticeChoice'] = Hash::extract($data, 'CircularNoticeChoices.{n}.CircularNoticeChoice');
 
+				// ユーザ選択状態を保持
+				$this->CircularNotice->setSelectUsers($this);
+			}
 			$this->NetCommons->handleValidationError($this->CircularNoticeContent->validationErrors);
 
 			unset($data['CircularNoticeContent']['id']);
@@ -363,7 +356,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 		if (! $this->request->isDelete()) {
 			$this->throwBadRequest();
-			return;
 		}
 
 		$this->CircularNoticeContent->deleteCircularNoticeContent($contentKey);
@@ -381,23 +373,22 @@ class CircularNoticesController extends CircularNoticesAppController {
 		App::uses('CsvFileWriter', 'Files.Utility');
 		App::uses('ZipDownloader', 'Files.Utility');
 
-		$userId = Current::read('User.id');
-		$contentKey = $this->params['pass'][1];
-		$this->initCircularNotice();
-
-		// 回覧を取得
-		$content = $this->CircularNoticeContent->getCircularNoticeContent($contentKey, $userId);
-		if (! $content) {
-			$this->throwBadRequest();
-			return false;
-		}
-		$contentId = $content['CircularNoticeContent']['id'];
-
-		// Paginator経由で回答先一覧を取得
-		$this->Paginator->settings = $this->CircularNoticeTargetUser->getCircularNoticeTargetUsersForPaginator($contentId, $this->params['named'], $userId, 0);
-		$targetUsers = $this->Paginator->paginate('CircularNoticeTargetUser');
-
 		try {
+			$userId = Current::read('User.id');
+			$contentKey = $this->params->params['pass'][1];
+			$this->initCircularNotice();
+
+			// 回覧を取得
+			$content = $this->CircularNoticeContent->getCircularNoticeContent($contentKey, $userId);
+			if (! $content) {
+				$this->throwBadRequest();
+			}
+			$contentId = $content['CircularNoticeContent']['id'];
+
+			// Paginator経由で回答先一覧を取得
+			$this->Paginator->settings = $this->CircularNoticeTargetUser->getCircularNoticeTargetUsersForPaginator($contentId, $this->params['named'], $userId, 0);
+			$targetUsers = $this->Paginator->paginate('CircularNoticeTargetUser');
+
 			$tmpFolder = new TemporaryFolder();
 			$csvFile = new CsvFileWriter(array(
 				'folder' => $tmpFolder->path
@@ -469,13 +460,13 @@ class CircularNoticesController extends CircularNoticesAppController {
 			$data['CircularNoticeChoices'] = array();
 		}
 
-		if (! empty($this->data['CircularNoticeContent']['is_room_targeted_flag'])) {
+		if (!empty($this->data['CircularNoticeContent']['is_room_targeted_flag'])) {
 			$data['CircularNoticeContent']['is_room_targeted_flag'] = true;
 		} else {
 			$data['CircularNoticeContent']['is_room_targeted_flag'] = false;
 		}
 
-		if (! empty($this->data['CircularNoticeContent']['target_groups'])) {
+		if (!empty($this->data['CircularNoticeContent']['target_groups'])) {
 			$data['CircularNoticeContent']['target_groups'] =
 				implode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $data['CircularNoticeContent']['target_groups']);
 		} else {
@@ -484,15 +475,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 		if ($this->data['CircularNoticeContent']['reply_deadline_set_flag'] !== '1') {
 			$data['CircularNoticeContent']['reply_deadline'] = null;
-		}
-
-		if (isset($data['CircularNoticeChoices'])) {
-			foreach ($data['CircularNoticeChoices'] as $i => $choice) {
-				$data['CircularNoticeChoices'][$i]['CircularNoticeChoice']['value'] =
-					str_replace(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, '', $choice['CircularNoticeChoice']['value']);
-			}
-		} else {
-			$data['CircularNoticeChoices'] = array();
 		}
 
 		return $data;

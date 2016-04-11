@@ -188,9 +188,9 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 				'room_id' => $frame['Frame']['room_id'] ? $frame['Frame']['room_id'] : 0,
 				'plugin_key' => $frame['Frame']['plugin_key'],
 			));
-			if (!$block) {
-				return false;
-			}
+			//if (!$block) {
+			//	return false;
+			//}
 		}
 		return $block;
 	}

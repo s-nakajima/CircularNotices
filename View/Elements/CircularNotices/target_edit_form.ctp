@@ -35,12 +35,12 @@
 		<?php echo $this->NetCommonsForm->error('CircularNoticeTargetUser.user_id'); ?>
 		<!-- グループ選択 -->
 		<div ng-show="target==0">
-			<?php echo $this->element('Groups.select',
-				array(
-					'title' => '回覧先ユーザ選択',
-					'pluginModel' => 'CircularNoticeTargetUser',
-					'selectUsers' => (isset($this->request->data['selectUsers'])) ? $this->request->data['selectUsers'] : null,
-				));
+			<?php
+				$title = '回覧先ユーザ選択';
+				$pluginModel = 'CircularNoticeTargetUser';
+				$roomId = Current::read('Room.id');
+				$selectUsers = (isset($this->request->data['selectUsers'])) ? $this->request->data['selectUsers'] : null;
+				echo $this->GroupUserList->select($title, $pluginModel, $roomId, $selectUsers);
 			?>
 		</div>
 	</div>

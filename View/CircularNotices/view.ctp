@@ -42,7 +42,7 @@
 	</div>
 
 	<!-- 編集 -->
-	<?php if (Current::permission('content_creatable') && $circularNoticeContent['createdUser'] == $userId) : ?>
+	<?php if (Current::permission('content_creatable') && $circularNoticeContent['createdUser'] == Current::read('User.id')) : ?>
 		<div class="pull-right">
 			<span class="nc-tooltip" tooltip="<?php echo h(__d('net_commons', 'Edit')); ?>">
 				<?php echo $this->NetCommonsHtml->link(
@@ -71,9 +71,9 @@
 	<div class="clearfix">
 		<div class="pull-left">
 			<?php echo h(__d('circular_notices', 'Circular Content Period Title')); ?>
-			<?php echo $this->Date->dateFormat($circularNoticeContent['openedPeriodFrom']); ?>
+			<?php echo $this->Date->dateFormat($circularNoticeContent['publishStart']); ?>
 			～
-			<?php echo $this->Date->dateFormat($circularNoticeContent['openedPeriodTo']); ?><br />
+			<?php echo $this->Date->dateFormat($circularNoticeContent['publishEnd']); ?><br />
 			<?php echo h(__d('circular_notices', 'Created User Title')); ?>
 			<?php echo h($user['username']); ?><br />
 		</div>

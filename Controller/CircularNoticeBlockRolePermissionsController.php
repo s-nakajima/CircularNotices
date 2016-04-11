@@ -59,23 +59,9 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
 	public $helpers = array(
 		'Blocks.BlockRolePermissionForm',
 		'Blocks.BlockTabs' => array(
-			'mainTabs' => array(
-				'role_permissions' => array('url' => array('controller' => 'circular_notice_block_role_permissions')),
-				'frame_settings' => array('url' => array('controller' => 'circular_notice_frame_settings')),
-				//'mail_settings' => array('url' => array('controller' => 'circular_notice_mail_settings')),
-			),
+			'mainTabs' => array('role_permissions', 'frame_settings', 'mail_settings')
 		),
 	);
-
-/**
- * beforeFilter
- *
- * @return void
- */
-	public function beforeFilter() {
-		parent::beforeFilter();
-		$this->Auth->deny('index');
-	}
 
 /**
  * edit action
@@ -83,33 +69,16 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
  * @return void
  */
 	public function edit() {
+		$frameId = Current::read('Frame.id');
+		if (!$frameId || !$setting = $this->CircularNoticeSetting->getCircularNoticeSetting($frameId)) {
+			$this->setAction('throwBadRequest');
+			return false;
+		}
+
 		$permissions = $this->Workflow->getBlockRolePermissions(
 			array('content_creatable', 'content_publishable')
 		);
 		$this->set('roles', $permissions['Roles']);
-
-		$frameId = Current::read('Frame.id');
-		if (! $frameId) {
-			$this->throwBadRequest();
-			return false;
-		}
-
-		if (! $frame = $this->Frame->findById($frameId)) {
-			$this->throwBadRequest();
-			return false;
-		}
-
-		if (! $frame['Block'] || ! $frame['Block']['id']) {
-			$this->throwBadRequest();
-			return false;
-		}
-		$this->set('blockId', $frame['Block']['id']);
-		$this->set('blockKey', $frame['Block']['key']);
-
-		if (! $setting = $this->CircularNoticeSetting->getCircularNoticeSetting($frameId)) {
-			$this->throwBadRequest();
-			return false;
-		}
 
 		if ($this->request->is(array('post', 'put'))) {
 			$data = $this->data;

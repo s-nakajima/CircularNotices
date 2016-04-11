@@ -82,9 +82,9 @@
 						</div>
 						<div class="pull-left">
 							<?php if (
-								$circularNoticeContent['circularNoticeContent']['createdUser'] != Current::read('User.id') &&
-								($circularNoticeContent['circularNoticeContent']['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT ||
-								$circularNoticeContent['circularNoticeContent']['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED)
+								($circularNoticeContent['circularNoticeContent']['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT
+									|| $circularNoticeContent['circularNoticeContent']['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED)
+									&& $circularNoticeContent['circularNoticeContent']['createdUser'] != Current::read('User.id')
 							) : ?>
 								<?php echo h($circularNoticeContent['circularNoticeContent']['subject']); ?><br />
 							<?php else : ?>
@@ -102,13 +102,13 @@
 							<?php endif; ?>
 							<div>
 								<?php echo h(__d('circular_notices', 'Circular Content Period Title')); ?>
-								<?php echo $this->Date->dateFormat($circularNoticeContent['circularNoticeContent']['openedPeriodFrom']); ?>
+								<?php echo $this->Date->dateFormat($circularNoticeContent['circularNoticeContent']['publishStart']); ?>
 								<?php echo __d('circular_notices', 'Till'); ?>
-								<?php echo $this->Date->dateFormat($circularNoticeContent['circularNoticeContent']['openedPeriodTo']); ?>
+								<?php echo $this->Date->dateFormat($circularNoticeContent['circularNoticeContent']['publishEnd']); ?>
 							</div>
 						</div>
 						<!-- 編集リンク -->
-						<?php if (Current::permission('content_creatable') && $circularNoticeContent['circularNoticeContent']['createdUser'] == $userId) : ?>
+						<?php if (Current::permission('content_creatable') && $circularNoticeContent['circularNoticeContent']['createdUser'] == Current::read('User.id')) : ?>
 							<div class="pull-right" style="margin: 6px 0;">
 									<span class="nc-tooltip" tooltip="<?php echo h(__d('net_commons', 'Edit')); ?>">
 										<?php echo $this->NetCommonsHtml->link(

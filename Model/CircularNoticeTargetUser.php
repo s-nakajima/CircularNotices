@@ -156,7 +156,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 
 		// 閲覧済件数を取得するため条件を追加
 		$conditions += array(
-			'CircularNoticeTargetUser.read_flag' => true,
+			'CircularNoticeTargetUser.read_flag' => true
 		);
 
 		// 閲覧済件数を取得
@@ -166,7 +166,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 
 		// 回答済件数を取得するため条件を追加
 		$conditions += array(
-			'CircularNoticeTargetUser.reply_flag' => true,
+			'CircularNoticeTargetUser.reply_flag' => true
 		);
 
 		// 回答済件数を取得
@@ -347,6 +347,14 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 	public function replaceCircularNoticeTargetUsers($data) {
 		$contentId = $data['CircularNoticeContent']['id'];
 
+		// 編集時に既に回答済みの情報を保持する
+		$existingTargetUsers = $this->find('all', array(
+			'recursive' => -1,
+			'fields' => array('user_id', 'read_flag', 'read_datetime', 'reply_flag', 'reply_datetime', 'reply_text_value', 'reply_selection_value'),
+			'conditions' => array('circular_notice_content_id' => $contentId)
+		));
+		$existingTargetUsers = Hash::combine($existingTargetUsers, '{n}.CircularNoticeTargetUser.user_id', '{n}');
+
 		// すべてDelete
 		if (! $this->deleteAll(array('CircularNoticeTargetUser.circular_notice_content_id' => $contentId), false)) {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
@@ -356,6 +364,9 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		if (isset($data['CircularNoticeTargetUsers']) && count($data['CircularNoticeTargetUsers']) > 0) {
 			foreach ($data['CircularNoticeTargetUsers'] as $targetUser) {
 				$targetUser['CircularNoticeTargetUser']['circular_notice_content_id'] = $contentId;
+				if (isset($existingTargetUsers[$targetUser['CircularNoticeTargetUser']['user_id']])) {
+					$targetUser = Hash::merge($targetUser, $existingTargetUsers[$targetUser['CircularNoticeTargetUser']['user_id']]);
+				}
 				if (! $this->validateCircularNoticeTargetUser($targetUser)) {
 					return false;
 				}

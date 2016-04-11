@@ -20,9 +20,9 @@
 	<div>
 		<div class="input-group inline-block">
 			<div class="input-group">
-				<?php echo $this->NetCommonsForm->input('CircularNoticeContent.opened_period_from', array(
+				<?php echo $this->NetCommonsForm->input('CircularNoticeContent.publish_start', array(
 					'type' => 'text',
-					'ng-model' => 'circularNoticeContent.openedPeriodFrom',
+					'ng-model' => 'circularNoticeContent.publishStart',
 					'datetimepicker',
 					'label' => false,
 					'class' => 'form-control',
@@ -31,9 +31,9 @@
 				<span class="input-group-addon">
 					<span class="glyphicon glyphicon-minus"></span>
 				</span>
-				<?php echo $this->NetCommonsForm->input('CircularNoticeContent.opened_period_to', array(
+				<?php echo $this->NetCommonsForm->input('CircularNoticeContent.publish_end', array(
 					'type' => 'text',
-					'ng-model' => 'circularNoticeContent.openedPeriodTo',
+					'ng-model' => 'circularNoticeContent.publishEnd',
 					'datetimepicker',
 					'label' => false,
 					'class' => 'form-control',

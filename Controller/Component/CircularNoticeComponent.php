@@ -142,4 +142,21 @@ class CircularNoticeComponent extends Component {
 		$dateHelper = new DateHelper(new View());
 		return $dateHelper->dateFormat($dateTime);
 	}
+
+/**
+ * 選択済みユーザを設定
+ * 
+ * @param Controller $controller コントローラ
+ * @return {void}
+ */
+	public function setSelectUsers(Controller $controller) {
+		$controller->request->data['selectUsers'] = array();
+		if (isset($controller->request->data['CircularNoticeTargetUser'])) {
+			$selectUsers = Hash::extract($controller->request->data['CircularNoticeTargetUser'], '{n}.user_id');
+			foreach ($selectUsers as $userId) {
+				$user = $controller->User->getUser($userId);
+				$controller->request->data['selectUsers'][] = $user;
+			}
+		}
+	}
 }
