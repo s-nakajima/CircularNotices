@@ -63,12 +63,32 @@ class CircularNoticeFrameSettingValidateCircularNoticeFrameSettingTest extends N
 		$methodName = $this->_methodName;
 
 		//データ生成
+		$data['CircularNoticeFrameSetting'] = (new CircularNoticeFrameSettingFixture())->records[0];
+
+		//テスト実施
+		$result = $this->$model->$methodName($data);
+
+		//チェック
+		$this->assertTrue($result);
+	}
+
+/**
+ * validateCircularNoticeFrameSetting()のテスト
+ *
+ * @return void
+ */
+	public function testValidateCircularNoticeFrameSettingFalse() {
+		$model = $this->_modelName;
+		$methodName = $this->_methodName;
+
+		//データ生成
 		$data = null;
 
 		//テスト実施
 		$result = $this->$model->$methodName($data);
 
 		//チェック
+		$this->assertFalse($result);
 	}
 
 }

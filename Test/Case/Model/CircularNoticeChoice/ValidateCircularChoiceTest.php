@@ -67,6 +67,9 @@ class CircularNoticeChoiceValidateCircularChoiceTest extends NetCommonsModelTest
 
 		//テスト実施
 		$result = $this->$model->$methodName($data);
+
+		//チェック
+		$this->assertTrue($result);
 	}
 
 }

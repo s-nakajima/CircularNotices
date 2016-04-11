@@ -70,6 +70,9 @@ class CircularNoticeContentGetCircularNoticeContentsForPaginateTest extends NetC
 
 		//テスト実施
 		$result = $this->$model->$methodName($blockKey, $userId, $paginatorParams, $defaultLimit);
+
+		//チェック
+		$this->assertNotEmpty($result);
 	}
 
 /**

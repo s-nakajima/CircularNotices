@@ -82,6 +82,11 @@ class CircularNoticeTargetUserBehaviorValidatesTest extends NetCommonsModelTestC
 		$this->assertFalse($result);
 	}
 
+/**
+ * IsRoomTargetedFlag()のテスト
+ *
+ * @return void
+ */
 	public function testIsRoomTargetedFlagOn() {
 		//テストデータ
 		$data = array(
@@ -96,6 +101,11 @@ class CircularNoticeTargetUserBehaviorValidatesTest extends NetCommonsModelTestC
 		$this->assertTrue($result);
 	}
 
+/**
+ * ValidationErrorテスト
+ *
+ * @return void
+ */
 	public function testValidationError() {
 		//テストデータ
 		$data = array(
@@ -106,8 +116,8 @@ class CircularNoticeTargetUserBehaviorValidatesTest extends NetCommonsModelTestC
 			)
 		);
 
-		$circularNoticeChoicesMock = $this->getMockForModel('TestCircularNotices.' . 'TestCircularNoticeTargetUserBehaviorValidatesModel', ['validates']);
-		$circularNoticeChoicesMock->expects($this->any())
+		$choicesMock = $this->getMockForModel('TestCircularNotices.' . 'TestCircularNoticeTargetUserBehaviorValidatesModel', ['validates']);
+		$choicesMock->expects($this->any())
 			->method('validates')
 			->will($this->returnValue(true));
 

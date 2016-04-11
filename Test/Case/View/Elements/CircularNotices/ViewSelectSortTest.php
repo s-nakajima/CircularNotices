@@ -53,7 +53,6 @@ class CircularNoticesViewElementsCircularNoticesViewSelectSortTest extends NetCo
  * @return void
  */
 	public function testViewSelectSort() {
-
 		$this->controller->set('circularNoticeContent', array('id' => 1));
 
 		//テスト実行

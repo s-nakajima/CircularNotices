@@ -95,8 +95,8 @@ class CircularNoticeTargetUserReplaceCircularNoticeTargetUsersTest extends NetCo
 		$data['CircularNoticeContent']['id'] = 4;
 
 		// 例外を発生させるためのモック
-		$circularNoticeChoicesMock = $this->getMockForModel('CircularNotices.' . $model, ['deleteAll']);
-		$circularNoticeChoicesMock->expects($this->any())
+		$choicesMock = $this->getMockForModel('CircularNotices.' . $model, ['deleteAll']);
+		$choicesMock->expects($this->any())
 			->method('deleteAll')
 			->will($this->returnValue(false));
 
@@ -104,6 +104,7 @@ class CircularNoticeTargetUserReplaceCircularNoticeTargetUsersTest extends NetCo
 		$result = $this->$model->$methodName($data);
 
 		//チェック
+		$this->assertTrue($result);
 	}
 
 /**
@@ -122,12 +123,15 @@ class CircularNoticeTargetUserReplaceCircularNoticeTargetUsersTest extends NetCo
 		$data['CircularNoticeContent']['id'] = 4;
 
 		// 例外を発生させるためのモック
-		$circularNoticeChoicesMock = $this->getMockForModel('CircularNotices.' . $model, ['deleteAll']);
-		$circularNoticeChoicesMock->expects($this->any())
+		$choicesMock = $this->getMockForModel('CircularNotices.' . $model, ['deleteAll']);
+		$choicesMock->expects($this->any())
 			->method('deleteAll')
 			->will($this->returnValue(false));
 
-		$circularNoticeChoicesMock->$methodName($data);
+		$result = $choicesMock->$methodName($data);
+
+		//チェック
+		$this->assertInstanceOf('InternalErrorException', $result);
 	}
 
 /**
@@ -145,12 +149,14 @@ class CircularNoticeTargetUserReplaceCircularNoticeTargetUsersTest extends NetCo
 		$data['CircularNoticeContent']['id'] = 4;
 
 		// falseを発生させるためのモック
-		$circularNoticeChoicesMock = $this->getMockForModel('CircularNotices.' . $model, ['validateCircularNoticeTargetUser']);
-		$circularNoticeChoicesMock->expects($this->any())
+		$choicesMock = $this->getMockForModel('CircularNotices.' . $model, ['validateCircularNoticeTargetUser']);
+		$choicesMock->expects($this->any())
 			->method('validateCircularNoticeTargetUser')
 			->will($this->returnValue(false));
-		$circularNoticeChoicesMock->$methodName($data);
+		$result = $choicesMock->$methodName($data);
+
 		//チェック
+		$this->assertFalse($result);
 	}
 
 /**
@@ -169,12 +175,15 @@ class CircularNoticeTargetUserReplaceCircularNoticeTargetUsersTest extends NetCo
 		$data['CircularNoticeContent']['id'] = 4;
 
 		// 例外を発生させるためのモック
-		$circularNoticeChoicesMock = $this->getMockForModel('CircularNotices.' . $model, ['save']);
-		$circularNoticeChoicesMock->expects($this->any())
+		$choicesMock = $this->getMockForModel('CircularNotices.' . $model, ['save']);
+		$choicesMock->expects($this->any())
 			->method('save')
 			->will($this->returnValue(false));
 
-		$circularNoticeChoicesMock->$methodName($data);
+		$result = $choicesMock->$methodName($data);
+
+		//チェック
+		$this->assertInstanceOf('InternalErrorException', $result);
 	}
 
 /**
@@ -192,5 +201,8 @@ class CircularNoticeTargetUserReplaceCircularNoticeTargetUsersTest extends NetCo
 		$data['CircularNoticeContent']['id'] = 1;
 
 		$result = $this->$model->$methodName($data);
+
+		//チェック
+		$this->assertTrue($result);
 	}
 }

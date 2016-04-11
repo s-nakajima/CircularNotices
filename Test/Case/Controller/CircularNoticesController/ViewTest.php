@@ -142,10 +142,8 @@ class CircularNoticesControllerViewTest extends NetCommonsControllerTestCase {
  */
 	public function dataProviderViewPost() {
 		$data = $this->__getData();
-
 		//テストデータ
 		$results = array();
-
 		$results[0] = array(
 			'urlOptions' => Hash::insert($data, 'key', 'circular_notice_content_1'),
 			'data' => array(
@@ -224,19 +222,6 @@ class CircularNoticesControllerViewTest extends NetCommonsControllerTestCase {
 								'id' => 11,
 								'reply_text_value' => '',
 								'reply_selection_value' => '',
-						),
-				),
-				'assert' => array('method' => 'assertNotEmpty'),
-		);
-		$results[6] = array(
-				'urlOptions' => Hash::insert($data, 'key', 'circular_notice_content_12'),
-				'data' => array(
-						'CircularNoticeContent' => array(
-								'key' => 'circular_notice_content_12',
-						),
-						'CircularNoticeTargetUser' => array(
-								'id' => 12,
-								'reply_selection_value' => array(),
 						),
 				),
 				'assert' => array('method' => 'assertNotEmpty'),

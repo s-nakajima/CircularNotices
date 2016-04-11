@@ -69,6 +69,7 @@ class CircularNoticeTargetUserGetCircularNoticeTargetUserCountTest extends NetCo
 		$result = $this->$model->$methodName($contentId);
 
 		//チェック
+		$this->assertNotEmpty($result);
 	}
 
 }

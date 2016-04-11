@@ -92,6 +92,7 @@ class CircularNoticeFrameSettingSetCircularNoticeFrameSettingTest extends NetCom
 		$result = $this->$model->$methodName($frameId);
 
 		//チェック
+		$this->assertTrue(is_array($result));
 	}
 
 /**
@@ -105,12 +106,15 @@ class CircularNoticeFrameSettingSetCircularNoticeFrameSettingTest extends NetCom
 		$frameId = 6;
 
 		// 例外を発生させるためのモック
-		$circularNoticeFrameSettingMock = $this->getMockForModel('CircularNotices.' . $model, ['findByFrameKey']);
-		$circularNoticeFrameSettingMock->expects($this->any())
+		$frameSettingMock = $this->getMockForModel('CircularNotices.' . $model, ['findByFrameKey']);
+		$frameSettingMock->expects($this->any())
 			->method('findByFrameKey')
 			->will($this->returnValue(false));
 
-		$circularNoticeFrameSettingMock->$methodName($frameId);
+		$result = $frameSettingMock->$methodName($frameId);
+
+		//チェック
+		$this->assertNotEmpty($result);
 	}
 
 /**
@@ -148,12 +152,15 @@ class CircularNoticeFrameSettingSetCircularNoticeFrameSettingTest extends NetCom
 		$frameId = 19;
 
 		// 例外を発生させるためのモック
-		$circularNoticeFrameSettingMock = $this->getMockForModel('CircularNotices.' . $model, ['save']);
-		$circularNoticeFrameSettingMock->expects($this->any())
+		$frameSettingMock = $this->getMockForModel('CircularNotices.' . $model, ['save']);
+		$frameSettingMock->expects($this->any())
 			->method('save')
 			->will($this->returnValue(false));
 
-		$circularNoticeFrameSettingMock->$methodName($frameId);
+		$result = $frameSettingMock->$methodName($frameId);
+
+		//チェック
+		$this->assertFalse($result);
 	}
 
 /**
@@ -168,6 +175,9 @@ class CircularNoticeFrameSettingSetCircularNoticeFrameSettingTest extends NetCom
 
 		$frameId = 300;
 
-		$this->$model->$methodName($frameId);
+		$result = $this->$model->$methodName($frameId);
+
+		//チェック
+		$this->assertNotEmpty($result);
 	}
 }

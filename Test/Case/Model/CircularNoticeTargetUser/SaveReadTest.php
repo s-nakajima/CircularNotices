@@ -185,7 +185,5 @@ class CircularNoticeTargetUserSaveReadTest extends NetCommonsModelTestCase {
 		$userId = 6;
 
 		$thisModelMock->$methodName($contentId, $userId);
-		
-		
 	}
 }

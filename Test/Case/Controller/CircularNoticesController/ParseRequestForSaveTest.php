@@ -129,5 +129,10 @@ class CircularNoticesControllerParseRequestForSaveTest extends NetCommonsControl
  */
 class CircularNoticesControllerParseRequestForSaveMock extends CircularNoticesController {
 
+/**
+ * data property
+ *
+ * @var array
+ */
 	public $data;
 }

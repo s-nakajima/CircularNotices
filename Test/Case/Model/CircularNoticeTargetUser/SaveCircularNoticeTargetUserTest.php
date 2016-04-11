@@ -110,7 +110,7 @@ class CircularNoticeTargetUserSaveCircularNoticeTargetUserTest extends NetCommon
 		$data = $this->dataProviderSave()[0][0];
 
 		return array(
-			array($data, 'CircularNotices.CircularNoticeTargetUser','validateCircularNoticeTargetUser'),
+			array($data, 'CircularNotices.CircularNoticeTargetUser', 'validateCircularNoticeTargetUser'),
 		);
 	}
 }

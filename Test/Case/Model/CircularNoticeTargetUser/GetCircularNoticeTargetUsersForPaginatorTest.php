@@ -76,6 +76,7 @@ class CircularNoticeTargetUserGetCircularNoticeTargetUsersForPaginatorTest exten
 		$result = $this->$model->$methodName($contentId, $paginatorParams, $userId, $limit);
 
 		//チェック
+		$this->assertNotEmpty($result);
 	}
 
 }

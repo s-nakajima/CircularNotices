@@ -78,6 +78,9 @@ class CircularNoticeComponentGetDisplayDateFormatTest extends NetCommonsControll
 		//テスト実行
 		$datetime = date('Y-m-d H:i:s');
 		$result = $this->controller->CircularNotice->getDisplayDateFormat($datetime);
+
+		//チェック
+		$this->assertNotEmpty($result);
 	}
 
 }

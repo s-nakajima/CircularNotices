@@ -78,6 +78,11 @@ class CircularNoticeContentValidateDatetimeBetweenTest extends NetCommonsModelTe
 		$this->assertTrue($result);
 	}
 
+/**
+ * validateDatetimeBetween()のエラーテスト
+ *
+ * @return void
+ */
 	public function testValidateDatetimeBetweenFalse() {
 		$model = $this->_modelName;
 		$methodName = $this->_methodName;

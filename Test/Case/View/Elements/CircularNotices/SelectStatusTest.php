@@ -46,8 +46,6 @@ class CircularNoticesViewElementsCircularNoticesSelectStatusTest extends NetComm
 		NetCommonsCakeTestCase::loadTestPlugin($this, 'CircularNotices', 'TestCircularNotices');
 		//テストコントローラ生成
 		$this->generateNc('TestCircularNotices.TestViewElementsCircularNoticesSelectStatus');
-
-
 	}
 
 /**

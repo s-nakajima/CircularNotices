@@ -94,12 +94,15 @@ class CircularNoticeSettingSetCircularNoticeSettingTest extends NetCommonsModelT
 		$frameId = 15;
 
 		// 例外を発生させるためのモック
-		$circularNoticeSettingMock = $this->getMockForModel('CircularNotices.' . $model, ['getLinkedBlockbyFrame']);
-		$circularNoticeSettingMock->expects($this->any())
+		$settingMock = $this->getMockForModel('CircularNotices.' . $model, ['getLinkedBlockbyFrame']);
+		$settingMock->expects($this->any())
 			->method('getLinkedBlockbyFrame')
 			->will($this->returnValue(false)
 			);
-		$result = $circularNoticeSettingMock->$methodName($frameId);
+		$result = $settingMock->$methodName($frameId);
+
+		//チェック
+		$this->assertFalse($result);
 	}
 
 /**
@@ -114,12 +117,12 @@ class CircularNoticeSettingSetCircularNoticeSettingTest extends NetCommonsModelT
 		$frameId = 15;
 
 		// 例外を発生させるためのモック
-		$circularNoticeSettingMock = $this->getMockForModel('CircularNotices.' . $model, ['findByBlockKey']);
-		$circularNoticeSettingMock->expects($this->any())
+		$settingMock = $this->getMockForModel('CircularNotices.' . $model, ['findByBlockKey']);
+		$settingMock->expects($this->any())
 			->method('findByBlockKey')
 			->will($this->returnValue(false));
 
-		$circularNoticeSettingMock->$methodName($frameId);
+		$settingMock->$methodName($frameId);
 	}
 
 /**
@@ -134,11 +137,11 @@ class CircularNoticeSettingSetCircularNoticeSettingTest extends NetCommonsModelT
 
 		$frameId = 30;
 
-		$circularNoticeSettingMock = $this->getMockForModel('CircularNotices.' . $model, ['getLinkedBlockbyFrame']);
-		$circularNoticeSettingMock->expects($this->any())
+		$settingMock = $this->getMockForModel('CircularNotices.' . $model, ['getLinkedBlockbyFrame']);
+		$settingMock->expects($this->any())
 			->method('getLinkedBlockbyFrame')
 			->will($this->returnValue(false));
-		$circularNoticeSettingMock->$methodName($frameId);
+		$settingMock->$methodName($frameId);
 	}
 
 /**
@@ -192,11 +195,14 @@ class CircularNoticeSettingSetCircularNoticeSettingTest extends NetCommonsModelT
 
 		$frameId = 19;
 
-		$circularNoticeSettingMock = $this->getMockForModel('CircularNotices.' . $model, ['save']);
-		$circularNoticeSettingMock->expects($this->any())
+		$settingMock = $this->getMockForModel('CircularNotices.' . $model, ['save']);
+		$settingMock->expects($this->any())
 			->method('save')
 			->will($this->returnValue(false));
-		$result = $circularNoticeSettingMock->$methodName($frameId);
+		$result = $settingMock->$methodName($frameId);
+
+		//チェック
+		$this->assertInstanceOf('InternalErrorException', $result);
 	}
 
 /**
@@ -230,11 +236,14 @@ class CircularNoticeSettingSetCircularNoticeSettingTest extends NetCommonsModelT
 
 		$frameId = 20;
 
-		$circularNoticeSettingMock = $this->getMockForModel('CircularNotices.' . $model, ['save']);
-		$circularNoticeSettingMock->expects($this->any())
+		$settingMock = $this->getMockForModel('CircularNotices.' . $model, ['save']);
+		$settingMock->expects($this->any())
 			->method('save')
 			->will($this->returnValue(false));
-		$result = $circularNoticeSettingMock->$methodName($frameId);
+		$result = $settingMock->$methodName($frameId);
+
+		//チェック
+		$this->assertTrue($result);
 	}
 
 /**

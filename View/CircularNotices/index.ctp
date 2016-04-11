@@ -82,9 +82,9 @@
 						</div>
 						<div class="pull-left">
 							<?php if (
-								 ($circularNoticeContent['circularNoticeContent']['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT 
-                                     || $circularNoticeContent['circularNoticeContent']['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED) 
-                                 && $circularNoticeContent['circularNoticeContent']['createdUser'] != Current::read('User.id')
+								($circularNoticeContent['circularNoticeContent']['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT
+									|| $circularNoticeContent['circularNoticeContent']['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED)
+									&& $circularNoticeContent['circularNoticeContent']['createdUser'] != Current::read('User.id')
 							) : ?>
 								<?php echo h($circularNoticeContent['circularNoticeContent']['subject']); ?><br />
 							<?php else : ?>

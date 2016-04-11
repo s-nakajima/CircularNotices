@@ -75,7 +75,6 @@ class CircularNoticesViewElementsCircularNoticesStatusLabelTest extends NetCommo
 		return $results;
 	}
 
-
 /**
  * View/Elements/CircularNotices/status_labelのテスト
  *
@@ -84,7 +83,6 @@ class CircularNoticesViewElementsCircularNoticesStatusLabelTest extends NetCommo
  * @dataProvider dataProviderStatusLabel
  */
 	public function testStatusLabel($data) {
-
 		$this->controller->set('circularNoticeContent', $data);
 
 		//テスト実行

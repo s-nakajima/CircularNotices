@@ -63,12 +63,32 @@ class CircularNoticeTargetUserGetCircularNoticeTargetUsersTest extends NetCommon
 		$methodName = $this->_methodName;
 
 		//データ生成
+		$contentId = 1;
+
+		//テスト実施
+		$result = $this->$model->$methodName($contentId);
+
+		//チェック
+		$this->assertNotEmpty($result);
+	}
+
+/**
+ * getCircularNoticeTargetUsers()のテスト
+ *
+ * @return void
+ */
+	public function testGetCircularNoticeTargetUsersFalse() {
+		$model = $this->_modelName;
+		$methodName = $this->_methodName;
+
+		//データ生成
 		$contentId = null;
 
 		//テスト実施
 		$result = $this->$model->$methodName($contentId);
 
 		//チェック
+		$this->assertEmpty($result);
 	}
 
 }

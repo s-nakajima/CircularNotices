@@ -132,10 +132,10 @@ class CircularNoticeContentDeleteCircularNoticeContentTest extends NetCommonsMod
 		$methodName = $this->_methodName;
 		$this->setExpectedException('InternalErrorException');
 
-		$circularNoticeChoicesMock = $this->getMockForModel('CircularNotices.' . $model, ['delete']);
-		$circularNoticeChoicesMock->expects($this->any())
+		$choicesMock = $this->getMockForModel('CircularNotices.' . $model, ['delete']);
+		$choicesMock->expects($this->any())
 				->method('delete')
 				->will($this->returnValue(false));
-		$circularNoticeChoicesMock->$methodName($key);
+		$choicesMock->$methodName($key);
 	}
 }

@@ -251,7 +251,7 @@ class CircularNoticeFrameSettingsControllerEditTest extends NetCommonsController
 	public function testValidationError() {
 		//ログイン
 		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
-		
+
 		$data = $this->__data();
 		$urlOptions = array('frame_id' => $data['Frame']['id']);
 
@@ -262,7 +262,7 @@ class CircularNoticeFrameSettingsControllerEditTest extends NetCommonsController
 			'message' => array(__d('net_commons', 'Invalid request.')
 			)
 		);
-				
+
 		$data = Hash::remove($data, $validationError['field']);
 		$data = Hash::insert($data, $validationError['field'], $validationError['value']);
 
@@ -273,6 +273,9 @@ class CircularNoticeFrameSettingsControllerEditTest extends NetCommonsController
 				'action' => 'edit',
 		), $urlOptions);
 		$result = $this->_testNcAction($url, array('method' => 'put', 'data' => $data));
+
+		//チェック
+		$this->assertNotEmpty($result);
 
 		//ログアウト
 		TestAuthGeneral::logout($this);

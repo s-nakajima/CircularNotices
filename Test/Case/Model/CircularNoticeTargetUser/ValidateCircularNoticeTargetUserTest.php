@@ -69,6 +69,7 @@ class CircularNoticeTargetUserValidateCircularNoticeTargetUserTest extends NetCo
 		$result = $this->$model->$methodName($data);
 
 		//チェック
+		$this->assertTrue($result);
 	}
 
 }

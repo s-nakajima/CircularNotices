@@ -53,7 +53,6 @@ class CircularNoticesViewElementsCircularNoticesTargetEditFormTest extends NetCo
  * @return void
  */
 	public function testTargetEditForm() {
-
 		$this->controller->set('circularNoticeContent', array('isRoomTargetedFlag' => 1));
 
 		//テスト実行

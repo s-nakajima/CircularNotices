@@ -53,8 +53,12 @@ class CircularNoticeChoiceValidateCircularChoicesTest extends NetCommonsModelTes
  */
 	protected $_methodName = 'validateCircularChoices';
 
+/**
+ * provider
+ * @return array
+ */
 	public function provider() {
-		return $data = array(
+		return array(
 			'CircularNoticeChoices' => array(
 				array(
 					'id' => 1,
@@ -83,6 +87,7 @@ class CircularNoticeChoiceValidateCircularChoicesTest extends NetCommonsModelTes
 /**
  * validateCircularChoices()のテスト
  * @dataProvider provider
+ * @param $data
  * @return void
  */
 	public function testValidateCircularChoices($data) {
@@ -96,6 +101,9 @@ class CircularNoticeChoiceValidateCircularChoicesTest extends NetCommonsModelTes
 
 		//テスト実施
 		$result = $this->$model->$methodName($data);
+
+		//チェック
+		$this->assertTrue($result);
 	}
 
 /**
@@ -123,5 +131,8 @@ class CircularNoticeChoiceValidateCircularChoicesTest extends NetCommonsModelTes
 
 		//テスト実施
 		$result = $this->$model->$methodName($data);
+
+		//チェック
+		$this->assertFalse($result);
 	}
 }

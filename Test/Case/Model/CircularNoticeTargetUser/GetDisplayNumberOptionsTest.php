@@ -68,6 +68,7 @@ class CircularNoticeTargetUserGetDisplayNumberOptionsTest extends NetCommonsGetT
 		$result = $this->$model->$methodName();
 
 		//チェック
+		$this->assertNotEmpty($result);
 	}
 
 }

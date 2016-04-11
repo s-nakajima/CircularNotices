@@ -114,6 +114,9 @@ class CircularNoticeChoiceReplaceCircularNoticeChoicesTest extends NetCommonsMod
 
 		//テスト実施
 		$result = $this->$model->$methodName($data);
+
+		//チェック
+		$this->assertTrue(is_bool($result));
 	}
 
 /**
@@ -140,12 +143,12 @@ class CircularNoticeChoiceReplaceCircularNoticeChoicesTest extends NetCommonsMod
 		);
 
 		// 例外を発生させるためのモック
-		$circularNoticeChoicesMock = $this->getMockForModel('CircularNotices.' . $model, ['save']);
-		$circularNoticeChoicesMock->expects($this->any())
+		$choicesMock = $this->getMockForModel('CircularNotices.' . $model, ['save']);
+		$choicesMock->expects($this->any())
 			->method('save')
 			->will($this->returnValue(false));
 
-		$circularNoticeChoicesMock->$methodName($data);
+		$choicesMock->$methodName($data);
 	}
 
 /**
@@ -172,11 +175,11 @@ class CircularNoticeChoiceReplaceCircularNoticeChoicesTest extends NetCommonsMod
 		);
 
 		// 例外を発生させるためのモック
-		$circularNoticeChoicesMock = $this->getMockForModel('CircularNotices.' . $model, ['deleteAll']);
-		$circularNoticeChoicesMock->expects($this->any())
+		$choicesMock = $this->getMockForModel('CircularNotices.' . $model, ['deleteAll']);
+		$choicesMock->expects($this->any())
 			->method('deleteAll')
 			->will($this->returnValue(false));
 
-		$circularNoticeChoicesMock->$methodName($data);
+		$choicesMock->$methodName($data);
 	}
 }

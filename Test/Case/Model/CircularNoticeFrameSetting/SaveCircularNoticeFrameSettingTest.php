@@ -108,7 +108,7 @@ class CircularNoticeFrameSettingSaveCircularNoticeFrameSettingTest extends NetCo
 		$data = $this->dataProviderSave()[0][0];
 
 		return array(
-				array($data, 'CircularNotices.CircularNoticeFrameSetting','validateCircularNoticeFrameSetting'),
+				array($data, 'CircularNotices.CircularNoticeFrameSetting', 'validateCircularNoticeFrameSetting'),
 		);
 	}
 

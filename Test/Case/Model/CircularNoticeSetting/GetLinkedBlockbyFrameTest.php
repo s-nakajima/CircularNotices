@@ -25,6 +25,8 @@ class CircularNoticeSettingGetLinkedBlockbyFrameTest extends NetCommonsGetTest {
  * @var array
  */
 	public $fixtures = array(
+		'plugin.frames.frame',
+		'plugin.blocks.block',
 		'plugin.circular_notices.circular_notice_choice',
 		'plugin.circular_notices.circular_notice_content',
 		'plugin.circular_notices.circular_notice_frame_setting',
@@ -63,12 +65,41 @@ class CircularNoticeSettingGetLinkedBlockbyFrameTest extends NetCommonsGetTest {
 		$methodName = $this->_methodName;
 
 		//データ生成
+		$frame['Frame'] = (new FrameFixture())->records[0];
+		$block['Block'] = (new BlockFixture())->records[0];
+		$blockMock = $this->getMockForModel('Blocks.Block');
+		$blockMock->expects($this->once())
+			->method('save')
+			->will($this->returnValue(true));
+		$blockMock->expects($this->once())
+			->method('find')
+			->will($this->returnValue(true));
+		$blockMock->save($block);
+
+		//テスト実施
+		$result = $this->$model->$methodName($frame);
+
+		//チェック
+		$this->assertTrue($result);
+	}
+
+/**
+ * getLinkedBlockbyFrame()のテスト
+ *
+ * @return void
+ */
+	public function testGetLinkedBlockbyFrameFalse() {
+		$model = $this->_modelName;
+		$methodName = $this->_methodName;
+
+		//データ生成
 		$frame = null;
 
 		//テスト実施
 		$result = $this->$model->$methodName($frame);
 
 		//チェック
+		$this->assertFalse($result);
 	}
 
 }
