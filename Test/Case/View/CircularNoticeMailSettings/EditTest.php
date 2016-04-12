@@ -17,7 +17,7 @@ App::uses('MailSetting', 'Mails.Model');
  * View/CircularNoticeMailSettings/editのテスト
  *
  * @author Yuna Miyashita <butackle@gmail.com>
- * @package NetCommons\Groups\Test\Case\View\Group\Select
+ * @package NetCommons\CircularNotices\Test\Case\View\CircularNoticeMailSettings\EditTest
  */
 class CircularNoticeMailSettingsViewEditTest extends NetCommonsControllerTestCase {
 
