@@ -100,9 +100,7 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
 			'Frame' => 'Frames.Frame',
 		]);
 
-		$this->setDataSource('master');
-		$dataSource = $this->getDataSource();
-		$dataSource->begin();
+		$this->begin();
 
 		try {
 
@@ -124,10 +122,10 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
 				}
 			}
 
-			$dataSource->commit();
+			$this->commit();
 
 		} catch (Exception $ex) {
-			$dataSource->rollback();
+			$this->rollback();
 			CakeLog::error($ex);
 			throw $ex;
 		}
@@ -169,9 +167,7 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
  * @throws InternalErrorException
  */
 	public function saveCircularNoticeFrameSetting($data) {
-		$this->setDataSource('master');
-		$dataSource = $this->getDataSource();
-		$dataSource->begin();
+		$this->begin();
 
 		try {
 
@@ -183,10 +179,10 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 
-			$dataSource->commit();
+			$this->commit();
 
 		} catch (Exception $ex) {
-			$dataSource->rollback();
+			$this->rollback();
 			CakeLog::error($ex);
 			throw $ex;
 		}
