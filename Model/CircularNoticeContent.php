@@ -331,8 +331,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			'CircularNoticeTargetUser' => 'CircularNotices.CircularNoticeTargetUser',
 		]);
 
-		$dataSource = $this->getDataSource();
-		$dataSource->begin();
+		$this->begin();
 
 		try {
 			$users = array();
@@ -399,10 +398,10 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 				return false;
 			}
 
-			$dataSource->commit();
+			$this->commit();
 
 		} catch (Exception $ex) {
-			$dataSource->rollback();
+			$this->rollback();
 			CakeLog::error($ex);
 			throw $ex;
 		}
@@ -450,8 +449,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
  * @throws InternalErrorException
  */
 	public function deleteCircularNoticeContent($key) {
-		$dataSource = $this->getDataSource();
-		$dataSource->begin();
+		$this->begin();
 
 		try {
 
@@ -479,10 +477,10 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 				}
 			}
 
-			$dataSource->commit();
+			$this->commit();
 
 		} catch (Exception $ex) {
-			$dataSource->rollback();
+			$this->rollback();
 			CakeLog::error($ex);
 			throw $ex;
 		}

@@ -303,10 +303,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
  * @throws InternalErrorException
  */
 	public function saveCircularNoticeTargetUser($data) {
-		// FIXME: これがあるとページネーションでこけてしまうため回避方法を探す
-		//$this->setDataSource('master');
-		$dataSource = $this->getDataSource();
-		$dataSource->begin();
+		$this->begin();
 
 		try {
 			// データセット＋検証
@@ -326,10 +323,10 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 
-			$dataSource->commit();
+			$this->commit();
 
 		} catch (Exception $ex) {
-			$dataSource->rollback();
+			$this->rollback();
 			CakeLog::error($ex);
 			throw $ex;
 		}

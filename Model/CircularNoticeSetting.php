@@ -102,9 +102,7 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 			'Block' => 'Blocks.Block',
 		]);
 
-		$this->setDataSource('master');
-		$dataSource = $this->getDataSource();
-		$dataSource->begin();
+		$this->begin();
 
 		try {
 
@@ -145,10 +143,10 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 				}
 			}
 
-			$dataSource->commit();
+			$this->commit();
 
 		} catch (Exception $ex) {
-			$dataSource->rollback();
+			$this->rollback();
 			CakeLog::error($ex);
 			throw $ex;
 		}
