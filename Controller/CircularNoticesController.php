@@ -128,7 +128,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		// 回覧を取得
 		$content = $this->CircularNoticeContent->getCircularNoticeContent($contentKey, $userId);
 		if (! $content) {
-			$this->throwBadRequest();
+			return $this->throwBadRequest();
 		}
 		$contentId = $content['CircularNoticeContent']['id'];
 		$myTargetUser = array();
@@ -355,7 +355,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$this->initCircularNotice();
 
 		if (! $this->request->isDelete()) {
-			$this->throwBadRequest();
+			return $this->throwBadRequest();
 		}
 
 		$this->CircularNoticeContent->deleteCircularNoticeContent($contentKey);
@@ -381,7 +381,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 			// 回覧を取得
 			$content = $this->CircularNoticeContent->getCircularNoticeContent($contentKey, $userId);
 			if (! $content) {
-				$this->throwBadRequest();
+				return $this->throwBadRequest();
 			}
 			$contentId = $content['CircularNoticeContent']['id'];
 
