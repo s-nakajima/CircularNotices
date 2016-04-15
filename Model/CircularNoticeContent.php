@@ -383,7 +383,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			$sendTimes = array($data['CircularNoticeContent']['publish_start']);
 			$this->setSendTimeReminder($sendTimes);
 			$mailSendUserIdArr = Hash::extract($data, 'CircularNoticeTargetUsers.{n}.CircularNoticeTargetUser.user_id');
-			$this->setToUserIds($mailSendUserIdArr);
+			$this->setSetting(MailQueueBehavior::MAIL_QUEUE_SETTING_USER_IDS, $mailSendUserIdArr);
 
 			// CircularNoticeContentを保存
 			if (! $content = $this->save(null, false)) {
