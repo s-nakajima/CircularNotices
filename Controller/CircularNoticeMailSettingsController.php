@@ -27,6 +27,8 @@ class CircularNoticeMailSettingsController extends MailSettingsController {
 		'Blocks.BlockTabs' => array(
 			'mainTabs' => array('role_permissions', 'frame_settings', 'mail_settings')
 		),
+		'Mails.MailsHtml',
+		'Mails.MailForm',
 	);
 
 }
