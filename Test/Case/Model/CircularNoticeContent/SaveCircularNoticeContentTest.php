@@ -40,6 +40,7 @@ class CircularNoticeContentSaveCircularNoticeContentTest extends NetCommonsModel
 		'plugin.user_attributes.user_attribute_layout',
 		'plugin.frames.frame',
 		'plugin.blocks.block',
+		'plugin.rooms.room_role',
 	);
 
 /**
