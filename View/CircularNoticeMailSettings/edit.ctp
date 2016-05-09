@@ -13,13 +13,16 @@
 	<div class="tab-content">
 		<?php echo $this->BlockTabs->main(BlockTabsHelper::MAIN_TAB_MAIL_SETTING); ?>
 
-		<?php echo $this->element('Mails.edit_form', array(
-			'mailBodyPopoverMessage' => __d('circular_notices', 'MailSetting.mail_fixed_phrase_body.popover'),
-			'MailSetting.mail_fixed_phrase_subject' => __d('circular_notices', 'mail_fixed_phrase_subject'),
-			'MailSetting.mail_fixed_phrase_body' => __d('circular_notices', 'mail_fixed_phrase_body'),
-			'cancelUrl' => NetCommonsUrl::backToIndexUrl('default_setting_action'),
-			'useNoticeAuthority' => 0,
-			'useReplayTo' => 0,
-		)); ?>
+		<?php /** @see MailFormHelper::editFrom() */ ?>
+		<?php echo $this->MailForm->editFrom(
+			array(
+				array(
+					'mailBodyPopoverMessage' => __d('circular_notices', 'MailSetting.mail_fixed_phrase_body.popover'),
+					'useNoticeAuthority' => 0,
+				),
+			),
+			NetCommonsUrl::backToIndexUrl('default_setting_action'),
+			0
+		); ?>
 	</div>
 </div>

@@ -20,6 +20,16 @@ App::uses('AppController', 'Controller');
 class TestViewElementsCircularNoticeFrameSettingsEditFormController extends AppController {
 
 /**
+ * use helpers
+ *
+ * @var array
+ */
+	public $helpers = array(
+		'Mails.MailsHtml',
+		'Mails.MailForm',
+	);
+
+/**
  * edit_form
  *
  * @return void

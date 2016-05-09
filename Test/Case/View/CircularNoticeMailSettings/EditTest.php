@@ -28,6 +28,7 @@ class CircularNoticeMailSettingsViewEditTest extends NetCommonsControllerTestCas
  */
 	public $fixtures = array(
 		'plugin.circular_notices.circular_notice_frame_setting',
+		'plugin.mails.mail_setting_fixed_phrase',
 	);
 
 /**
