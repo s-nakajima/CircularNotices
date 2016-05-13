@@ -203,7 +203,8 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
  * @param int $limit limit
  * @return array
  */
-	public function getCircularNoticeTargetUsersForPaginator($contentId, $paginatorParams, $userId, $limit = self::DEFAULT_DISPLAY_NUMBER) {
+	public function getCircularNoticeTargetUsersForPaginator($contentId, $paginatorParams, $userId,
+															$limit = self::DEFAULT_DISPLAY_NUMBER) {
 		$this->virtualFields['first_order'] =
 			'CASE WHEN CircularNoticeTargetUser.user_id = ' . $userId . ' THEN 1 ELSE 2 END';
 
@@ -246,7 +247,8 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
  * @param array $extra extra
  * @return mixed
  */
-	public function paginate($conditions, $fields, $order, $limit, $page = 1, $recursive = null, $extra = array()) {
+	public function paginate($conditions, $fields, $order, $limit, $page = 1, $recursive = null,
+							$extra = array()) {
 		// ログイン者を先頭に持ってくるためにorderをカスタム
 		$customOrder = array(array('CircularNoticeTargetUser.first_order' => 'asc'));
 		if (! empty($order)) {
@@ -273,9 +275,12 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 			)
 		));
 
-		if ($target['CircularNoticeTargetUser']['user_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD) {
-			if ($target['CircularNoticeContent']['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN ||
-				$target['CircularNoticeContent']['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED
+		if ($target['CircularNoticeTargetUser']['user_status'] ==
+			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD) {
+			if ($target['CircularNoticeContent']['current_status'] ==
+				CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN ||
+				$target['CircularNoticeContent']['current_status'] ==
+				CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED
 			) {
 				$data = array(
 					'CircularNoticeTargetUser' => array(
@@ -311,7 +316,8 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 				'notEmpty' => array(
 					'rule' => array('validateNotEmptyReplyValue'),
 					'last' => false,
-					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Answer Title')),
+					'message' => sprintf(__d('net_commons', 'Please input %s.'),
+						__d('circular_notices', 'Answer Title')),
 				),
 			);
 			if (! $this->validateCircularNoticeTargetUser($data)) {
@@ -347,13 +353,16 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		// 編集時に既に回答済みの情報を保持する
 		$existingTargetUsers = $this->find('all', array(
 			'recursive' => -1,
-			'fields' => array('user_id', 'read_flag', 'read_datetime', 'reply_flag', 'reply_datetime', 'reply_text_value', 'reply_selection_value'),
+			'fields' => array('user_id', 'read_flag', 'read_datetime', 'reply_flag',
+				'reply_datetime', 'reply_text_value', 'reply_selection_value'),
 			'conditions' => array('circular_notice_content_id' => $contentId)
 		));
-		$existingTargetUsers = Hash::combine($existingTargetUsers, '{n}.CircularNoticeTargetUser.user_id', '{n}');
+		$existingTargetUsers =
+			Hash::combine($existingTargetUsers, '{n}.CircularNoticeTargetUser.user_id', '{n}');
 
 		// すべてDelete
-		if (! $this->deleteAll(array('CircularNoticeTargetUser.circular_notice_content_id' => $contentId), false)) {
+		if (! $this->deleteAll(array(
+			'CircularNoticeTargetUser.circular_notice_content_id' => $contentId), false)) {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 
@@ -362,7 +371,8 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 			foreach ($data['CircularNoticeTargetUsers'] as $targetUser) {
 				$targetUser['CircularNoticeTargetUser']['circular_notice_content_id'] = $contentId;
 				if (isset($existingTargetUsers[$targetUser['CircularNoticeTargetUser']['user_id']])) {
-					$targetUser = Hash::merge($targetUser, $existingTargetUsers[$targetUser['CircularNoticeTargetUser']['user_id']]);
+					$targetUser = Hash::merge($targetUser,
+						$existingTargetUsers[$targetUser['CircularNoticeTargetUser']['user_id']]);
 				}
 				if (! $this->validateCircularNoticeTargetUser($targetUser)) {
 					return false;

@@ -152,7 +152,8 @@ class CircularNoticeComponent extends Component {
 	public function setSelectUsers(Controller $controller) {
 		$controller->request->data['selectUsers'] = array();
 		if (isset($controller->request->data['CircularNoticeTargetUser'])) {
-			$selectUsers = Hash::extract($controller->request->data['CircularNoticeTargetUser'], '{n}.user_id');
+			$selectUsers =
+				Hash::extract($controller->request->data['CircularNoticeTargetUser'], '{n}.user_id');
 			foreach ($selectUsers as $userId) {
 				$user = $controller->User->getUser($userId);
 				$controller->request->data['selectUsers'][] = $user;

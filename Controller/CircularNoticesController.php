@@ -104,7 +104,8 @@ class CircularNoticesController extends CircularNoticesAppController {
 		foreach ($contents as $i => $content) {
 			// 閲覧件数／回答件数を取得してセット
 			// FIXME: 表示件数が多い場合、クエリ発行回数がかなり増える
-			$counts = $this->CircularNoticeTargetUser->getCircularNoticeTargetUserCount((int)$content['CircularNoticeContent']['id']);
+			$counts = $this->CircularNoticeTargetUser
+				->getCircularNoticeTargetUserCount((int)$content['CircularNoticeContent']['id']);
 			$contents[$i]['targetCount'] = $counts['targetCount'];
 			$contents[$i]['readCount'] = $counts['readCount'];
 			$contents[$i]['replyCount'] = $counts['replyCount'];
@@ -140,15 +141,18 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 			// ログイン者の回答を取得して整形
 			$myTargetUser = array('CircularNoticeTargetUser' => $content['MyCircularNoticeTargetUser']);
-			$myTargetUser['CircularNoticeTargetUser']['origin_reply_text_value'] = $myTargetUser['CircularNoticeTargetUser']['reply_text_value'];
-			$myTargetUser['CircularNoticeTargetUser']['origin_reply_selection_value'] = $myTargetUser['CircularNoticeTargetUser']['reply_selection_value'];
+			$myTargetUser['CircularNoticeTargetUser']['origin_reply_text_value'] =
+				$myTargetUser['CircularNoticeTargetUser']['reply_text_value'];
+			$myTargetUser['CircularNoticeTargetUser']['origin_reply_selection_value'] =
+				$myTargetUser['CircularNoticeTargetUser']['reply_selection_value'];
 		}
 
 		// 回覧の閲覧件数／回答件数を取得
 		$counts = $this->CircularNoticeTargetUser->getCircularNoticeTargetUserCount($contentId);
 
 		// Paginator経由で回答先一覧を取得
-		$this->Paginator->settings = $this->CircularNoticeTargetUser->getCircularNoticeTargetUsersForPaginator($contentId, $this->params['named'], $userId);
+		$this->Paginator->settings = $this->CircularNoticeTargetUser
+			->getCircularNoticeTargetUsersForPaginator($contentId, $this->params['named'], $userId);
 		$targetUsers = $this->Paginator->paginate('CircularNoticeTargetUser');
 
 		// 回答を集計
@@ -159,19 +163,24 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 			$replyTextValue = '';
 			$replySelectionValue = '';
-			if ($content['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT) {
+			if ($content['CircularNoticeContent']['reply_type'] ==
+				CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT) {
 				$replyTextValue = $this->data['CircularNoticeTargetUser']['reply_text_value'];
-			} elseif ($content['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION) {
+			} elseif ($content['CircularNoticeContent']['reply_type'] ==
+				CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION) {
 				$replySelectionValue = $this->data['CircularNoticeTargetUser']['reply_selection_value'];
-			} elseif ($content['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION) {
+			} elseif ($content['CircularNoticeContent']['reply_type'] ==
+				CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION) {
 				if ($this->data['CircularNoticeTargetUser']['reply_selection_value']) {
-					$replySelectionValue = implode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $this->data['CircularNoticeTargetUser']['reply_selection_value']);
+					$replySelectionValue = implode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER,
+						$this->data['CircularNoticeTargetUser']['reply_selection_value']);
 				}
 			}
 
 			$data = Hash::merge(
 				$this->data,
-				['CircularNoticeTargetUser' => ['reply_flag' => true, 'reply_datetime' => date('Y-m-d H:i:s'), 'reply_text_value' => $replyTextValue, 'reply_selection_value' => $replySelectionValue]]
+				['CircularNoticeTargetUser' => ['reply_flag' => true, 'reply_datetime' => date('Y-m-d H:i:s'),
+					'reply_text_value' => $replyTextValue, 'reply_selection_value' => $replySelectionValue]]
 			);
 
 			if ($this->CircularNoticeTargetUser->saveCircularNoticeTargetUser($data)) {
@@ -199,7 +208,8 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 		$results = Hash::merge(
 			$content, $counts,
-			['MyAnswer' => $myTargetUser, 'CircularNoticeTargetUsers' => $targetUsers, 'AnswersSummary' => $answersSummary]
+			['MyAnswer' => $myTargetUser, 'CircularNoticeTargetUsers' => $targetUsers,
+				'AnswersSummary' => $answersSummary]
 		);
 		$results = $this->camelizeKeyRecursive($results);
 		$this->set($results);
@@ -245,7 +255,8 @@ class CircularNoticesController extends CircularNoticesAppController {
 				return;
 			} else {
 				// 回答の選択肢を保持
-				$content['CircularNoticeChoice'] = Hash::extract($data, 'CircularNoticeChoices.{n}.CircularNoticeChoice');
+				$content['CircularNoticeChoice'] = Hash::extract($data,
+					'CircularNoticeChoices.{n}.CircularNoticeChoice');
 
 				// ユーザ選択状態を保持
 				$this->CircularNotice->setSelectUsers($this);
@@ -253,7 +264,8 @@ class CircularNoticesController extends CircularNoticesAppController {
 			$this->NetCommons->handleValidationError($this->CircularNoticeContent->validationErrors);
 
 			unset($data['CircularNoticeContent']['status']);
-			$data['CircularNoticeContent']['is_room_targeted_flag'] = $this->data['CircularNoticeContent']['is_room_targeted_flag'];
+			$data['CircularNoticeContent']['is_room_targeted_flag'] =
+				$this->data['CircularNoticeContent']['is_room_targeted_flag'];
 		} else {
 			if (!isset($data['CircularNoticeContent']['is_room_targeted_flag'])
 					|| $data['CircularNoticeContent']['is_room_targeted_flag']) {
@@ -317,7 +329,8 @@ class CircularNoticesController extends CircularNoticesAppController {
 				return;
 			} else {
 				// 回答の選択肢を保持
-				$content['CircularNoticeChoice'] = Hash::extract($data, 'CircularNoticeChoices.{n}.CircularNoticeChoice');
+				$content['CircularNoticeChoice'] = Hash::extract($data,
+					'CircularNoticeChoices.{n}.CircularNoticeChoice');
 
 				// ユーザ選択状態を保持
 				$this->CircularNotice->setSelectUsers($this);
@@ -326,7 +339,8 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 			unset($data['CircularNoticeContent']['id']);
 			unset($data['CircularNoticeContent']['status']);
-			$data['CircularNoticeContent']['is_room_targeted_flag'] = $this->data['CircularNoticeContent']['is_room_targeted_flag'];
+			$data['CircularNoticeContent']['is_room_targeted_flag'] =
+				$this->data['CircularNoticeContent']['is_room_targeted_flag'];
 		} else {
 			if ($content['CircularNoticeContent']['is_room_targeted_flag']) {
 				// 自分自身を取得
@@ -392,7 +406,8 @@ class CircularNoticesController extends CircularNoticesAppController {
 			$contentId = $content['CircularNoticeContent']['id'];
 
 			// Paginator経由で回答先一覧を取得
-			$this->Paginator->settings = $this->CircularNoticeTargetUser->getCircularNoticeTargetUsersForPaginator($contentId, $this->params['named'], $userId, 0);
+			$this->Paginator->settings = $this->CircularNoticeTargetUser
+				->getCircularNoticeTargetUsersForPaginator($contentId, $this->params['named'], $userId, 0);
 			$targetUsers = $this->Paginator->paginate('CircularNoticeTargetUser');
 
 			$tmpFolder = new TemporaryFolder();
@@ -415,7 +430,8 @@ class CircularNoticesController extends CircularNoticesAppController {
 						break;
 					case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION:
 					case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION:
-						$selectionValues = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $targetUser['circularNoticeTargetUser']['replySelectionValue']);
+						$selectionValues = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER,
+							$targetUser['circularNoticeTargetUser']['replySelectionValue']);
 						$answer = implode('、', $selectionValues);
 						break;
 				}
@@ -423,12 +439,14 @@ class CircularNoticesController extends CircularNoticesAppController {
 				if (! $targetUser['circularNoticeTargetUser']['readDatetime']) {
 					$readDatetime = __d('circular_notices', 'Unread');
 				} else {
-					$readDatetime = $this->CircularNotice->getDisplayDateFormat($targetUser['circularNoticeTargetUser']['readDatetime']);
+					$readDatetime = $this->CircularNotice
+						->getDisplayDateFormat($targetUser['circularNoticeTargetUser']['readDatetime']);
 				}
 				if (! $targetUser['circularNoticeTargetUser']['replyDatetime']) {
 					$replyDatetime = __d('circular_notices', 'Unreply');
 				} else {
-					$replyDatetime = $this->CircularNotice->getDisplayDateFormat($targetUser['circularNoticeTargetUser']['replyDatetime']);
+					$replyDatetime = $this->CircularNotice
+						->getDisplayDateFormat($targetUser['circularNoticeTargetUser']['replyDatetime']);
 				}
 				$data = array(
 					h($targetUser['user']['handlename']),
@@ -462,7 +480,8 @@ class CircularNoticesController extends CircularNoticesAppController {
 	private function __parseRequestForSave() {
 		$data = $this->data;
 
-		if ($this->data['CircularNoticeContent']['reply_type'] === CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT) {
+		if ($this->data['CircularNoticeContent']['reply_type'] ===
+			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT) {
 			$data['CircularNoticeChoices'] = array();
 		}
 
@@ -474,7 +493,8 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 		if (!empty($this->data['CircularNoticeContent']['target_groups'])) {
 			$data['CircularNoticeContent']['target_groups'] =
-				implode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $data['CircularNoticeContent']['target_groups']);
+				implode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER,
+					$data['CircularNoticeContent']['target_groups']);
 		} else {
 			$data['CircularNoticeContent']['target_groups'] = null;
 		}
