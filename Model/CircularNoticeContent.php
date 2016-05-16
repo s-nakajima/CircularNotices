@@ -47,13 +47,15 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			'subject' => array(
 				'notBlank' => array(
 					'rule' => array('notBlank'),
-					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Subject')),
+					'message' => sprintf(__d('net_commons', 'Please input %s.'),
+						__d('circular_notices', 'Subject')),
 				),
 			),
 			'content' => array(
 				'notBlank' => array(
 					'rule' => array('notBlank'),
-					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Content')),
+					'message' => sprintf(__d('net_commons', 'Please input %s.'),
+						__d('circular_notices', 'Content')),
 				),
 			),
 			'reply_type' => array(
@@ -67,13 +69,15 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 				),
 				'notEmptyChoices' => array(
 					'rule' => array('validateNotEmptyChoices'),
-					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Choice')),
+					'message' => sprintf(__d('net_commons', 'Please input %s.'),
+						__d('circular_notices', 'Choice')),
 				),
 			),
 			'publish_start' => array(
 				'notBlank' => array(
 					'rule' => array('notBlank'),
-					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Period')),
+					'message' => sprintf(__d('net_commons', 'Please input %s.'),
+						__d('circular_notices', 'Period')),
 				),
 				'datetime' => array(
 					'rule' => array('datetime'),
@@ -83,14 +87,16 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			'publish_end' => array(
 				'notBlank' => array(
 					'rule' => array('notBlank'),
-					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Period')),
+					'message' => sprintf(__d('net_commons', 'Please input %s.'),
+						__d('circular_notices', 'Period')),
 				),
 				'datetime' => array(
 					'rule' => array('datetime'),
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
 				'fromTo' => array(
-					'rule' => array('validateDatetimeFromTo', array('from' => $this->data['CircularNoticeContent']['publish_start'])),
+					'rule' => array('validateDatetimeFromTo',
+						array('from' => $this->data['CircularNoticeContent']['publish_start'])),
 					'message' => __d('net_commons', 'Invalid request.'),
 				)
 			),
@@ -107,7 +113,8 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 				'reply_deadline' => array(
 					'notBlank' => array(
 						'rule' => array('notBlank'),
-						'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('circular_notices', 'Reply Deadline')),
+						'message' => sprintf(__d('net_commons', 'Please input %s.'),
+							__d('circular_notices', 'Reply Deadline')),
 					),
 					'datetime' => array(
 						'rule' => array('datetime'),
@@ -133,10 +140,13 @@ class CircularNoticeContent extends CircularNoticesAppModel {
  * @return bool
  */
 	public function validateNotEmptyChoices($check) {
-		if ($this->data['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION ||
-			$this->data['CircularNoticeContent']['reply_type'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION
+		if ($this->data['CircularNoticeContent']['reply_type'] ==
+			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION ||
+			$this->data['CircularNoticeContent']['reply_type'] ==
+			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION
 		) {
-			if (! isset($this->data['CircularNoticeChoices']) || count($this->data['CircularNoticeChoices']) == 0) {
+			if (! isset($this->data['CircularNoticeChoices']) ||
+				count($this->data['CircularNoticeChoices']) == 0) {
 				return false;
 			}
 		}
@@ -235,15 +245,18 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 		$now = date('Y-m-d H:i:s');
 
 		$this->virtualFields['current_status'] =
-			'CASE WHEN ' . $this->alias . '.status = \'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT . '\' THEN ' .
+			'CASE WHEN ' . $this->alias . '.status = \'' .
+				CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT . '\' THEN ' .
 				'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT . '\' ' .
-			'WHEN ' . $this->alias . '.status = \'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_PUBLISHED . '\' THEN ' .
+			'WHEN ' . $this->alias . '.status = \'' .
+					CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_PUBLISHED . '\' THEN ' .
 				'CASE WHEN ' . $this->alias . '.publish_start > \'' . $now . '\' THEN ' .
 					'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED . '\' ' .
 				'ELSE ' .
 					'CASE WHEN ' . $this->alias . '.publish_end < \'' . $now . '\' THEN ' .
 						'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_CLOSED . '\' ' .
-					'WHEN ' . $this->alias . '.reply_deadline_set_flag = 1 AND ' . $this->alias . '.reply_deadline < \'' . $now . '\' THEN ' .
+					'WHEN ' . $this->alias . '.reply_deadline_set_flag = 1 AND ' .
+						$this->alias . '.reply_deadline < \'' . $now . '\' THEN ' .
 						'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED . '\' ' .
 					'ELSE ' .
 						'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN . '\' ' .
@@ -279,9 +292,11 @@ class CircularNoticeContent extends CircularNoticesAppModel {
  * @param int $defaultLimit default limit per page
  * @return array
  */
-	public function getCircularNoticeContentsForPaginate($blockKey, $userId, $paginatorParams, $defaultLimit) {
+	public function getCircularNoticeContentsForPaginate($blockKey, $userId, $paginatorParams,
+														$defaultLimit) {
 		$this->__bindMyCircularNoticeTargetUser($userId, false);
-		$this->virtualFields['user_status'] = $this->MyCircularNoticeTargetUser->virtualFields['user_status'];
+		$this->virtualFields['user_status'] =
+			$this->MyCircularNoticeTargetUser->virtualFields['user_status'];
 
 		$conditions = array(
 			'CircularNoticeContent.circular_notice_setting_key' => $blockKey,
@@ -290,17 +305,22 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 				array(
 					'NOT' => array('CircularNoticeContent.user_status' => null),
 					'OR' => array(
-						array('CircularNoticeContent.current_status' => CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN),
-						array('CircularNoticeContent.current_status' => CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED),
+						array('CircularNoticeContent.current_status' =>
+							CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN),
+						array('CircularNoticeContent.current_status' =>
+							CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED),
 					)
 				)
 			),
 		);
 
 		if (isset($paginatorParams['status'])) {
-			if ($paginatorParams['status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD ||
-				$paginatorParams['status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_READ_YET ||
-				$paginatorParams['status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_REPLIED
+			if ($paginatorParams['status'] ==
+					CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD ||
+				$paginatorParams['status'] ==
+					CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_READ_YET ||
+				$paginatorParams['status'] ==
+					CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_REPLIED
 			) {
 				$conditions['CircularNoticeContent.user_status'] = (int)$paginatorParams['status'];
 			} else {
@@ -386,7 +406,8 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			// データセット＋検証
 			$this->validateCircularNoticeContent($data);
 			if (! $this->CircularNoticeChoice->validateCircularChoices($data)) {
-				$this->validationErrors = Hash::merge($this->validationErrors, $this->CircularNoticeChoice->validationErrors);
+				$this->validationErrors =
+					Hash::merge($this->validationErrors, $this->CircularNoticeChoice->validationErrors);
 			}
 			if ($this->validationErrors) {
 				return false;
@@ -395,7 +416,8 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			// メール処理
 			$sendTimes = array($data['CircularNoticeContent']['publish_start']);
 			$this->setSendTimeReminder($sendTimes);
-			$mailSendUserIdArr = Hash::extract($data, 'CircularNoticeTargetUsers.{n}.CircularNoticeTargetUser.user_id');
+			$mailSendUserIdArr =
+				Hash::extract($data, 'CircularNoticeTargetUsers.{n}.CircularNoticeTargetUser.user_id');
 			$this->setSetting(MailQueueBehavior::MAIL_QUEUE_SETTING_USER_IDS, $mailSendUserIdArr);
 
 			// CircularNoticeContentを保存
@@ -478,10 +500,12 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			// 関連するデータを一式削除
 			if (count($targetIds) > 0) {
 				foreach ($targetIds as $targetId) {
-					if (! $this->CircularNoticeTargetUser->deleteAll(array('CircularNoticeTargetUser.circular_notice_content_id' => $targetId), false)) {
+					if (! $this->CircularNoticeTargetUser->deleteAll(
+						array('CircularNoticeTargetUser.circular_notice_content_id' => $targetId), false)) {
 						throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 					}
-					if (! $this->CircularNoticeChoice->deleteAll(array('CircularNoticeChoice.circular_notice_content_id' => $targetId), false)) {
+					if (! $this->CircularNoticeChoice->deleteAll(
+						array('CircularNoticeChoice.circular_notice_content_id' => $targetId), false)) {
 						throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 					}
 					if (! $this->delete($targetId, false)) {

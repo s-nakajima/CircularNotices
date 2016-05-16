@@ -74,7 +74,8 @@ class CircularNoticeChoice extends CircularNoticesAppModel {
 		$deleteConditions = array(
 			'CircularNoticeChoice.circular_notice_content_id' => $contentId,
 		);
-		$extractIds = Hash::filter(Hash::extract($data['CircularNoticeChoices'], '{n}.CircularNoticeChoice.id'));
+		$extractIds =
+			Hash::filter(Hash::extract($data['CircularNoticeChoices'], '{n}.CircularNoticeChoice.id'));
 		if (count($extractIds) > 0) {
 			$deleteConditions['CircularNoticeChoice.id NOT'] = $extractIds;
 		}
