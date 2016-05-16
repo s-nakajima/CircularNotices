@@ -118,7 +118,7 @@ class CircularNoticesControllerParseRequestForSaveTest extends NetCommonsControl
 		$method->setAccessible(true);
 		$method->invoke($stub);
 
-		$this->$assert['method']($stub->data);
+		$this->assertNotEmpty($stub->data);
 	}
 }
 /**

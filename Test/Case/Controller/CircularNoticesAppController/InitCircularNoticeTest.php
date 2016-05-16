@@ -101,8 +101,6 @@ class CircularNoticesAppControllerInitCircularNoticeTest extends NetCommonsContr
 
 		$stub->initCircularNotice();
 
-		if ($assert) {
-			$this->$assert['method']($stub->viewVars);
-		}
+		$this->assertNotEmpty($stub->viewVars);
 	}
 }
