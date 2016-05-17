@@ -499,6 +499,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 
 			// 関連するデータを一式削除
 			if (count($targetIds) > 0) {
+				$this->contentKey = $key;
 				if (! $this->CircularNoticeTargetUser->deleteAll(
 					array('CircularNoticeTargetUser.circular_notice_content_id' => $targetIds), false)) {
 					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
@@ -507,7 +508,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 					array('CircularNoticeChoice.circular_notice_content_id' => $targetIds), false)) {
 					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				}
-				if (! $this->delete($targetIds, false)) {
+				if (! $this->deleteAll(array($this->alias . '.key' => $key), false, true)) {
 					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				}
 			}
