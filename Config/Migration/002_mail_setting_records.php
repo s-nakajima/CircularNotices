@@ -80,7 +80,7 @@ class MailSettingRecords extends MailsMigration {
 
 {X-BODY}
 
-この投稿内容を確認するには下記のリンクをクリックして下さい。
+この投稿内容を確認するには下記のリンクをクリックしてください。
 {X-URL}',
 			),
 		),
