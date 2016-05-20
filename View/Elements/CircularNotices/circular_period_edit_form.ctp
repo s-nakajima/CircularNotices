@@ -25,6 +25,8 @@
 					'ng-model' => 'circularNoticeContent.publishStart',
 					'datetimepicker',
 					'label' => false,
+					'error' => false,
+					'div' => false,
 					'class' => 'form-control',
 					'placeholder' => 'yyyy-mm-dd hh:mm',
 				)); ?>
@@ -36,10 +38,17 @@
 					'ng-model' => 'circularNoticeContent.publishEnd',
 					'datetimepicker',
 					'label' => false,
+					'error' => false,
+					'div' => false,
 					'class' => 'form-control',
 					'placeholder' => 'yyyy-mm-dd hh:mm',
 				)); ?>
 			</div>
+			<?php echo $this->NetCommonsForm->error('CircularNoticeContent.publish_start') ;?>
+			<?php if ($this->NetCommonsForm->error('CircularNoticeContent.publish_start') 
+					!== $this->NetCommonsForm->error('CircularNoticeContent.publish_end')):?>
+				<?php echo $this->NetCommonsForm->error('CircularNoticeContent.publish_end') ;?>
+			<?php endif ?>
 		</div>
 	</div>
 </div>

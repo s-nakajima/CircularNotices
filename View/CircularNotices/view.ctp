@@ -35,6 +35,10 @@
 	);
 ?>
 
+<header>
+	<?php echo $this->BackTo->listLinkButton(); ?>
+</header>
+
 <div id="nc-circular-notices-<?php echo (int)Current::read('Frame.id'); ?>" ng-controller="CircularNoticeView" ng-init="initialize()">
 
 	<div class="circular-notice-index-status-label">
@@ -205,7 +209,7 @@
 						<button type="submit" class="btn btn-primary"
 							ng-click="this.form.submit();"
 							ng-disabled="sending">
-							<span class="glyphicon glyphicon-edit"></span>
+							<span class="glyphicon"></span>
 							<?php echo h($labelName); ?>
 						</button>
 					</span>
@@ -225,7 +229,7 @@
 			<button type="button" class="btn btn-default"
 				ng-click="switchOtherUserView(true)"
 				ng-hide="showOtherUsers!=false">
-				<span class="glyphicon glyphicon-plus"></span>
+				<span class="glyphicon glyphicon-menu-right"></span>
 				<?php echo h(__d('circular_notices', 'Show Other Users')); ?>
 			</button>
 		</span>
@@ -234,7 +238,7 @@
 			<button type="button" class="btn btn-default"
 				ng-click="switchOtherUserView(false)"
 				ng-hide="showOtherUsers!=true">
-				<span class="glyphicon glyphicon-minus"></span>
+				<span class="glyphicon glyphicon-menu-down"></span>
 				<?php echo h(__d('circular_notices', 'Close Other Users')); ?>
 			</button>
 		</span>
@@ -334,25 +338,6 @@
 		</table>
 
 		<?php echo $this->element('NetCommons.paginator'); ?>
-	</div>
-
-	<div class="text-center">
-		<span class="nc-tooltip" tooltip="<?php echo h(__d('circular_notices', 'Back')); ?>">
-			<?php echo $this->NetCommonsHtml->link(
-				'<span class="glyphicon">' . __d('circular_notices', 'Back') . '</span>',
-				$this->NetCommonsHtml->url(
-					array(
-						'controller' => 'circular_notices',
-						'action' => 'index',
-					)
-				),
-				array(
-					'class' => 'btn btn-default',
-					'escape' => false
-				)
-			);
-			?>
-		</span>
 	</div>
 
 </div>

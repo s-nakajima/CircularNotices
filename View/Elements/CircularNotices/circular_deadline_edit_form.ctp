@@ -38,10 +38,12 @@
 					'ng-model' => 'circularNoticeContent.replyDeadline',
 					'datetimepicker',
 					'label' => false,
+					'error' => false,
 					'class' => 'form-control',
 					'placeholder' => 'yyyy-mm-dd hh:mm',
 				)); ?>
 			</div>
+			<?php echo $this->NetCommonsForm->error('CircularNoticeContent.reply_deadline') ;?>
 		</div>
 	</div>
 </div>
