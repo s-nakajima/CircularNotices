@@ -12,18 +12,16 @@
 
 <div class="form-group" style="margin-bottom: 10px;">
 	<div>
-		<?php echo $this->Form->label(
+		<?php echo $this->NetCommonsForm->label(
 			'CircularNoticeTargetUser.period',
 			__d('circular_notices', 'Period') . $this->element('NetCommons.required')
 		); ?>
 	</div>
 	<div>
-		<div class="input-group inline-block">
+		<div class="form-inline">
 			<div class="input-group">
 				<?php echo $this->NetCommonsForm->input('CircularNoticeContent.publish_start', array(
-					'type' => 'text',
-					'ng-model' => 'circularNoticeContent.publishStart',
-					'datetimepicker',
+					'type' => 'datetime',
 					'label' => false,
 					'error' => false,
 					'div' => false,
@@ -34,9 +32,7 @@
 					<span class="glyphicon glyphicon-minus"></span>
 				</span>
 				<?php echo $this->NetCommonsForm->input('CircularNoticeContent.publish_end', array(
-					'type' => 'text',
-					'ng-model' => 'circularNoticeContent.publishEnd',
-					'datetimepicker',
+					'type' => 'datetime',
 					'label' => false,
 					'error' => false,
 					'div' => false,

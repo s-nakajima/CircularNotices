@@ -12,35 +12,34 @@
 
 <div class="form-group">
 	<div>
-		<?php echo $this->Form->label(
+		<?php echo $this->NetCommonsForm->label(
 			'CircularNoticeContent.reply_deadline_set_flag',
 			__d('circular_notices', 'Reply Deadline') . $this->element('NetCommons.required')
 		); ?>
 	</div>
-	<div class="col-xs-offset-1 col-xs-11">
+	<div class="col-xs-12">
 		<?php
 			$options = array(
 				'0' => __d('circular_notices', 'No Deadline'),
 				'1' => __d('circular_notices', 'Set Deadline'),
 			);
-			echo $this->Form->radio('CircularNoticeContent.reply_deadline_set_flag', $options, array(
+			echo $this->NetCommonsForm->radio('CircularNoticeContent.reply_deadline_set_flag', $options, array(
 				'value' => (isset($circularNoticeContent['replyDeadlineSetFlag']) ? $circularNoticeContent['replyDeadlineSetFlag'] : 0),
-				'legend' => false,
-				'separator' => '<br />',
+				'outer' => true,
 			));
 		?>
 	</div>
-	<div class="col-xs-offset-1 col-xs-11">
+	<div class="col-xs-11 col-xs-offset-1">
 		<div class="input-group inline-block">
 			<div class="input-group">
-				<?php echo $this->Form->input('CircularNoticeContent.reply_deadline', array(
-					'type' => 'text',
+				<?php echo $this->NetCommonsForm->input('CircularNoticeContent.reply_deadline', array(
+					'type' => 'datetime',
 					'ng-model' => 'circularNoticeContent.replyDeadline',
-					'datetimepicker',
 					'label' => false,
 					'error' => false,
 					'class' => 'form-control',
 					'placeholder' => 'yyyy-mm-dd hh:mm',
+					'div' => false,
 				)); ?>
 			</div>
 			<?php echo $this->NetCommonsForm->error('CircularNoticeContent.reply_deadline') ;?>
