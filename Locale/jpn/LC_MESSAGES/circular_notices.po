@@ -254,11 +254,11 @@ msgstr "～"
 
 # 登録（編集）画面で使用
 msgid "No Deadline"
-msgstr "回答期限を設定しない"
+msgstr "設定しない"
 
 # 登録（編集）画面で使用
 msgid "Set Deadline"
-msgstr "回答期限を設定する"
+msgstr "設定する"
 
 msgid "Plugin Name"
 msgstr "回覧板"
