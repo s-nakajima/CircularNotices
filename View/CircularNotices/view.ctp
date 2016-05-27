@@ -79,7 +79,7 @@
 			～
 			<?php echo $this->Date->dateFormat($circularNoticeContent['publishEnd']); ?><br />
 			<?php echo h(__d('circular_notices', 'Created User Title')); ?>
-			<?php echo h($user['username']); ?><br />
+			<?php echo $this->NetCommonsHtml->handleLink(array('User' => $user), array('avatar' => true), array(), 'User'); ?><br />
 		</div>
 		<div class="pull-right">
 			<?php echo h(__d('circular_notices', 'Read Count Title') . ' ' . h($readCount)); ?>
@@ -327,7 +327,7 @@
 					endif;
 
 					echo $this->Html->tableCells(array(
-						h($circularNoticeTargetUser['user']['handlename']),
+						$this->NetCommonsHtml->handleLink($circularNoticeTargetUser, array(), array(), 'user'),
 						h($readDatetime),
 						h($replyDatetime),
 						h($answer),
