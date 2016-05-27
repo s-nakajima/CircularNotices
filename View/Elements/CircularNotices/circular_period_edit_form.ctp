@@ -40,11 +40,11 @@
 					'placeholder' => 'yyyy-mm-dd hh:mm',
 				)); ?>
 			</div>
-			<?php echo $this->NetCommonsForm->error('CircularNoticeContent.publish_start') ;?>
-			<?php if ($this->NetCommonsForm->error('CircularNoticeContent.publish_start') 
+			<?php echo $this->NetCommonsForm->error('CircularNoticeContent.publish_start');?>
+			<?php if ($this->NetCommonsForm->error('CircularNoticeContent.publish_start')
 					!== $this->NetCommonsForm->error('CircularNoticeContent.publish_end')):?>
-				<?php echo $this->NetCommonsForm->error('CircularNoticeContent.publish_end') ;?>
-			<?php endif ?>
+				<?php echo $this->NetCommonsForm->error('CircularNoticeContent.publish_end');?>
+			<?php endif; ?>
 		</div>
 	</div>
 </div>

@@ -12,13 +12,13 @@
 
 <div class="form-group">
 	<div>
-		<?php echo $this->Form->label(
+		<?php echo $this->NetCommonsForm->label(
 			'CircularNoticeContent.replyType',
 			__d('circular_notices', 'Reply Type') . $this->element('NetCommons.required')
 		); ?>
 	</div>
 	<div>
-		<?php echo $this->Form->select('CircularNoticeContent.reply_type',
+		<?php echo $this->NetCommonsForm->select('CircularNoticeContent.reply_type',
 			array(
 				CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT => __d('circular_notices', 'Reply Type Text'),
 				CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION => __d('circular_notices', 'Reply Type Selection'),

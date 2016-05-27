@@ -138,14 +138,14 @@
 					<div class="panel-body">
 						<div class="form-group">
 
-						<?php echo $this->Form->hidden('CircularNoticeTargetUser.id', array(
+						<?php echo $this->NetCommonsForm->hidden('CircularNoticeTargetUser.id', array(
 							'value' => $myAnswer['circularNoticeTargetUser']['id'],
 						)); ?>
 
 						<?php
 						switch ($circularNoticeContent['replyType']) {
 							case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT:
-								echo $this->Form->input('CircularNoticeTargetUser.reply_text_value', array(
+								echo $this->NetCommonsForm->input('CircularNoticeTargetUser.reply_text_value', array(
 									'type' => 'text',
 									'label' => '',
 									'error' => false,
@@ -160,7 +160,7 @@
 								foreach ($circularNoticeChoice as $choice) :
 									$selections[$choice['value']] = $choice['value'];
 								endforeach;
-								echo $this->Form->input('CircularNoticeTargetUser.reply_selection_value', array(
+								echo $this->NetCommonsForm->input('CircularNoticeTargetUser.reply_selection_value', array(
 									'div' => false,
 									'type' => 'radio',
 									'legend' => false,
@@ -176,7 +176,7 @@
 									$selections[$choices['value']] = $choices['value'];
 								endforeach;
 								$selected = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $myAnswer['circularNoticeTargetUser']['replySelectionValue']);
-								echo $this->Form->input('CircularNoticeTargetUser.reply_selection_value', array(
+								echo $this->NetCommonsForm->input('CircularNoticeTargetUser.reply_selection_value', array(
 									'div' => false,
 									'type' => 'select',
 									'legend' => true,
@@ -209,13 +209,12 @@
 						<button type="submit" class="btn btn-primary"
 							ng-click="this.form.submit();"
 							ng-disabled="sending">
-							<span class="glyphicon"></span>
 							<?php echo h($labelName); ?>
 						</button>
 					</span>
 				</div>
 
-			<?php echo $this->Form->end(); ?>
+			<?php echo $this->NetCommonsForm->end(); ?>
 
 		</div>
 

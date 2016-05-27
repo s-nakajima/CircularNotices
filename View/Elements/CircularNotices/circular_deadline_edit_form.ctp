@@ -42,7 +42,7 @@
 					'div' => false,
 				)); ?>
 			</div>
-			<?php echo $this->NetCommonsForm->error('CircularNoticeContent.reply_deadline') ;?>
+			<?php echo $this->NetCommonsForm->error('CircularNoticeContent.reply_deadline');?>
 		</div>
 	</div>
 </div>

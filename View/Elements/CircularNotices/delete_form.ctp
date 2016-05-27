@@ -25,4 +25,4 @@
 <?php echo $this->Button->delete('',
 	sprintf(__d('net_commons', 'Deleting the %s. Are you sure to proceed?'), __d('circular_notices', '回覧'))
 ); ?>
-<?php echo $this->Form->end();
+<?php echo $this->NetCommonsForm->end();

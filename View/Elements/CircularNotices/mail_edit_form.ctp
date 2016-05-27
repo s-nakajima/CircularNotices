@@ -10,7 +10,7 @@
 
 <div class="form-group">
 	<div>
-		<?php echo $this->Form->label(
+		<?php echo $this->NetCommonsForm->label(
 			'CircularNoticeContent.mail_notice_flag',
 			__d('circular_notices', 'メール通知') . $this->element('NetCommons.required')
 		); ?>
@@ -21,7 +21,7 @@
 				'1' => __d('circular_notices', 'メールで通知する'),
 				'0' => __d('circular_notices', 'メールで通知しない'),
 			);
-			echo $this->Form->radio('CircularNoticeContent.mail_notice_flag', $options, array(
+			echo $this->NetCommonsForm->radio('CircularNoticeContent.mail_notice_flag', $options, array(
 				'value' => (isset($circularNoticeContent['mail_notice_flag']) ? $circularNoticeContent['mailNoticeFlag'] : 1),
 				'legend' => false,
 				'separator' => '<br />',
