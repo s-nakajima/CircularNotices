@@ -81,6 +81,7 @@
 							<?php echo $this->element('CircularNotices/status_label', array('circularNoticeContent' => $circularNoticeContent)); ?>
 						</div>
 						<div class="pull-left">
+							<?php echo $this->TitleIcon->titleIcon($circularNoticeContent['circularNoticeContent']['titleIcon']); ?>
 							<?php if (
 								($circularNoticeContent['circularNoticeContent']['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT
 									|| $circularNoticeContent['circularNoticeContent']['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED)

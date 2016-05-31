@@ -45,26 +45,26 @@
 
 	<div class="panel panel-default">
 
-		<?php echo $this->Form->create('CircularNoticeContent', array(
+		<?php echo $this->NetCommonsForm->create('CircularNoticeContent', array(
 			'name' => 'form',
 			'novalidate' => true,
 		)); ?>
 
 			<div class="panel-body">
 
-				<?php echo $this->Form->hidden('Frame.id', array(
+				<?php echo $this->NetCommonsForm->hidden('Frame.id', array(
 					'value' => $frameId
 				)); ?>
 
-				<?php echo $this->Form->hidden('Block.id', array(
+				<?php echo $this->NetCommonsForm->hidden('Block.id', array(
 					'value' => $blockId,
 				)); ?>
 
-				<?php echo $this->Form->hidden('CircularNoticeContent.id', array(
+				<?php echo $this->NetCommonsForm->hidden('CircularNoticeContent.id', array(
 					'value' => isset($circularNoticeContent['id']) ? $circularNoticeContent['id'] : null,
 				)); ?>
 
-				<?php echo $this->Form->hidden('CircularNoticeContent.circular_notice_setting_key', array(
+				<?php echo $this->NetCommonsForm->hidden('CircularNoticeContent.circular_notice_setting_key', array(
 					'value' => isset($circularNoticeContent['circular_notice_setting_key']) ? $circularNoticeContent['circular_notice_setting_key'] : $circularNoticeSetting['CircularNoticeSetting']['key'],
 				)); ?>
 
@@ -86,7 +86,7 @@
 				<?php echo $this->Button->cancelAndSaveAndSaveTemp(); ?>
 			</div>
 
-		<?php echo $this->Form->end(); ?>
+		<?php echo $this->NetCommonsForm->end(); ?>
 
 		<?php if ($this->request->params['action'] === 'edit') : ?>
 			<div class="panel-footer text-right">

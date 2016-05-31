@@ -12,12 +12,14 @@
 
 <div class="form-group">
 	<?php
-		echo $this->NetCommonsForm->input(
+		echo $this->TitleIcon->inputWithTitleIcon(
 			'CircularNoticeContent.subject',
+			'CircularNoticeContent.title_icon',
 			array(
 				'label' => __d('circular_notices', 'Subject'),
 				'required' => 'required',
 				'ng-model' => 'circularNoticeContent.subject',
+				'titleIcon' => isset($circularNoticeContent['titleIcon']) ? $circularNoticeContent['titleIcon'] : '',
 			)
 		);
 	?>

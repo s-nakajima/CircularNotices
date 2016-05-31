@@ -14,22 +14,21 @@
 ?>
 <div class="form-group" ng-controller="CircularNoticeTarget" ng-init="initialize(<?php echo $circularNoticeContent['isRoomTargetedFlag']; ?>)">
 	<div>
-		<?php echo $this->Form->label(
+		<?php echo $this->NetCommonsForm->label(
 			'CircularNoticeContent.userId',
 			__d('circular_notices', 'Circular Target') . $this->element('NetCommons.required')
 		); ?>
 	</div>
-	<div class="col-xs-offset-1 col-xs-11" style="margin-bottom: 10px;">
+	<div class="col-xs-12" style="margin-bottom: 10px;">
 		<?php
 		$options = array(
 			'1' => __d('circular_notices', 'All Members Belings to this Room'),
 			'0' => __d('circular_notices', '個別に選択'),
 		);
 		echo $this->NetCommonsForm->radio('CircularNoticeContent.is_room_targeted_flag', $options, array(
-			'legend' => false,
-			'separator' => '<br />',
 			'value' => $circularNoticeContent['isRoomTargetedFlag'],
 			'ng-click' => 'switchTarget($event)',
+			'outer' => true,
 		));
 		?>
 		<?php echo $this->NetCommonsForm->error('CircularNoticeTargetUser.user_id'); ?>

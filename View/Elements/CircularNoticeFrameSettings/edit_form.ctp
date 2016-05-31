@@ -14,17 +14,17 @@
 <?php echo $this->NetCommonsForm->hidden('Frame.id'); ?>
 <?php echo $this->NetCommonsForm->hidden('Block.id'); ?>
 
-<?php echo $this->Form->hidden('CircularNoticeFrameSetting.id', array(
+<?php echo $this->NetCommonsForm->hidden('CircularNoticeFrameSetting.id', array(
 	'value' => isset($circularNoticeFrameSetting['id']) ? (int)$circularNoticeFrameSetting['id'] : null,
 	)); ?>
 
-<?php echo $this->Form->hidden('CircularNoticeFrameSetting.frame_key', array(
+<?php echo $this->NetCommonsForm->hidden('CircularNoticeFrameSetting.frame_key', array(
 	'value' => Current::read('Frame.key'),
 	)); ?>
 
 <div class="form-group">
-	<?php echo $this->Form->label(__d('circular_notices', 'Show contents per page')); ?>
-	<?php echo $this->Form->select('CircularNoticeFrameSetting.display_number',
+	<?php echo $this->NetCommonsForm->label(__d('circular_notices', 'Show contents per page')); ?>
+	<?php echo $this->NetCommonsForm->select('CircularNoticeFrameSetting.display_number',
 			CircularNoticeFrameSetting::getDisplayNumberOptions(),
 			array(
 				'type' => 'select',

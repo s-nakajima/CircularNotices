@@ -10,15 +10,15 @@
  */
 ?>
 
-<?php echo $this->Form->hidden('Block.id', array(
+<?php echo $this->NetCommonsForm->hidden('Block.id', array(
 		'value' => Current::read('Block.id'),
 	)); ?>
 
-<?php echo $this->Form->hidden('CircularNoticeSetting.id', array(
+<?php echo $this->NetCommonsForm->hidden('CircularNoticeSetting.id', array(
 		'value' => isset($circularNoticeSetting['id']) ? (int)$circularNoticeSetting['id'] : null,
 	)); ?>
 
-<?php echo $this->Form->hidden('CircularNoticeSetting.key', array(
+<?php echo $this->NetCommonsForm->hidden('CircularNoticeSetting.key', array(
 		'value' => isset($circularNoticeSetting['key']) ? $circularNoticeSetting['key'] : null,
 	)); ?>
 

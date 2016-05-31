@@ -21,7 +21,7 @@
 	);
 ?>
 
-<?php $this->Form->unlockField('CircularNoticeChoices'); ?>
+<?php $this->NetCommonsForm->unlockField('CircularNoticeChoices'); ?>
 
 <div class="panel panel-default" ng-controller="CircularNoticeChoices" ng-init="initialize(<?php echo h(json_encode(['choices' => $circularNoticeChoice])); ?>)">
 
