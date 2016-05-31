@@ -145,100 +145,100 @@ class CircularNoticesControllerAddTest extends NetCommonsControllerTestCase {
 		$data = $this->__getData();
 
 		//テストデータ
-		$results = array();
-		$results[0] = array(
-			'urlOptions' => $data,
-			'data' => array(
-				'save_1' => '',
-				'Frame' => array('id' => $data['frame_id']),
-				'Block' => array('id' => $data['block_id']),
-				'CircularNoticeContent' => array(
-					'reply_type' => 1,
-					'is_room_targeted_flag' => '',
-					'publish_start' => '',
-					'publish_end' => '',
-					'reply_deadline_set_flag' => 0,
-					'reply_deadline' => ''
-				),
-				'CircularNoticeTargetUser' => array(
-					0 => array('user_id' => 1),
-				),
-			),
-			'assert' => array('method' => 'assertNotEmpty'),
-		);
-		$results[1] = array(
-			'urlOptions' => $data,
-			'data' => array(
-				'save_1' => '',
-				'Frame' => array('id' => $data['frame_id']),
-				'Block' => array('id' => $data['block_id']),
-				'CircularNoticeContent' => array(
-					'id' => '',
-					'circular_notice_setting_key' => 'circular_notice_setting_1',
-					'subject' => 'Lorem ipsum dolor sit amet',
-					'content' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
-					'reply_type' => '2',
-					'is_room_targeted_flag' => 1,
-					'publish_start' => '2016-01-01 00:00',
-					'publish_end' => '2016-12-01 00:00',
-					'reply_deadline_set_flag' => '1',
-					'reply_deadline' => '2016-06-28 00:00'
-				),
-				'CircularNoticeChoices' => array(
-					0 => array(
-						'CircularNoticeChoice' => array(
-							'id' => '',
-							'weight' => '1',
-							'value' => 'aaa',
-						),
+		return array(
+			array(
+				'urlOptions' => $data,
+				'data' => array(
+					'save_1' => '',
+					'Frame' => array('id' => $data['frame_id']),
+					'Block' => array('id' => $data['block_id']),
+					'CircularNoticeContent' => array(
+						'reply_type' => 1,
+						'is_room_targeted_flag' => '',
+						'publish_start' => '',
+						'publish_end' => '',
+						'reply_deadline_set_flag' => 0,
+						'reply_deadline' => ''
 					),
-					1 => array(
-						'CircularNoticeChoice' => array(
-							'id' => '',
-							'weight' => '2',
-							'value' => 'bbb',
-						),
+					'CircularNoticeTargetUser' => array(
+						0 => array('user_id' => 1),
 					),
 				),
-				'CircularNoticeTargetUser' => array(
-					0 => array('user_id' => 1),
-				),
-			),
-			'assert' => array('method' => 'assertNotEmpty'),
-		);
-		$results[2] = array(
-			'urlOptions' => $data,
-			'data' => array(
-				'save_1' => '',
-				'Frame' => array('id' => $data['frame_id']),
-				'Block' => array('id' => $data['block_id']),
-				'CircularNoticeContent' => array(
-					'id' => '',
-					'circular_notice_setting_key' => 'circular_notice_setting_1',
-					'subject' => 'Lorem ipsum dolor sit amet',
-					'content' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
-					'reply_type' => '3',
-					'is_room_targeted_flag' => 1,
-					'publish_start' => '2016-01-01 00:00',
-					'publish_end' => '2016-12-01 00:00',
-					'reply_deadline_set_flag' => '0',
-				),
-				'CircularNoticeChoices' => array(
-					0 => array(
-						'CircularNoticeChoice' => array(
-							'id' => '',
-							'weight' => '1',
-							'value' => 'aaa',
+				'assert' => array('method' => 'assertNotEmpty'),
+			), array(
+				'urlOptions' => $data,
+				'data' => array(
+					'save_1' => '',
+					'Frame' => array('id' => $data['frame_id']),
+					'Block' => array('id' => $data['block_id']),
+					'CircularNoticeContent' => array(
+						'id' => '',
+						'circular_notice_setting_key' => 'circular_notice_setting_1',
+						'title_icon' => '',
+						'subject' => 'Lorem ipsum dolor sit amet',
+						'content' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
+						'reply_type' => '2',
+						'is_room_targeted_flag' => 1,
+						'publish_start' => '2016-01-01 00:00',
+						'publish_end' => '2016-12-01 00:00',
+						'reply_deadline_set_flag' => '1',
+						'reply_deadline' => '2016-06-28 00:00'
+					),
+					'CircularNoticeChoices' => array(
+						0 => array(
+							'CircularNoticeChoice' => array(
+								'id' => '',
+								'weight' => '1',
+								'value' => 'aaa',
+							),
+						),
+						1 => array(
+							'CircularNoticeChoice' => array(
+								'id' => '',
+								'weight' => '2',
+								'value' => 'bbb',
+							),
 						),
 					),
+					'CircularNoticeTargetUser' => array(
+						0 => array('user_id' => 1),
+					),
 				),
-				'CircularNoticeTargetUser' => array(
-					0 => array('user_id' => 1),
+				'assert' => array('method' => 'assertNotEmpty'),
+			), array(
+				'urlOptions' => $data,
+				'data' => array(
+					'save_1' => '',
+					'Frame' => array('id' => $data['frame_id']),
+					'Block' => array('id' => $data['block_id']),
+					'CircularNoticeContent' => array(
+						'id' => '',
+						'circular_notice_setting_key' => 'circular_notice_setting_1',
+						'title_icon' => '',
+						'subject' => 'Lorem ipsum dolor sit amet',
+						'content' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
+						'reply_type' => '3',
+						'is_room_targeted_flag' => 1,
+						'publish_start' => '2016-01-01 00:00',
+						'publish_end' => '2016-12-01 00:00',
+						'reply_deadline_set_flag' => '0',
+					),
+					'CircularNoticeChoices' => array(
+						0 => array(
+							'CircularNoticeChoice' => array(
+								'id' => '',
+								'weight' => '1',
+								'value' => 'aaa',
+							),
+						),
+					),
+					'CircularNoticeTargetUser' => array(
+						0 => array('user_id' => 1),
+					),
 				),
-			),
-			'assert' => array('method' => 'assertNotEmpty'),
+				'assert' => array('method' => 'assertNotEmpty'),
+			)
 		);
-		return $results;
 	}
 
 /**
