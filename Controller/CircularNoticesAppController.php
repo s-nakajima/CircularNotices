@@ -92,9 +92,9 @@ class CircularNoticesAppController extends AppController {
 		$this->set('circularNoticeFrameSetting', $frameSetting);
 
 		// 一般権限で回覧登録を行えるようにするため、ステータス定義をオーバーライド
-		WorkflowBehavior::$statusesForEditor = array(
-			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_PUBLISHED,
-			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT,
+		WorkflowBehavior::$statusesForEditor
+			= array(CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_PUBLISHED,
+					CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT,
 		);
 	}
 }
