@@ -53,6 +53,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		'Paginator',
 		'UserAttributes.UserAttributeLayout',
 		'CircularNotices.CircularNotice',
+		'NetCommons.NetCommonsTime',
 	);
 
 /**
@@ -275,6 +276,13 @@ class CircularNoticesController extends CircularNoticesAppController {
 			}
 		}
 
+		$data = $this->NetCommonsTime->toUserDatetimeArray(
+			$data,
+			array(
+				'CircularNoticeContent.publish_start',
+				'CircularNoticeContent.publish_end',
+				'CircularNoticeContent.reply_deadline',
+			));
 		$results = Hash::merge(
 			$content, $data,
 			['contentStatus' => null]
@@ -348,6 +356,13 @@ class CircularNoticesController extends CircularNoticesAppController {
 			}
 		}
 
+		$data = $this->NetCommonsTime->toUserDatetimeArray(
+			$data,
+			array(
+				'CircularNoticeContent.publish_start',
+				'CircularNoticeContent.publish_end',
+				'CircularNoticeContent.reply_deadline',
+			));
 		$results = Hash::merge(
 			$content, $data,
 			['contentStatus' => $content['CircularNoticeContent']['status']]

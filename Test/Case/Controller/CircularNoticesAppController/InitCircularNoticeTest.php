@@ -11,6 +11,9 @@
 
 App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
 App::uses('CircularNoticesAppController', 'CircularNotices.Controller');
+App::uses('CircularNoticeComponent', 'CircularNotices.Controller/Component');
+App::uses('WorkflowComponent', 'Workflow.Controller/Component');
+App::uses('WorkflowBehavior', 'Workflow.Model/Behavior');
 
 /**
  * CircularNoticesAppController::initCircularNotice()のテスト
