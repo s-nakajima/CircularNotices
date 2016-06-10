@@ -60,7 +60,6 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
 		'Blocks.BlockTabs' => array(
 			'mainTabs' => array('role_permissions', 'frame_settings', 'mail_settings')
 		),
-		'NetCommons.Token',
 		'NetCommons.DisplayNumber',
 	);
 

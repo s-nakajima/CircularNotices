@@ -27,7 +27,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 	public $uses = array(
 		'Frames.Frame',
 		'Blocks.Block',
-		'Auth.Auth',
 		'CircularNotices.CircularNoticeFrameSetting',
 		'CircularNotices.CircularNoticeSetting',
 		'CircularNotices.CircularNoticeContent',
@@ -42,7 +41,6 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @var array
  */
 	public $components = array(
-		'Workflow.Workflow',
 		'NetCommons.Permission' => array(
 			//アクセスの権限
 			'allow' => array(
@@ -71,7 +69,6 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @var array
  */
 	public $helpers = array(
-		'NetCommons.Token',
 		'NetCommons.DisplayNumber',
 		'Workflow.Workflow',
 		'Groups.GroupUserList',
@@ -301,7 +298,7 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @return void
  */
 	public function edit($blockId = null, $key = null) {
-		$userId = (int)$this->Auth->user('id');
+		$userId = Current::read('User.id');
 		$this->initCircularNotice();
 		$frameId = Current::read('Frame.id');
 		$this->helpers[] = 'Users.UserSearch';
