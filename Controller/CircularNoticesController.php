@@ -276,18 +276,18 @@ class CircularNoticesController extends CircularNoticesAppController {
 			}
 		}
 
-		$data = $this->NetCommonsTime->toUserDatetimeArray(
-			$data,
-			array(
-				'CircularNoticeContent.publish_start',
-				'CircularNoticeContent.publish_end',
-				'CircularNoticeContent.reply_deadline',
-			));
 		$results = Hash::merge(
 			$content, $data,
 			['contentStatus' => null]
 		);
 		$results = $this->camelizeKeyRecursive($results);
+		$results = $this->NetCommonsTime->toUserDatetimeArray(
+			$results,
+			array(
+				'circularNoticeContent.publishStart',
+				'circularNoticeContent.publishEnd',
+				'circularNoticeContent.replyDeadline',
+			));
 		$this->set($results);
 		$this->set('frameId', $frameId);
 		$this->set('blockId', $blockId);
@@ -356,18 +356,18 @@ class CircularNoticesController extends CircularNoticesAppController {
 			}
 		}
 
-		$data = $this->NetCommonsTime->toUserDatetimeArray(
-			$data,
-			array(
-				'CircularNoticeContent.publish_start',
-				'CircularNoticeContent.publish_end',
-				'CircularNoticeContent.reply_deadline',
-			));
 		$results = Hash::merge(
 			$content, $data,
 			['contentStatus' => $content['CircularNoticeContent']['status']]
 		);
 		$results = $this->camelizeKeyRecursive($results);
+		$results = $this->NetCommonsTime->toUserDatetimeArray(
+			$results,
+			array(
+				'circularNoticeContent.publishStart',
+				'circularNoticeContent.publishEnd',
+				'circularNoticeContent.replyDeadline',
+			));
 		$this->set($results);
 		$this->set('frameId', $frameId);
 		$this->set('blockId', $blockId);
