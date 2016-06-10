@@ -31,8 +31,8 @@ class CircularNoticesAppModel extends AppModel {
 		$isCompareFrom = isset($params['from']);
 		$compareValue = $isCompareFrom ? $params['from'] : $params['to'];
 
-		if (($isCompareFrom && $checkValue > $compareValue) ||
-			(! $isCompareFrom && $checkValue < $compareValue)
+		if (($isCompareFrom && $checkValue >= $compareValue) ||
+			(! $isCompareFrom && $checkValue <= $compareValue)
 		) {
 			return true;
 		}
