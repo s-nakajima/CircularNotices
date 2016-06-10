@@ -27,6 +27,82 @@ App::uses('WorkflowComponent', 'Workflow.Controller/Component');
 class CircularNoticeContent extends CircularNoticesAppModel {
 
 /**
+ * Use behaviors
+ *
+ * @var array
+ */
+	public $actsAs = array(
+		'NetCommons.OriginalKey',
+		'CircularNotices.CircularNoticeTargetUser',
+		'Workflow.Workflow',
+		'Mails.MailQueue' => array(
+			'embedTags' => array(
+				'X-SUBJECT' => 'CircularNoticeContent.subject',
+				'X-BODY' => 'CircularNoticeContent.content',
+			),
+		),
+		'Topics.Topics' => array(
+			'fields' => array(
+				'title' => 'CircularNoticeContent.subject',
+				'summary' => 'CircularNoticeContent.content',
+				'answer_period_start' => 'CircularNoticeContent.publish_start',
+				'answer_period_end' => 'CircularNoticeContent.reply_deadline',
+				'path' => '/:plugin_key/:plugin_key/view/:block_id/:content_key',
+			),
+			'is_workflow' => false
+		),
+	);
+
+/**
+ * belongsTo associations
+ *
+ * @var array
+ */
+	public $belongsTo = array(
+		'User' => array(
+			'className' => 'Users.User',
+			'foreignKey' => 'created_user',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		)
+	);
+
+/**
+ * hasMany associations
+ *
+ * @var array
+ */
+	public $hasMany = array(
+		'CircularNoticeChoice' => array(
+			'className' => 'CircularNotices.CircularNoticeChoice',
+			'foreignKey' => 'circular_notice_content_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => array('weight' => 'asc'),
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'CircularNoticeTargetUser' => array(
+			'className' => 'CircularNotices.CircularNoticeTargetUser',
+			'foreignKey' => 'circular_notice_content_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+	);
+
+/**
  * Validation rules
  *
  * @var array
@@ -152,82 +228,6 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 		}
 		return true;
 	}
-
-/**
- * Use behaviors
- *
- * @var array
- */
-	public $actsAs = array(
-		'NetCommons.OriginalKey',
-		'CircularNotices.CircularNoticeTargetUser',
-		'Workflow.Workflow',
-		'Mails.MailQueue' => array(
-			'embedTags' => array(
-				'X-SUBJECT' => 'CircularNoticeContent.subject',
-				'X-BODY' => 'CircularNoticeContent.content',
-			),
-		),
-		'Topics.Topics' => array(
-			'fields' => array(
-				'title' => 'CircularNoticeContent.subject',
-				'summary' => 'CircularNoticeContent.content',
-				'answer_period_start' => 'CircularNoticeContent.publish_start',
-				'answer_period_end' => 'CircularNoticeContent.reply_deadline',
-				'path' => '/:plugin_key/:plugin_key/view/:block_id/:content_key',
-			),
-			'is_workflow' => false
-		),
-	);
-
-/**
- * belongsTo associations
- *
- * @var array
- */
-	public $belongsTo = array(
-		'User' => array(
-			'className' => 'Users.User',
-			'foreignKey' => 'created_user',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
-	);
-
-/**
- * hasMany associations
- *
- * @var array
- */
-	public $hasMany = array(
-		'CircularNoticeChoice' => array(
-			'className' => 'CircularNotices.CircularNoticeChoice',
-			'foreignKey' => 'circular_notice_content_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => array('weight' => 'asc'),
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
-		'CircularNoticeTargetUser' => array(
-			'className' => 'CircularNotices.CircularNoticeTargetUser',
-			'foreignKey' => 'circular_notice_content_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
-	);
 
 /**
  * Constructor. Binds the model's database table to the object.
