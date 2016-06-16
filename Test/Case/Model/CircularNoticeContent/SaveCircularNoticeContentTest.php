@@ -86,7 +86,8 @@ class CircularNoticeContentSaveCircularNoticeContentTest extends NetCommonsModel
 		$data['CircularNoticeTargetUser'] = (new CircularNoticeTargetUserFixture())->records;
 		$data['CircularNoticeChoices'] = (new CircularNoticeChoiceFixture())->records[0];
 		//テスト実施
-		$this->$model->$methodName($data);
+		$result = $this->$model->$methodName($data);
+		$this->assertFalse($result);
 	}
 
 /**
@@ -101,7 +102,8 @@ class CircularNoticeContentSaveCircularNoticeContentTest extends NetCommonsModel
 		$data['CircularNoticeTargetUser'] = (new CircularNoticeTargetUserFixture())->records[0];
 		$data['CircularNoticeChoices'] = [(new CircularNoticeChoiceFixture())->records[0]];
 		//テスト実施
-		$this->$model->$methodName($data);
+		$result = $this->$model->$methodName($data);
+		$this->assertFalse($result);
 	}
 
 /**
@@ -122,7 +124,8 @@ class CircularNoticeContentSaveCircularNoticeContentTest extends NetCommonsModel
 		$data['CircularNoticeChoices'] = [(new CircularNoticeChoiceFixture())->records[0]];
 		$this->_mockForReturnFalse($model, 'CircularNotices.CircularNoticeChoice', 'validateCircularChoices');
 		//テスト実施
-		$this->$model->$methodName($data);
+		$result = $this->$model->$methodName($data);
+		$this->assertFalse($result);
 	}
 /**
  * Saveの例外テスト
@@ -146,20 +149,46 @@ class CircularNoticeContentSaveCircularNoticeContentTest extends NetCommonsModel
 	}
 
 /**
- * ValidateCircularChoicesのFalseテスト
+ * SaveCircularNoticeChoiceの例外テスト
  *
  * @return void
  */
-	//public function testValidateCircularChoicesFalse() {
-	//	$model = $this->_modelName;
-	//	$methodName = $this->_methodName;
-	//	$data['CircularNoticeContent'] = (new CircularNoticeContentFixture())->records[6];
-	//	$data['CircularNoticeTargetUser'] = (new CircularNoticeTargetUserFixture())->records;
-	//	$data['CircularNoticeChoices'] = [(new CircularNoticeChoiceFixture())->records[0]];
-	//
-	//	// 例外を発生させるためのモック
-	//	$this->_mockForReturnFalse($model, 'CircularNotices.CircularNoticeChoice', 'replaceCircularNoticeChoices');
-	//	//テスト実施
-	//	$this->$model->$methodName($data);
-	//}
+	public function testSaveCircularNoticeChoiceFalse() {
+		$model = $this->_modelName;
+		$methodName = $this->_methodName;
+		$data['CircularNoticeContent'] = (new CircularNoticeContentFixture())->records[6];
+		$data['CircularNoticeTargetUsers'][0]['CircularNoticeTargetUser'] = (new CircularNoticeTargetUserFixture())->records[0];
+		$data['CircularNoticeChoices'][0]['CircularNoticeChoice'] = (new CircularNoticeChoiceFixture())->records[0];
+		// 例外を発生させるためのモック
+		$thisModelMock = $this->getMockForModel('CircularNotices.' . $model, ['save']);
+		$thisModelMock->expects($this->any())
+				->method('save')
+				->will($this->returnValue(true));
+		//テスト実施
+		$this->_mockForReturnFalse($model, 'CircularNoticeChoice', 'replaceCircularNoticeChoices');
+		$result = $thisModelMock->$methodName($data);
+		$this->assertFalse($result);
+	}
+
+/**
+ * SaveCircularNoticeTargetUserの例外テスト
+ *
+ * @return void
+ */
+	public function testSaveCircularNoticeTargetUserFalse() {
+		$model = $this->_modelName;
+		$methodName = $this->_methodName;
+		$data['CircularNoticeContent'] = (new CircularNoticeContentFixture())->records[6];
+		$data['CircularNoticeTargetUsers'][0]['CircularNoticeTargetUser'] = (new CircularNoticeTargetUserFixture())->records[0];
+		$data['CircularNoticeChoices'][0]['CircularNoticeChoice'] = (new CircularNoticeChoiceFixture())->records[0];
+		// 例外を発生させるためのモック
+		$thisModelMock = $this->getMockForModel('CircularNotices.' . $model, ['save']);
+		$thisModelMock->expects($this->any())
+				->method('save')
+				->will($this->returnValue(true));
+		//テスト実施
+		$this->_mockForReturnFalse($model, 'CircularNoticeTargetUser', 'replaceCircularNoticeTargetUsers');
+		$result = $thisModelMock->$methodName($data);
+		$this->assertFalse($result);
+	}
 }
