@@ -19,7 +19,7 @@
 			__d('circular_notices', 'Circular Target') . $this->element('NetCommons.required')
 		); ?>
 	</div>
-	<div class="col-xs-12" style="margin-bottom: 10px;">
+	<div style="margin-bottom: 10px;">
 		<?php
 		$options = array(
 			'1' => __d('circular_notices', 'All Members Belings to this Room'),
@@ -28,19 +28,19 @@
 		echo $this->NetCommonsForm->radio('CircularNoticeContent.is_room_targeted_flag', $options, array(
 			'value' => $circularNoticeContent['isRoomTargetedFlag'],
 			'ng-click' => 'switchTarget($event)',
-			'outer' => true,
+			'outer' => false,
 		));
 		?>
 		<?php echo $this->NetCommonsForm->error('CircularNoticeTargetUser.user_id'); ?>
-		<!-- グループ選択 -->
-		<div ng-show="target==0">
-			<?php
-				$title = '回覧先ユーザ選択';
-				$pluginModel = 'CircularNoticeTargetUser';
-				$roomId = Current::read('Room.id');
-				$selectUsers = (isset($this->request->data['selectUsers'])) ? $this->request->data['selectUsers'] : null;
-				echo $this->GroupUserList->select($title, $pluginModel, $roomId, $selectUsers);
-			?>
-		</div>
+	</div>
+	<!-- グループ選択 -->
+	<div ng-show="target==0" class="col-xs-12">
+		<?php
+			$title = '回覧先ユーザ選択';
+			$pluginModel = 'CircularNoticeTargetUser';
+			$roomId = Current::read('Room.id');
+			$selectUsers = (isset($this->request->data['selectUsers'])) ? $this->request->data['selectUsers'] : null;
+			echo $this->GroupUserList->select($title, $pluginModel, $roomId, $selectUsers);
+		?>
 	</div>
 </div>

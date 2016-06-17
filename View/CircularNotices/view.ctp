@@ -36,7 +36,6 @@
 ?>
 
 <header>
-	<?php echo $this->BackTo->listLinkButton(); ?>
 	<!-- 編集 -->
 	<?php if (Current::permission('content_creatable') && $circularNoticeContent['createdUser'] == Current::read('User.id')) : ?>
 		<div class="pull-right">
@@ -125,8 +124,10 @@
 					'value' => $circularNoticeContent['key'],
 				)); ?>
 	
-					<?php echo h(__d('circular_notices', 'Answer Title')); ?>
 					<div class="panel panel-default">
+						<div class="panel-heading">
+							<?php echo h(__d('circular_notices', 'Answer Title')); ?>
+						</div>
 						<div class="panel-body">
 							<div class="form-group">
 	
@@ -138,14 +139,14 @@
 							switch ($circularNoticeContent['replyType']) {
 								case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT:
 									echo $this->NetCommonsForm->input('CircularNoticeTargetUser.reply_text_value', array(
-										'type' => 'text',
-										'label' => '',
-										'error' => false,
-										'class' => 'form-control',
-										'value' => $myAnswer['circularNoticeTargetUser']['replyTextValue'],
-										'placeholder' => '',
-										'div' => true,
-									));
+											'type' => 'textarea',
+											'label' => '',
+											'error' => false,
+											'class' => 'form-control',
+											'value' => $myAnswer['circularNoticeTargetUser']['replyTextValue'],
+											'placeholder' => '',
+											'div' => true,
+											));
 									break;
 								case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION:
 									$selections = array();
@@ -159,7 +160,6 @@
 										'label' => false,
 										'value' => $myAnswer['circularNoticeTargetUser']['replySelectionValue'],
 										'options' => $selections,
-										'separator' => '<br />',
 									));
 									break;
 								case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION:
@@ -185,25 +185,27 @@
 
 							</div>
 						</div>
-					</div>
 
-					<div class="text-center">
-						<?php 
-							if (! $myAnswer['circularNoticeTargetUser']['replyFlag']):
-								$labelName = __d('circular_notices', 'Answer');
-								$tooltip = __d('circular_notices', 'Do Answer');
-							else:
-								$labelName = __d('circular_notices', 'Change Answer');
-								$tooltip = __d('circular_notices', 'Change Answer');
-							endif;
-						?>
-						<span class="nc-tooltip" tooltip="<?php echo h($tooltip); ?>">
-							<button type="submit" class="btn btn-primary"
-								ng-click="this.form.submit();"
-								ng-disabled="sending">
-								<?php echo h($labelName); ?>
-							</button>
-						</span>
+						<div class="panel-footer text-center">
+							<?php
+								echo $this->BackTo->linkButton(
+										__d('net_commons', 'Cancel'), NetCommonsUrl::backToPageUrl(false));
+								if (! $myAnswer['circularNoticeTargetUser']['replyFlag']):
+									$labelName = __d('circular_notices', 'Answer');
+									$tooltip = __d('circular_notices', 'Do Answer');
+								else:
+									$labelName = __d('circular_notices', 'Change Answer');
+									$tooltip = __d('circular_notices', 'Change Answer');
+								endif;
+							?>
+							<span class="nc-tooltip" tooltip="<?php echo h($tooltip); ?>">
+								<button type="submit" class="btn btn-primary"
+									ng-click="this.form.submit();"
+									ng-disabled="sending">
+									<?php echo h($labelName); ?>
+								</button>
+							</span>
+						</div>
 					</div>
 	
 				<?php echo $this->NetCommonsForm->end(); ?>
@@ -247,7 +249,7 @@
 				</div>
 				<div class="pull-right">
 					<span class="nc-tooltip" tooltip="<?php echo h(__d('circular_notices', 'Download')); ?>">
-						<button type="button" class="btn btn-default"
+						<button type="button" class="btn btn-success"
 							onclick="location.href='<?php echo NetCommonsUrl::actionUrl(array(
 								'plugin' => 'circular_notices',
 								'controller' => 'circular_notices',
@@ -255,7 +257,9 @@
 								'block_id' => Current::read('Block.id'),
 								'key' => $circularNoticeContent['key'],
 								'frame_id' => Current::read('Frame.id'))); ?>'">
-							<span class="glyphicon glyphicon-download"> </span>
+							<span class="glyphicon glyphicon-download">
+								<?php echo h(__d('circular_notices', 'Other Users Csv')); ?>
+							</span>
 						</button>
 					</span>
 				</div>

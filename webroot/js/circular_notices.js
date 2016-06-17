@@ -73,6 +73,38 @@ NetCommonsApp.controller('CircularNoticeTarget',
 
 
 /**
+ * CircularNotices.deadline Javascript
+ *
+ * @param {string} Controller name
+ * @param {function($scope, NetCommonsWysiwyg)} Controller
+ */
+NetCommonsApp.controller('CircularNoticeDeadline',
+    function($scope) {
+
+      /**
+       * tinymce
+       *
+       * @type {object}
+       */
+      $scope.deadline = false;
+
+      /**
+       * Initialize
+       *
+       * @param {object} CircularNoticeContents data
+       * @return {void}
+       */
+      $scope.initialize = function(value) {
+        $scope.deadline = value;
+      };
+
+      $scope.switchDeadline = function($event) {
+        $scope.deadline = $event.target.value;
+      };
+    });
+
+
+/**
  * CircularNotices.view Javascript
  *
  * @param {string} Controller name
