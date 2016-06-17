@@ -376,6 +376,16 @@ msgstr "回覧を投稿できる権限"
 msgid "Select user"
 msgstr "回覧先を選択してください。"
 
+#: Plugins/CircularNotices/View/Elements/CircularNotices/delete_form.ctp:
+msgid "Circulation"
+msgstr "回覧"
+
+#: Plugins/CircularNotices/View/Elements/CircularNotices/target_edit_form.ctp:
+msgid "Individually User Selected"
+msgstr "個別に選択"
+
+msgid "Circulation Destination User Selection"
+msgstr "回覧先ユーザ選択"
 
 
 # メール関連

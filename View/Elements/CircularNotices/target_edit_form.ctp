@@ -23,7 +23,7 @@
 		<?php
 		$options = array(
 			'1' => __d('circular_notices', 'All Members Belings to this Room'),
-			'0' => __d('circular_notices', '個別に選択'),
+			'0' => __d('circular_notices', 'Individually User Selected'),
 		);
 		echo $this->NetCommonsForm->radio('CircularNoticeContent.is_room_targeted_flag', $options, array(
 			'value' => $circularNoticeContent['isRoomTargetedFlag'],
@@ -36,7 +36,7 @@
 	<!-- グループ選択 -->
 	<div ng-show="target==0" class="col-xs-12">
 		<?php
-			$title = '回覧先ユーザ選択';
+			$title = __d('circular_notices', 'Circulation Destination User Selection');
 			$pluginModel = 'CircularNoticeTargetUser';
 			$roomId = Current::read('Room.id');
 			$selectUsers = (isset($this->request->data['selectUsers'])) ? $this->request->data['selectUsers'] : null;
