@@ -18,9 +18,12 @@ $url = NetCommonsUrl::actionUrlAsArray(Hash::merge(array(
 
 $options = CircularNoticeFrameSetting::getDisplayNumberOptions();
 $currentLimit = $this->Paginator->param('limit') ? $this->Paginator->param('limit') : CircularNoticeFrameSetting::DEFAULT_DISPLAY_NUMBER;
+?>
 
-echo $this->DisplayNumber->dropDownToggle(array(
-	'url' => $url,
-	'currentLimit' => $currentLimit,
-	'options' => $options,
-));
+<div class="btn-group circular-notice-index-pull-down-margin">
+	<?php echo $this->DisplayNumber->dropDownToggle(array(
+		'url' => $url,
+		'currentLimit' => $currentLimit,
+		'options' => $options,
+	)); ?>
+</div>

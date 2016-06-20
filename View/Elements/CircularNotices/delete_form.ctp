@@ -23,6 +23,6 @@
 <?php echo $this->NetCommonsForm->hidden('CircularNoticeContent.language_id'); ?>
 
 <?php echo $this->Button->delete('',
-	sprintf(__d('net_commons', 'Deleting the %s. Are you sure to proceed?'), __d('circular_notices', '回覧'))
+	sprintf(__d('net_commons', 'Deleting the %s. Are you sure to proceed?'), __d('circular_notices', 'Circulation'))
 ); ?>
 <?php echo $this->NetCommonsForm->end();

@@ -62,11 +62,9 @@
 
 	<div class="clearfix">
 		<div class="pull-left">
-			<?php echo $this->element('CircularNotices/select_status'); ?>
-		</div>
-		<div class="pull-right">
-			<?php echo $this->element('CircularNotices/select_sort'); ?>
-			<?php echo $this->element('CircularNotices/select_limit'); ?>
+				<?php echo $this->element('CircularNotices/select_status'); ?>
+				<?php echo $this->element('CircularNotices/select_sort'); ?>
+				<?php echo $this->element('CircularNotices/select_limit'); ?>
 		</div>
 	</div>
 
