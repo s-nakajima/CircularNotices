@@ -43,11 +43,11 @@
 			<div class="pull-right">
 				<span class="nc-tooltip" tooltip="<?php echo h(__d('net_commons', 'Add')); ?>">
 					<?php
-					$addUrl = $this->NetCommonsHtml->url(array(
+					$addUrl = array(
 						'controller' => 'circular_notices',
 						'action' => 'add',
 						'frame_id' => Current::read('Frame.id')
-					));
+					);
 					echo $this->Button->addLink('',
 						$addUrl,
 						array('tooltip' => __d('net_commons', 'Add')));
