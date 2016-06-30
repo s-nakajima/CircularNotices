@@ -142,7 +142,7 @@
 											'type' => 'textarea',
 											'label' => '',
 											'error' => false,
-											'class' => 'form-control',
+											'class' => 'form-control nc-noresize',
 											'value' => $myAnswer['circularNoticeTargetUser']['replyTextValue'],
 											'placeholder' => '',
 											'div' => true,
