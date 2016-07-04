@@ -380,7 +380,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 	public function delete($blockId = null, $contentKey = null) {
 		$this->initCircularNotice();
 
-		if (! $this->request->isDelete()) {
+		if (! $this->request->is('delete')) {
 			return $this->throwBadRequest();
 		}
 
