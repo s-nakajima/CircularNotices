@@ -121,7 +121,7 @@ class CircularNoticesController extends CircularNoticesAppController {
  */
 	public function view() {
 		$userId = Current::read('User.id');
-		$contentKey = $this->params['pass'][1];
+		$contentKey = $this->request->params['key'];
 		$this->initCircularNotice();
 
 		// 回覧を取得
@@ -293,15 +293,15 @@ class CircularNoticesController extends CircularNoticesAppController {
 /**
  * edit action
  *
- * @param int $blockId blocks.id
- * @param string $key circular_notice_content.key
  * @return void
  */
-	public function edit($blockId = null, $key = null) {
+	public function edit() {
 		$userId = Current::read('User.id');
 		$this->initCircularNotice();
 		$frameId = Current::read('Frame.id');
 		$this->helpers[] = 'Users.UserSearch';
+		$blockId = Current::read('Block.id');
+		$key = $this->request->params['key'];
 
 		if (! $content = $this->CircularNoticeContent->getCircularNoticeContent($key, $userId)) {
 			return $this->throwBadRequest();
@@ -373,11 +373,11 @@ class CircularNoticesController extends CircularNoticesAppController {
 /**
  * delete action
  *
- * @param int $blockId blocks.id
- * @param string $contentKey circular_notice_content.key
  * @return void
  */
-	public function delete($blockId = null, $contentKey = null) {
+	public function delete() {
+		$contentKey = $this->request->params['key'];
+
 		$this->initCircularNotice();
 
 		if (! $this->request->is('delete')) {
@@ -401,7 +401,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 		try {
 			$userId = Current::read('User.id');
-			$contentKey = $this->params->params['pass'][1];
+			$contentKey = $this->request->params['key'];
 			$this->initCircularNotice();
 
 			// 回覧を取得
