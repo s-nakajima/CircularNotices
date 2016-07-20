@@ -31,7 +31,7 @@ class RoutesTest extends NetCommonsRoutesTestCase {
  *
  * @var string
  */
-	public $plugin = 'blogs';
+	public $plugin = 'circular_notices';
 
 /**
  * DataProvider
