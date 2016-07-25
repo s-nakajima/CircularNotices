@@ -51,6 +51,9 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			),
 			'is_workflow' => false
 		),
+		'Wysiwyg.Wysiwyg' => array(
+			'fields' => array('content'),
+		),
 	);
 
 /**
