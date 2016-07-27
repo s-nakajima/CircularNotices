@@ -29,7 +29,7 @@
 			array(
 				'type' => 'select',
 				'class' => 'form-control',
-				'value' => $circularNoticeFrameSetting['displayNumber'],
+				'value' => $circularNoticeFrameSetting['display_number'],
 				'empty' => false,
 			)
 		); ?>

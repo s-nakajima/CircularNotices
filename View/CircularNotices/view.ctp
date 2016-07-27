@@ -37,7 +37,7 @@
 
 <header>
 	<!-- 編集 -->
-	<?php if (Current::permission('content_creatable') && $circularNoticeContent['createdUser'] == Current::read('User.id')) : ?>
+	<?php if (Current::permission('content_creatable') && $circularNoticeContent['created_user'] == Current::read('User.id')) : ?>
 		<div class="pull-right">
 			<div class="text-right">
 				<?php echo $this->Button->editLink('',
@@ -58,19 +58,19 @@
 <div id="nc-circular-notices-<?php echo (int)Current::read('Frame.id'); ?>" ng-controller="CircularNoticeView" ng-init="initialize()">
 	<article>
 		<div class="clearfix">
-			<?php $title = h($circularNoticeContent['subject']) . '<small>' . $this->element('CircularNotices/status_label', array('circularNoticeContent' => array('circularNoticeContent' => $circularNoticeContent))) . '</small>'; ?>
+			<?php $title = h($circularNoticeContent['subject']) . '<small>' . $this->element('CircularNotices/status_label', array('circularNoticeContent' => $circularNoticeContent)) . '</small>'; ?>
 			<?php echo $this->NetCommonsHtml->blockTitle($title,
-				$circularNoticeContent['titleIcon'], ['escape' => false]); ?>
+				$circularNoticeContent['title_icon'], ['escape' => false]); ?>
 		</div>
 	
 		<div class="clearfix">
 			<div class="pull-left">
 				<?php echo h(__d('circular_notices', 'Circular Content Period Title')); ?>
-				<?php echo $this->Date->dateFormat($circularNoticeContent['publishStart']); ?>
+				<?php echo $this->Date->dateFormat($circularNoticeContent['publish_start']); ?>
 				～
-				<?php echo $this->Date->dateFormat($circularNoticeContent['publishEnd']); ?><br />
+				<?php echo $this->Date->dateFormat($circularNoticeContent['publish_end']); ?><br />
 				<?php echo h(__d('circular_notices', 'Created User Title')); ?>
-				<?php echo $this->NetCommonsHtml->handleLink(array('User' => $user), array('avatar' => true), array(), 'User'); ?><br />
+				<?php echo $this->NetCommonsHtml->handleLink(array('User' => Current::read('User')), array('avatar' => true), array(), 'User'); ?><br />
 			</div>
 			<div class="pull-right">
 				<?php echo h(__d('circular_notices', 'Read Count Title') . ' ' . h($readCount)); ?>
@@ -88,7 +88,7 @@
 			<?php echo $circularNoticeContent['content']; ?>
 		</div>
 	
-		<?php if ($circularNoticeContent['replyType'] != CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT) : ?>
+		<?php if ($circularNoticeContent['reply_type'] != CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT) : ?>
 			<div class="clearfix">
 				<div class="pull-left">
 					<?php echo h(__d('circular_notices', 'Choices Title')); ?>
@@ -107,8 +107,8 @@
 		<?php endif; ?>
 	
 		<?php if (
-			$circularNoticeContent['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN &&
-			isset($myAnswer['circularNoticeTargetUser']['userStatus'])
+			$circularNoticeContent['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN &&
+			isset($myAnswer['CircularNoticeTargetUser']['user_status'])
 		) : ?>
 	
 			<hr />
@@ -132,18 +132,18 @@
 							<div class="form-group">
 	
 							<?php echo $this->NetCommonsForm->hidden('CircularNoticeTargetUser.id', array(
-								'value' => $myAnswer['circularNoticeTargetUser']['id'],
+								'value' => $myAnswer['CircularNoticeTargetUser']['id'],
 							)); ?>
 	
 							<?php
-							switch ($circularNoticeContent['replyType']) {
+							switch ($circularNoticeContent['reply_type']) {
 								case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT:
 									echo $this->NetCommonsForm->input('CircularNoticeTargetUser.reply_text_value', array(
 											'type' => 'textarea',
 											'label' => '',
 											'error' => false,
 											'class' => 'form-control nc-noresize',
-											'value' => $myAnswer['circularNoticeTargetUser']['replyTextValue'],
+											'value' => $myAnswer['CircularNoticeTargetUser']['reply_text_value'],
 											'placeholder' => '',
 											'div' => true,
 											));
@@ -158,7 +158,7 @@
 										'type' => 'radio',
 										'legend' => false,
 										'label' => false,
-										'value' => $myAnswer['circularNoticeTargetUser']['replySelectionValue'],
+										'value' => $myAnswer['CircularNoticeTargetUser']['reply_selection_value'],
 										'options' => $selections,
 									));
 									break;
@@ -167,7 +167,7 @@
 									foreach ($circularNoticeChoice as $choices) :
 										$selections[$choices['value']] = $choices['value'];
 									endforeach;
-									$selected = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $myAnswer['circularNoticeTargetUser']['replySelectionValue']);
+									$selected = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $myAnswer['CircularNoticeTargetUser']['reply_selection_value']);
 									echo $this->NetCommonsForm->input('CircularNoticeTargetUser.reply_selection_value', array(
 										'div' => false,
 										'type' => 'select',
@@ -190,7 +190,7 @@
 							<?php
 								echo $this->BackTo->linkButton(
 										__d('net_commons', 'Cancel'), NetCommonsUrl::backToPageUrl(false));
-								if (! $myAnswer['circularNoticeTargetUser']['replyFlag']):
+								if (! $myAnswer['CircularNoticeTargetUser']['reply_flag']):
 									$labelName = __d('circular_notices', 'Answer');
 									$tooltip = __d('circular_notices', 'Do Answer');
 								else:
@@ -282,7 +282,7 @@
 						</th>
 						<th>
 							<?php
-								switch ($circularNoticeContent['replyType']) {
+								switch ($circularNoticeContent['reply_type']) {
 									case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT:
 										$replyType = 'reply_text_value';
 										break;
@@ -299,31 +299,31 @@
 				<?php
 					foreach ($circularNoticeTargetUsers as $circularNoticeTargetUser) :
 						$answer = null;
-						switch ($circularNoticeContent['replyType']) {
+						switch ($circularNoticeContent['reply_type']) {
 							case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT:
-								$answer = $circularNoticeTargetUser['circularNoticeTargetUser']['replyTextValue'];
+								$answer = $circularNoticeTargetUser['CircularNoticeTargetUser']['reply_text_value'];
 								break;
 							case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION:
 							case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION:
-								$selectionValues = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $circularNoticeTargetUser['circularNoticeTargetUser']['replySelectionValue']);
+								$selectionValues = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $circularNoticeTargetUser['CircularNoticeTargetUser']['reply_selection_value']);
 								$answer = implode('、', $selectionValues);
 								break;
 						}
 
-						if (! $circularNoticeTargetUser['circularNoticeTargetUser']['readDatetime']) :
+						if (! $circularNoticeTargetUser['CircularNoticeTargetUser']['read_datetime']) :
 							$readDatetime = __d('circular_notices', 'Unread');
 						else :
-							$readDatetime = $this->Date->dateFormat($circularNoticeTargetUser['circularNoticeTargetUser']['readDatetime']);
+							$readDatetime = $this->Date->dateFormat($circularNoticeTargetUser['CircularNoticeTargetUser']['read_datetime']);
 						endif;
 
-						if (! $circularNoticeTargetUser['circularNoticeTargetUser']['replyDatetime']) :
+						if (! $circularNoticeTargetUser['CircularNoticeTargetUser']['reply_datetime']) :
 							$replyDatetime = __d('circular_notices', 'Unreply');
 						else :
-							$replyDatetime = $this->Date->dateFormat($circularNoticeTargetUser['circularNoticeTargetUser']['replyDatetime']);
+							$replyDatetime = $this->Date->dateFormat($circularNoticeTargetUser['CircularNoticeTargetUser']['reply_datetime']);
 						endif;
 
 						echo $this->Html->tableCells(array(
-							$this->NetCommonsHtml->handleLink($circularNoticeTargetUser, array(), array(), 'user'),
+							$this->NetCommonsHtml->handleLink($circularNoticeTargetUser, array(), array(), 'User'),
 							h($readDatetime),
 							h($replyDatetime),
 							h($answer),

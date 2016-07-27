@@ -13,7 +13,7 @@
 <div class="form-group">
 	<div>
 		<?php echo $this->NetCommonsForm->label(
-			'CircularNoticeContent.replyType',
+			'CircularNoticeContent.reply_type',
 			__d('circular_notices', 'Reply Type') . $this->element('NetCommons.required')
 		); ?>
 	</div>
@@ -28,12 +28,12 @@
 				'class' => 'form-control',
 				'div' => false,
 				'empty' => null,
-				'ng-model' => 'circularNoticeContent.replyType',
+				'ng-model' => 'circularNoticeContent.reply_type',
 		)); ?>
 	</div>
 </div>
 
-<div class="form-group" ng-show="circularNoticeContent.replyType!=<?php echo h(CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT); ?>">
+<div class="form-group" ng-show="circularNoticeContent.reply_type!=<?php echo h(CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT); ?>">
 	<?php echo $this->element('CircularNotices/choice_edit_form'); ?>
 	<div class="has-error">
 		<?php echo $this->NetCommonsForm->error('CircularNoticeContent.reply_type', null, array('class' => 'help-block')); ?>

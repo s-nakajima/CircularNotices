@@ -8,12 +8,12 @@
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
  */
-$status = $circularNoticeContent['circularNoticeContent']['currentStatus'];
+$status = $circularNoticeContent['current_status'];
 if (
 	$status == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN &&
-	isset($circularNoticeContent['circularNoticeContent']['userStatus'])
+	isset($circularNoticeContent['user_status'])
 ) :
-	$status = $circularNoticeContent['circularNoticeContent']['userStatus'];
+	$status = $circularNoticeContent['user_status'];
 endif;
 
 $labels = [

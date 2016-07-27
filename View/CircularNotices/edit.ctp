@@ -35,9 +35,9 @@
 	);
 ?>
 
-<div id="nc-circular-notices-<?php echo (int)$frameId; ?>"
+<div id="nc-circular-notices-<?php echo Current::read('Frame.id'); ?>"
 	 ng-controller="CircularNoticeEdit"
-	 ng-init="initialize(<?php echo h(json_encode($this->viewVars['circularNoticeContent'])); ?>)">
+	 ng-init="initialize(<?php echo h(json_encode($circularNoticeContent)); ?>)">
 
 	<h1>
 		<?php echo h(__d('circular_notices', 'Plugin Name')); ?>
@@ -53,20 +53,27 @@
 			<div class="panel-body">
 
 				<?php echo $this->NetCommonsForm->hidden('Frame.id', array(
-					'value' => $frameId
+					'value' => Current::read('Frame.id')
 				)); ?>
 
 				<?php echo $this->NetCommonsForm->hidden('Block.id', array(
-					'value' => $blockId,
+					'value' => Current::read('Block.id'),
 				)); ?>
 
 				<?php echo $this->NetCommonsForm->hidden('CircularNoticeContent.id', array(
 					'value' => isset($circularNoticeContent['id']) ? $circularNoticeContent['id'] : null,
 				)); ?>
 
-				<?php echo $this->NetCommonsForm->hidden('CircularNoticeContent.circular_notice_setting_key', array(
-					'value' => isset($circularNoticeContent['circular_notice_setting_key']) ? $circularNoticeContent['circular_notice_setting_key'] : $circularNoticeSetting['CircularNoticeSetting']['key'],
-				)); ?>
+				<?php
+					$circularNoticeSettingKey = $circularNoticeSetting['CircularNoticeSetting']['key'];
+					if (isset($circularNoticeContent['circular_notice_setting_key'])
+							&& !empty($circularNoticeContent['circular_notice_setting_key'])) {
+						$circularNoticeSettingKey = $circularNoticeContent['circular_notice_setting_key'];
+					}
+					echo $this->NetCommonsForm->hidden('CircularNoticeContent.circular_notice_setting_key', array(
+						'value' => $circularNoticeSettingKey,
+					));
+				?>
 
 				<?php echo $this->element('CircularNotices/subject_edit_form'); ?>
 

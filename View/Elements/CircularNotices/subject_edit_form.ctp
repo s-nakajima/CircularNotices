@@ -19,7 +19,7 @@
 				'label' => __d('circular_notices', 'Subject'),
 				'required' => 'required',
 				'ng-model' => 'circularNoticeContent.subject',
-				'titleIcon' => isset($circularNoticeContent['titleIcon']) ? $circularNoticeContent['titleIcon'] : '',
+				'titleIcon' => isset($circularNoticeContent['title_icon']) ? $circularNoticeContent['title_icon'] : '',
 			)
 		);
 	?>
