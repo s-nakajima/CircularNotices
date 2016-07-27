@@ -76,24 +76,24 @@
 				<div class="panel-body">
 					<div class="clearfix">
 						<div class="pull-left circular-notice-index-status-label">
-							<?php echo $this->element('CircularNotices/status_label', array('circularNoticeContent' => $circularNoticeContent)); ?>
+							<?php echo $this->element('CircularNotices/status_label', array('circularNoticeContent' => $circularNoticeContent['CircularNoticeContent'])); ?>
 						</div>
 						<div class="pull-left">
-							<?php echo $this->TitleIcon->titleIcon($circularNoticeContent['circularNoticeContent']['titleIcon']); ?>
+							<?php echo $this->TitleIcon->titleIcon($circularNoticeContent['CircularNoticeContent']['title_icon']); ?>
 							<?php if (
-								($circularNoticeContent['circularNoticeContent']['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT
-									|| $circularNoticeContent['circularNoticeContent']['currentStatus'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED)
-									&& $circularNoticeContent['circularNoticeContent']['createdUser'] != Current::read('User.id')
+								($circularNoticeContent['CircularNoticeContent']['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT
+									|| $circularNoticeContent['CircularNoticeContent']['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED)
+									&& $circularNoticeContent['CircularNoticeContent']['created_user'] != Current::read('User.id')
 							) : ?>
-								<?php echo h($circularNoticeContent['circularNoticeContent']['subject']); ?><br />
+								<?php echo h($circularNoticeContent['CircularNoticeContent']['subject']); ?><br />
 							<?php else : ?>
 								<?php echo $this->Html->link(
-									$circularNoticeContent['circularNoticeContent']['subject'],
+									$circularNoticeContent['CircularNoticeContent']['subject'],
 									$this->NetCommonsHtml->url(
 										array(
 											'controller' => 'circular_notices',
 											'action' => 'view',
-											'key' => $circularNoticeContent['circularNoticeContent']['key']
+											'key' => $circularNoticeContent['CircularNoticeContent']['key']
 										)
 									)
 								);
@@ -101,13 +101,13 @@
 							<?php endif; ?>
 							<div>
 								<?php echo h(__d('circular_notices', 'Circular Content Period Title')); ?>
-								<?php echo $this->Date->dateFormat($circularNoticeContent['circularNoticeContent']['publishStart']); ?>
+								<?php echo $this->Date->dateFormat($circularNoticeContent['CircularNoticeContent']['publish_start']); ?>
 								<?php echo __d('circular_notices', 'Till'); ?>
-								<?php echo $this->Date->dateFormat($circularNoticeContent['circularNoticeContent']['publishEnd']); ?>
+								<?php echo $this->Date->dateFormat($circularNoticeContent['CircularNoticeContent']['publish_end']); ?>
 							</div>
 						</div>
 						<!-- 編集リンク -->
-						<?php if (Current::permission('content_creatable') && $circularNoticeContent['circularNoticeContent']['createdUser'] == Current::read('User.id')) : ?>
+						<?php if (Current::permission('content_creatable') && $circularNoticeContent['CircularNoticeContent']['created_user'] == Current::read('User.id')) : ?>
 							<div class="pull-right" style="margin: 6px 0;">
 									<span class="nc-tooltip" tooltip="<?php echo h(__d('net_commons', 'Edit')); ?>">
 										<?php echo $this->NetCommonsHtml->link(
@@ -116,7 +116,7 @@
 												array(
 													'controller' => 'circular_notices',
 													'action' => 'edit',
-													'key' => $circularNoticeContent['circularNoticeContent']['key']
+													'key' => $circularNoticeContent['CircularNoticeContent']['key']
 												)
 											),
 											array(
@@ -131,12 +131,12 @@
 						<!-- 閲覧状況・回答状況 -->
 						<div class="pull-right" style="margin: 0 16px;">
 							<small>
-								<?php echo h(__d('circular_notices', 'Read Count Title') . ' ' . h($circularNoticeContent['readCount'])); ?>
+								<?php echo h(__d('circular_notices', 'Read Count Title') . ' ' . h($circularNoticeContent['read_count'])); ?>
 								/
-								<?php echo h($circularNoticeContent['targetCount']); ?><br />
-								<?php echo h(__d('circular_notices', 'Reply Count Title') . ' ' . h($circularNoticeContent['replyCount'])); ?>
+								<?php echo h($circularNoticeContent['target_count']); ?><br />
+								<?php echo h(__d('circular_notices', 'Reply Count Title') . ' ' . h($circularNoticeContent['reply_count'])); ?>
 								/
-								<?php echo h($circularNoticeContent['targetCount']); ?>
+								<?php echo h($circularNoticeContent['target_count']); ?>
 							</small>
 						</div>
 					</div>

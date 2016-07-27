@@ -81,7 +81,6 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
 			$this->request->data['Frame'] = Current::read('Frame');
 		}
 
-		$results = $this->camelizeKeyRecursive($this->request->data);
-		$this->set($results);
+		$this->set('circularNoticeFrameSetting', $this->request->data['CircularNoticeFrameSetting']);
 	}
 }

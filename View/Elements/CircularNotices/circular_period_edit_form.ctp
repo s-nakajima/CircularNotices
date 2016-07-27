@@ -22,7 +22,7 @@
 			<div class="input-group">
 				<?php echo $this->NetCommonsForm->input('CircularNoticeContent.publish_start', array(
 					'type' => 'datetime',
-					'ng-model' => 'circularNoticeContent.publishStart',
+					'ng-model' => 'circularNoticeContent.publish_start',
 					'label' => false,
 					'error' => false,
 					'div' => false,
@@ -34,7 +34,7 @@
 				</span>
 				<?php echo $this->NetCommonsForm->input('CircularNoticeContent.publish_end', array(
 					'type' => 'datetime',
-					'ng-model' => 'circularNoticeContent.publishEnd',
+					'ng-model' => 'circularNoticeContent.publish_end',
 					'label' => false,
 					'error' => false,
 					'div' => false,

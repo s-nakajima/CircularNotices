@@ -59,7 +59,7 @@ class CircularNoticesAppController extends AppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 
-		$results = $this->camelizeKeyRecursive(['current' => $this->current]);
+		$results = $this->current;
 		$this->set($results);
 
 		// フレームが新規配置された場合はブロック設定／フレーム設定を初期化

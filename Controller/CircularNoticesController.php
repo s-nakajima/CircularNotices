@@ -101,16 +101,14 @@ class CircularNoticesController extends CircularNoticesAppController {
 		// 各回覧データの閲覧／回答件数を取得
 		foreach ($contents as $i => $content) {
 			// 閲覧件数／回答件数を取得してセット
-			// FIXME: 表示件数が多い場合、クエリ発行回数がかなり増える
 			$counts = $this->CircularNoticeTargetUser
 				->getCircularNoticeTargetUserCount((int)$content['CircularNoticeContent']['id']);
-			$contents[$i]['targetCount'] = $counts['targetCount'];
-			$contents[$i]['readCount'] = $counts['readCount'];
-			$contents[$i]['replyCount'] = $counts['replyCount'];
+			$contents[$i]['target_count'] = $counts['targetCount'];
+			$contents[$i]['read_count'] = $counts['readCount'];
+			$contents[$i]['reply_count'] = $counts['replyCount'];
 		}
 
 		// 画面表示のためのデータを設定
-		$contents = $this->camelizeKeyRecursive($contents);
 		$this->set('circularNoticeContents', $contents);
 	}
 
@@ -205,11 +203,13 @@ class CircularNoticesController extends CircularNoticesAppController {
 		}
 
 		$results = Hash::merge(
-			$content, $counts,
-			['MyAnswer' => $myTargetUser, 'CircularNoticeTargetUsers' => $targetUsers,
-				'AnswersSummary' => $answersSummary]
+			$counts,
+			['myAnswer' => $myTargetUser, /*'CircularNoticeTargetUsers' => $targetUsers,*/
+				'answersSummary' => $answersSummary]
 		);
-		$results = $this->camelizeKeyRecursive($results);
+		$this->set('circularNoticeContent', $content['CircularNoticeContent']);
+		$this->set('circularNoticeChoice', $content['CircularNoticeChoice']);
+		$this->set('circularNoticeTargetUsers', $targetUsers);
 		$this->set($results);
 	}
 
@@ -220,8 +220,6 @@ class CircularNoticesController extends CircularNoticesAppController {
  */
 	public function add() {
 		$this->view = 'edit';
-		$frameId = Current::read('Frame.id');
-		$blockId = Current::read('Block.id');
 		$this->helpers[] = 'Users.UserSearch';
 
 		$this->initCircularNotice();
@@ -277,17 +275,15 @@ class CircularNoticesController extends CircularNoticesAppController {
 			$content, $data,
 			['contentStatus' => null]
 		);
-		$results = $this->camelizeKeyRecursive($results);
 		$results = $this->NetCommonsTime->toUserDatetimeArray(
 			$results,
 			array(
-				'circularNoticeContent.publishStart',
-				'circularNoticeContent.publishEnd',
-				'circularNoticeContent.replyDeadline',
+				'CircularNoticeContent.publish_start',
+				'CircularNoticeContent.publish_end',
+				'CircularNoticeContent.reply_deadline',
 			));
-		$this->set($results);
-		$this->set('frameId', $frameId);
-		$this->set('blockId', $blockId);
+		$this->set('circularNoticeContent', $results['CircularNoticeContent']);
+		$this->set('circularNoticeChoice', $results['CircularNoticeChoice']);
 	}
 
 /**
@@ -298,9 +294,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 	public function edit() {
 		$userId = Current::read('User.id');
 		$this->initCircularNotice();
-		$frameId = Current::read('Frame.id');
 		$this->helpers[] = 'Users.UserSearch';
-		$blockId = Current::read('Block.id');
 		$key = $this->request->params['key'];
 
 		if (! $content = $this->CircularNoticeContent->getCircularNoticeContent($key, $userId)) {
@@ -357,17 +351,15 @@ class CircularNoticesController extends CircularNoticesAppController {
 			$content, $data,
 			['contentStatus' => $content['CircularNoticeContent']['status']]
 		);
-		$results = $this->camelizeKeyRecursive($results);
 		$results = $this->NetCommonsTime->toUserDatetimeArray(
 			$results,
 			array(
-				'circularNoticeContent.publishStart',
-				'circularNoticeContent.publishEnd',
-				'circularNoticeContent.replyDeadline',
+				'CircularNoticeContent.publish_start',
+				'CircularNoticeContent.publish_end',
+				'CircularNoticeContent.reply_deadline',
 			));
-		$this->set($results);
-		$this->set('frameId', $frameId);
-		$this->set('blockId', $blockId);
+		$this->set('circularNoticeContent', $results['CircularNoticeContent']);
+		$this->set('circularNoticeChoice', $results['CircularNoticeChoice']);
 	}
 
 /**
@@ -426,36 +418,35 @@ class CircularNoticesController extends CircularNoticesAppController {
 			$csvFile->add($header);
 
 			// 回答データ整形
-			$content = $this->camelizeKeyRecursive($content['CircularNoticeContent']);
-			$targetUsers = $this->camelizeKeyRecursive($targetUsers);
+			$content = $content['CircularNoticeContent'];
 			foreach ($targetUsers as $targetUser) {
 				$answer = null;
-				switch ($content['replyType']) {
+				switch ($content['reply_type']) {
 					case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT:
-						$answer = $targetUser['circularNoticeTargetUser']['replyTextValue'];
+						$answer = $targetUser['CircularNoticeTargetUser']['reply_text_value'];
 						break;
 					case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION:
 					case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION:
 						$selectionValues = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER,
-							$targetUser['circularNoticeTargetUser']['replySelectionValue']);
+							$targetUser['CircularNoticeTargetUser']['reply_selection_value']);
 						$answer = implode('、', $selectionValues);
 						break;
 				}
 
-				if (! $targetUser['circularNoticeTargetUser']['readDatetime']) {
+				if (! $targetUser['CircularNoticeTargetUser']['read_datetime']) {
 					$readDatetime = __d('circular_notices', 'Unread');
 				} else {
 					$readDatetime = $this->CircularNotice
-						->getDisplayDateFormat($targetUser['circularNoticeTargetUser']['readDatetime']);
+						->getDisplayDateFormat($targetUser['CircularNoticeTargetUser']['read_datetime']);
 				}
-				if (! $targetUser['circularNoticeTargetUser']['replyDatetime']) {
+				if (! $targetUser['CircularNoticeTargetUser']['reply_datetime']) {
 					$replyDatetime = __d('circular_notices', 'Unreply');
 				} else {
 					$replyDatetime = $this->CircularNotice
-						->getDisplayDateFormat($targetUser['circularNoticeTargetUser']['replyDatetime']);
+						->getDisplayDateFormat($targetUser['CircularNoticeTargetUser']['reply_datetime']);
 				}
 				$data = array(
-					h($targetUser['user']['handlename']),
+					h($targetUser['User']['handlename']),
 					h($readDatetime),
 					h($replyDatetime),
 					h($answer),

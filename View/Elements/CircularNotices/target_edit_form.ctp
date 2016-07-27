@@ -10,9 +10,9 @@
  */
 ?>
 <?php
-	$circularNoticeContent['isRoomTargetedFlag'] = ($circularNoticeContent['isRoomTargetedFlag']) ? 1 : 0;
+	$circularNoticeContent['is_room_targeted_flag'] = ($circularNoticeContent['is_room_targeted_flag']) ? 1 : 0;
 ?>
-<div class="form-group" ng-controller="CircularNoticeTarget" ng-init="initialize(<?php echo $circularNoticeContent['isRoomTargetedFlag']; ?>)">
+<div class="form-group" ng-controller="CircularNoticeTarget" ng-init="initialize(<?php echo $circularNoticeContent['is_room_targeted_flag']; ?>)">
 	<div>
 		<?php echo $this->NetCommonsForm->label(
 			'CircularNoticeContent.userId',
@@ -26,7 +26,7 @@
 			'0' => __d('circular_notices', 'Individually User Selected'),
 		);
 		echo $this->NetCommonsForm->radio('CircularNoticeContent.is_room_targeted_flag', $options, array(
-			'value' => $circularNoticeContent['isRoomTargetedFlag'],
+			'value' => $circularNoticeContent['is_room_targeted_flag'],
 			'ng-click' => 'switchTarget($event)',
 			'outer' => false,
 		));
