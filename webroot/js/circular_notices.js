@@ -11,7 +11,7 @@
  * @param {function($scope, NetCommonsWysiwyg)} Controller
  */
 NetCommonsApp.controller('CircularNoticeEdit',
-    function($scope, NetCommonsWysiwyg) {
+    ['$scope', 'NetCommonsWysiwyg', function($scope, NetCommonsWysiwyg) {
 
       /**
        * tinymce
@@ -37,7 +37,7 @@ NetCommonsApp.controller('CircularNoticeEdit',
         $scope.circularNoticeContent = data;
       };
 
-    });
+    }]);
 
 
 /**
@@ -47,7 +47,7 @@ NetCommonsApp.controller('CircularNoticeEdit',
  * @param {function($scope, NetCommonsWysiwyg)} Controller
  */
 NetCommonsApp.controller('CircularNoticeTarget',
-    function($scope) {
+    ['$scope', function($scope) {
 
       /**
        * tinymce
@@ -69,7 +69,7 @@ NetCommonsApp.controller('CircularNoticeTarget',
       $scope.switchTarget = function($event) {
         $scope.target = $event.target.value;
       };
-    });
+    }]);
 
 
 /**
@@ -79,7 +79,7 @@ NetCommonsApp.controller('CircularNoticeTarget',
  * @param {function($scope, NetCommonsWysiwyg)} Controller
  */
 NetCommonsApp.controller('CircularNoticeDeadline',
-    function($scope) {
+    ['$scope', function($scope) {
 
       /**
        * tinymce
@@ -101,7 +101,7 @@ NetCommonsApp.controller('CircularNoticeDeadline',
       $scope.switchDeadline = function($event) {
         $scope.deadline = $event.target.value;
       };
-    });
+    }]);
 
 
 /**
@@ -110,36 +110,37 @@ NetCommonsApp.controller('CircularNoticeDeadline',
  * @param {string} Controller name
  * @param {function($scope)} Controller
  */
-NetCommonsApp.controller('CircularNoticeView', function($scope) {
+NetCommonsApp.controller('CircularNoticeView',
+    ['$scope', function($scope) {
 
-  /**
-   * Initialize
-   *
-   * @return {void}
-   */
-  $scope.initialize = function() {
-    $scope.showReplyForm = false;
-    $scope.showOtherUsers = true;
-  };
+      /**
+       * Initialize
+       *
+       * @return {void}
+       */
+      $scope.initialize = function() {
+        $scope.showReplyForm = false;
+        $scope.showOtherUsers = true;
+      };
 
-  /**
-   * Switch reply form
-   *
-   * @param {boolean} Flag of visibility
-   * @return {void}
-   */
-  $scope.switchReplyForm = function(isVisible) {
-    $scope.showReplyForm = isVisible;
-  };
+      /**
+       * Switch reply form
+       *
+       * @param {boolean} Flag of visibility
+       * @return {void}
+       */
+      $scope.switchReplyForm = function(isVisible) {
+        $scope.showReplyForm = isVisible;
+      };
 
-  /**
-   * Switch other user's list
-   *
-   * @param {boolean} Flag of visibility
-   * @return {void}
-   */
-  $scope.switchOtherUserView = function(isVisible) {
-    $scope.showOtherUsers = isVisible;
-  };
+      /**
+       * Switch other user's list
+       *
+       * @param {boolean} Flag of visibility
+       * @return {void}
+       */
+      $scope.switchOtherUserView = function(isVisible) {
+        $scope.showOtherUsers = isVisible;
+      };
 
-});
+    }]);
