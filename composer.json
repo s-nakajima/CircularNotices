@@ -38,7 +38,7 @@
         },
         {
             "name": "NetCommons Community",
-            "homepage": "https://github.com/NetCommons3/CircularNotices/graphs/contributors"
+            "homepage": "http://www.netcommons.org"
         }
     ],
     "type":        "cakephp-plugin",
