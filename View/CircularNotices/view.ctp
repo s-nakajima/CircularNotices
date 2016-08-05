@@ -62,7 +62,7 @@
 			<?php echo $this->NetCommonsHtml->blockTitle($title,
 				$circularNoticeContent['title_icon'], ['escape' => false]); ?>
 		</div>
-	
+
 		<div class="clearfix">
 			<div class="pull-left">
 				<?php echo h(__d('circular_notices', 'Circular Content Period Title')); ?>
@@ -81,13 +81,13 @@
 				<?php echo h($targetCount); ?><br />
 			</div>
 		</div>
-	
+
 		<hr />
-	
+
 		<div>
 			<?php echo $circularNoticeContent['content']; ?>
 		</div>
-	
+
 		<?php if ($circularNoticeContent['reply_type'] != CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT) : ?>
 			<div class="clearfix">
 				<div class="pull-left">
@@ -105,17 +105,17 @@
 				</div>
 			</div>
 		<?php endif; ?>
-	
+
 		<?php if (
 			$circularNoticeContent['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN &&
 			isset($myAnswer['CircularNoticeTargetUser']['user_status'])
 		) : ?>
-	
+
 			<hr />
-	
+
 			<div>
 				<hr class="circular-notice-spacer" />
-	
+
 				<?php echo $this->NetCommonsForm->create('CircularNoticeTargetUser', array(
 					'name' => 'form',
 					'novalidate' => true,
@@ -123,18 +123,18 @@
 				<?php echo $this->NetCommonsForm->hidden('CircularNoticeContent.key', array(
 					'value' => $circularNoticeContent['key'],
 				)); ?>
-	
+
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<?php echo h(__d('circular_notices', 'Answer Title')); ?>
 						</div>
 						<div class="panel-body">
 							<div class="form-group">
-	
+
 							<?php echo $this->NetCommonsForm->hidden('CircularNoticeTargetUser.id', array(
 								'value' => $myAnswer['CircularNoticeTargetUser']['id'],
 							)); ?>
-	
+
 							<?php
 							switch ($circularNoticeContent['reply_type']) {
 								case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT:
@@ -207,17 +207,17 @@
 							</span>
 						</div>
 					</div>
-	
+
 				<?php echo $this->NetCommonsForm->end(); ?>
-	
+
 			</div>
-	
+
 		<?php endif; ?>
-	
+
 		<hr />
-	
+
 		<div class="text-right">
-	
+
 			<span class="nc-tooltip" tooltip="<?php echo h(__d('circular_notices', 'Show Other Users')); ?>">
 				<button type="button" class="btn btn-default"
 					ng-click="switchOtherUserView(true)"
@@ -226,7 +226,7 @@
 					<?php echo h(__d('circular_notices', 'Show Other Users')); ?>
 				</button>
 			</span>
-	
+
 			<span class="nc-tooltip" tooltip="<?php echo h(__d('circular_notices', 'Close Other Users')); ?>">
 				<button type="button" class="btn btn-default"
 					ng-click="switchOtherUserView(false)"
@@ -235,13 +235,13 @@
 					<?php echo h(__d('circular_notices', 'Close Other Users')); ?>
 				</button>
 			</span>
-	
+
 		</div>
-	
+
 		<hr class="circular-notice-spacer" />
-	
+
 		<div ng-hide="showOtherUsers!=true">
-	
+
 			<div class="clearfix">
 				<div class="pull-left">
 	<!--				--><?php //echo $this->element('CircularNotices/view_select_sort'); ?>
@@ -250,7 +250,7 @@
 				<div class="pull-right">
 					<span class="nc-tooltip" tooltip="<?php echo h(__d('circular_notices', 'Download')); ?>">
 						<button type="button" class="btn btn-success"
-							onclick="location.href='<?php echo NetCommonsUrl::actionUrl(array(
+							onclick="location.href='<?php echo $this->NetCommonsHtml->url(array(
 								'plugin' => 'circular_notices',
 								'controller' => 'circular_notices',
 								'action' => 'download',
@@ -264,9 +264,9 @@
 					</span>
 				</div>
 			</div>
-	
+
 			<hr class="circular-notice-spacer" />
-	
+
 			<!-- 回覧先と回答 -->
 			<table class="table table-hover">
 				<thead>
