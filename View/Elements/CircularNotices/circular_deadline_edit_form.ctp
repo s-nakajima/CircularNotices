@@ -10,13 +10,13 @@
  */
 ?>
 <?php
-	$circularNoticeContent['reply_deadline_set_flag'] = ($circularNoticeContent['reply_deadline_set_flag']) ? 1 : 0;
+	$circularNoticeContent['use_reply_deadline'] = ($circularNoticeContent['use_reply_deadline']) ? 1 : 0;
 ?>
 
-<div class="form-group" ng-controller="CircularNoticeDeadline" ng-init="initialize(<?php echo $circularNoticeContent['reply_deadline_set_flag']; ?>)">
+<div class="form-group" ng-controller="CircularNoticeDeadline" ng-init="initialize(<?php echo $circularNoticeContent['use_reply_deadline']; ?>)">
 	<div>
 		<?php echo $this->NetCommonsForm->label(
-			'CircularNoticeContent.reply_deadline_set_flag',
+			'CircularNoticeContent.use_reply_deadline',
 			__d('circular_notices', 'Reply Deadline') . $this->element('NetCommons.required')
 		); ?>
 	</div>
@@ -25,8 +25,8 @@
 			'0' => __d('circular_notices', 'No Deadline'),
 			'1' => __d('circular_notices', 'Set Deadline'),
 		);
-		echo $this->NetCommonsForm->radio('CircularNoticeContent.reply_deadline_set_flag', $options, array(
-			'value' => $circularNoticeContent['reply_deadline_set_flag'],
+		echo $this->NetCommonsForm->radio('CircularNoticeContent.use_reply_deadline', $options, array(
+			'value' => $circularNoticeContent['use_reply_deadline'],
 			'ng-click' => 'switchDeadline($event)',
 			'outer' => false,
 		));

@@ -175,7 +175,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 			$data = Hash::merge(
 				$this->data,
-				['CircularNoticeTargetUser' => ['reply_flag' => true, 'reply_datetime' => date('Y-m-d H:i:s'),
+				['CircularNoticeTargetUser' => ['is_reply' => true, 'reply_datetime' => date('Y-m-d H:i:s'),
 					'reply_text_value' => $replyTextValue, 'reply_selection_value' => $replySelectionValue]]
 			);
 
@@ -225,8 +225,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$this->initCircularNotice();
 
 		$content = $this->CircularNoticeContent->create(array(
-			'is_room_targeted_flag' => true,
-			'target_groups' => ''
+			'is_room_target' => true,
 		));
 		$content['CircularNoticeChoice'] = array();
 
@@ -257,11 +256,11 @@ class CircularNoticesController extends CircularNoticesAppController {
 			$this->NetCommons->handleValidationError($this->CircularNoticeContent->validationErrors);
 
 			unset($data['CircularNoticeContent']['status']);
-			$data['CircularNoticeContent']['is_room_targeted_flag'] =
-				$this->data['CircularNoticeContent']['is_room_targeted_flag'];
+			$data['CircularNoticeContent']['is_room_target'] =
+				$this->data['CircularNoticeContent']['is_room_target'];
 		} else {
-			if (!isset($data['CircularNoticeContent']['is_room_targeted_flag'])
-					|| $data['CircularNoticeContent']['is_room_targeted_flag']) {
+			if (!isset($data['CircularNoticeContent']['is_room_target'])
+					|| $data['CircularNoticeContent']['is_room_target']) {
 				// 自分自身を取得
 				$selectUsers = array(Current::read('User.id'));
 				$this->request->data['selectUsers'] = array();
@@ -332,10 +331,10 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 			unset($data['CircularNoticeContent']['id']);
 			unset($data['CircularNoticeContent']['status']);
-			$data['CircularNoticeContent']['is_room_targeted_flag'] =
-				$this->data['CircularNoticeContent']['is_room_targeted_flag'];
+			$data['CircularNoticeContent']['is_room_target'] =
+				$this->data['CircularNoticeContent']['is_room_target'];
 		} else {
-			if ($content['CircularNoticeContent']['is_room_targeted_flag']) {
+			if ($content['CircularNoticeContent']['is_room_target']) {
 				// 自分自身を取得
 				$selectUsers = array(Current::read('User.id'));
 			} else {
@@ -482,21 +481,13 @@ class CircularNoticesController extends CircularNoticesAppController {
 			$data['CircularNoticeChoices'] = array();
 		}
 
-		if (!empty($this->data['CircularNoticeContent']['is_room_targeted_flag'])) {
-			$data['CircularNoticeContent']['is_room_targeted_flag'] = true;
+		if (!empty($this->data['CircularNoticeContent']['is_room_target'])) {
+			$data['CircularNoticeContent']['is_room_target'] = true;
 		} else {
-			$data['CircularNoticeContent']['is_room_targeted_flag'] = false;
+			$data['CircularNoticeContent']['is_room_target'] = false;
 		}
 
-		if (!empty($this->data['CircularNoticeContent']['target_groups'])) {
-			$data['CircularNoticeContent']['target_groups'] =
-				implode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER,
-					$data['CircularNoticeContent']['target_groups']);
-		} else {
-			$data['CircularNoticeContent']['target_groups'] = null;
-		}
-
-		if ($this->data['CircularNoticeContent']['reply_deadline_set_flag'] !== '1') {
+		if ($this->data['CircularNoticeContent']['use_reply_deadline'] !== '1') {
 			$data['CircularNoticeContent']['reply_deadline'] = null;
 		}
 

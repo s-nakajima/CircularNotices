@@ -132,11 +132,6 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 			if (! $blockSetting = $this->findByBlockKey($block['Block']['key'])) {
 				$data = $this->create(array(
 					'block_key' => $block['Block']['key'],
-					'mail_notice_flag' => self::DEFAULT_MAIL_NOTICE_FLAG,
-					'mail_subject' => self::DEFAULT_MAIL_SUBJECT,
-					'mail_body' => self::DEFAULT_MAIL_BODY,
-					'is_auto_translated' => false,
-					'translation_engine' => null,
 				));
 				if (! $blockSetting = $this->save($data, false)) {
 					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));

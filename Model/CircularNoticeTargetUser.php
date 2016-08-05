@@ -109,12 +109,12 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		parent::__construct($id, $table, $ds);
 
 		$this->virtualFields['user_status'] =
-			'CASE WHEN ' . $this->alias . '.read_flag = 0 THEN ' .
+			'CASE WHEN ' . $this->alias . '.is_read = 0 THEN ' .
 				'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD . '\' ' .
-			'WHEN ' . $this->alias . '.read_flag = 1 THEN ' .
-				'CASE WHEN ' . $this->alias . '.reply_flag = 0 THEN ' .
+			'WHEN ' . $this->alias . '.is_read = 1 THEN ' .
+				'CASE WHEN ' . $this->alias . '.is_reply = 0 THEN ' .
 					'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_READ_YET . '\' ' .
-				'WHEN ' . $this->alias . '.reply_flag = 1 THEN ' .
+				'WHEN ' . $this->alias . '.is_reply = 1 THEN ' .
 					'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_REPLIED . '\' ' .
 				'ELSE ' .
 					'NULL ' .
@@ -156,7 +156,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 
 		// 閲覧済件数を取得するため条件を追加
 		$conditions += array(
-			'CircularNoticeTargetUser.read_flag' => true
+			'CircularNoticeTargetUser.is_read' => true
 		);
 
 		// 閲覧済件数を取得
@@ -166,7 +166,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 
 		// 回答済件数を取得するため条件を追加
 		$conditions += array(
-			'CircularNoticeTargetUser.reply_flag' => true
+			'CircularNoticeTargetUser.is_reply' => true
 		);
 
 		// 回答済件数を取得
@@ -286,7 +286,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 					'CircularNoticeTargetUser' => array(
 						'id' => $target['CircularNoticeTargetUser']['id'],
 						'user_id' => $target['CircularNoticeTargetUser']['user_id'],
-						'read_flag' => true,
+						'is_read' => true,
 						'read_datetime' => date('Y-m-d H:i:s'),
 					)
 				);
@@ -353,7 +353,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		// 編集時に既に回答済みの情報を保持する
 		$existingTargetUsers = $this->find('all', array(
 			'recursive' => -1,
-			'fields' => array('user_id', 'read_flag', 'read_datetime', 'reply_flag',
+			'fields' => array('user_id', 'is_read', 'read_datetime', 'is_reply',
 				'reply_datetime', 'reply_text_value', 'reply_selection_value'),
 			'conditions' => array('circular_notice_content_id' => $contentId)
 		));

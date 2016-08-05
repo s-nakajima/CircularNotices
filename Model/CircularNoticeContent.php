@@ -179,7 +179,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 					'message' => __d('net_commons', 'Invalid request.'),
 				)
 			),
-			'reply_deadline_set_flag' => array(
+			'use_reply_deadline' => array(
 				'boolean' => array(
 					'rule' => array('boolean'),
 					'message' => __d('net_commons', 'Pleas input boolean.'),
@@ -187,7 +187,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			),
 		));
 
-		if ($this->data['CircularNoticeContent']['reply_deadline_set_flag']) {
+		if ($this->data['CircularNoticeContent']['use_reply_deadline']) {
 			$this->validate = Hash::merge($this->validate, array(
 				'reply_deadline' => array(
 					'notBlank' => array(
@@ -258,7 +258,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 				'ELSE ' .
 					'CASE WHEN ' . $this->alias . '.publish_end < \'' . $now . '\' THEN ' .
 						'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_CLOSED . '\' ' .
-					'WHEN ' . $this->alias . '.reply_deadline_set_flag = 1 AND ' .
+					'WHEN ' . $this->alias . '.use_reply_deadline = 1 AND ' .
 						$this->alias . '.reply_deadline < \'' . $now . '\' THEN ' .
 						'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED . '\' ' .
 					'ELSE ' .
@@ -373,7 +373,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			}
 
 			// ルームに所属する全ユーザが対象の場合、ルームの参加者を取得
-			if ($data['CircularNoticeContent']['is_room_targeted_flag']) {
+			if ($data['CircularNoticeContent']['is_room_target']) {
 				$this->loadModels([
 					'RolesRoomsUser' => 'Rooms.RolesRoomsUser',
 				]);

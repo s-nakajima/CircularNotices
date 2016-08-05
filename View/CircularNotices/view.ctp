@@ -178,7 +178,7 @@
 
 						<div class="panel-footer text-center">
 							<?php
-								if (! $myAnswer['CircularNoticeTargetUser']['reply_flag']):
+								if (! $myAnswer['CircularNoticeTargetUser']['is_reply']):
 									$labelName = __d('circular_notices', 'Answer');
 								else:
 									$labelName = __d('circular_notices', 'Change Answer');

@@ -154,10 +154,10 @@ class CircularNoticesControllerAddTest extends NetCommonsControllerTestCase {
 					'Block' => array('id' => $data['block_id']),
 					'CircularNoticeContent' => array(
 						'reply_type' => 1,
-						'is_room_targeted_flag' => '',
+						'is_room_target' => '',
 						'publish_start' => '',
 						'publish_end' => '',
-						'reply_deadline_set_flag' => 0,
+						'use_reply_deadline' => 0,
 						'reply_deadline' => ''
 					),
 					'CircularNoticeTargetUser' => array(
@@ -178,10 +178,10 @@ class CircularNoticesControllerAddTest extends NetCommonsControllerTestCase {
 						'subject' => 'Lorem ipsum dolor sit amet',
 						'content' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
 						'reply_type' => '2',
-						'is_room_targeted_flag' => 1,
+						'is_room_target' => 1,
 						'publish_start' => '2016-01-01 00:00',
 						'publish_end' => '2016-12-01 00:00',
-						'reply_deadline_set_flag' => '1',
+						'use_reply_deadline' => '1',
 						'reply_deadline' => '2016-06-28 00:00'
 					),
 					'CircularNoticeChoices' => array(
@@ -218,10 +218,10 @@ class CircularNoticesControllerAddTest extends NetCommonsControllerTestCase {
 						'subject' => 'Lorem ipsum dolor sit amet',
 						'content' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
 						'reply_type' => '3',
-						'is_room_targeted_flag' => 1,
+						'is_room_target' => 1,
 						'publish_start' => '2016-01-01 00:00',
 						'publish_end' => '2016-12-01 00:00',
-						'reply_deadline_set_flag' => '0',
+						'use_reply_deadline' => '0',
 					),
 					'CircularNoticeChoices' => array(
 						0 => array(
