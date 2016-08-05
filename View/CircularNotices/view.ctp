@@ -178,11 +178,11 @@
 
 						<div class="panel-footer text-center">
 							<?php
-								if (! $myAnswer['CircularNoticeTargetUser']['reply_flag']) {
+								if (! $myAnswer['CircularNoticeTargetUser']['reply_flag']):
 									$labelName = __d('circular_notices', 'Answer');
-								} else {
+								else:
 									$labelName = __d('circular_notices', 'Change Answer');
-								}
+								endif;
 								echo $this->Button->cancelAndSave(
 									__d('net_commons', 'Cancel'),
 									$labelName,
