@@ -16,7 +16,7 @@
 		<?php echo $this->element('Blocks.edit_form', array(
 			'model' => 'CircularNoticeFrameSettings',
 			'callback' => 'CircularNotices.CircularNoticeFrameSettings/edit_form',
-			'cancelUrl' => NetCommonsUrl::backToPageUrl(),
+			'cancelUrl' => NetCommonsUrl::backToPageUrl(true),
 		)); ?>
 	</div>
 </article>

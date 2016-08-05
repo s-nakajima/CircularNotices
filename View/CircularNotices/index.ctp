@@ -14,11 +14,6 @@
 	echo $this->NetCommonsHtml->script(
 		array(
 			'/circular_notices/js/circular_notices.js'
-		),
-		array(
-			'plugin' => false,
-			'once' => true,
-			'inline' => false
 		)
 	);
 ?>
@@ -27,11 +22,6 @@
 	echo $this->NetCommonsHtml->css(
 		array(
 			'/circular_notices/css/circular_notices.css'
-		),
-		array(
-			'plugin' => false,
-			'once' => true,
-			'inline' => false
 		)
 	);
 ?>
@@ -87,14 +77,12 @@
 							) : ?>
 								<?php echo h($circularNoticeContent['CircularNoticeContent']['subject']); ?><br />
 							<?php else : ?>
-								<?php echo $this->Html->link(
+								<?php echo $this->NetCommonsHtml->link(
 									$circularNoticeContent['CircularNoticeContent']['subject'],
-									$this->NetCommonsHtml->url(
-										array(
-											'controller' => 'circular_notices',
-											'action' => 'view',
-											'key' => $circularNoticeContent['CircularNoticeContent']['key']
-										)
+									array(
+										'controller' => 'circular_notices',
+										'action' => 'view',
+										'key' => $circularNoticeContent['CircularNoticeContent']['key']
 									)
 								);
 								?>
@@ -110,18 +98,11 @@
 						<?php if (Current::permission('content_creatable') && $circularNoticeContent['CircularNoticeContent']['created_user'] == Current::read('User.id')) : ?>
 							<div class="pull-right" style="margin: 6px 0;">
 									<span class="nc-tooltip" tooltip="<?php echo h(__d('net_commons', 'Edit')); ?>">
-										<?php echo $this->NetCommonsHtml->link(
-											'<span class="glyphicon glyphicon-edit"> </span>',
-											$this->NetCommonsHtml->url(
-												array(
-													'controller' => 'circular_notices',
-													'action' => 'edit',
-													'key' => $circularNoticeContent['CircularNoticeContent']['key']
-												)
-											),
+										<?php echo $this->LinkButton->edit('',
 											array(
-												'class' => 'btn btn-sm btn-primary',
-												'escape' => false
+												'controller' => 'circular_notices',
+												'action' => 'edit',
+												'key' => $circularNoticeContent['CircularNoticeContent']['key']
 											)
 										);
 										?>

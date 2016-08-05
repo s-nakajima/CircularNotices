@@ -30,4 +30,14 @@ class CircularNoticeMailSettingsController extends MailSettingsController {
 		'Mails.MailForm',
 	);
 
+/**
+ * メール設定 登録,編集
+ *
+ * @return mixed
+ */
+	public function edit() {
+		$this->backUrl = NetCommonsUrl::backToPageUrl(true);
+		parent::edit();
+	}
+
 }

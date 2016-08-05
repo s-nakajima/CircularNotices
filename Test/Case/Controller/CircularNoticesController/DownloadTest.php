@@ -155,7 +155,6 @@ class CircularNoticesControllerDownloadTest extends NetCommonsControllerTestCase
 			$urlOptions
 		);
 		$this->controller->request->params['key'] = $urlOptions['key'];
-		//Current::initialize($this->controller->request);
 		Current::initialize($this->controller);
 		$id = empty($urlOptions['frame_id']) ? '5' : $urlOptions['frame_id'];
 		Current::write('Frame', [

@@ -21,7 +21,7 @@
 					'useNoticeAuthority' => 0,
 				),
 			),
-			NetCommonsUrl::backToIndexUrl('default_setting_action'),
+			NetCommonsUrl::backToPageUrl(true),
 			0, // 問合せ先メールアドレス 非表示
 			0, // メール通知機能を使う ヘルプメッセージ 非表示
 			0 // 承認メール通知機能を使う 非表示
