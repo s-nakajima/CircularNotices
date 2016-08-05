@@ -83,7 +83,7 @@ class CircularNoticeBlockRolePermissionsController extends CircularNoticesAppCon
 		if ($this->request->is(array('post', 'put'))) {
 			$data = $this->data;
 			if ($this->CircularNoticeSetting->saveCircularNoticeSetting($data)) {
-				$this->redirect(NetCommonsUrl::backToIndexUrl('default_setting_action'));
+				$this->redirect(NetCommonsUrl::backToPageUrl(true));
 				return;
 			}
 			$this->NetCommons->handleValidationError($this->CircularNoticeSetting->validationErrors);
