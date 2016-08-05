@@ -72,7 +72,7 @@ class CircularNoticeFrameSettingsController extends CircularNoticesAppController
 		if ($this->request->is(array('post', 'put'))) {
 			$data = $this->request->data;
 			if ($this->CircularNoticeFrameSetting->saveCircularNoticeFrameSetting($data)) {
-				$this->redirect(NetCommonsUrl::backToPageUrl());
+				$this->redirect(NetCommonsUrl::backToPageUrl(true));
 				return;
 			}
 			$this->NetCommons->handleValidationError($this->CircularNoticeFrameSetting->validationErrors);
