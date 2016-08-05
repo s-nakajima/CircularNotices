@@ -48,7 +48,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 				'add,edit,delete' => 'content_creatable',
 			),
 		),
-		'Paginator',
+		'Paginator' => array('className' => 'NetCommons.AppPaginator'),
 		'UserAttributes.UserAttributeLayout',
 		'CircularNotices.CircularNotice',
 		'NetCommons.NetCommonsTime',
