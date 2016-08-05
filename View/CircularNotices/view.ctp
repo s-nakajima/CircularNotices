@@ -323,7 +323,7 @@
 						endif;
 
 						echo $this->Html->tableCells(array(
-							$this->NetCommonsHtml->handleLink($circularNoticeTargetUser, array(), array(), 'User'),
+							$this->NetCommonsHtml->handleLink($circularNoticeTargetUser, array('avatar' => true), array(), 'User'),
 							h($readDatetime),
 							h($replyDatetime),
 							h($answer),
