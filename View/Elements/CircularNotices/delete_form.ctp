@@ -12,7 +12,7 @@
 
 <?php echo $this->NetCommonsForm->create('CircularNotice', array(
 	'type' => 'delete',
-	'url' => $this->NetCommonsHtml->url(array('action' => 'delete', 'key' => $circularNoticeContent['key']))
+	'url' => NetCommonsUrl::blockUrl(array('action' => 'delete', 'key' => $circularNoticeContent['key']))
 )); ?>
 <?php echo $this->NetCommonsForm->hidden('Frame.id'); ?>
 <?php echo $this->NetCommonsForm->hidden('Block.id'); ?>

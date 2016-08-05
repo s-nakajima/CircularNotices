@@ -11,26 +11,16 @@
 ?>
 
 <?php
-	echo $this->Html->script(
+	echo $this->NetCommonsHtml->script(
 		array(
 			'/circular_notices/js/circular_notices.js'
-		),
-		array(
-			'plugin' => false,
-			'once' => true,
-			'inline' => false
 		)
 	);
 ?>
 <?php
-	echo $this->Html->css(
+	echo $this->NetCommonsHtml->css(
 		array(
 			'/circular_notices/css/circular_notices.css'
-		),
-		array(
-			'plugin' => false,
-			'once' => true,
-			'inline' => false
 		)
 	);
 ?>
@@ -188,23 +178,17 @@
 
 						<div class="panel-footer text-center">
 							<?php
-								echo $this->BackTo->linkButton(
-										__d('net_commons', 'Cancel'), NetCommonsUrl::backToPageUrl(false));
-								if (! $myAnswer['CircularNoticeTargetUser']['reply_flag']):
+								if (! $myAnswer['CircularNoticeTargetUser']['reply_flag']) {
 									$labelName = __d('circular_notices', 'Answer');
-									$tooltip = __d('circular_notices', 'Do Answer');
-								else:
+								} else {
 									$labelName = __d('circular_notices', 'Change Answer');
-									$tooltip = __d('circular_notices', 'Change Answer');
-								endif;
+								}
+								echo $this->Button->cancelAndSave(
+									__d('net_commons', 'Cancel'),
+									$labelName,
+									NetCommonsUrl::backToPageUrl(false)
+								);
 							?>
-							<span class="nc-tooltip" tooltip="<?php echo h($tooltip); ?>">
-								<button type="submit" class="btn btn-primary"
-									ng-click="this.form.submit();"
-									ng-disabled="sending">
-									<?php echo h($labelName); ?>
-								</button>
-							</span>
 						</div>
 					</div>
 
