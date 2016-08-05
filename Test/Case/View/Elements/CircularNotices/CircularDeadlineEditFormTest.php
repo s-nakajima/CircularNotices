@@ -53,7 +53,7 @@ class CircularNoticesViewElementsCircularNoticesCircularDeadlineEditFormTest ext
  * @return void
  */
 	public function testCircularDeadlineEditForm() {
-		$this->controller->set('circularNoticeContent', array('reply_deadline_set_flag' => 1));
+		$this->controller->set('circularNoticeContent', array('use_reply_deadline' => 1));
 
 		//テスト実行
 		$this->_testGetAction('/test_circular_notices/test_view_elements_circular_notices_circular_deadline_edit_form/circular_deadline_edit_form',

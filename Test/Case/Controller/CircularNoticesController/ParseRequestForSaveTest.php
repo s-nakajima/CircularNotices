@@ -59,9 +59,8 @@ class CircularNoticesControllerParseRequestForSaveTest extends NetCommonsControl
 			'data' => array(
 				'CircularNoticeContent' => array(
 					'reply_type' => '1',
-					'is_room_targeted_flag' => 1,
-					'target_groups' => array(),
-					'reply_deadline_set_flag' => 1,
+					'is_room_target' => 1,
+					'use_reply_deadline' => 1,
 				),
 			),
 			'assert' => array('method' => 'assertNotEmpty')
@@ -70,9 +69,8 @@ class CircularNoticesControllerParseRequestForSaveTest extends NetCommonsControl
 			'data' => array(
 				'CircularNoticeContent' => array(
 					'reply_type' => '2',
-					'is_room_targeted_flag' => 0,
-					'target_groups' => array(1, 2, 3),
-					'reply_deadline_set_flag' => 1,
+					'is_room_target' => 0,
+					'use_reply_deadline' => 1,
 				),
 			),
 			'assert' => array('method' => 'assertNotEmpty')
@@ -81,9 +79,8 @@ class CircularNoticesControllerParseRequestForSaveTest extends NetCommonsControl
 			'data' => array(
 				'CircularNoticeContent' => array(
 					'reply_type' => '2',
-					'is_room_targeted_flag' => 0,
-					'target_groups' => array(1, 2, 3),
-					'reply_deadline_set_flag' => 0,
+					'is_room_target' => 0,
+					'use_reply_deadline' => 0,
 				),
 				'CircularNoticeChoices' => array(
 					1 => array(

@@ -190,7 +190,7 @@
 							<?php
 								echo $this->BackTo->linkButton(
 										__d('net_commons', 'Cancel'), NetCommonsUrl::backToPageUrl(false));
-								if (! $myAnswer['CircularNoticeTargetUser']['reply_flag']):
+								if (! $myAnswer['CircularNoticeTargetUser']['is_reply']):
 									$labelName = __d('circular_notices', 'Answer');
 									$tooltip = __d('circular_notices', 'Do Answer');
 								else:
