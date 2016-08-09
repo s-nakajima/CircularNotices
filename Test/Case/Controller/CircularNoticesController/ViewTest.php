@@ -99,6 +99,22 @@ class CircularNoticesControllerViewTest extends NetCommonsControllerTestCase {
 			'urlOptions' => $data,
 			'assert' => array('method' => 'assertNotEmpty'),
 		);
+		$results[3] = array(
+			'urlOptions' => Hash::insert($data, 'key', 'circular_notice_content_2'),
+			'assert' => array('method' => 'assertNotEmpty'),
+		);
+		$results[4] = array(
+			'urlOptions' => Hash::insert($data, 'key', 'circular_notice_content_3'),
+			'assert' => array('method' => 'assertNotEmpty'),
+		);
+		$results[5] = array(
+			'urlOptions' => Hash::insert($data, 'key', 'circular_notice_content_11'),
+			'assert' => array('method' => 'assertNotEmpty'),
+		);
+		$results[6] = array(
+			'urlOptions' => Hash::insert($data, 'key', 'circular_notice_content_12'),
+			'assert' => array('method' => 'assertNotEmpty'),
+		);
 
 		return $results;
 	}
@@ -177,7 +193,7 @@ class CircularNoticesControllerViewTest extends NetCommonsControllerTestCase {
 					),
 					'CircularNoticeTargetUser' => array(
 						'id' => 2,
-						'reply_selection_value' => 'Lorem ipsum dolor sit amet',
+						'reply_selection_value' => '2',
 					),
 				),
 				'assert' => array('method' => 'assertNotEmpty'),
@@ -191,8 +207,8 @@ class CircularNoticesControllerViewTest extends NetCommonsControllerTestCase {
 					'CircularNoticeTargetUser' => array(
 						'id' => 3,
 						'reply_selection_value' => array(
-							'Lorem ipsum dolor sit amet',
-							'Convallis morbi fringilla gravida'
+							'3',
+							'5'
 						),
 					),
 				),

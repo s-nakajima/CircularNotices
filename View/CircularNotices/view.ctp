@@ -90,7 +90,7 @@
 				</div>
 				<div>
 					<?php foreach ($circularNoticeChoice as $choice) : ?>
-						<?php echo h(__d('circular_notices', 'Selected Count', isset($answersSummary[$choice['value']]) ? $answersSummary[$choice['value']] : 0)); ?><br />
+						<?php echo h(__d('circular_notices', 'Selected Count', isset($answersSummary[$choice['id']]) ? $answersSummary[$choice['id']] : 0)); ?><br />
 					<?php endforeach; ?>
 				</div>
 			</div>
@@ -140,22 +140,31 @@
 									break;
 								case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION:
 									$selections = array();
+									$selectedValue = '';
 									foreach ($circularNoticeChoice as $choice) :
-										$selections[$choice['value']] = $choice['value'];
+										$selections[$choice['id']] = $choice['value'];
+										if ($choice['id'] === $myAnswer['CircularNoticeTargetUser']['reply_selection_value']) :
+											$selectedValue = $choice['value'];
+										endif;
 									endforeach;
 									echo $this->NetCommonsForm->input('CircularNoticeTargetUser.reply_selection_value', array(
 										'div' => false,
 										'type' => 'radio',
 										'legend' => false,
 										'label' => false,
-										'value' => $myAnswer['CircularNoticeTargetUser']['reply_selection_value'],
+										'value' => $selectedValue,
 										'options' => $selections,
 									));
 									break;
 								case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION:
 									$selections = array();
+									$selected = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $myAnswer['CircularNoticeTargetUser']['reply_selection_value']);
+									$selectedValueArr = array();
 									foreach ($circularNoticeChoice as $choices) :
-										$selections[$choices['value']] = $choices['value'];
+										$selections[$choices['id']] = $choices['value'];
+										if (in_array($choices['id'], $selected, true)) :
+											$selectedValueArr[] = $choices['value'];
+										endif;
 									endforeach;
 									$selected = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $myAnswer['CircularNoticeTargetUser']['reply_selection_value']);
 									echo $this->NetCommonsForm->input('CircularNoticeTargetUser.reply_selection_value', array(
@@ -164,7 +173,7 @@
 										'legend' => true,
 										'label' => false,
 										'multiple' => 'checkbox',
-										'selected' => $selected,
+										'selected' => $selectedValueArr,
 										'options' => $selections,
 										'class' => 'form-input',
 									));
