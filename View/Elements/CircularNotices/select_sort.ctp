@@ -39,7 +39,7 @@ $options = array(
 );
 ?>
 
-<div class="btn-group circular-notice-index-pull-down-margin">
+<div class="btn-group">
 	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 		<?php echo h($options[$curretSort . '.' . $curretDirection]['label']); ?>
 		<span class="caret"></span>

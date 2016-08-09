@@ -3,13 +3,33 @@
 	border: 0px none transparent;
 }
 
-.circular-notice-index-status-label {
-	margin-right: 10px;
+.circular-notices-navigation-header {
 	margin-bottom: 10px;
 }
 
-.circular-notice-index-pull-down-margin {
-	margin-top: 10px;
+.circular-notices {
+	padding-top: 16px;
+}
+
+.circular-notice-edit-link {
+	margin: 6px 0;
+}
+
+.circular-notice-answer-status {
+	padding: 2px 16px 0 16px;
+}
+
+.circular-notice-attr-font-inner {
+	padding: 2px 0;
+}
+
+.circular-notice-created-user {
+	padding: 2px 0;
+}
+
+.circular-notice-index-status-label {
+	margin-right: 10px;
+	margin-bottom: 10px;
 }
 
 .circular-notice-status-label {

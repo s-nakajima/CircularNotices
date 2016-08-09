@@ -154,7 +154,7 @@ msgstr "回答期限順（降順）"
 
 # 回覧一覧画面で使用
 msgid "Circular Content Data Not Found"
-msgstr "回覧がありません"
+msgstr "回覧がありません。"
 
 # 回覧一覧画面で使用
 msgid "Circular Content Period Title"

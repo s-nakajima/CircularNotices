@@ -20,7 +20,7 @@ $options = CircularNoticeFrameSetting::getDisplayNumberOptions();
 $currentLimit = $this->Paginator->param('limit') ? $this->Paginator->param('limit') : CircularNoticeFrameSetting::DEFAULT_DISPLAY_NUMBER;
 ?>
 
-<div class="btn-group circular-notice-index-pull-down-margin">
+<div class="btn-group">
 	<?php echo $this->DisplayNumber->dropDownToggle(array(
 		'url' => $url,
 		'currentLimit' => $currentLimit,
