@@ -73,6 +73,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		'Workflow.Workflow',
 		'Groups.GroupUserList',
 		'NetCommons.TitleIcon',
+		'AuthorizationKeys.AuthKeyPopupButton',
 	);
 
 /**
@@ -386,6 +387,11 @@ class CircularNoticesController extends CircularNoticesAppController {
 		App::uses('CsvFileWriter', 'Files.Utility');
 		App::uses('ZipDownloader', 'Files.Utility');
 
+		$zipPassword = $this->__getCompressPassword();
+		if ($zipPassword === false) {
+			return false;
+		}
+
 		try {
 			$userId = Current::read('User.id');
 			$contentKey = $this->request->params['key'];
@@ -415,28 +421,15 @@ class CircularNoticesController extends CircularNoticesAppController {
 			// 回答データ整形
 			$content = $content['CircularNoticeContent'];
 			foreach ($targetUsers as $targetUser) {
-				$answer = null;
-				switch ($content['reply_type']) {
-					case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT:
-						$answer = $targetUser['CircularNoticeTargetUser']['reply_text_value'];
-						break;
-					case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION:
-					case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION:
-						$selectionValues = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER,
-							$targetUser['CircularNoticeTargetUser']['reply_selection_value']);
-						$answer = implode('、', $selectionValues);
-						break;
-				}
+				$answer = $this->__parseAnswer($content['reply_type'], $targetUser);
 
-				if (! $targetUser['CircularNoticeTargetUser']['read_datetime']) {
-					$readDatetime = __d('circular_notices', 'Unread');
-				} else {
+				$readDatetime = __d('circular_notices', 'Unread');
+				if ($targetUser['CircularNoticeTargetUser']['read_datetime']) {
 					$readDatetime = $this->CircularNotice
 						->getDisplayDateFormat($targetUser['CircularNoticeTargetUser']['read_datetime']);
 				}
-				if (! $targetUser['CircularNoticeTargetUser']['reply_datetime']) {
-					$replyDatetime = __d('circular_notices', 'Unreply');
-				} else {
+				$replyDatetime = __d('circular_notices', 'Unreply');
+				if ($targetUser['CircularNoticeTargetUser']['reply_datetime']) {
 					$replyDatetime = $this->CircularNotice
 						->getDisplayDateFormat($targetUser['CircularNoticeTargetUser']['reply_datetime']);
 				}
@@ -460,8 +453,59 @@ class CircularNoticesController extends CircularNoticesAppController {
 			return false;
 		}
 		$this->autoRender = false;
-		$fileName = $content['subject'] . CircularNoticeComponent::EXPORT_FILE_EXTENSION;
-		return $csvFile->download($fileName);
+		$zipFileName = $content['subject'] . CircularNoticeComponent::EXPORT_COMPRESS_FILE_EXTENSION;
+		$downloadFileName = $content['subject'] . CircularNoticeComponent::EXPORT_FILE_EXTENSION;
+		return $csvFile->zipDownload(rawurlencode($zipFileName), $downloadFileName, $zipPassword);
+	}
+
+/**
+ * Parse answer data
+ *
+ * @param string $replyType 回答種別
+ * @param array $targetUser 回答者
+ * @return null|string
+ */
+	private function __parseAnswer($replyType, $targetUser) {
+		$answer = null;
+		switch ($replyType) {
+			case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT:
+				$answer = $targetUser['CircularNoticeTargetUser']['reply_text_value'];
+				break;
+			case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION:
+			case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION:
+				$selectionValues = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER,
+					$targetUser['CircularNoticeTargetUser']['reply_selection_value']);
+				$answer = implode('、', $selectionValues);
+				break;
+		}
+		return $answer;
+	}
+
+/**
+ * Get compress password
+ *
+ * @return mixed
+ */
+	private function __getCompressPassword() {
+		if (isset($this->request->data['AuthorizationKey']) &&
+			$this->request->data['AuthorizationKey']['authorization_key'] !== ''
+		) {
+			return $this->request->data['AuthorizationKey']['authorization_key'];
+		}
+
+		// エラー
+		$this->NetCommons->setFlashNotification(
+			__d('circular_notices', 'Setting of password is required always to download answers.'),
+			array('interval' => NetCommonsComponent::ALERT_VALIDATE_ERROR_INTERVAL)
+		);
+		$this->redirect(NetCommonsUrl::actionUrl(array(
+			'controller' => 'circular_notices',
+			'action' => 'view',
+			'block_id' => Current::read('Block.id'),
+			'key' => $this->request->params['key'],
+			'frame_id' => Current::read('Frame.id')
+		)));
+		return false;
 	}
 
 /**
