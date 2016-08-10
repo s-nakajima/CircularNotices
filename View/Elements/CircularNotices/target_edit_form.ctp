@@ -19,7 +19,7 @@
 			__d('circular_notices', 'Circular Target') . $this->element('NetCommons.required')
 		); ?>
 	</div>
-	<div style="margin-bottom: 10px;">
+	<div class="circular-notices-target-users">
 		<?php
 		$options = array(
 			'1' => __d('circular_notices', 'All Members Belings to this Room'),

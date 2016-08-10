@@ -38,69 +38,68 @@
 <div id="nc-circular-notices-<?php echo Current::read('Frame.id'); ?>"
 	 ng-controller="CircularNoticeEdit"
 	 ng-init="initialize(<?php echo h(json_encode($circularNoticeContent)); ?>)">
+	<article>
+		<h1>
+			<?php echo $listTitle; ?>
+		</h1>
 
-	<h1>
-		<?php echo h(__d('circular_notices', 'Plugin Name')); ?>
-	</h1>
+		<div class="panel panel-default">
 
-	<div class="panel panel-default">
+			<?php echo $this->NetCommonsForm->create('CircularNoticeContent', array(
+				'name' => 'form',
+				'novalidate' => true,
+			)); ?>
 
-		<?php echo $this->NetCommonsForm->create('CircularNoticeContent', array(
-			'name' => 'form',
-			'novalidate' => true,
-		)); ?>
+				<div class="panel-body">
+	
+					<?php echo $this->NetCommonsForm->hidden('Frame.id', array(
+						'value' => Current::read('Frame.id')
+					)); ?>
 
-			<div class="panel-body">
+					<?php echo $this->NetCommonsForm->hidden('Block.id', array(
+						'value' => Current::read('Block.id'),
+					)); ?>
 
-				<?php echo $this->NetCommonsForm->hidden('Frame.id', array(
-					'value' => Current::read('Frame.id')
-				)); ?>
+					<?php echo $this->NetCommonsForm->hidden('CircularNoticeContent.id', array(
+						'value' => isset($circularNoticeContent['id']) ? $circularNoticeContent['id'] : null,
+					)); ?>
 
-				<?php echo $this->NetCommonsForm->hidden('Block.id', array(
-					'value' => Current::read('Block.id'),
-				)); ?>
+					<?php
+						$circularNoticeSettingKey = $circularNoticeSetting['CircularNoticeSetting']['key'];
+						if (isset($circularNoticeContent['circular_notice_setting_key'])
+								&& !empty($circularNoticeContent['circular_notice_setting_key'])) {
+							$circularNoticeSettingKey = $circularNoticeContent['circular_notice_setting_key'];
+						}
+						echo $this->NetCommonsForm->hidden('CircularNoticeContent.circular_notice_setting_key', array(
+							'value' => $circularNoticeSettingKey,
+						));
+					?>
 
-				<?php echo $this->NetCommonsForm->hidden('CircularNoticeContent.id', array(
-					'value' => isset($circularNoticeContent['id']) ? $circularNoticeContent['id'] : null,
-				)); ?>
+					<?php echo $this->element('CircularNotices/subject_edit_form'); ?>
 
-				<?php
-					$circularNoticeSettingKey = $circularNoticeSetting['CircularNoticeSetting']['key'];
-					if (isset($circularNoticeContent['circular_notice_setting_key'])
-							&& !empty($circularNoticeContent['circular_notice_setting_key'])) {
-						$circularNoticeSettingKey = $circularNoticeContent['circular_notice_setting_key'];
-					}
-					echo $this->NetCommonsForm->hidden('CircularNoticeContent.circular_notice_setting_key', array(
-						'value' => $circularNoticeSettingKey,
-					));
-				?>
+					<?php echo $this->element('CircularNotices/content_edit_form'); ?>
+	
+					<?php echo $this->element('CircularNotices/reply_type_edit_form'); ?>
 
-				<?php echo $this->element('CircularNotices/subject_edit_form'); ?>
+					<?php echo $this->element('CircularNotices/target_edit_form'); ?>
 
-				<?php echo $this->element('CircularNotices/content_edit_form'); ?>
+					<?php echo $this->element('CircularNotices/circular_period_edit_form'); ?>
 
-				<?php echo $this->element('CircularNotices/reply_type_edit_form'); ?>
+					<?php echo $this->element('CircularNotices/circular_deadline_edit_form'); ?>
 
-				<?php echo $this->element('CircularNotices/target_edit_form'); ?>
+				</div>
 
-				<?php echo $this->element('CircularNotices/circular_period_edit_form'); ?>
-
-				<?php echo $this->element('CircularNotices/circular_deadline_edit_form'); ?>
-
-			</div>
-
-			<div class="panel-footer text-center">
-				<?php echo $this->Button->cancelAndSaveAndSaveTemp(); ?>
-			</div>
-
-		<?php echo $this->NetCommonsForm->end(); ?>
-
-		<?php if ($this->request->params['action'] === 'edit') : ?>
-			<div class="panel-footer text-right">
-				<?php echo $this->element('CircularNotices/delete_form'); ?>
-			</div>
-		<?php endif; ?>
-
-	</div>
-
+				<div class="panel-footer text-center">
+					<?php echo $this->Button->cancelAndSaveAndSaveTemp(); ?>
+				</div>
+	
+			<?php echo $this->NetCommonsForm->end(); ?>
+	
+			<?php if ($this->request->params['action'] === 'edit') : ?>
+				<div class="panel-footer text-right">
+					<?php echo $this->element('CircularNotices/delete_form'); ?>
+				</div>
+			<?php endif; ?>
+		</div>
+	</article>
 </div>

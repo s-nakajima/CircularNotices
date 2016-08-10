@@ -273,10 +273,8 @@
 				</div>
 			</div>
 
-			<hr class="circular-notice-spacer" />
-
 			<!-- 回覧先と回答 -->
-			<table class="table table-hover">
+			<table class="table table-hover circular-notices-target-users-list">
 				<thead>
 					<tr>
 						<th>

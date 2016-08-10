@@ -1,6 +1,6 @@
 
 .circular-notice-spacer {
-	border: 0px none transparent;
+	border: 0 none transparent;
 }
 
 .circular-notices-navigation-header {
@@ -58,4 +58,16 @@
 
 .circular-notices-answer-count-denominator {
 	margin: 0 2px;
+}
+
+.circular-notices-edit-period {
+	margin-bottom: 16px;
+}
+
+.circular-notices-target-users {
+	margin-bottom: 10px;
+}
+
+.circular-notices-target-users-list {
+	margin-top: 20px;
 }

@@ -10,7 +10,7 @@
  */
 ?>
 
-<div class="form-group" style="margin-bottom: 10px;">
+<div class="form-group circular-notices-edit-period">
 	<div>
 		<?php echo $this->NetCommonsForm->label(
 			'CircularNoticeTargetUser.period',
