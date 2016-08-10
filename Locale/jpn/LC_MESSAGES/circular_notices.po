@@ -141,16 +141,8 @@ msgid "Display Replied Contents"
 msgstr "回答済"
 
 # 回覧一覧画面の表示順変更に使用
-msgid "Change Sort Order to New Arrival"
-msgstr "新着順（降順）"
-
-# 回覧一覧画面の表示順変更に使用
-msgid "Change Sort Order to Old Arrival"
-msgstr "新着順（昇順）"
-
-# 回覧一覧画面の表示順変更に使用
 msgid "Change Sort Order to Reply Deadline"
-msgstr "回答期限順（降順）"
+msgstr "回答期限順"
 
 # 回覧一覧画面で使用
 msgid "Circular Content Data Not Found"
