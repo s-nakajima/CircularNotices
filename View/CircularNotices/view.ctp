@@ -280,13 +280,13 @@
 						<th>
 							<?php echo $this->Paginator->sort('User.handlename', __d('circular_notices', 'Target User')); ?>
 						</th>
-						<th>
+						<th class="row-datetime">
 							<?php echo $this->Paginator->sort('CircularNoticeTargetUser.read_datetime', __d('circular_notices', 'Read Datetime')); ?>
 						</th>
-						<th>
+						<th class="row-datetime">
 							<?php echo $this->Paginator->sort('CircularNoticeTargetUser.reply_datetime', __d('circular_notices', 'Reply Datetime')); ?>
 						</th>
-						<th>
+						<th class="circular-notices-reply-col">
 							<?php
 								switch ($circularNoticeContent['reply_type']) {
 									case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT:
@@ -336,9 +336,9 @@
 
 						echo $this->Html->tableCells(array(
 							$this->NetCommonsHtml->handleLink($circularNoticeTargetUser, array('avatar' => true), array(), 'User'),
-							$readDatetime,
-							$replyDatetime,
-							$answer,
+							array($readDatetime, array('class' => 'row-datetime')),
+							array($replyDatetime, array('class' => 'row-datetime')),
+							array($answer, array('class' => 'circular-notices-reply-col')),
 						));
 					endforeach;
 				?>

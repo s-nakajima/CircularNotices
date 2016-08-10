@@ -71,3 +71,8 @@
 .circular-notices-target-users-list {
 	margin-top: 20px;
 }
+
+.table > thead > tr > th.circular-notices-reply-col,
+.table > tbody > tr > td.circular-notices-reply-col {
+    padding-left: 8%;
+}
