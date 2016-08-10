@@ -30,11 +30,6 @@
 	<h1><?php echo $listTitle; ?></h1>
 
 	<div class="clearfix circular-notices-navigation-header">
-		<div class="pull-left">
-			<?php echo $this->element('CircularNotices/select_status'); ?>
-			<?php echo $this->element('CircularNotices/select_sort'); ?>
-			<?php echo $this->element('CircularNotices/select_limit'); ?>
-		</div>
 		<div class="pull-right">
 			<?php
 			$addUrl = array(
@@ -46,6 +41,11 @@
 				$addUrl,
 				array('tooltip' => __d('net_commons', 'Add')));
 			?>
+		</div>
+		<div class="pull-left">
+			<?php echo $this->element('CircularNotices/select_status'); ?>
+			<?php echo $this->element('CircularNotices/select_sort'); ?>
+			<?php echo $this->element('CircularNotices/select_limit'); ?>
 		</div>
 	</div>
 
