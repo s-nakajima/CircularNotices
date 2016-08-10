@@ -204,7 +204,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 							'from' => $this->data['CircularNoticeContent']['publish_start'],
 							'to' => $this->data['CircularNoticeContent']['publish_end']
 						)),
-						'message' => __d('net_commons', 'Invalid request.'),
+						'message' => __d('circular_notices', 'Please input between circular period.'),
 					)
 				),
 			));

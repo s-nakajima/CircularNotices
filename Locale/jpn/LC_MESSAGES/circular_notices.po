@@ -380,6 +380,9 @@ msgstr "回覧を投稿できる権限"
 msgid "Select user"
 msgstr "回覧先を選択してください。"
 
+msgid "Please input between circular period."
+msgstr "回覧期間の範囲内で入力してください。"
+
 #: Plugins/CircularNotices/View/Elements/CircularNotices/delete_form.ctp:
 msgid "Circulation"
 msgstr "回覧"
