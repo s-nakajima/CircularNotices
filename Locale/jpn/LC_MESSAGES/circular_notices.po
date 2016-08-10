@@ -387,6 +387,11 @@ msgstr "個別に選択"
 msgid "Circulation Destination User Selection"
 msgstr "回覧先ユーザ選択"
 
+msgid "Answer separator"
+msgstr "、"
+
+msgid "Division bar"
+msgstr "/"
 
 # メール関連
 msgid "MailSetting.mail_fixed_phrase_body.popover"

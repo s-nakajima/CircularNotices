@@ -16,15 +16,15 @@
 }
 
 .circular-notice-answer-status {
-	padding: 2px 16px 0 16px;
+	padding: 2px 16px 0 0;
 }
 
-.circular-notice-attr-font-inner {
-	padding: 2px 0;
+.circular-notice-publish-period {
+	padding: 0 0 2px 0;
 }
 
 .circular-notice-created-user {
-	padding: 2px 0;
+	padding: 2px 0 0 0;
 }
 
 .circular-notice-index-status-label {
@@ -32,8 +32,26 @@
 	margin-bottom: 10px;
 }
 
-.circular-notice-status-label {
-	display: inline-block;
-	width: 60px;
-	padding: 4px 0;
+.circular-notices-content {
+	padding: 10px 0 10px 0 ;
+}
+
+.circular-notice-answer-choice {
+	padding: 0 0 20px 0;
+}
+
+.circular-notice-answer-choice-choices {
+	margin: 0 4px 0 8px;
+}
+
+.circular-notices-show-other-users {
+	margin: 20px 0 0 0 ;
+}
+
+.circular-notices-answer-count-molecule {
+	margin: 0 2px;
+}
+
+.circular-notices-answer-count-denominator {
+	margin: 0 2px;
 }

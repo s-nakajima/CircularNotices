@@ -65,7 +65,7 @@
 								|| $circularNoticeContent['CircularNoticeContent']['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED)
 							&& $circularNoticeContent['CircularNoticeContent']['created_user'] != Current::read('User.id')
 						) : ?>
-							<?php echo h($circularNoticeContent['CircularNoticeContent']['subject']); ?><br />
+							<?php echo $circularNoticeContent['CircularNoticeContent']['subject']; ?><br />
 						<?php else : ?>
 							<?php echo $this->NetCommonsHtml->link(
 								$circularNoticeContent['CircularNoticeContent']['subject'],
@@ -84,7 +84,7 @@
 							<!-- 編集リンク -->
 							<?php if (Current::permission('content_creatable') && $circularNoticeContent['CircularNoticeContent']['created_user'] == Current::read('User.id')) : ?>
 								<div class="pull-right circular-notice-edit-link">
-									<span class="nc-tooltip" tooltip="<?php echo h(__d('net_commons', 'Edit')); ?>">
+									<span class="nc-tooltip" tooltip="<?php echo __d('net_commons', 'Edit'); ?>">
 										<?php echo $this->LinkButton->edit('',
 											array(
 												'controller' => 'circular_notices',
@@ -99,19 +99,30 @@
 							<!-- 閲覧状況・回答状況 -->
 							<div class="pull-right circular-notice-answer-status">
 								<small>
-									<?php echo h(__d('circular_notices', 'Read Count Title') . ' ' . h($circularNoticeContent['read_count'])); ?>
-									/
-									<?php echo h($circularNoticeContent['target_count']); ?><br />
-									<?php echo h(__d('circular_notices', 'Reply Count Title') . ' ' . h($circularNoticeContent['reply_count'])); ?>
-									/
-									<?php echo h($circularNoticeContent['target_count']); ?>
+									<?php echo __d('circular_notices', 'Read Count Title'); ?>
+									<span class="circular-notices-answer-count-molecule">
+										<?php echo $circularNoticeContent['read_count']; ?>
+									</span>
+									<?php echo __d('circular_notices', 'Division bar'); ?>
+									<span>
+										<?php echo $circularNoticeContent['target_count']; ?>
+									</span>
+									<br />
+									<?php echo __d('circular_notices', 'Reply Count Title'); ?>
+									<span class="circular-notices-answer-count-molecule">
+										<?php echo $circularNoticeContent['reply_count']; ?>
+									</span>
+									<?php echo __d('circular_notices', 'Division bar'); ?>
+									<span>
+										<?php echo $circularNoticeContent['target_count']; ?>
+									</span>
 								</small>
 							</div>
 
 							<!-- 回覧期間 -->
 							<div class="circular-notice-attr-font">
-								<div class="circular-notice-attr-font-inner">
-									<?php echo h(__d('circular_notices', 'Circular Content Period Title')); ?>
+								<div class="circular-notice-publish-period">
+									<?php echo __d('circular_notices', 'Circular Content Period Title'); ?>
 									<?php echo $this->Date->dateFormat($circularNoticeContent['CircularNoticeContent']['publish_start']); ?>
 									<?php echo __d('circular_notices', 'Till'); ?>
 									<?php echo $this->Date->dateFormat($circularNoticeContent['CircularNoticeContent']['publish_end']); ?>
@@ -132,7 +143,7 @@
 
 		<?php else : ?>
 			<p>
-				<?php echo h(__d('circular_notices', 'Circular Content Data Not Found')); ?>
+				<?php echo __d('circular_notices', 'Circular Content Data Not Found'); ?>
 			</p>
 		<?php endif; ?>
 	</div>
