@@ -88,7 +88,7 @@ else :
 endif;
 ?>
 
-<span class="btn-group circular-notice-index-pull-down-margin">
+<span class="btn-group">
 	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 		<?php echo h($options['CircularNoticeContents.status_' . $currentStatus]['label']); ?>
 		<span class="caret"></span>

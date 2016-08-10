@@ -141,20 +141,12 @@ msgid "Display Replied Contents"
 msgstr "回答済"
 
 # 回覧一覧画面の表示順変更に使用
-msgid "Change Sort Order to New Arrival"
-msgstr "新着順（降順）"
-
-# 回覧一覧画面の表示順変更に使用
-msgid "Change Sort Order to Old Arrival"
-msgstr "新着順（昇順）"
-
-# 回覧一覧画面の表示順変更に使用
 msgid "Change Sort Order to Reply Deadline"
-msgstr "回答期限順（降順）"
+msgstr "回答期限順"
 
 # 回覧一覧画面で使用
 msgid "Circular Content Data Not Found"
-msgstr "回覧がありません"
+msgstr "回覧がありません。"
 
 # 回覧一覧画面で使用
 msgid "Circular Content Period Title"
@@ -167,6 +159,10 @@ msgstr "閲覧状況："
 # 回覧一覧画面で使用
 msgid "Reply Count Title"
 msgstr "回答状況："
+
+# 回覧詳細画面で使用
+msgid "Circular Content Deadline Title"
+msgstr "回答期限："
 
 # ステータス（公開前）
 msgid "Reserved"
@@ -380,6 +376,9 @@ msgstr "回覧を投稿できる権限"
 msgid "Select user"
 msgstr "回覧先を選択してください。"
 
+msgid "Please input between circular period."
+msgstr "回覧期間の範囲内で入力してください。"
+
 #: Plugins/CircularNotices/View/Elements/CircularNotices/delete_form.ctp:
 msgid "Circulation"
 msgstr "回覧"
@@ -391,6 +390,14 @@ msgstr "個別に選択"
 msgid "Circulation Destination User Selection"
 msgstr "回覧先ユーザ選択"
 
+msgid "Answer separator"
+msgstr "、"
+
+msgid "Division bar"
+msgstr "/"
+
+msgid "Not Date Set"
+msgstr "--:--"
 
 # メール関連
 msgid "MailSetting.mail_fixed_phrase_body.popover"

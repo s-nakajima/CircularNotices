@@ -26,78 +26,65 @@
 	);
 ?>
 
-<div class="nc-content-list">
+<article class="index">
+	<h1><?php echo $listTitle; ?></h1>
 
-	<?php if (Current::permission('content_creatable')) : ?>
-		<div class="clearfix">
-			<div class="pull-right">
-				<span class="nc-tooltip" tooltip="<?php echo h(__d('net_commons', 'Add')); ?>">
-					<?php
-					$addUrl = array(
-						'controller' => 'circular_notices',
-						'action' => 'add',
-						'frame_id' => Current::read('Frame.id')
-					);
-					echo $this->Button->addLink('',
-						$addUrl,
-						array('tooltip' => __d('net_commons', 'Add')));
-					?>
-
-				</span>
-			</div>
+	<div class="clearfix circular-notices-navigation-header">
+		<div class="pull-right">
+			<?php
+			$addUrl = array(
+				'controller' => 'circular_notices',
+				'action' => 'add',
+				'frame_id' => Current::read('Frame.id')
+			);
+			echo $this->Button->addLink('',
+				$addUrl,
+				array('tooltip' => __d('net_commons', 'Add')));
+			?>
 		</div>
-
-		<hr class="circular-notice-spacer" />
-	<?php endif; ?>
-
-	<div class="clearfix">
 		<div class="pull-left">
-				<?php echo $this->element('CircularNotices/select_status'); ?>
-				<?php echo $this->element('CircularNotices/select_sort'); ?>
-				<?php echo $this->element('CircularNotices/select_limit'); ?>
+			<?php echo $this->element('CircularNotices/select_status'); ?>
+			<?php echo $this->element('CircularNotices/select_sort'); ?>
+			<?php echo $this->element('CircularNotices/select_limit'); ?>
 		</div>
 	</div>
 
-	<hr />
+	<div class="nc-content-list">
+		<?php if ($circularNoticeContents) : ?>
+			<?php foreach ($circularNoticeContents as $circularNoticeContent) : ?>
+				<article class="circular-notices">
+					<!-- ステータス -->
+					<div>
+						<?php echo $this->element('CircularNotices/status_label', array('circularNoticeContent' => $circularNoticeContent['CircularNoticeContent'])); ?>
+					</div>
+					<!-- タイトル -->
+					<h2>
+						<?php echo $this->TitleIcon->titleIcon($circularNoticeContent['CircularNoticeContent']['title_icon']); ?>
+						<?php if (
+							($circularNoticeContent['CircularNoticeContent']['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT
+								|| $circularNoticeContent['CircularNoticeContent']['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED)
+							&& $circularNoticeContent['CircularNoticeContent']['created_user'] != Current::read('User.id')
+						) : ?>
+							<?php echo $circularNoticeContent['CircularNoticeContent']['subject']; ?><br />
+						<?php else : ?>
+							<?php echo $this->NetCommonsHtml->link(
+								$circularNoticeContent['CircularNoticeContent']['subject'],
+								array(
+									'controller' => 'circular_notices',
+									'action' => 'view',
+									'key' => $circularNoticeContent['CircularNoticeContent']['key']
+								)
+							);
+							?>
+						<?php endif; ?>
+					</h2>
 
-	<?php if ($circularNoticeContents) : ?>
-		<?php foreach ($circularNoticeContents as $circularNoticeContent) : ?>
-			<div class="panel panel-default">
-				<div class="panel-body">
-					<div class="clearfix">
-						<div class="pull-left circular-notice-index-status-label">
-							<?php echo $this->element('CircularNotices/status_label', array('circularNoticeContent' => $circularNoticeContent['CircularNoticeContent'])); ?>
-						</div>
-						<div class="pull-left">
-							<?php echo $this->TitleIcon->titleIcon($circularNoticeContent['CircularNoticeContent']['title_icon']); ?>
-							<?php if (
-								($circularNoticeContent['CircularNoticeContent']['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT
-									|| $circularNoticeContent['CircularNoticeContent']['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED)
-									&& $circularNoticeContent['CircularNoticeContent']['created_user'] != Current::read('User.id')
-							) : ?>
-								<?php echo h($circularNoticeContent['CircularNoticeContent']['subject']); ?><br />
-							<?php else : ?>
-								<?php echo $this->NetCommonsHtml->link(
-									$circularNoticeContent['CircularNoticeContent']['subject'],
-									array(
-										'controller' => 'circular_notices',
-										'action' => 'view',
-										'key' => $circularNoticeContent['CircularNoticeContent']['key']
-									)
-								);
-								?>
-							<?php endif; ?>
-							<div>
-								<?php echo h(__d('circular_notices', 'Circular Content Period Title')); ?>
-								<?php echo $this->Date->dateFormat($circularNoticeContent['CircularNoticeContent']['publish_start']); ?>
-								<?php echo __d('circular_notices', 'Till'); ?>
-								<?php echo $this->Date->dateFormat($circularNoticeContent['CircularNoticeContent']['publish_end']); ?>
-							</div>
-						</div>
-						<!-- 編集リンク -->
-						<?php if (Current::permission('content_creatable') && $circularNoticeContent['CircularNoticeContent']['created_user'] == Current::read('User.id')) : ?>
-							<div class="pull-right" style="margin: 6px 0;">
-									<span class="nc-tooltip" tooltip="<?php echo h(__d('net_commons', 'Edit')); ?>">
+					<div>
+						<div class="well well-sm">
+							<!-- 編集リンク -->
+							<?php if (Current::permission('content_creatable') && $circularNoticeContent['CircularNoticeContent']['created_user'] == Current::read('User.id')) : ?>
+								<div class="pull-right circular-notice-edit-link">
+									<span class="nc-tooltip" tooltip="<?php echo __d('net_commons', 'Edit'); ?>">
 										<?php echo $this->LinkButton->edit('',
 											array(
 												'controller' => 'circular_notices',
@@ -107,28 +94,57 @@
 										);
 										?>
 									</span>
+								</div>
+							<?php endif; ?>
+							<!-- 閲覧状況・回答状況 -->
+							<div class="pull-right circular-notice-answer-status">
+								<small>
+									<?php echo __d('circular_notices', 'Read Count Title'); ?>
+									<span class="circular-notices-answer-count-molecule">
+										<?php echo $circularNoticeContent['read_count']; ?>
+									</span>
+									<?php echo __d('circular_notices', 'Division bar'); ?>
+									<span>
+										<?php echo $circularNoticeContent['target_count']; ?>
+									</span>
+									<br />
+									<?php echo __d('circular_notices', 'Reply Count Title'); ?>
+									<span class="circular-notices-answer-count-molecule">
+										<?php echo $circularNoticeContent['reply_count']; ?>
+									</span>
+									<?php echo __d('circular_notices', 'Division bar'); ?>
+									<span>
+										<?php echo $circularNoticeContent['target_count']; ?>
+									</span>
+								</small>
 							</div>
-						<?php endif; ?>
-						<!-- 閲覧状況・回答状況 -->
-						<div class="pull-right" style="margin: 0 16px;">
-							<small>
-								<?php echo h(__d('circular_notices', 'Read Count Title') . ' ' . h($circularNoticeContent['read_count'])); ?>
-								/
-								<?php echo h($circularNoticeContent['target_count']); ?><br />
-								<?php echo h(__d('circular_notices', 'Reply Count Title') . ' ' . h($circularNoticeContent['reply_count'])); ?>
-								/
-								<?php echo h($circularNoticeContent['target_count']); ?>
-							</small>
+
+							<!-- 回覧期間 -->
+							<div class="circular-notice-attr-font">
+								<div class="circular-notice-publish-period">
+									<?php echo __d('circular_notices', 'Circular Content Period Title'); ?>
+									<?php echo $this->Date->dateFormat($circularNoticeContent['CircularNoticeContent']['publish_start']); ?>
+									<?php echo __d('circular_notices', 'Till'); ?>
+									<?php echo $this->Date->dateFormat($circularNoticeContent['CircularNoticeContent']['publish_end']); ?>
+								</div>
+
+								<!-- 作成者 -->
+								<div class="circular-notice-created-user">
+									<?php echo __d('circular_notices', 'Created User Title'); ?>
+									<?php echo $this->NetCommonsHtml->handleLink($circularNoticeContent, array('avatar' => true)); ?>&nbsp;
+								</div>
+							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		<?php endforeach; ?>
+				</article>
+			<?php endforeach; ?>
 
-		<?php echo $this->element('NetCommons.paginator'); ?>
+			<?php echo $this->element('NetCommons.paginator'); ?>
 
-	<?php else : ?>
-		<?php echo h(__d('circular_notices', 'Circular Content Data Not Found')); ?>
-	<?php endif; ?>
-
-</div>
+		<?php else : ?>
+			<p>
+				<?php echo __d('circular_notices', 'Circular Content Data Not Found'); ?>
+			</p>
+		<?php endif; ?>
+	</div>
+</article>

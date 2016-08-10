@@ -22,13 +22,18 @@ $curretDirection = isset($this->Paginator->params['named']['direction']) ? $this
 
 $options = array(
 	'CircularNoticeContent.modified.desc' => array(
-		'label' => __d('circular_notices', 'Change Sort Order to New Arrival'),
+		'label' => __d('net_commons', 'Newest'),
 		'sort' => 'CircularNoticeContent.modified',
 		'direction' => 'desc'
 	),
-	'CircularNoticeContent.modified.asc' => array(
-		'label' => __d('circular_notices', 'Change Sort Order to Old Arrival'),
-		'sort' => 'CircularNoticeContent.modified',
+	'CircularNoticeContent.created.asc' => array(
+		'label' => __d('net_commons', 'Oldest'),
+		'sort' => 'CircularNoticeContent.created',
+		'direction' => 'asc'
+	),
+	'CircularNoticeContent.subject.asc' => array(
+		'label' => __d('net_commons', 'Title'),
+		'sort' => 'CircularNoticeContent.subject',
 		'direction' => 'asc'
 	),
 	'CircularNoticeContent.reply_deadline.desc' => array(
@@ -39,7 +44,7 @@ $options = array(
 );
 ?>
 
-<div class="btn-group circular-notice-index-pull-down-margin">
+<div class="btn-group">
 	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 		<?php echo h($options[$curretSort . '.' . $curretDirection]['label']); ?>
 		<span class="caret"></span>

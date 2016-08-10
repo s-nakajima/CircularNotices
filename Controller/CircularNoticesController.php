@@ -138,10 +138,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 			// ログイン者の回答を取得して整形
 			$myTargetUser = array('CircularNoticeTargetUser' => $content['MyCircularNoticeTargetUser']);
-			$myTargetUser['CircularNoticeTargetUser']['origin_reply_text_value'] =
-				$myTargetUser['CircularNoticeTargetUser']['reply_text_value'];
-			$myTargetUser['CircularNoticeTargetUser']['origin_reply_selection_value'] =
-				$myTargetUser['CircularNoticeTargetUser']['reply_selection_value'];
 		}
 
 		// 回覧の閲覧件数／回答件数を取得
@@ -205,7 +201,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 		$results = Hash::merge(
 			$counts,
-			['myAnswer' => $myTargetUser, /*'CircularNoticeTargetUsers' => $targetUsers,*/
+			['myAnswer' => $myTargetUser,
 				'answersSummary' => $answersSummary]
 		);
 		$this->set('circularNoticeContent', $content['CircularNoticeContent']);
