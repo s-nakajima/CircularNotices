@@ -307,7 +307,7 @@
 						$answer = null;
 						switch ($circularNoticeContent['reply_type']) {
 							case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT:
-								$answer = $circularNoticeTargetUser['CircularNoticeTargetUser']['reply_text_value'];
+								$answer = nl2br(h($circularNoticeTargetUser['CircularNoticeTargetUser']['reply_text_value']));
 								break;
 							case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION:
 							case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION:
