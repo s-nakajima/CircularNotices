@@ -58,6 +58,16 @@
 					<?php echo __d('circular_notices', 'Till'); ?>
 					<?php echo $this->Date->dateFormat($circularNoticeContent['publish_end']); ?><br />
 				</div>
+				<div class="circular-notice-answer-deadline">
+					<?php echo __d('circular_notices', 'Circular Content Deadline Title'); ?>
+					<?php 
+						$replyDeadline = __d('circular_notices', 'Not Date Set');
+						if (!empty($circularNoticeContent['reply_deadline'])):
+							$replyDeadline = $this->Date->dateFormat($circularNoticeContent['reply_deadline']);
+						endif;
+						echo $replyDeadline;
+					?>
+				</div>
 				<div class="circular-notice-created-user">
 					<?php echo __d('circular_notices', 'Created User Title'); ?>
 					<?php echo $this->NetCommonsHtml->handleLink(array('User' => Current::read('User')), array('avatar' => true), array(), 'User'); ?><br />

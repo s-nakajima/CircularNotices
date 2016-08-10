@@ -168,6 +168,10 @@ msgstr "閲覧状況："
 msgid "Reply Count Title"
 msgstr "回答状況："
 
+# 回覧詳細画面で使用
+msgid "Circular Content Deadline Title"
+msgstr "回答期限："
+
 # ステータス（公開前）
 msgid "Reserved"
 msgstr "公開前"
@@ -392,6 +396,9 @@ msgstr "、"
 
 msgid "Division bar"
 msgstr "/"
+
+msgid "Not Date Set"
+msgstr "--:--"
 
 # メール関連
 msgid "MailSetting.mail_fixed_phrase_body.popover"
