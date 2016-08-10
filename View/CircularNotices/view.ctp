@@ -159,11 +159,11 @@
 									break;
 								case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION:
 									$selections = array();
-									$selectedValue = '';
+									$selected = '';
 									foreach ($circularNoticeChoice as $choice) :
 										$selections[$choice['id']] = $choice['value'];
 										if ($choice['id'] === $myAnswer['CircularNoticeTargetUser']['reply_selection_value']) :
-											$selectedValue = $choice['value'];
+											$selected = $choice['id'];
 										endif;
 									endforeach;
 									echo $this->NetCommonsForm->input('CircularNoticeTargetUser.reply_selection_value', array(
@@ -171,28 +171,28 @@
 										'type' => 'radio',
 										'legend' => false,
 										'label' => false,
-										'value' => $selectedValue,
+										'value' => $selected,
 										'options' => $selections,
 									));
 									break;
 								case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION:
 									$selections = array();
 									$selected = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $myAnswer['CircularNoticeTargetUser']['reply_selection_value']);
-									$selectedValueArr = array();
+									$selectedValue = array();
 									foreach ($circularNoticeChoice as $choices) :
 										$selections[$choices['id']] = $choices['value'];
 										if (in_array($choices['id'], $selected, true)) :
-											$selectedValueArr[] = $choices['value'];
+											$selectedValue[] = $choices['value'];
 										endif;
 									endforeach;
 									$selected = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $myAnswer['CircularNoticeTargetUser']['reply_selection_value']);
-									echo $this->NetCommonsForm->input('CircularNoticeTargetUser.reply_selection_value', array(
+									echo $this->Form->input('CircularNoticeTargetUser.reply_selection_value', array(
 										'div' => false,
 										'type' => 'select',
 										'legend' => true,
 										'label' => false,
 										'multiple' => 'checkbox',
-										'selected' => $selectedValueArr,
+										'selected' => $selected,
 										'options' => $selections,
 										'class' => 'form-input',
 									));
@@ -256,19 +256,6 @@
 					<?php echo $this->element('CircularNotices/view_select_limit'); ?>
 				</div>
 				<div class="pull-right">
-					<span class="nc-tooltip" tooltip="<?php echo __d('circular_notices', 'Download'); ?>">
-						<button type="button" class="btn btn-success"
-							onclick="location.href='<?php echo $this->NetCommonsHtml->url(array(
-								'plugin' => 'circular_notices',
-								'controller' => 'circular_notices',
-								'action' => 'download',
-								'block_id' => Current::read('Block.id'),
-								'key' => $circularNoticeContent['key'],
-								'frame_id' => Current::read('Frame.id'))); ?>'">
-							<span class="glyphicon glyphicon-download">
-								<?php echo __d('circular_notices', 'Other Users Csv'); ?>
-							</span>
-						</button>
 					<span class="nc-tooltip" tooltip="<?php echo h(__d('circular_notices', 'Download')); ?>">
 						<?php echo $this->AuthKeyPopupButton->popupButton(
 							array(
