@@ -242,18 +242,22 @@
 				</div>
 				<div class="pull-right">
 					<span class="nc-tooltip" tooltip="<?php echo h(__d('circular_notices', 'Download')); ?>">
-						<button type="button" class="btn btn-success"
-							onclick="location.href='<?php echo $this->NetCommonsHtml->url(array(
-								'plugin' => 'circular_notices',
-								'controller' => 'circular_notices',
-								'action' => 'download',
-								'block_id' => Current::read('Block.id'),
-								'key' => $circularNoticeContent['key'],
-								'frame_id' => Current::read('Frame.id'))); ?>'">
-							<span class="glyphicon glyphicon-download">
-								<?php echo h(__d('circular_notices', 'Other Users Csv')); ?>
-							</span>
-						</button>
+						<?php echo $this->AuthKeyPopupButton->popupButton(
+							array(
+								'url' => NetCommonsUrl::actionUrl(array(
+									'plugin' => 'circular_notices',
+									'controller' => 'circular_notices',
+									'action' => 'download',
+									'block_id' => Current::read('Block.id'),
+									'key' => $circularNoticeContent['key'],
+									'frame_id' => Current::read('Frame.id'),
+								)),
+								'label' => h(__d('circular_notices', 'Other Users Csv')),
+								'popup-title' => __d('authorization_keys', 'Compression password'),
+								'popup-label' => __d('authorization_keys', 'Compression password'),
+								'popup-placeholder' => __d('authorization_keys', 'please input compression password'),
+							)
+						)?>
 					</span>
 				</div>
 			</div>

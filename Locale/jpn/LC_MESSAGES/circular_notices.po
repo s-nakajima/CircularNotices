@@ -327,6 +327,10 @@ msgstr "回覧先と回答を閉じる"
 msgid "Other Users Csv"
 msgstr "回覧先CSV"
 
+# 参照画面で使用
+msgid "Setting of password is required always to download answers."
+msgstr "回答データをダウンロードする場合は必ず圧縮パスワードの設定が必要です。"
+
 # 設定画面で使用
 msgid "Privilege Setting"
 msgstr "権限設定"

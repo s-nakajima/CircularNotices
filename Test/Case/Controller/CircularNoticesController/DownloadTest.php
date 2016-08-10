@@ -70,6 +70,26 @@ class CircularNoticesControllerDownloadTest extends NetCommonsControllerTestCase
 	}
 
 /**
+ * テストDataの取得
+ *
+ * @return array
+ */
+	private function __getRequestData() {
+		return array(
+			'success' => array(
+				'AuthorizationKey' => array(
+					'authorization_key' => 'netcommons'
+				)
+			),
+			'empty' => array(
+				'AuthorizationKey' => array(
+					'authorization_key' => ''
+				)
+			),
+		);
+	}
+
+/**
  * downloadアクションのテスト(作成権限のみ)用DataProvider
  *
  * ### 戻り値
@@ -82,28 +102,34 @@ class CircularNoticesControllerDownloadTest extends NetCommonsControllerTestCase
  */
 	public function dataProviderDownload() {
 		$data = $this->__getData();
+		$requestData = $this->__getRequestData();
 
 		//テストデータ
 		$results = array();
 
 		$results[0] = array(
 			'urlOptions' => Hash::insert($data, 'frame_id', ''),
+			'data' => $requestData['success'],
 			'assert' => null,
 		);
 		$results[1] = array(
 			'urlOptions' => Hash::insert($data, 'key', 'circular_notice_content_1'),
+			'data' => $requestData['success'],
 			'assert' => null,
 		);
 		$results[2] = array(
 			'urlOptions' => Hash::insert($data, 'key', 'circular_notice_content_2'),
+			'data' => $requestData['success'],
 			'assert' => null,
 		);
 		$results[3] = array(
 			'urlOptions' => Hash::insert($data, 'key', 'circular_notice_content_3'),
+			'data' => $requestData['success'],
 			'assert' => null,
 		);
 		$results[4] = array(
 			'urlOptions' => Hash::insert($data, 'key', 'circular_notice_content_4'),
+			'data' => $requestData['success'],
 			'assert' => null,
 		);
 
@@ -125,10 +151,17 @@ class CircularNoticesControllerDownloadTest extends NetCommonsControllerTestCase
  */
 	public function dataProviderDownloadExceptionError() {
 		$data = $this->__getData();
+		$requestData = $this->__getRequestData();
 
 		$results = array();
 		$results[0] = array(
 			'urlOptions' => Hash::insert($data, 'key', '9999'),
+			'data' => $requestData['success'],
+			'assert' => null,
+		);
+		$results[1] = array(
+			'urlOptions' => Hash::insert($data, 'frame_id', ''),
+			'data' => $requestData['empty'],
 			'assert' => null,
 		);
 
@@ -139,13 +172,14 @@ class CircularNoticesControllerDownloadTest extends NetCommonsControllerTestCase
  * downloadアクションのテスト(作成権限のみ)
  *
  * @param array $urlOptions URLオプション
+ * @param array $data リクエストパラメータ
  * @param array $assert テストの期待値
  * @param string|null $exception Exception
  * @param string $return testActionの実行後の結果
  * @dataProvider dataProviderDownload
  * @return void
  */
-	public function testDownload($urlOptions, $assert, $exception = null, $return = 'view') {
+	public function testDownload($urlOptions, $data, $assert, $exception = null, $return = 'view') {
 		//ログイン
 		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_GENERAL_USER);
 
@@ -155,6 +189,7 @@ class CircularNoticesControllerDownloadTest extends NetCommonsControllerTestCase
 			$urlOptions
 		);
 		$this->controller->request->params['key'] = $urlOptions['key'];
+		$this->controller->request->data = $data;
 		Current::initialize($this->controller);
 		$id = empty($urlOptions['frame_id']) ? '5' : $urlOptions['frame_id'];
 		Current::write('Frame', [
@@ -163,7 +198,7 @@ class CircularNoticesControllerDownloadTest extends NetCommonsControllerTestCase
 		]);
 		$response = $this->controller->download();
 		$this->assertInstanceOf('CakeResponse', $response);
-		$this->assertEquals('text/csv', $response->type());
+		$this->assertEquals('application/zip', $response->type());
 		$this->assertEquals($assert, $response->body());
 
 		//ログアウト
@@ -175,13 +210,14 @@ class CircularNoticesControllerDownloadTest extends NetCommonsControllerTestCase
  * downloadのテスト(ExceptionError)
  *
  * @param array $urlOptions URLオプション
+ * @param array $data リクエストパラメータ
  * @param array $assert テストの期待値
  * @param string|null $exception Exception
  * @param string $return testActionの実行後の結果
  * @dataProvider dataProviderDownloadExceptionError
  * @return void
  */
-	public function testDownloadExceptionError($urlOptions, $assert, $exception = null, $return = 'view') {
+	public function testDownloadExceptionError($urlOptions, $data, $assert, $exception = null, $return = 'view') {
 		//ログイン
 		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_GENERAL_USER);
 
@@ -192,7 +228,7 @@ class CircularNoticesControllerDownloadTest extends NetCommonsControllerTestCase
 			'controller' => $this->_controller,
 			'action' => 'download',
 		), $urlOptions);
-		$this->_testGetAction($url, $assert, $exception, $return);
+		$this->_testPostAction('post', $data, $url, $exception, $return);
 
 		//チェック
 		$this->asserts($assert, $this->contents);
