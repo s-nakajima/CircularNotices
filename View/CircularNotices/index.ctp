@@ -142,7 +142,7 @@
 			<?php echo $this->element('NetCommons.paginator'); ?>
 
 		<?php else : ?>
-			<p>
+			<p class="nc-not-found">
 				<?php echo __d('circular_notices', 'Circular Content Data Not Found'); ?>
 			</p>
 		<?php endif; ?>
