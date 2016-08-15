@@ -128,7 +128,13 @@
 				<?php echo $this->NetCommonsForm->create('CircularNoticeTargetUser', array(
 					'name' => 'form',
 					'novalidate' => true,
-				)); ?>
+					'type' => 'post',
+					'url' => $this->NetCommonsHtml->url(array(
+						'controller' => 'circular_notices_answer',
+						'action' => 'edit',
+						'key' => $circularNoticeContent['key'],
+					))
+					)); ?>
 				<?php echo $this->NetCommonsForm->hidden('CircularNoticeContent.key', array(
 					'value' => $circularNoticeContent['key'],
 				)); ?>

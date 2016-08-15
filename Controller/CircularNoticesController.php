@@ -60,6 +60,8 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @return void
  */
 	public function beforeFilter() {
+		$this->CircularNotice->setCircularNoticeErrors($this);
+		$this->CircularNotice->setCircularNoticeDatas($this);
 		parent::beforeFilter();
 	}
 
@@ -151,51 +153,28 @@ class CircularNoticesController extends CircularNoticesAppController {
 		// 回答を集計
 		$answersSummary = $this->CircularNoticeContent->getAnswerSummary($contentId);
 
-		// 回答の登録／更新
-		if ($this->request->is(array('post', 'put'))) {
-
+		// 回答エラー時は入力値を保持
+		if (isset($this->viewVars['circularNoticeDatas'])) {
+			$inputData = $this->viewVars['circularNoticeDatas'];
 			$replyTextValue = '';
 			$replySelectionValue = '';
 			if ($content['CircularNoticeContent']['reply_type'] ==
 				CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT) {
-				$replyTextValue = $this->data['CircularNoticeTargetUser']['reply_text_value'];
+				$replyTextValue = $inputData['CircularNoticeTargetUser']['reply_text_value'];
 			} elseif ($content['CircularNoticeContent']['reply_type'] ==
 				CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION) {
-				$replySelectionValue = $this->data['CircularNoticeTargetUser']['reply_selection_value'];
+				$replySelectionValue = $inputData['CircularNoticeTargetUser']['reply_selection_value'];
 			} elseif ($content['CircularNoticeContent']['reply_type'] ==
 				CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION) {
-				if ($this->data['CircularNoticeTargetUser']['reply_selection_value']) {
+				if (is_array($inputData['CircularNoticeTargetUser']['reply_selection_value'])) {
 					$replySelectionValue = implode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER,
-						$this->data['CircularNoticeTargetUser']['reply_selection_value']);
+						$inputData['CircularNoticeTargetUser']['reply_selection_value']);
 				}
 			}
-
-			$data = Hash::merge(
-				$this->data,
-				['CircularNoticeTargetUser' => ['is_reply' => true, 'reply_datetime' => date('Y-m-d H:i:s'),
-					'reply_text_value' => $replyTextValue, 'reply_selection_value' => $replySelectionValue]]
-			);
-
-			if ($this->CircularNoticeTargetUser->saveCircularNoticeTargetUser($data)) {
-				//新着データを回答済みにする
-				$this->CircularNoticeContent->saveTopicUserStatus($content, true);
-
-				$url = NetCommonsUrl::actionUrl(array(
-					'controller' => $this->params['controller'],
-					'action' => 'view',
-					'block_id' => Current::read('Block.id'),
-					'frame_id' => Current::read('Frame.id'),
-					'key' => $this->request->data['CircularNoticeContent']['key']
-				));
-				$this->redirect($url);
-				return;
-			}
-			$this->NetCommons->handleValidationError($this->CircularNoticeTargetUser->validationErrors);
-
 			$myTargetUser['CircularNoticeTargetUser']['reply_text_value'] = $replyTextValue;
 			$myTargetUser['CircularNoticeTargetUser']['reply_selection_value'] = $replySelectionValue;
 		} else {
-			//新着データを既読にする
+			// 新着データを既読にする
 			$this->CircularNoticeContent->saveTopicUserStatus($content);
 		}
 

@@ -25,7 +25,8 @@ class TestCircularNoticeComponentController extends AppController {
  * @var array
  */
 	public $components = array(
-		'CircularNotices.CircularNotice'
+		'CircularNotices.CircularNotice',
+		'Session',
 	);
 
 /**

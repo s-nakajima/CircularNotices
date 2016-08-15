@@ -167,4 +167,35 @@ class CircularNoticeComponent extends Component {
 			}
 		}
 	}
+
+/**
+ * エラー内容を保持
+ * 
+ * @param Controller $controller コントローラー
+ * @return void
+ */
+	public function setCircularNoticeErrors(Controller $controller) {
+		if ($controller->Session->read('circularNoticeErrors')) {
+			foreach ($controller->Session->read('circularNoticeErrors') as $model => $errors) {
+				if (! $controller->$model) {
+					$controller->loadModel($model);
+				}
+				$controller->$model->validationErrors = $errors;
+			}
+			$controller->Session->delete('circularNoticeErrors');
+		}
+	}
+
+/**
+ * データを保持
+ *
+ * @param Controller $controller コントローラー
+ * @return void
+ */
+	public function setCircularNoticeDatas(Controller $controller) {
+		if ($controller->Session->read('circularNoticeDatas')) {
+			$controller->set('circularNoticeDatas', $controller->Session->read('circularNoticeDatas'));
+			$controller->Session->delete('circularNoticeDatas');
+		}
+	}
 }
