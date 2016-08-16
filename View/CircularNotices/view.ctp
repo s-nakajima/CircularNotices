@@ -122,8 +122,8 @@
 		<?php endif; ?>
 
 		<?php if (
-			$circularNoticeContent['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN &&
-			isset($myAnswer['CircularNoticeTargetUser']['user_status'])
+			$circularNoticeContent['content_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN &&
+			isset($myAnswer['CircularNoticeTargetUser']['reply_status'])
 		) : ?>
 
 			<div>

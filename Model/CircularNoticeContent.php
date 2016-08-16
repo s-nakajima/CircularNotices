@@ -247,7 +247,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 
 		$now = date('Y-m-d H:i:s');
 
-		$this->virtualFields['current_status'] =
+		$this->virtualFields['content_status'] =
 			'CASE WHEN ' . $this->alias . '.status = \'' .
 				CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT . '\' THEN ' .
 				'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT . '\' ' .
@@ -298,37 +298,39 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 	public function getCircularNoticeContentsForPaginate($blockKey, $userId, $paginatorParams,
 														$defaultLimit) {
 		$this->__bindMyCircularNoticeTargetUser($userId, false);
-		$this->virtualFields['user_status'] =
-			$this->MyCircularNoticeTargetUser->virtualFields['user_status'];
+		$this->virtualFields['reply_status'] =
+			$this->MyCircularNoticeTargetUser->virtualFields['reply_status'];
 
 		$conditions = array(
 			'CircularNoticeContent.circular_notice_setting_key' => $blockKey,
 			'OR' => array(
 				'CircularNoticeContent.created_user' => $userId,
 				array(
-					'NOT' => array('CircularNoticeContent.user_status' => null),
+					'NOT' => array('CircularNoticeContent.reply_status' => null),
 					'OR' => array(
-						array('CircularNoticeContent.current_status' =>
+						array('CircularNoticeContent.content_status' =>
 							CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN),
-						array('CircularNoticeContent.current_status' =>
+						array('CircularNoticeContent.content_status' =>
 							CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED),
 					)
 				)
 			),
 		);
 
-		if (isset($paginatorParams['status'])) {
-			if ($paginatorParams['status'] ==
-					CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD ||
-				$paginatorParams['status'] ==
-					CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_READ_YET ||
-				$paginatorParams['status'] ==
-					CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_REPLIED
-			) {
-				$conditions['CircularNoticeContent.user_status'] = (int)$paginatorParams['status'];
+		if (isset($paginatorParams['reply_status'])) {
+			// 未回答の場合
+			if ($paginatorParams['reply_status'] ==
+					CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_NOT_REPLIED) {
+				$conditions['CircularNoticeContent.reply_status'] = array(
+					CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD,
+					CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_READ_YET
+				);
 			} else {
-				$conditions['CircularNoticeContent.current_status'] = (int)$paginatorParams['status'];
+				$conditions['CircularNoticeContent.reply_status'] = (int)$paginatorParams['reply_status'];
 			}
+		}
+		if (isset($paginatorParams['content_status'])) {
+			$conditions['CircularNoticeContent.content_status'] = (int)$paginatorParams['content_status'];
 		}
 
 		$order = array('CircularNoticeContent.modified' => 'desc');

@@ -45,7 +45,8 @@
 			</div>
 		<?php endif; ?>
 		<div class="pull-left">
-			<?php echo $this->element('CircularNotices/select_status'); ?>
+			<?php echo $this->element('CircularNotices/select_content_status'); ?>
+			<?php echo $this->element('CircularNotices/select_reply_status'); ?>
 			<?php echo $this->element('CircularNotices/select_sort'); ?>
 			<?php echo $this->element('CircularNotices/select_limit'); ?>
 		</div>
@@ -63,8 +64,8 @@
 					<h2>
 						<?php echo $this->TitleIcon->titleIcon($circularNoticeContent['CircularNoticeContent']['title_icon']); ?>
 						<?php if (
-							($circularNoticeContent['CircularNoticeContent']['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT
-								|| $circularNoticeContent['CircularNoticeContent']['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED)
+							($circularNoticeContent['CircularNoticeContent']['content_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT
+								|| $circularNoticeContent['CircularNoticeContent']['content_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED)
 							&& $circularNoticeContent['CircularNoticeContent']['created_user'] != Current::read('User.id')
 						) : ?>
 							<?php echo $circularNoticeContent['CircularNoticeContent']['subject']; ?><br />

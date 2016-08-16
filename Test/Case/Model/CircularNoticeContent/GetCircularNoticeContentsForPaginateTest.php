@@ -54,6 +54,79 @@ class CircularNoticeContentGetCircularNoticeContentsForPaginateTest extends NetC
 	protected $_methodName = 'getCircularNoticeContentsForPaginate';
 
 /**
+ * testPaginatorParamsCheckのDataProvider
+ *
+ * ### 戻り値
+ *  - blockKey CircularNoticeContentのblock_key
+ *  - user_id ユーザID
+ *  - paginatorParams paginatorで使用するパラメータ
+ *  - defaultLimit データ取得件数のデフォルト値
+ *
+ * @return array
+ */
+	public function dataProviderPaginatorParamsCheck() {
+		return array(
+			array(
+				'blockKey' => null,
+				'userId' => null,
+				'paginatorParams' => array(
+					'reply_status' => 10,
+				),
+				'defaultLimit' => null,
+			),
+			array(
+				'blockKey' => null,
+				'userId' => null,
+				'paginatorParams' => array(
+					'reply_status' => 11,
+				),
+				'defaultLimit' => null,
+			),
+			array(
+				'blockKey' => null,
+				'userId' => null,
+				'paginatorParams' => array(
+					'reply_status' => 12,
+				),
+				'defaultLimit' => null,
+			),
+			array(
+				'blockKey' => null,
+				'userId' => null,
+				'paginatorParams' => array(
+					'reply_status' => 13,
+				),
+				'defaultLimit' => null,
+			),
+			array(
+				'blockKey' => null,
+				'userId' => null,
+				'paginatorParams' => array(
+					'content_status' => 2,
+				),
+				'defaultLimit' => null,
+			),
+			array(
+				'blockKey' => null,
+				'userId' => null,
+				'paginatorParams' => array(
+					'sort' => 'CircularNoticeContent.subject',
+					'direction' => 'desc',
+				),
+				'defaultLimit' => null,
+			),
+			array(
+				'blockKey' => null,
+				'userId' => null,
+				'paginatorParams' => array(
+					'limit' => '5',
+				),
+				'defaultLimit' => null,
+			),
+		);
+	}
+
+/**
  * getCircularNoticeContentsForPaginate()のテスト
  *
  * @return void
@@ -78,79 +151,21 @@ class CircularNoticeContentGetCircularNoticeContentsForPaginateTest extends NetC
 /**
  * PaginatorParams()のCheckテスト
  *
+ * @param $blockKey
+ * @param $userId
+ * @param $paginatorParams
+ * @param $defaultLimit
+ * @dataProvider dataProviderPaginatorParamsCheck
  * @return void
  */
-	public function testPaginatorParamsCheck() {
+	public function testPaginatorParamsCheck($blockKey, $userId, $paginatorParams, $defaultLimit) {
 		$model = $this->_modelName;
 		$methodName = $this->_methodName;
 
-		//データ生成
-		$blockKey = null;
-		$userId = null;
-		$paginatorParams = array(
-				'status' => 10
-		);
-		$defaultLimit = null;
-
 		//テスト実施
 		$result = $this->$model->$methodName($blockKey, $userId, $paginatorParams, $defaultLimit);
 
-		//データ生成
-		$blockKey = null;
-		$userId = null;
-		$paginatorParams = array(
-				'status' => 11
-		);
-		$defaultLimit = null;
-
-		//テスト実施
-		$result = $this->$model->$methodName($blockKey, $userId, $paginatorParams, $defaultLimit);
-
-		//データ生成
-		$blockKey = null;
-		$userId = null;
-		$paginatorParams = array(
-				'status' => 12
-		);
-		$defaultLimit = null;
-
-		//テスト実施
-		$result = $this->$model->$methodName($blockKey, $userId, $paginatorParams, $defaultLimit);
-
-		//データ生成
-		$blockKey = null;
-		$userId = null;
-		$paginatorParams = array(
-				'status' => 2
-		);
-		$defaultLimit = null;
-
-		//テスト実施
-		$result = $this->$model->$methodName($blockKey, $userId, $paginatorParams, $defaultLimit);
-
-		//sort
-		//データ生成
-		$blockKey = null;
-		$userId = null;
-		$paginatorParams = array(
-			'sort' => 'asc',
-			'direction' => 'desc'
-		);
-		$defaultLimit = null;
-
-		//テスト実施
-		$result = $this->$model->$methodName($blockKey, $userId, $paginatorParams, $defaultLimit);
-
-		//limit
-		//データ生成
-		$blockKey = null;
-		$userId = null;
-		$paginatorParams = array(
-				'limit' => 5,
-		);
-		$defaultLimit = null;
-
-		//テスト実施
-		$result = $this->$model->$methodName($blockKey, $userId, $paginatorParams, $defaultLimit);
+		//チェック
+		$this->assertTrue(is_array($result));
 	}
 }

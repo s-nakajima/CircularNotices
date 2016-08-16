@@ -83,6 +83,13 @@ class CircularNoticeComponent extends Component {
 	const CIRCULAR_NOTICE_CONTENT_STATUS_REPLIED = '12';
 
 /**
+ * view status not replied
+ *
+ * @var string
+ */
+	const CIRCULAR_NOTICE_CONTENT_STATUS_NOT_REPLIED = '13';
+
+/**
  * reply by text
  *
  * @var string
