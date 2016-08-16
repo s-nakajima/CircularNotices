@@ -104,7 +104,7 @@ class CircularNoticesAnswerController extends CircularNoticesAppController {
 					$this->CircularNoticeTargetUser->validationErrors);
 				$this->Session->write('circularNoticeDatas', $this->request->data);
 			} else {
-				$message = __d('circular_notices', '回答しました。');
+				$message = __d('circular_notices', 'Answerd.');
 				$this->NetCommons->setFlashNotification(
 					$message, array('class' => 'success')
 				);
