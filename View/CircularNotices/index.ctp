@@ -30,18 +30,20 @@
 	<h1><?php echo $listTitle; ?></h1>
 
 	<div class="clearfix circular-notices-navigation-header">
-		<div class="pull-right">
-			<?php
-			$addUrl = array(
-				'controller' => 'circular_notices',
-				'action' => 'add',
-				'frame_id' => Current::read('Frame.id')
-			);
-			echo $this->Button->addLink('',
-				$addUrl,
-				array('tooltip' => __d('net_commons', 'Add')));
-			?>
-		</div>
+		<?php if (Current::permission('content_creatable')) : ?>
+			<div class="pull-right">
+				<?php
+				$addUrl = array(
+					'controller' => 'circular_notices',
+					'action' => 'add',
+					'frame_id' => Current::read('Frame.id')
+				);
+				echo $this->Button->addLink('',
+					$addUrl,
+					array('tooltip' => __d('net_commons', 'Add')));
+				?>
+			</div>
+		<?php endif; ?>
 		<div class="pull-left">
 			<?php echo $this->element('CircularNotices/select_status'); ?>
 			<?php echo $this->element('CircularNotices/select_sort'); ?>

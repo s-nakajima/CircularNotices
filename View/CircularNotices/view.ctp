@@ -29,18 +29,20 @@
 	<div class="pull-left">
 		<?php echo $this->element('CircularNotices/status_label', array('circularNoticeContent' => $circularNoticeContent)); ?>
 	</div>
-	<div class="pull-right">
-		<?php echo $this->Button->editLink('',
-			array(
-				'controller' => 'circular_notices',
-				'action' => 'edit',
-				'key' => $circularNoticeContent['key']
-			),
-			array(
-				'tooltip' => true,
-			)
-		); ?>
-	</div>
+	<?php if (Current::permission('content_creatable')) : ?>
+		<div class="pull-right">
+			<?php echo $this->Button->editLink('',
+				array(
+					'controller' => 'circular_notices',
+					'action' => 'edit',
+					'key' => $circularNoticeContent['key']
+				),
+				array(
+					'tooltip' => true,
+				)
+			); ?>
+		</div>
+	<?php endif; ?>
 </header>
 
 <article>

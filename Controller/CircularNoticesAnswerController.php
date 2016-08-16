@@ -38,7 +38,7 @@ class CircularNoticesAnswerController extends CircularNoticesAppController {
 		'NetCommons.Permission' => array(
 			//アクセスの権限
 			'allow' => array(
-				'edit' => 'content_creatable',
+				'edit' => 'content_readable',
 			),
 		),
 		'CircularNotices.CircularNotice',
