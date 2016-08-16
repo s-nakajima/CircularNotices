@@ -61,7 +61,7 @@
 						<?php echo $this->element('CircularNotices/status_label', array('circularNoticeContent' => $circularNoticeContent['CircularNoticeContent'])); ?>
 					</div>
 					<!-- タイトル -->
-					<h2>
+					<h2 class="circular-notices-word-break">
 						<?php echo $this->TitleIcon->titleIcon($circularNoticeContent['CircularNoticeContent']['title_icon']); ?>
 						<?php if (
 							($circularNoticeContent['CircularNoticeContent']['content_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT

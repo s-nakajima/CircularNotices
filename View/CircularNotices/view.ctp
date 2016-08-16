@@ -47,7 +47,7 @@
 
 <article>
 	<div id="nc-circular-notices-<?php echo (int)Current::read('Frame.id'); ?>" ng-controller="CircularNoticeView" ng-init="initialize()">
-		<div class="clearfix">
+		<div class="clearfix circular-notices-word-break">
 			<?php echo $this->NetCommonsHtml->blockTitle($circularNoticeContent['subject'],
 				$circularNoticeContent['title_icon']); ?>
 		</div>
@@ -97,7 +97,7 @@
 			</div>
 		</div>
 
-		<div class="circular-notices-content">
+		<div class="circular-notices-content circular-notices-word-break">
 			<p>
 				<?php echo $circularNoticeContent['content']; ?>
 			</p>
@@ -349,7 +349,7 @@
 							$this->NetCommonsHtml->handleLink($circularNoticeTargetUser, array('avatar' => true), array(), 'User'),
 							array($readDatetime, array('class' => 'row-datetime')),
 							array($replyDatetime, array('class' => 'row-datetime')),
-							array($answer, array('class' => 'circular-notices-reply-col')),
+							array($answer, array('class' => 'circular-notices-reply-col circular-notices-word-break')),
 						));
 					endforeach;
 				?>

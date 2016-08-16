@@ -74,5 +74,11 @@
 
 .table > thead > tr > th.circular-notices-reply-col,
 .table > tbody > tr > td.circular-notices-reply-col {
+	width: 30%;
     padding-left: 8%;
+}
+
+.circular-notices-word-break {
+	word-break: break-all;
+	word-wrap: break-word;
 }
