@@ -205,4 +205,36 @@ class CircularNoticeComponent extends Component {
 			$controller->Session->delete('circularNoticeDatas');
 		}
 	}
+
+/**
+ * コンテンツステータスの選択値存在チェック
+ *
+ * @param string $checkValue チェック対象値
+ * @return bool チェック結果（true:存在する, false:存在しない）
+ */
+	public function existsContentStatus($checkValue) {
+		$contentStatusArr = array(
+			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_PUBLISHED,
+			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT,
+			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED,
+			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN,
+			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED,
+			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_CLOSED,
+		);
+		return in_array($checkValue, $contentStatusArr, true);
+	}
+
+/**
+ * 回答状況の選択値存在チェック
+ *
+ * @param string $checkValue チェック対象値
+ * @return bool チェック結果（true:存在する, false:存在しない）
+ */
+	public function existsReplyStatus($checkValue) {
+		$contentStatusArr = array(
+			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_REPLIED,
+			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_NOT_REPLIED,
+		);
+		return in_array($checkValue, $contentStatusArr, true);
+	}
 }

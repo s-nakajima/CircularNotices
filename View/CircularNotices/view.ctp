@@ -260,7 +260,6 @@
 
 			<div class="clearfix">
 				<div class="pull-left">
-	<!--				--><?php //echo $this->element('CircularNotices/view_select_sort'); ?>
 					<?php echo $this->element('CircularNotices/view_select_limit'); ?>
 				</div>
 				<div class="pull-right">

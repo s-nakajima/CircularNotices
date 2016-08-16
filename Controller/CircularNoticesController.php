@@ -92,6 +92,52 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 		$this->initCircularNotice();
 
+		// コンテンツスタータスの絞り込み値チェック
+		if (isset($this->params['named']['content_status'])
+				&& ! $this->CircularNotice->existsContentStatus($this->params['named']['content_status'])) {
+			return $this->throwBadRequest();
+		}
+
+		// 回答状況の絞り込み値チェック
+		if (isset($this->params['named']['reply_status'])
+				&& ! $this->CircularNotice->existsReplyStatus($this->params['named']['reply_status'])) {
+			return $this->throwBadRequest();
+		}
+
+		// ソートの選択肢
+		$sortOptions = array(
+			'CircularNoticeContent.modified.desc' => array(
+				'label' => __d('net_commons', 'Newest'),
+				'sort' => 'CircularNoticeContent.modified',
+				'direction' => 'desc'
+			),
+			'CircularNoticeContent.created.asc' => array(
+				'label' => __d('net_commons', 'Oldest'),
+				'sort' => 'CircularNoticeContent.created',
+				'direction' => 'asc'
+			),
+			'CircularNoticeContent.subject.asc' => array(
+				'label' => __d('net_commons', 'Title'),
+				'sort' => 'CircularNoticeContent.subject',
+				'direction' => 'asc'
+			),
+			'CircularNoticeContent.reply_deadline.desc' => array(
+				'label' => __d('circular_notices', 'Change Sort Order to Reply Deadline'),
+				'sort' => 'CircularNoticeContent.reply_deadline',
+				'direction' => 'desc'
+			),
+		);
+		$this->set('sortOptions', $sortOptions);
+
+		$currentSort = Hash::get($this->params['named'], 'sort', 'CircularNoticeContent.modified');
+		$currentDirection = Hash::get($this->params['named'], 'direction', 'desc');
+		if (! isset($sortOptions[$currentSort . '.' . $currentDirection])) {
+			$currentSort = 'CircularNoticeContent.modified';
+			$currentDirection = 'desc';
+		}
+		$this->set('currentSort', $currentSort);
+		$this->set('currentDirection', $currentDirection);
+
 		// Paginator経由で一覧を取得
 		$this->Paginator->settings = $this->CircularNoticeContent->getCircularNoticeContentsForPaginate(
 			$this->viewVars['circularNoticeSetting']['CircularNoticeSetting']['key'],
