@@ -131,10 +131,13 @@
 					'name' => 'form',
 					'novalidate' => true,
 					'type' => 'post',
-					'url' => $this->NetCommonsHtml->url(array(
+					'url' => NetCommonsUrl::actionUrl(array(
+						'plugin' => 'circular_notices',
 						'controller' => 'circular_notices_answer',
 						'action' => 'edit',
 						'key' => $circularNoticeContent['key'],
+						'block_id' => Current::read('Block.id'),
+						'frame_id' => Current::read('Frame.id'),
 					))
 					)); ?>
 				<?php echo $this->NetCommonsForm->hidden('CircularNoticeContent.key', array(
