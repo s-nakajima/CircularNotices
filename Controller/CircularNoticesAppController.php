@@ -82,10 +82,6 @@ class CircularNoticesAppController extends AppController {
  * @return void
  */
 	public function initCircularNotice() {
-		// タイトルを設定
-		$this->_circularNoticeTitle = __d('circular_notices', 'Plugin Name');
-		$this->set('listTitle', $this->_circularNoticeTitle);
-
 		$frameId = Current::read('Frame.id');
 		$setting = $this->CircularNoticeSetting->getCircularNoticeSetting($frameId);
 		if (! $setting) {
