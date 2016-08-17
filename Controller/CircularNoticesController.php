@@ -191,7 +191,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		// 回覧の閲覧件数／回答件数を取得
 		$counts = $this->CircularNoticeTargetUser->getCircularNoticeTargetUserCount($contentId);
 
-		// Paginator経由で回答先一覧を取得
+		// Paginator経由で回覧先一覧を取得
 		$this->Paginator->settings = $this->CircularNoticeTargetUser
 			->getCircularNoticeTargetUsersForPaginator($contentId, $this->params['named'], $userId);
 		$targetUsers = $this->Paginator->paginate('CircularNoticeTargetUser');
@@ -429,7 +429,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 			}
 			$contentId = $content['CircularNoticeContent']['id'];
 
-			// Paginator経由で回答先一覧を取得
+			// Paginator経由で回覧先一覧を取得
 			$this->Paginator->settings = $this->CircularNoticeTargetUser
 				->getCircularNoticeTargetUsersForPaginator($contentId, $this->params['named'], $userId, 0);
 			$targetUsers = $this->Paginator->paginate('CircularNoticeTargetUser');
@@ -500,7 +500,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 			case CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION:
 				$selectionValues = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER,
 					$targetUser['CircularNoticeTargetUser']['reply_selection_value']);
-				$answer = implode('、', $selectionValues);
+				$answer = implode(__d('circular_notices', 'Answer separator'), $selectionValues);
 				break;
 		}
 		return $answer;

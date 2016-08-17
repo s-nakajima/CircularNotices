@@ -276,6 +276,9 @@ class CircularNoticeContent extends CircularNoticesAppModel {
  * @return mixed
  */
 	public function getCircularNoticeContent($key, $userId) {
+		if (empty($userId)) {
+			return false;
+		}
 		$this->__bindMyCircularNoticeTargetUser($userId, true);
 
 		return $this->find('first', array(

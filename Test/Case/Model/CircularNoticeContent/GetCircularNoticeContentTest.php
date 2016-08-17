@@ -54,22 +54,46 @@ class CircularNoticeContentGetCircularNoticeContentTest extends NetCommonsGetTes
 	protected $_methodName = 'getCircularNoticeContent';
 
 /**
+ * getCircularNoticeContentのDataProvider
+ *
+ * ### 戻り値
+ *  - key CircularNoticeContentのkey
+ *  - userId ユーザID
+ *
+ * @return array
+ */
+	public function dataProvider() {
+		return array(
+			array(
+				'key' => 'circular_notice_content_1',
+				'userId' => '1',
+				'array'
+			),
+			array(
+				'key' => 'circular_notice_content_2',
+				'userId' => null,
+				'boolean',
+			),
+		);
+	}
+
+/**
  * getCircularNoticeContent()のテスト
  *
+ * @param string $key CircularNoticeContentのkey
+ * @param int $userId ユーザID
+ * @param array $expected 期待値
+ * @dataProvider dataProvider
  * @return void
  */
-	public function testGetCircularNoticeContent() {
+	public function testGetCircularNoticeContent($key, $userId, $expected) {
 		$model = $this->_modelName;
 		$methodName = $this->_methodName;
-
-		//データ生成
-		$key = null;
-		$userId = null;
 
 		//テスト実施
 		$result = $this->$model->$methodName($key, $userId);
 
 		//チェック
-		$this->assertNotEquals(false, $result);
+		$this->assertInternalType($expected, $result);
 	}
 }

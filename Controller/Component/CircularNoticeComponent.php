@@ -132,7 +132,7 @@ class CircularNoticeComponent extends Component {
 	const EXPORT_COMPRESS_FILE_EXTENSION = '.zip';
 
 /**
- * 回答先のヘッダ項目を取得
+ * 回覧先のヘッダ項目を取得
  *
  * @return array
  */
