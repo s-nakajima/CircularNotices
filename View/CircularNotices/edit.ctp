@@ -39,9 +39,6 @@
 	 ng-controller="CircularNoticeEdit"
 	 ng-init="initialize(<?php echo h(json_encode($circularNoticeContent)); ?>)">
 	<article>
-		<h1>
-			<?php echo $listTitle; ?>
-		</h1>
 
 		<div class="panel panel-default">
 

@@ -27,7 +27,6 @@
 ?>
 
 <article class="index">
-	<h1><?php echo $listTitle; ?></h1>
 
 	<div class="clearfix circular-notices-navigation-header">
 		<?php if (Current::permission('content_creatable')) : ?>
