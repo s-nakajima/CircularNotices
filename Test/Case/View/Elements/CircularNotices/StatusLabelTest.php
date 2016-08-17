@@ -58,13 +58,13 @@ class CircularNoticesViewElementsCircularNoticesStatusLabelTest extends NetCommo
 
 		$results[0] = array(
 			'CircularNoticeContent' => array(
-				'current_status' => 1,
+				'content_status' => 1,
 			)
 		);
 		$results[1] = array(
 			'CircularNoticeContent' => array(
-				'current_status' => 6,
-				'user_status' => 1
+				'content_status' => 6,
+				'reply_status' => 1
 			)
 		);
 

@@ -29,23 +29,25 @@
 	<div class="pull-left">
 		<?php echo $this->element('CircularNotices/status_label', array('circularNoticeContent' => $circularNoticeContent)); ?>
 	</div>
-	<div class="pull-right">
-		<?php echo $this->Button->editLink('',
-			array(
-				'controller' => 'circular_notices',
-				'action' => 'edit',
-				'key' => $circularNoticeContent['key']
-			),
-			array(
-				'tooltip' => true,
-			)
-		); ?>
-	</div>
+	<?php if (Current::permission('content_creatable')) : ?>
+		<div class="pull-right">
+			<?php echo $this->Button->editLink('',
+				array(
+					'controller' => 'circular_notices',
+					'action' => 'edit',
+					'key' => $circularNoticeContent['key']
+				),
+				array(
+					'tooltip' => true,
+				)
+			); ?>
+		</div>
+	<?php endif; ?>
 </header>
 
 <article>
 	<div id="nc-circular-notices-<?php echo (int)Current::read('Frame.id'); ?>" ng-controller="CircularNoticeView" ng-init="initialize()">
-		<div class="clearfix">
+		<div class="clearfix circular-notices-word-break">
 			<?php echo $this->NetCommonsHtml->blockTitle($circularNoticeContent['subject'],
 				$circularNoticeContent['title_icon']); ?>
 		</div>
@@ -95,7 +97,7 @@
 			</div>
 		</div>
 
-		<div class="circular-notices-content">
+		<div class="circular-notices-content circular-notices-word-break">
 			<p>
 				<?php echo $circularNoticeContent['content']; ?>
 			</p>
@@ -120,15 +122,21 @@
 		<?php endif; ?>
 
 		<?php if (
-			$circularNoticeContent['current_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN &&
-			isset($myAnswer['CircularNoticeTargetUser']['user_status'])
+			$circularNoticeContent['content_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN &&
+			isset($myAnswer['CircularNoticeTargetUser']['reply_status'])
 		) : ?>
 
 			<div>
 				<?php echo $this->NetCommonsForm->create('CircularNoticeTargetUser', array(
 					'name' => 'form',
 					'novalidate' => true,
-				)); ?>
+					'type' => 'post',
+					'url' => $this->NetCommonsHtml->url(array(
+						'controller' => 'circular_notices_answer',
+						'action' => 'edit',
+						'key' => $circularNoticeContent['key'],
+					))
+					)); ?>
 				<?php echo $this->NetCommonsForm->hidden('CircularNoticeContent.key', array(
 					'value' => $circularNoticeContent['key'],
 				)); ?>
@@ -252,7 +260,6 @@
 
 			<div class="clearfix">
 				<div class="pull-left">
-	<!--				--><?php //echo $this->element('CircularNotices/view_select_sort'); ?>
 					<?php echo $this->element('CircularNotices/view_select_limit'); ?>
 				</div>
 				<div class="pull-right">
@@ -342,7 +349,7 @@
 							$this->NetCommonsHtml->handleLink($circularNoticeTargetUser, array('avatar' => true), array(), 'User'),
 							array($readDatetime, array('class' => 'row-datetime')),
 							array($replyDatetime, array('class' => 'row-datetime')),
-							array($answer, array('class' => 'circular-notices-reply-col')),
+							array($answer, array('class' => 'circular-notices-reply-col circular-notices-word-break')),
 						));
 					endforeach;
 				?>

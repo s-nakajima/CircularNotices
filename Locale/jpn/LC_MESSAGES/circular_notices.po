@@ -98,7 +98,11 @@ msgstr ""
 
 # 回覧一覧画面の表示コンテンツ絞り込みに使用
 msgid "Display All Contents"
-msgstr "全てのステータスを表示"
+msgstr "全てのステータス"
+
+# 回覧一覧画面の表示コンテンツ絞り込みに使用
+msgid "Display All Reply Status"
+msgstr "全ての回答状況"
 
 # 回覧一覧画面の表示コンテンツ絞り込みに使用
 msgid "Display Public Pending Contents"
@@ -398,6 +402,9 @@ msgstr "/"
 
 msgid "Not Date Set"
 msgstr "--:--"
+
+msgid "Answerd."
+msgstr "回答しました。"
 
 # メール関連
 msgid "MailSetting.mail_fixed_phrase_body.popover"

@@ -1,6 +1,6 @@
 <?php
 /**
- * View/Elements/CircularNotices/view_select_sortのテスト
+ * View/Elements/CircularNotices/select_reply_statusのテスト
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Masaki Goto <go8ogle@gmail.com>
@@ -10,14 +10,15 @@
  */
 
 App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
+App::uses('CircularNoticeComponent', 'CircularNotices.Controller/Component');
 
 /**
- * View/Elements/CircularNotices/view_select_sortのテスト
+ * View/Elements/CircularNotices/select_reply_statusのテスト
  *
  * @author Masaki Goto <go8ogle@gmail.com>
- * @package NetCommons\CircularNotices\Test\Case\View\Elements\CircularNotices\ViewSelectSort
+ * @package NetCommons\CircularNotices\Test\Case\View\Elements\CircularNotices\SelectStatus
  */
-class CircularNoticesViewElementsCircularNoticesViewSelectSortTest extends NetCommonsControllerTestCase {
+class CircularNoticesViewElementsCircularNoticesSelectReplyStatusTest extends NetCommonsControllerTestCase {
 
 /**
  * Fixtures
@@ -44,23 +45,25 @@ class CircularNoticesViewElementsCircularNoticesViewSelectSortTest extends NetCo
 		//テストプラグインのロード
 		NetCommonsCakeTestCase::loadTestPlugin($this, 'CircularNotices', 'TestCircularNotices');
 		//テストコントローラ生成
-		$this->generateNc('TestCircularNotices.TestViewElementsCircularNoticesViewSelectSort');
+		$this->generateNc('TestCircularNotices.TestViewElementsCircularNoticesSelectReplyStatus');
 	}
 
 /**
- * View/Elements/CircularNotices/view_select_sortのテスト
+ * View/Elements/CircularNotices/select_statusのテスト
  *
  * @return void
  */
-	public function testViewSelectSort() {
-		$this->controller->set('circularNoticeContent', array('id' => 1));
+	public function testSelectContentStatus() {
+		if (!class_exists('CircularNoticeComponent')) {
+			App::load('CircularNoticeComponent');
+		}
 
 		//テスト実行
-		$this->_testGetAction('/test_circular_notices/test_view_elements_circular_notices_view_select_sort/view_select_sort',
+		$this->_testGetAction('/test_circular_notices/test_view_elements_circular_notices_select_reply_status/select_reply_status',
 				array('method' => 'assertNotEmpty'), null, 'view');
 
 		//チェック
-		$pattern = '/' . preg_quote('View/Elements/CircularNotices/view_select_sort', '/') . '/';
+		$pattern = '/' . preg_quote('View/Elements/CircularNotices/select_reply_status', '/') . '/';
 		$this->assertRegExp($pattern, $this->view);
 	}
 }

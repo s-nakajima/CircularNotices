@@ -1,6 +1,6 @@
 <?php
 /**
- * View/Elements/CircularNotices/view_select_sortテスト用Viewファイル
+ * View/Elements/CircularNotices/select_content_statusテスト用Viewファイル
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Masaki Goto <go8ogle@gmail.com>
@@ -11,6 +11,6 @@
 
 ?>
 
-View/Elements/CircularNotices/view_select_sort
+View/Elements/CircularNotices/select_content_status
 
-<?php echo $this->element('CircularNotices.CircularNotices/view_select_sort');
+<?php echo $this->element('CircularNotices.CircularNotices/select_content_status');

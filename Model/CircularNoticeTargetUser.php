@@ -108,7 +108,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 	public function __construct($id = false, $table = null, $ds = null) {
 		parent::__construct($id, $table, $ds);
 
-		$this->virtualFields['user_status'] =
+		$this->virtualFields['reply_status'] =
 			'CASE WHEN ' . $this->alias . '.is_read = 0 THEN ' .
 				'\'' . CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD . '\' ' .
 			'WHEN ' . $this->alias . '.is_read = 1 THEN ' .
@@ -275,11 +275,11 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 			)
 		));
 
-		if ($target['CircularNoticeTargetUser']['user_status'] ==
+		if ($target['CircularNoticeTargetUser']['reply_status'] ==
 			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_UNREAD) {
-			if ($target['CircularNoticeContent']['current_status'] ==
+			if ($target['CircularNoticeContent']['content_status'] ==
 				CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN ||
-				$target['CircularNoticeContent']['current_status'] ==
+				$target['CircularNoticeContent']['content_status'] ==
 				CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED
 			) {
 				$data = array(

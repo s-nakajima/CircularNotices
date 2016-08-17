@@ -127,6 +127,30 @@ class CircularNoticesControllerIndexTest extends NetCommonsControllerTestCase {
 			),
 			'assert' => array('method' => 'assertNotEmpty'),
 		);
+		$results[1] = array(
+			'urlOptions' => array(
+				'frame_id' => $data['frame_id'],
+				'content_status' => '99'
+			),
+			'assert' => null,
+			'exception' => 'BadRequestException'
+		);
+		$results[2] = array(
+			'urlOptions' => array(
+				'frame_id' => $data['frame_id'],
+				'reply_status' => '99',
+			),
+			'assert' => null,
+			'exception' => 'BadRequestException'
+		);
+		$results[3] = array(
+			'urlOptions' => array(
+				'frame_id' => $data['frame_id'],
+				'sort' => 'abc',
+				'direction' => 'abc',
+			),
+			'assert' => array('method' => 'assertNotEmpty'),
+		);
 		return $results;
 	}
 

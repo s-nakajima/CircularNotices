@@ -50,6 +50,18 @@ class CircularNoticesControllerBeforeFilterTest extends NetCommonsControllerTest
 	protected $_controller = 'circular_notices';
 
 /**
+ * setUp method
+ *
+ * @return void
+ */
+	public function setUp() {
+		parent::setUp();
+		$this->controller->Session->expects($this->any())
+			->method('read')
+			->will($this->returnValueMap([['circularNoticeErrors', ['CircularNoticeTargetUser' => 'Validation error']]]));
+	}
+
+/**
  * テストDataの取得
  *
  * @param string $role ロール

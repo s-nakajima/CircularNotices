@@ -1,6 +1,6 @@
 <?php
 /**
- * View/Elements/CircularNotices/view_select_sortテスト用Controller
+ * View/Elements/CircularNotices/select_reply_statusテスト用Controller
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Masaki Goto <go8ogle@gmail.com>
@@ -12,19 +12,19 @@
 App::uses('AppController', 'Controller');
 
 /**
- * View/Elements/CircularNotices/view_select_sortテスト用Controller
+ * View/Elements/CircularNotices/select_reply_statusテスト用Controller
  *
  * @author Masaki Goto <go8ogle@gmail.com>
  * @package NetCommons\CircularNotices\Test\test_app\Plugin\TestCircularNotices\Controller
  */
-class TestViewElementsCircularNoticesViewSelectSortController extends AppController {
+class TestViewElementsCircularNoticesSelectReplyStatusController extends AppController {
 
 /**
- * view_select_sort
+ * select_reply_status
  *
  * @return void
  */
-	public function view_select_sort() {
+	public function select_reply_status() {
 		$this->autoRender = true;
 	}
 

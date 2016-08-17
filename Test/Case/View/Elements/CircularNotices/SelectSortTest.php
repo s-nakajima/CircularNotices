@@ -53,6 +53,31 @@ class CircularNoticesViewElementsCircularNoticesSelectSortTest extends NetCommon
  * @return void
  */
 	public function testSelectSort() {
+		$this->controller->set('currentSort', 'CircularNoticeContent.modified');
+		$this->controller->set('currentDirection', 'desc');
+		$this->controller->set('sortOptions', array(
+			'CircularNoticeContent.modified.desc' => array(
+				'label' => __d('net_commons', 'Newest'),
+				'sort' => 'CircularNoticeContent.modified',
+				'direction' => 'desc'
+			),
+			'CircularNoticeContent.created.asc' => array(
+				'label' => __d('net_commons', 'Oldest'),
+				'sort' => 'CircularNoticeContent.created',
+				'direction' => 'asc'
+			),
+			'CircularNoticeContent.subject.asc' => array(
+				'label' => __d('net_commons', 'Title'),
+				'sort' => 'CircularNoticeContent.subject',
+				'direction' => 'asc'
+			),
+			'CircularNoticeContent.reply_deadline.desc' => array(
+				'label' => __d('circular_notices', 'Change Sort Order to Reply Deadline'),
+				'sort' => 'CircularNoticeContent.reply_deadline',
+				'direction' => 'desc'
+			))
+		);
+
 		//テスト実行
 		$this->_testGetAction('/test_circular_notices/test_view_elements_circular_notices_select_sort/select_sort',
 				array('method' => 'assertNotEmpty'), null, 'view');

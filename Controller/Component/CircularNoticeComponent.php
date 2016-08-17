@@ -83,6 +83,13 @@ class CircularNoticeComponent extends Component {
 	const CIRCULAR_NOTICE_CONTENT_STATUS_REPLIED = '12';
 
 /**
+ * view status not replied
+ *
+ * @var string
+ */
+	const CIRCULAR_NOTICE_CONTENT_STATUS_NOT_REPLIED = '13';
+
+/**
  * reply by text
  *
  * @var string
@@ -166,5 +173,68 @@ class CircularNoticeComponent extends Component {
 				$controller->request->data['selectUsers'][] = $user;
 			}
 		}
+	}
+
+/**
+ * エラー内容を保持
+ * 
+ * @param Controller $controller コントローラー
+ * @return void
+ */
+	public function setCircularNoticeErrors(Controller $controller) {
+		if ($controller->Session->read('circularNoticeErrors')) {
+			foreach ($controller->Session->read('circularNoticeErrors') as $model => $errors) {
+				if (! $controller->$model) {
+					$controller->loadModel($model);
+				}
+				$controller->$model->validationErrors = $errors;
+			}
+			$controller->Session->delete('circularNoticeErrors');
+		}
+	}
+
+/**
+ * データを保持
+ *
+ * @param Controller $controller コントローラー
+ * @return void
+ */
+	public function setCircularNoticeDatas(Controller $controller) {
+		if ($controller->Session->read('circularNoticeDatas')) {
+			$controller->set('circularNoticeDatas', $controller->Session->read('circularNoticeDatas'));
+			$controller->Session->delete('circularNoticeDatas');
+		}
+	}
+
+/**
+ * コンテンツステータスの選択値存在チェック
+ *
+ * @param string $checkValue チェック対象値
+ * @return bool チェック結果（true:存在する, false:存在しない）
+ */
+	public function existsContentStatus($checkValue) {
+		$contentStatusArr = array(
+			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_PUBLISHED,
+			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT,
+			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED,
+			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_OPEN,
+			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_FIXED,
+			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_CLOSED,
+		);
+		return in_array($checkValue, $contentStatusArr, true);
+	}
+
+/**
+ * 回答状況の選択値存在チェック
+ *
+ * @param string $checkValue チェック対象値
+ * @return bool チェック結果（true:存在する, false:存在しない）
+ */
+	public function existsReplyStatus($checkValue) {
+		$contentStatusArr = array(
+			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_REPLIED,
+			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_NOT_REPLIED,
+		);
+		return in_array($checkValue, $contentStatusArr, true);
 	}
 }

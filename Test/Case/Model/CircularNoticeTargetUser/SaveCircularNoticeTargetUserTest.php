@@ -64,7 +64,7 @@ class CircularNoticeTargetUserSaveCircularNoticeTargetUserTest extends NetCommon
  */
 	public function dataProviderSave() {
 		$data['CircularNoticeTargetUser'] = (new CircularNoticeTargetUserFixture())->records[0];
-		$data['CircularNoticeTargetUser']['user_status'] = 10;
+		$data['CircularNoticeTargetUser']['reply_status'] = 10;
 
 		$results = array();
 		// * 編集の登録処理
