@@ -92,7 +92,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 		$this->initCircularNotice();
 
-		// コンテンツスタータスの絞り込み値チェック
+		// コンテンツステータスの絞り込み値チェック
 		if (isset($this->params['named']['content_status'])
 				&& ! $this->CircularNotice->existsContentStatus($this->params['named']['content_status'])) {
 			return $this->throwBadRequest();
