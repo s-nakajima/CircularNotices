@@ -48,19 +48,22 @@ class CircularNoticeFrameSettingsControllerEditTest extends NetCommonsController
 	protected $_controller = 'circular_notice_frame_settings';
 
 /**
- * POSTリクエストデータ生成
+ * テストDataの取得
  *
- * @return array リクエストデータ
+ * @return array
  */
-	private function __data() {
+	private function __getData() {
+		$frameId = '6';
+		$blockId = '1';
+		$blockKey = 'block_2';
+
 		$data = array(
 			'Frame' => array(
-				'id' => '6',
-				'key' => 'frame_1'
+				'id' => $frameId
 			),
 			'Block' => array(
-				'id' => '1',
-				'key' => 'block_2'
+				'id' => $blockId,
+				'key' => $blockKey,
 			),
 			'CircularNoticeFrameSetting' => array(
 				'id' => 2,
@@ -77,7 +80,7 @@ class CircularNoticeFrameSettingsControllerEditTest extends NetCommonsController
 	}
 
 /**
- * edit()アクションのGetリクエストテスト
+ * editアクションのGETテスト
  *
  * @param array $urlOptions URLオプション
  * @param array $assert テストの期待値
@@ -87,12 +90,12 @@ class CircularNoticeFrameSettingsControllerEditTest extends NetCommonsController
  * @return void
  */
 	public function testEditGet($urlOptions, $assert, $exception = null, $return = 'view') {
-		// Exception
+		//Exception
 		if ($exception) {
 			$this->setExpectedException($exception);
 		}
 
-		// テスト実施
+		//テスト実施
 		$url = Hash::merge(array(
 			'plugin' => $this->plugin,
 			'controller' => $this->_controller,
@@ -114,7 +117,7 @@ class CircularNoticeFrameSettingsControllerEditTest extends NetCommonsController
  * @return array
  */
 	public function dataProviderEditGet() {
-		$data = $this->__data();
+		$data = $this->__getData();
 		$results = array();
 
 		//ログインなし
@@ -164,12 +167,12 @@ class CircularNoticeFrameSettingsControllerEditTest extends NetCommonsController
  * @return array
  */
 	public function dataProviderEditGetByPublishable() {
-		$data0 = $this->__data();
+		$data0 = $this->__getData();
 		$results = array();
 
 		//ログインあり
 		$results[0] = array(
-			'urlOptions' => array('frame_id' => $data0['Frame']['id']),
+			'urlOptions' => array('frame_id' => $data0['Frame']['id'], 'block_id' => $data0['Block']['id'], 'key' => $data0['CircularNoticeFrameSetting']['id']),
 			'assert' => null
 		);
 
@@ -177,7 +180,7 @@ class CircularNoticeFrameSettingsControllerEditTest extends NetCommonsController
 	}
 
 /**
- * edit()アクションのPOSTリクエストテスト
+ * editアクションのPOSTテスト
  *
  * @param array $data POSTデータ
  * @param string $role ロール
@@ -188,7 +191,7 @@ class CircularNoticeFrameSettingsControllerEditTest extends NetCommonsController
  * @return void
  */
 	public function testEditPost($data, $role, $urlOptions, $exception = null, $return = 'view') {
-		// ログイン
+		//ログイン
 		if (isset($role)) {
 			TestAuthGeneral::login($this, $role);
 		}
@@ -221,64 +224,80 @@ class CircularNoticeFrameSettingsControllerEditTest extends NetCommonsController
  * @return array
  */
 	public function dataProviderEditPost() {
-		$data = $this->__data();
+		$data = $this->__getData();
 
 		return array(
-			// ログインなし
+			//ログインなし
 			array(
 				'data' => $data, 'role' => null,
 				'urlOptions' => array('frame_id' => $data['Frame']['id']),
 				'exception' => 'ForbiddenException'
 			),
-			// 正常
+
+			//正常
 			array(
 				'data' => $data, 'role' => Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
 				'urlOptions' => array('frame_id' => $data['Frame']['id']),
+
 			),
-			// フレームID指定なしテスト
+			//フレームID指定なしテスト
 			array(
 				'data' => $data, 'role' => Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
 				'urlOptions' => array('frame_id' => null),
+
 			),
+
 		);
 	}
 
 /**
  * editアクションのValidateionErrorテスト
  *
- * @return mixed テスト結果
+ * @param array $data POSTデータ
+ * @param array $urlOptions URLオプション
+ * @param string|null $validationError ValidationError
+ * @dataProvider dataProviderEditValidationError
+ * @return void
  */
-	public function testValidationError() {
+	public function testEditValidationError($data, $urlOptions, $validationError = null) {
 		//ログイン
-		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
-
-		$data = $this->__data();
-		$urlOptions = array('frame_id' => $data['Frame']['id']);
-
-		//バリデーションエラー
-		$validationError = array(
-			'field' => 'CircularNoticeFrameSetting.display_number',
-			'value' => '99',
-			'message' => array(__d('net_commons', 'Invalid request.')
-			)
-		);
-
-		$data = Hash::remove($data, $validationError['field']);
-		$data = Hash::insert($data, $validationError['field'], $validationError['value']);
+		TestAuthGeneral::login($this);
 
 		//テスト実施
-		$url = Hash::merge(array(
-				'plugin' => $this->plugin,
-				'controller' => $this->_controller,
-				'action' => 'edit',
-		), $urlOptions);
-		$result = $this->_testNcAction($url, array('method' => 'put', 'data' => $data));
-
-		//チェック
-		$this->assertNotEmpty($result);
+		$this->_testActionOnValidationError('put', $data, Hash::merge(array('action' => 'edit'), $urlOptions), $validationError);
 
 		//ログアウト
 		TestAuthGeneral::logout($this);
+	}
+
+/**
+ * editアクションのValidationErrorテスト用DataProvider
+ *
+ * #### 戻り値
+ *  - data: 登録データ
+ *  - urlOptions: URLオプション
+ *  - validationError: バリデーションエラー
+ *
+ * @return array
+ */
+	public function dataProviderEditValidationError() {
+		$data = $this->__getData();
+
+		$result = array(
+			'data' => $data,
+			'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id'], 'key' => ''),
+		);
+
+		return array(
+			//バリデーションエラー
+			Hash::merge($result, array(
+				'validationError' => array(
+					'field' => 'CircularNoticeFrameSetting.display_number',
+					'value' => '',
+					'message' => __d('net_commons', 'Invalid request.'),
+				)
+			)),
+		);
 	}
 
 }

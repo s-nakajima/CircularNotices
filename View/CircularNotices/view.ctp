@@ -263,7 +263,7 @@
 
 			<div class="clearfix">
 				<div class="pull-left">
-					<?php echo $this->element('CircularNotices/view_select_limit'); ?>
+					<?php echo $this->DisplayNumber->dropDownToggle(); ?>
 				</div>
 				<div class="pull-right">
 					<span class="nc-tooltip" tooltip="<?php echo h(__d('circular_notices', 'Download')); ?>">

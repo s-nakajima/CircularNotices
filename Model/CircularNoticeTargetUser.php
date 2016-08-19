@@ -397,19 +397,4 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		$this->validates();
 		return $this->validationErrors ? false : true;
 	}
-
-/**
- * Get display numbers for limit options
- *
- * @return array
- */
-	public static function getDisplayNumberOptions() {
-		return array(
-			10 => __d('circular_notices', '%d items', 10),
-			20 => __d('circular_notices', '%d items', 20),
-			30 => __d('circular_notices', '%d items', 30),
-			40 => __d('circular_notices', '%d items', 40),
-			50 => __d('circular_notices', '%d items', 50),
-		);
-	}
 }
