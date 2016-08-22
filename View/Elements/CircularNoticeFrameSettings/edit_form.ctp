@@ -10,27 +10,14 @@
  */
 ?>
 
-<?php echo $this->NetCommonsForm->hidden('id'); ?>
 <?php echo $this->NetCommonsForm->hidden('Frame.id'); ?>
-<?php echo $this->NetCommonsForm->hidden('Block.id'); ?>
+<?php echo $this->NetCommonsForm->hidden('CircularNoticeFrameSetting.id'); ?>
+<?php echo $this->NetCommonsForm->hidden('CircularNoticeFrameSetting.frame_key'); ?>
 
-<?php echo $this->NetCommonsForm->hidden('CircularNoticeFrameSetting.id', array(
-	'value' => isset($circularNoticeFrameSetting['id']) ? (int)$circularNoticeFrameSetting['id'] : null,
-	)); ?>
-
-<?php echo $this->NetCommonsForm->hidden('CircularNoticeFrameSetting.frame_key', array(
-	'value' => Current::read('Frame.key'),
-	)); ?>
-
-<div class="form-group">
-	<?php echo $this->NetCommonsForm->label(__d('circular_notices', 'Show contents per page')); ?>
-	<?php echo $this->NetCommonsForm->select('CircularNoticeFrameSetting.display_number',
-			CircularNoticeFrameSetting::getDisplayNumberOptions(),
-			array(
-				'type' => 'select',
-				'class' => 'form-control',
-				'value' => $circularNoticeFrameSetting['display_number'],
-				'empty' => false,
-			)
-		); ?>
-</div>
+<?php echo $this->DisplayNumber->select('CircularNoticeFrameSetting.display_number', array(
+	'label' => __d('circular_notices', 'Show contents per page'),
+	'unit' => array(
+		'single' => __d('circular_notices', '%d items'),
+		'multiple' => __d('circular_notices', '%d items')
+	),
+));

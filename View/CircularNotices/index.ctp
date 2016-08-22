@@ -47,7 +47,7 @@
 			<?php echo $this->element('CircularNotices/select_content_status'); ?>
 			<?php echo $this->element('CircularNotices/select_reply_status'); ?>
 			<?php echo $this->element('CircularNotices/select_sort'); ?>
-			<?php echo $this->element('CircularNotices/select_limit'); ?>
+			<?php echo $this->DisplayNumber->dropDownToggle(); ?>
 		</div>
 	</div>
 

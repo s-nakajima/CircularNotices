@@ -45,8 +45,6 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
  * @see Model::save()
  */
 	public function beforeValidate($options = array()) {
-		$displayNumbers = array_keys(self::getDisplayNumberOptions());
-
 		$this->validate = Hash::merge($this->validate, array(
 			'frame_key' => array(
 				'notBlank' => array(
@@ -56,10 +54,11 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
 				)
 			),
 			'display_number' => array(
-				'inList' => array(
-					'rule' => array('inList', $displayNumbers),
+				'number' => array(
+					'rule' => array('notBlank'),
 					'message' => __d('net_commons', 'Invalid request.'),
-				),
+					'required' => true,
+				)
 			),
 		));
 
@@ -200,21 +199,5 @@ class CircularNoticeFrameSetting extends CircularNoticesAppModel {
 		$this->set($data);
 		$this->validates();
 		return $this->validationErrors ? false : true;
-	}
-
-/**
- * Get display numbers for limit options
- *
- * @return array
- */
-	public static function getDisplayNumberOptions() {
-		return array(
-			1 => __d('circular_notices', '%d items', 1),
-			5 => __d('circular_notices', '%d items', 5),
-			10 => __d('circular_notices', '%d items', 10),
-			20 => __d('circular_notices', '%d items', 20),
-			50 => __d('circular_notices', '%d items', 50),
-			100 => __d('circular_notices', '%d items', 100),
-		);
 	}
 }
