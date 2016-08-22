@@ -125,9 +125,9 @@
 							<div class="circular-notice-attr-font">
 								<div class="circular-notice-publish-period">
 									<?php echo __d('circular_notices', 'Circular Content Period Title'); ?>
-									<?php echo $this->Date->dateFormat($circularNoticeContent['CircularNoticeContent']['publish_start']); ?>
+									<?php echo $this->CircularNotice->displayDate($circularNoticeContent['CircularNoticeContent']['publish_start']); ?>
 									<?php echo __d('circular_notices', 'Till'); ?>
-									<?php echo $this->Date->dateFormat($circularNoticeContent['CircularNoticeContent']['publish_end']); ?>
+									<?php echo $this->CircularNotice->displayDate($circularNoticeContent['CircularNoticeContent']['publish_end']); ?>
 								</div>
 
 								<!-- 作成者 -->
