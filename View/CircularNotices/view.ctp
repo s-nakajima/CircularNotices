@@ -56,16 +56,16 @@
 			<div class="pull-left">
 				<div class="circular-notice-publish-period">
 					<?php echo __d('circular_notices', 'Circular Content Period Title'); ?>
-					<?php echo $this->Date->dateFormat($circularNoticeContent['publish_start']); ?>
+					<?php echo $this->CircularNotice->displayDate($circularNoticeContent['publish_start']); ?>
 					<?php echo __d('circular_notices', 'Till'); ?>
-					<?php echo $this->Date->dateFormat($circularNoticeContent['publish_end']); ?><br />
+					<?php echo $this->CircularNotice->displayDate($circularNoticeContent['publish_end']); ?><br />
 				</div>
 				<div class="circular-notice-answer-deadline">
 					<?php echo __d('circular_notices', 'Circular Content Deadline Title'); ?>
 					<?php 
 						$replyDeadline = __d('circular_notices', 'Not Date Set');
 						if (!empty($circularNoticeContent['reply_deadline'])):
-							$replyDeadline = $this->Date->dateFormat($circularNoticeContent['reply_deadline']);
+							$replyDeadline = $this->CircularNotice->displayDate($circularNoticeContent['reply_deadline']);
 						endif;
 						echo $replyDeadline;
 					?>
