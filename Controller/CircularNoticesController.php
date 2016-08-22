@@ -76,6 +76,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		'Groups.GroupUserList',
 		'NetCommons.TitleIcon',
 		'AuthorizationKeys.AuthKeyPopupButton',
+		'CircularNotices.CircularNotice',
 	);
 
 /**

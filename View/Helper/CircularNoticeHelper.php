@@ -16,7 +16,7 @@ App::uses('AppHelper', 'View/Helper');
  * @author Yuto Kitatsuji <kitatsuji.yuto@withone.co.jp>
  * @package NetCommons\CircularNotices\View\Helper
  */
-class CircularNoticeContentHelper extends AppHelper {
+class CircularNoticeHelper extends AppHelper {
 
 /**
  * Other helpers used by FormHelper
