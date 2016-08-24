@@ -11,8 +11,6 @@
 
 App::uses('AppController', 'Controller');
 App::uses('CircularNoticeComponent', 'CircularNotices.Controller/Component');
-App::uses('WorkflowComponent', 'Workflow.Controller/Component');
-App::uses('WorkflowBehavior', 'Workflow.Model/Behavior');
 
 /**
  * CircularNotices App Controller
@@ -74,32 +72,5 @@ class CircularNoticesAppController extends AppController {
 			$this->CircularNoticeSetting->setCircularNoticeSetting($frameId);
 			$this->CircularNoticeFrameSetting->setCircularNoticeFrameSetting($frameId);
 		}
-	}
-
-/**
- * Initialize circular notices
- *
- * @return void
- */
-	public function initCircularNotice() {
-		$frameId = Current::read('Frame.id');
-		$setting = $this->CircularNoticeSetting->getCircularNoticeSetting($frameId);
-		if (! $setting) {
-			return $this->throwBadRequest();
-		}
-		$this->set('circularNoticeSetting', $setting);
-
-		$frameKey = Current::read('Frame.key');
-		$frameSetting = $this->CircularNoticeFrameSetting->getCircularNoticeFrameSetting($frameKey);
-		if (! $frameSetting) {
-			return $this->throwBadRequest();
-		}
-		$this->set('circularNoticeFrameSetting', $frameSetting);
-
-		// 一般権限で回覧登録を行えるようにするため、ステータス定義をオーバーライド
-		WorkflowBehavior::$statusesForEditor
-			= array(CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_PUBLISHED,
-					CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT,
-		);
 	}
 }

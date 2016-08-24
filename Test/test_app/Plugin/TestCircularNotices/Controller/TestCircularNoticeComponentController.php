@@ -38,4 +38,13 @@ class TestCircularNoticeComponentController extends AppController {
 		$this->autoRender = true;
 	}
 
+/**
+ * view
+ *
+ * @return void
+ */
+	public function view() {
+		$this->autoRender = true;
+	}
+
 }

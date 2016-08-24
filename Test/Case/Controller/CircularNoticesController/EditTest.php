@@ -93,7 +93,6 @@ class CircularNoticesControllerEditTest extends NetCommonsControllerTestCase {
 		$results[0] = array(
 			'urlOptions' => Hash::insert($data, 'frame_id', ''),
 			'assert' => null,
-			'exception' => 'BadRequestException'
 		);
 		$results[1] = array(
 			'urlOptions' => Hash::insert($data, 'key', 'A'),

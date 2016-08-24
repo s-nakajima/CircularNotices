@@ -10,6 +10,8 @@
  */
 
 App::uses('Component', 'Controller');
+App::uses('WorkflowComponent', 'Workflow.Controller/Component');
+App::uses('WorkflowBehavior', 'Workflow.Model/Behavior');
 
 /**
  * CircularNotice Component
@@ -130,6 +132,63 @@ class CircularNoticeComponent extends Component {
  * @var string
  */
 	const EXPORT_COMPRESS_FILE_EXTENSION = '.zip';
+
+/**
+ * Initialize circular notices
+ *
+ * @param Controller $controller コントローラー
+ * @return bool
+ */
+	public function initCircularNotice(Controller $controller) {
+		$this->controller = $controller;
+		$userId = Current::read('User.id');
+		if (! $userId) {
+			if ($this->controller->action === 'index') {
+				$this->controller->setAction('emptyRender');
+			} else {
+				$this->controller->redirect(NetCommonsUrl::backToPageUrl());
+			}
+			return false;
+		}
+
+		$this->controller->CircularNoticeSetting =
+			ClassRegistry::init('CircularNotices.CircularNoticeSetting');
+		$this->controller->CircularNoticeFrameSetting =
+			ClassRegistry::init('CircularNotices.CircularNoticeFrameSetting');
+
+		$frameId = Current::read('Frame.id');
+		$setting = $this->controller->CircularNoticeSetting->getCircularNoticeSetting($frameId);
+		if (! $setting) {
+			if ($this->controller->action === 'index') {
+				$this->controller->setAction('emptyRender');
+			} else {
+				$this->controller->redirect(NetCommonsUrl::backToPageUrl());
+			}
+			return false;
+		}
+		$this->controller->set('circularNoticeSetting', $setting);
+
+		$frameKey = Current::read('Frame.key');
+		$frameSetting =
+			$this->controller->CircularNoticeFrameSetting->getCircularNoticeFrameSetting($frameKey);
+		if (! $frameSetting) {
+			if ($this->controller->action === 'index') {
+				$this->controller->setAction('emptyRender');
+			} else {
+				$this->controller->redirect(NetCommonsUrl::backToPageUrl());
+			}
+			return false;
+		}
+		$this->controller->set('circularNoticeFrameSetting', $frameSetting);
+
+		// 一般権限で回覧登録を行えるようにするため、ステータス定義をオーバーライド
+		WorkflowBehavior::$statusesForEditor
+			= array(CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_PUBLISHED,
+			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT,
+		);
+
+		return true;
+	}
 
 /**
  * 回覧先のヘッダ項目を取得

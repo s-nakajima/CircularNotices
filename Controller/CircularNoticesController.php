@@ -84,13 +84,9 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @return void
  */
 	public function index() {
-		$userId = Current::read('User.id');
-		if (! $userId) {
-			$this->autoRender = false;
+		if (! $this->CircularNotice->initCircularNotice($this)) {
 			return;
 		}
-
-		$this->initCircularNotice();
 
 		// コンテンツステータスの絞り込み値チェック
 		if (isset($this->params['named']['content_status'])
@@ -141,7 +137,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		// Paginator経由で一覧を取得
 		$this->Paginator->settings = $this->CircularNoticeContent->getCircularNoticeContentsForPaginate(
 			$this->viewVars['circularNoticeSetting']['CircularNoticeSetting']['key'],
-			$userId,
+			Current::read('User.id'),
 			$this->params['named'],
 			$this->viewVars['circularNoticeFrameSetting']['CircularNoticeFrameSetting']['display_number']
 		);
@@ -169,7 +165,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 	public function view() {
 		$userId = Current::read('User.id');
 		$contentKey = $this->request->params['key'];
-		$this->initCircularNotice();
+		$this->CircularNotice->initCircularNotice($this);
 
 		// 回覧を取得
 		$content = $this->CircularNoticeContent->getCircularNoticeContent($contentKey, $userId);
@@ -244,7 +240,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$this->view = 'edit';
 		$this->helpers[] = 'Users.UserSearch';
 
-		$this->initCircularNotice();
+		$this->CircularNotice->initCircularNotice($this);
 
 		$content = $this->CircularNoticeContent->create(array(
 			'is_room_target' => true,
@@ -314,7 +310,7 @@ class CircularNoticesController extends CircularNoticesAppController {
  */
 	public function edit() {
 		$userId = Current::read('User.id');
-		$this->initCircularNotice();
+		$this->CircularNotice->initCircularNotice($this);
 		$this->helpers[] = 'Users.UserSearch';
 		$key = $this->request->params['key'];
 
@@ -391,7 +387,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 	public function delete() {
 		$contentKey = $this->request->params['key'];
 
-		$this->initCircularNotice();
+		$this->CircularNotice->initCircularNotice($this);
 
 		if (! $this->request->is('delete')) {
 			return $this->throwBadRequest();
@@ -420,7 +416,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		try {
 			$userId = Current::read('User.id');
 			$contentKey = $this->request->params['key'];
-			$this->initCircularNotice();
+			$this->CircularNotice->initCircularNotice($this);
 
 			// 回覧を取得
 			$content = $this->CircularNoticeContent->getCircularNoticeContent($contentKey, $userId);
