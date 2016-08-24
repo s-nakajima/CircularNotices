@@ -112,18 +112,6 @@ msgid "Reply Type"
 msgstr "回答方式"
 
 # 登録（編集）画面で使用
-msgid "Reply Type Text"
-msgstr "記述方式"
-
-# 登録（編集）画面で使用
-msgid "Reply Type Selection"
-msgstr "択一選択"
-
-# 登録（編集）画面で使用
-msgid "Reply Type Multiple Selection"
-msgstr "複数選択"
-
-# 登録（編集）画面で使用
 msgid "Circular Target"
 msgstr "回覧先"
 
