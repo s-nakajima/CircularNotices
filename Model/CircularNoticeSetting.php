@@ -22,27 +22,6 @@ App::uses('CircularNoticesAppModel', 'CircularNotices.Model');
 class CircularNoticeSetting extends CircularNoticesAppModel {
 
 /**
- * Default mail notice flag
- *
- * @var int
- */
-	const DEFAULT_MAIL_NOTICE_FLAG = 1;
-
-/**
- * Default mail subject
- *
- * @var string
- */
-	const DEFAULT_MAIL_SUBJECT = '件名';
-
-/**
- * Default mail body
- *
- * @var string
- */
-	const DEFAULT_MAIL_BODY = 'メール本文';
-
-/**
  * Validation rules
  *
  * @var array
