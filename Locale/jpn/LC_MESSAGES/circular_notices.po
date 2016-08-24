@@ -117,7 +117,7 @@ msgstr "回覧先"
 
 # 登録（編集）画面で使用
 msgid "All Members Belings to this Room"
-msgstr "ルームに所属する全会員"
+msgstr "ルームに参加している全会員"
 
 # 登録（編集）画面で使用
 msgid "Period"
