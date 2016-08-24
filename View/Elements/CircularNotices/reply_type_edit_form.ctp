@@ -20,9 +20,9 @@
 	<div>
 		<?php echo $this->NetCommonsForm->select('CircularNoticeContent.reply_type',
 			array(
-				CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT => __d('circular_notices', 'Reply Type Text'),
-				CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION => __d('circular_notices', 'Reply Type Selection'),
-				CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION => __d('circular_notices', 'Reply Type Multiple Selection'),
+				CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT => __d('net_commons', 'Free style'),
+				CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION => __d('net_commons', 'Single choice'),
+				CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION => __d('net_commons', 'Multiple choice'),
 			),
 			array(
 				'class' => 'form-control',
