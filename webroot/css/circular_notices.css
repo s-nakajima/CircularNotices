@@ -7,6 +7,10 @@
 	margin-bottom: 10px;
 }
 
+.circular-notices-navigation-header .btn {
+	margin-bottom: 4px;
+}
+
 .circular-notices {
 	padding-top: 16px;
 }
