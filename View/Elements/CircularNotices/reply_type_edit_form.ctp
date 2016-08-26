@@ -33,10 +33,11 @@
 	</div>
 </div>
 
-<div class="form-group" ng-show="circularNoticeContent.reply_type!=<?php echo h(CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT); ?>">
+<div class="form-group" ng-show="circularNoticeContent.reply_type==<?php echo CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION; ?>
+		|| circularNoticeContent.reply_type==<?php echo CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION; ?>">
 	<?php echo $this->element('CircularNotices/choice_edit_form'); ?>
-	<div class="has-error">
-		<?php echo $this->NetCommonsForm->error('CircularNoticeContent.reply_type', null, array('class' => 'help-block')); ?>
-	</div>
+</div>
+<div class="has-error">
+	<?php echo $this->NetCommonsForm->error('CircularNoticeContent.reply_type', null, array('class' => 'help-block')); ?>
 </div>
 
