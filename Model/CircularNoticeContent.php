@@ -310,6 +310,8 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			'CircularNoticeContent.circular_notice_setting_key' => $blockKey,
 			'OR' => array(
 				'CircularNoticeContent.created_user' => $userId,
+				Current::read('Permission.content_editable.role_key')
+					=== Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR,
 				array(
 					'NOT' => array('CircularNoticeContent.reply_status' => null),
 					'OR' => array(
