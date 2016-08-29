@@ -27,7 +27,7 @@
 
 <header class="clearfix">
 	<div class="pull-left">
-		<?php echo $this->element('CircularNotices/status_label', array('circularNoticeContent' => $circularNoticeContent)); ?>
+		<?php echo $this->LinkButton->toList(); ?>
 	</div>
 	<?php if (Current::permission('content_creatable')
 			&& ($circularNoticeContent['created_user'] == Current::read('User.id')
@@ -50,8 +50,11 @@
 <article>
 	<div id="nc-circular-notices-<?php echo (int)Current::read('Frame.id'); ?>" ng-controller="CircularNoticeView" ng-init="initialize()">
 		<div class="clearfix circular-notices-word-break">
-			<?php echo $this->NetCommonsHtml->blockTitle($circularNoticeContent['subject'],
-				h($circularNoticeContent['title_icon'])); ?>
+			<?php echo $this->NetCommonsHtml->blockTitle(
+				$circularNoticeContent['subject'],
+				h($circularNoticeContent['title_icon']),
+				array('status' => $this->element('CircularNotices/status_label', array('circularNoticeContent' => $circularNoticeContent)))
+			); ?>
 		</div>
 
 		<div class="clearfix">
@@ -64,7 +67,7 @@
 				</div>
 				<div class="circular-notice-answer-deadline">
 					<?php echo __d('circular_notices', 'Circular Content Deadline Title'); ?>
-					<?php 
+					<?php
 						$replyDeadline = __d('circular_notices', 'Not Date Set');
 						if (!empty($circularNoticeContent['reply_deadline'])):
 							$replyDeadline = $this->CircularNotice->displayDate($circularNoticeContent['reply_deadline']);
