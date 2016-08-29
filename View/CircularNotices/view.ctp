@@ -49,10 +49,9 @@
 	<div id="nc-circular-notices-<?php echo (int)Current::read('Frame.id'); ?>" ng-controller="CircularNoticeView" ng-init="initialize()">
 		<div class="clearfix circular-notices-word-break">
 			<?php echo $this->NetCommonsHtml->blockTitle(
-				$this->element('CircularNotices/status_label', array('circularNoticeContent' => $circularNoticeContent)) . ' ' .
-				h($circularNoticeContent['subject']),
+				$circularNoticeContent['subject'],
 				$circularNoticeContent['title_icon'],
-				array('escape' => false)
+				array('status' => $this->element('CircularNotices/status_label', array('circularNoticeContent' => $circularNoticeContent)))
 			); ?>
 		</div>
 
