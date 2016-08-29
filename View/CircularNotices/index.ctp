@@ -61,7 +61,7 @@
 					</div>
 					<!-- タイトル -->
 					<h2 class="circular-notices-word-break">
-						<?php echo $this->TitleIcon->titleIcon($circularNoticeContent['CircularNoticeContent']['title_icon']); ?>
+						<?php echo $this->TitleIcon->titleIcon(h($circularNoticeContent['CircularNoticeContent']['title_icon'])); ?>
 						<?php if (
 							($circularNoticeContent['CircularNoticeContent']['content_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT
 								|| $circularNoticeContent['CircularNoticeContent']['content_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED)
