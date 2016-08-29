@@ -29,7 +29,9 @@
 	<div class="pull-left">
 		<?php echo $this->element('CircularNotices/status_label', array('circularNoticeContent' => $circularNoticeContent)); ?>
 	</div>
-	<?php if (Current::permission('content_creatable')) : ?>
+	<?php if (Current::permission('content_creatable')
+			&& ($circularNoticeContent['created_user'] == Current::read('User.id')
+				|| Current::read('Permission.content_editable.role_key') === Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR)) : ?>
 		<div class="pull-right">
 			<?php echo $this->Button->editLink('',
 				array(
