@@ -70,35 +70,18 @@ class CircularNoticeChoice extends CircularNoticesAppModel {
 	public function replaceCircularNoticeChoices($data) {
 		$contentId = $data['CircularNoticeContent']['id'];
 
-		// 残す選択肢の条件を生成
-		$deleteConditions = array(
-			'CircularNoticeChoice.circular_notice_content_id' => $contentId,
-		);
-		$extractIds =
-			Hash::filter(Hash::extract($data['CircularNoticeChoices'], '{n}.CircularNoticeChoice.id'));
-		if (count($extractIds) > 0) {
-			$deleteConditions['CircularNoticeChoice.id NOT'] = $extractIds;
-		}
-
-		// 選択肢を一旦削除
-		if (! $this->deleteAll($deleteConditions, false)) {
-			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-		}
-
 		// 1件ずつ保存
 		foreach ($data['CircularNoticeChoices'] as $choice) {
-
+			unset($choice['CircularNoticeChoice']['id']);	// 常に新規登録
 			$choice['CircularNoticeChoice']['circular_notice_content_id'] = $contentId;
-
+			$this->create($choice);
 			if (! $this->validateCircularChoice($choice)) {
 				return false;
 			}
-
 			if (! $this->save(null, false)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 		}
-
 		return true;
 	}
 

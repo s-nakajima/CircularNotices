@@ -29,7 +29,9 @@
 	<div class="pull-left">
 		<?php echo $this->LinkButton->toList(); ?>
 	</div>
-	<?php if (Current::permission('content_creatable')) : ?>
+	<?php if (Current::permission('content_creatable')
+			&& ($circularNoticeContent['created_user'] == Current::read('User.id')
+				|| Current::read('Permission.content_editable.role_key') === Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR)) : ?>
 		<div class="pull-right">
 			<?php echo $this->Button->editLink('',
 				array(
@@ -50,7 +52,7 @@
 		<div class="clearfix circular-notices-word-break">
 			<?php echo $this->NetCommonsHtml->blockTitle(
 				$circularNoticeContent['subject'],
-				$circularNoticeContent['title_icon'],
+				h($circularNoticeContent['title_icon']),
 				array('status' => $this->element('CircularNotices/status_label', array('circularNoticeContent' => $circularNoticeContent)))
 			); ?>
 		</div>
@@ -113,7 +115,7 @@
 				</div>
 				<div class="pull-left circular-notice-answer-choice-choices">
 					<?php foreach ($circularNoticeChoice as $choice) : ?>
-						<?php echo $choice['value']; ?><br />
+						<?php echo h($choice['value']); ?><br />
 					<?php endforeach; ?>
 				</div>
 				<div>
@@ -355,7 +357,7 @@
 							$this->NetCommonsHtml->handleLink($circularNoticeTargetUser, array('avatar' => true), array(), 'User'),
 							array($readDatetime, array('class' => 'row-datetime')),
 							array($replyDatetime, array('class' => 'row-datetime')),
-							array($answer, array('class' => 'circular-notices-reply-col circular-notices-word-break')),
+							array(h($answer), array('class' => 'circular-notices-reply-col circular-notices-word-break')),
 						));
 					endforeach;
 				?>

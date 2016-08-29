@@ -150,36 +150,4 @@ class CircularNoticeChoiceReplaceCircularNoticeChoicesTest extends NetCommonsMod
 
 		$choicesMock->$methodName($data);
 	}
-
-/**
- * データ削除 例外テスト
- *
- * @return void
- */
-	public function testDeleteReplaceCircularNoticeChoicesException() {
-		$model = $this->_modelName;
-		$methodName = $this->_methodName;
-		$this->setExpectedException('InternalErrorException');
-
-		$data = array('CircularNoticeContent' => array('id' => '1'));
-		$data['CircularNoticeChoices'][] = array('CircularNoticeChoice' => array(
-			'id' => 1,
-			'circular_notice_content_id' => 1,
-			'value' => 'frame_1',
-			'weight' => 1,
-			'created_user' => 1,
-			'created' => '2015-03-09 09:25:18',
-			'modified_user' => 1,
-			'modified' => '2015-03-09 09:25:18'
-		),
-		);
-
-		// 例外を発生させるためのモック
-		$choicesMock = $this->getMockForModel('CircularNotices.' . $model, ['deleteAll']);
-		$choicesMock->expects($this->any())
-			->method('deleteAll')
-			->will($this->returnValue(false));
-
-		$choicesMock->$methodName($data);
-	}
 }

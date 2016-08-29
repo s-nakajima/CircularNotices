@@ -181,11 +181,14 @@ class CircularNoticeContentSaveCircularNoticeContentTest extends NetCommonsModel
 		$data['CircularNoticeContent'] = (new CircularNoticeContentFixture())->records[6];
 		$data['CircularNoticeTargetUsers'][0]['CircularNoticeTargetUser'] = (new CircularNoticeTargetUserFixture())->records[0];
 		$data['CircularNoticeChoices'][0]['CircularNoticeChoice'] = (new CircularNoticeChoiceFixture())->records[0];
+		$expectedContent = array(
+			'CircularNoticeContent' => (new CircularNoticeContentFixture())->records[6],
+		);
 		// 例外を発生させるためのモック
 		$thisModelMock = $this->getMockForModel('CircularNotices.' . $model, ['save']);
 		$thisModelMock->expects($this->any())
 				->method('save')
-				->will($this->returnValue(true));
+				->will($this->returnValue($expectedContent));
 		//テスト実施
 		$this->_mockForReturnFalse($model, 'CircularNoticeTargetUser', 'replaceCircularNoticeTargetUsers');
 		$result = $thisModelMock->$methodName($data);

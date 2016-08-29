@@ -55,14 +55,15 @@
 			<?php foreach ($circularNoticeContents as $circularNoticeContent) : ?>
 				<!-- タイトル -->
 				<h2 class="circular-notices-word-break">
-					<?php echo $this->TitleIcon->titleIcon($circularNoticeContent['CircularNoticeContent']['title_icon']); ?>
+					<?php echo $this->TitleIcon->titleIcon(h($circularNoticeContent['CircularNoticeContent']['title_icon'])); ?>
 
 					<?php if (
 						($circularNoticeContent['CircularNoticeContent']['content_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT
 							|| $circularNoticeContent['CircularNoticeContent']['content_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED)
 						&& $circularNoticeContent['CircularNoticeContent']['created_user'] != Current::read('User.id')
+						&& Current::read('Permission.content_editable.role_key') !== Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR
 					) : ?>
-						<?php echo $circularNoticeContent['CircularNoticeContent']['subject']; ?><br />
+						<?php echo h($circularNoticeContent['CircularNoticeContent']['subject']); ?><br />
 					<?php else : ?>
 						<?php echo $this->NetCommonsHtml->link(
 							$circularNoticeContent['CircularNoticeContent']['subject'],
@@ -84,7 +85,9 @@
 					<div>
 						<div class="well well-sm">
 							<!-- 編集リンク -->
-							<?php if (Current::permission('content_creatable') && $circularNoticeContent['CircularNoticeContent']['created_user'] == Current::read('User.id')) : ?>
+							<?php if (Current::permission('content_creatable')
+								&& ($circularNoticeContent['CircularNoticeContent']['created_user'] == Current::read('User.id')
+									|| Current::read('Permission.content_editable.role_key') === Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR)) : ?>
 								<div class="pull-right circular-notice-edit-link">
 									<span class="nc-tooltip" tooltip="<?php echo __d('net_commons', 'Edit'); ?>">
 										<?php echo $this->LinkButton->edit('',

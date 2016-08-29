@@ -60,8 +60,8 @@ class CircularNoticesControllerAddTest extends NetCommonsControllerTestCase {
  * @return array
  */
 	private function __getData() {
-		$frameId = '5';
-		$blockId = '1';
+		$frameId = '6';
+		$blockId = '2';
 
 		$data = array(
 			'frame_id' => $frameId,

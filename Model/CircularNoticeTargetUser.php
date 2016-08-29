@@ -349,30 +349,29 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
  */
 	public function replaceCircularNoticeTargetUsers($data) {
 		$contentId = $data['CircularNoticeContent']['id'];
+		$oldContentId =
+			isset($data['oldCircularNoticeContentId']) ? $data['oldCircularNoticeContentId'] : 0;
 
 		// 編集時に既に回答済みの情報を保持する
 		$existingTargetUsers = $this->find('all', array(
 			'recursive' => -1,
 			'fields' => array('user_id', 'is_read', 'read_datetime', 'is_reply',
 				'reply_datetime', 'reply_text_value', 'reply_selection_value'),
-			'conditions' => array('circular_notice_content_id' => $contentId)
+			'conditions' => array('circular_notice_content_id' => $oldContentId)
 		));
 		$existingTargetUsers =
 			Hash::combine($existingTargetUsers, '{n}.CircularNoticeTargetUser.user_id', '{n}');
-
-		// すべてDelete
-		if (! $this->deleteAll(array(
-			'CircularNoticeTargetUser.circular_notice_content_id' => $contentId), false)) {
-			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-		}
 
 		// 1件ずつ保存
 		if (isset($data['CircularNoticeTargetUsers']) && count($data['CircularNoticeTargetUsers']) > 0) {
 			foreach ($data['CircularNoticeTargetUsers'] as $targetUser) {
 				$targetUser['CircularNoticeTargetUser']['circular_notice_content_id'] = $contentId;
-				if (isset($existingTargetUsers[$targetUser['CircularNoticeTargetUser']['user_id']])) {
+				if (isset($existingTargetUsers[$targetUser['CircularNoticeTargetUser']['user_id']])
+						&& strtotime($data['CircularNoticeContent']['publish_start']) < strtotime('now')) {
 					$targetUser = Hash::merge($targetUser,
 						$existingTargetUsers[$targetUser['CircularNoticeTargetUser']['user_id']]);
+					$targetUser['CircularNoticeTargetUser']['reply_text_value'] = '';		// NC2の仕様を踏襲
+					$targetUser['CircularNoticeTargetUser']['reply_selection_value'] = '';	// NC2の仕様を踏襲
 				}
 				if (! $this->validateCircularNoticeTargetUser($targetUser)) {
 					return false;
