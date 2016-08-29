@@ -54,7 +54,7 @@ $label = isset($labels[$status]) ? $labels[$status] : null;
 ?>
 
 <?php if ($label): ?>
-	<span class="label <?php echo h($labels[$status]['class']); ?>">
+	<span class="workflow-label label <?php echo h($labels[$status]['class']); ?>">
 		<?php echo h($labels[$status]['message']); ?>
 	</span>
 <?php endif;

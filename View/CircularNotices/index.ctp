@@ -26,7 +26,7 @@
 	);
 ?>
 
-<article class="index">
+<article class="index nc-content-list">
 
 	<div class="clearfix circular-notices-navigation-header">
 		<?php if (Current::permission('content_creatable')) : ?>
@@ -51,36 +51,36 @@
 		</div>
 	</div>
 
-	<div class="nc-content-list">
 		<?php if ($circularNoticeContents) : ?>
 			<?php foreach ($circularNoticeContents as $circularNoticeContent) : ?>
-				<article class="circular-notices">
-					<!-- ステータス -->
-					<div>
-						<?php echo $this->element('CircularNotices/status_label', array('circularNoticeContent' => $circularNoticeContent['CircularNoticeContent'])); ?>
-					</div>
-					<!-- タイトル -->
-					<h2 class="circular-notices-word-break">
-						<?php echo $this->TitleIcon->titleIcon($circularNoticeContent['CircularNoticeContent']['title_icon']); ?>
-						<?php if (
-							($circularNoticeContent['CircularNoticeContent']['content_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT
-								|| $circularNoticeContent['CircularNoticeContent']['content_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED)
-							&& $circularNoticeContent['CircularNoticeContent']['created_user'] != Current::read('User.id')
-						) : ?>
-							<?php echo $circularNoticeContent['CircularNoticeContent']['subject']; ?><br />
-						<?php else : ?>
-							<?php echo $this->NetCommonsHtml->link(
-								$circularNoticeContent['CircularNoticeContent']['subject'],
-								array(
-									'controller' => 'circular_notices',
-									'action' => 'view',
-									'key' => $circularNoticeContent['CircularNoticeContent']['key']
-								)
-							);
-							?>
-						<?php endif; ?>
-					</h2>
+				<!-- タイトル -->
+				<h2 class="circular-notices-word-break">
+					<?php echo $this->TitleIcon->titleIcon($circularNoticeContent['CircularNoticeContent']['title_icon']); ?>
 
+					<?php if (
+						($circularNoticeContent['CircularNoticeContent']['content_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT
+							|| $circularNoticeContent['CircularNoticeContent']['content_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED)
+						&& $circularNoticeContent['CircularNoticeContent']['created_user'] != Current::read('User.id')
+					) : ?>
+						<?php echo $circularNoticeContent['CircularNoticeContent']['subject']; ?><br />
+					<?php else : ?>
+						<?php echo $this->NetCommonsHtml->link(
+							$circularNoticeContent['CircularNoticeContent']['subject'],
+							array(
+								'controller' => 'circular_notices',
+								'action' => 'view',
+								'key' => $circularNoticeContent['CircularNoticeContent']['key']
+							)
+						);
+						?>
+					<?php endif; ?>
+
+					<!-- ステータス -->
+					<?php echo $this->element('CircularNotices/status_label', array(
+						'circularNoticeContent' => $circularNoticeContent['CircularNoticeContent'])
+					); ?>
+				</h2>
+				<article class="circular-notices">
 					<div>
 						<div class="well well-sm">
 							<!-- 編集リンク -->
@@ -148,5 +148,4 @@
 				<?php echo __d('circular_notices', 'Circular Content Data Not Found'); ?>
 			</p>
 		<?php endif; ?>
-	</div>
 </article>
