@@ -54,8 +54,8 @@ class CircularNoticeFrameSettingsControllerEditTest extends NetCommonsController
  */
 	private function __getData() {
 		$frameId = '6';
-		$blockId = '1';
-		$blockKey = 'block_2';
+		$blockId = '2';
+		$blockKey = 'block_1';
 
 		$data = array(
 			'Frame' => array(
@@ -67,7 +67,7 @@ class CircularNoticeFrameSettingsControllerEditTest extends NetCommonsController
 			),
 			'CircularNoticeFrameSetting' => array(
 				'id' => 2,
-				'frame_key' => 'frame_2',
+				'frame_key' => 'frame_3',
 				'display_number' => '10',
 				'created_user' => '1',
 				'created' => '2015-03-09 09:25:22',

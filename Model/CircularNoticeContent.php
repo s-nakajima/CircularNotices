@@ -280,12 +280,13 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			return false;
 		}
 		$this->__bindMyCircularNoticeTargetUser($userId, true);
+		$conditions = array(
+			'CircularNoticeContent.key' => $key,
+		);
 
 		return $this->find('first', array(
 			'recursive' => 1,
-			'conditions' => array(
-				'CircularNoticeContent.key' => $key,
-			),
+			'conditions' => $this->getWorkflowConditions($conditions),
 		));
 	}
 
@@ -304,7 +305,8 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 		$this->virtualFields['reply_status'] =
 			$this->MyCircularNoticeTargetUser->virtualFields['reply_status'];
 
-		$conditions = array(
+		$conditions = $this->getWorkflowConditions();
+		$conditions[] = array(
 			'CircularNoticeContent.circular_notice_setting_key' => $blockKey,
 			'OR' => array(
 				'CircularNoticeContent.created_user' => $userId,

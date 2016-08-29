@@ -108,33 +108,6 @@ class CircularNoticeTargetUserReplaceCircularNoticeTargetUsersTest extends NetCo
 	}
 
 /**
- * データ一括削除 例外テスト
- *
- * @return void
- */
-	public function testDeleteAllException() {
-		$model = $this->_modelName;
-		$methodName = $this->_methodName;
-		$this->setExpectedException('InternalErrorException');
-
-		//データ生成
-		$data['CircularNoticeTargetUsers'] = $this->__data();
-		// $contentIdの値設定
-		$data['CircularNoticeContent']['id'] = 4;
-
-		// 例外を発生させるためのモック
-		$choicesMock = $this->getMockForModel('CircularNotices.' . $model, ['deleteAll']);
-		$choicesMock->expects($this->any())
-			->method('deleteAll')
-			->will($this->returnValue(false));
-
-		$result = $choicesMock->$methodName($data);
-
-		//チェック
-		$this->assertInstanceOf('InternalErrorException', $result);
-	}
-
-/**
  * validateCircularNoticeTargetUser() falseのテスト
  *
  * @return void

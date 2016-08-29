@@ -56,8 +56,8 @@ class CircularNoticesControllerDownloadTest extends NetCommonsControllerTestCase
  * @return array
  */
 	private function __getData() {
-		$frameId = '5';
-		$blockId = '1';
+		$frameId = '6';
+		$blockId = '2';
 		$contentKey = 'circular_notice_content_1';
 
 		$data = array(
@@ -191,7 +191,7 @@ class CircularNoticesControllerDownloadTest extends NetCommonsControllerTestCase
 		$this->controller->request->params['key'] = $urlOptions['key'];
 		$this->controller->request->data = $data;
 		Current::initialize($this->controller);
-		$id = empty($urlOptions['frame_id']) ? '5' : $urlOptions['frame_id'];
+		$id = empty($urlOptions['frame_id']) ? '6' : $urlOptions['frame_id'];
 		Current::write('Frame', [
 			'id' => $id,
 			'key' => $urlOptions['key'],

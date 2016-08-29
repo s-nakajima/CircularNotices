@@ -56,8 +56,8 @@ class CircularNoticesControllerDeleteTest extends NetCommonsControllerTestCase {
  * @return array
  */
 	private function __getData($role = null) {
-		$frameId = '5';
-		$blockId = '1';
+		$frameId = '6';
+		$blockId = '2';
 		$contentKey = 'circular_notice_content_1';
 
 		$data = array(

@@ -50,13 +50,23 @@ class CircularNoticesControllerViewTest extends NetCommonsControllerTestCase {
 	protected $_controller = 'circular_notices';
 
 /**
+ * setUp method
+ *
+ * @return void
+ */
+	public function setUp() {
+		Current::write('Language.id', '2');
+		parent::setUp();
+	}
+
+/**
  * テストDataの取得
  *
  * @return array
  */
 	private function __getData() {
-		$frameId = '5';
-		$blockId = '1';
+		$frameId = '6';
+		$blockId = '2';
 		$contentKey = 'circular_notice_content_1';
 
 		$data = array(
