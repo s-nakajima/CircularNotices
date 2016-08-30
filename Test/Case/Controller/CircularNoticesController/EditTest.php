@@ -199,16 +199,141 @@ class CircularNoticesControllerEditTest extends NetCommonsControllerTestCase {
 								'value' => 'aaa',
 							),
 						),
-						1 => array(
-							'CircularNoticeChoice' => array(
-								'id' => '',
-								'weight' => '2',
-								'value' => 'bbb',
-							),
-						),
 					),
 					'CircularNoticeTargetUser' => array(
 						0 => array('user_id' => 1),
+					),
+				),
+				'assert' => array('method' => 'assertNotEmpty'),
+			),
+			array(
+				'urlOptions' => $data,
+				'data' => array(
+					'save_1' => '',
+					'Frame' => array('id' => $data['frame_id']),
+					'Block' => array('id' => $data['block_id']),
+					'CircularNoticeContent' => array(
+						'id' => 1,
+						'circular_notice_setting_key' => 'circular_notice_setting_1',
+						'subject' => 'Lorem ipsum dolor sit amet',
+						'content' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
+						'reply_type' => '3',
+						'is_room_target' => 1,
+						'publish_start' => '2016-01-01 00:00',
+						'publish_end' => '2016-12-01 00:00',
+						'use_reply_deadline' => '0',
+					),
+				),
+				'assert' => array('method' => 'assertNotEmpty'),
+			),
+			array(
+				'urlOptions' => Hash::insert($data, 'key', 'circular_notice_content_2'),
+				'data' => array(
+					'role' => Role::ROOM_ROLE_KEY_GENERAL_USER,
+					'save_1' => '',
+					'CircularNoticeContent' => array(
+						'id' => 2,
+						'key' => 'circular_notice_content_2',
+					),
+				),
+				'assert' => null,
+				'exception' => 'BadRequestException'
+			),
+		);
+	}
+
+/**
+ * editアクションのPOSTテスト
+ *
+ * @param array $urlOptions URLオプション
+ * @param array $data POSTデータ
+ * @param array $assert テストの期待値
+ * @param string|null $exception Exception
+ * @param string $return testActionの実行後の結果
+ * @dataProvider dataProviderEditPost
+ * @return void
+ */
+	public function testEditPost($urlOptions, $data, $assert, $exception = null, $return = 'view') {
+		//ログイン
+		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_GENERAL_USER);
+		//テスト実施
+		$this->_testPostAction('post', $data, Hash::merge(array('action' => 'edit'), $urlOptions), $exception, $return);
+		//ログアウト
+		TestAuthGeneral::logout($this);
+	}
+
+/**
+ * editアクションFalseテスト
+ *
+ * ### 戻り値
+ *  - urlOptions: URLオプション
+ *  - assert: テストの期待値
+ *  - exception: Exception
+ *  - return: testActionの実行後の結果
+ *
+ * @return array
+ */
+	public function dataProviderEditPostFalse() {
+		$data = $this->__getData();
+		//テストデータ
+		return array(
+			array(
+				'urlOptions' => $data,
+				'data' => array(
+					'save_1' => '',
+					'Frame' => array('id' => $data['frame_id']),
+					'Block' => array('id' => $data['block_id']),
+					'CircularNoticeContent' => array(
+							'id' => '',
+							'reply_type' => '1',
+							'is_room_target' => '',
+							'publish_start' => '',
+							'publish_end' => '',
+							'use_reply_deadline' => 0,
+							'reply_deadline' => ''
+					),
+					'CircularNoticeTargetUser' => array(
+							0 => array('user_id' => 1),
+					),
+				),
+				'assert' => array('method' => 'assertNotEmpty'),
+			),
+			array(
+				'urlOptions' => $data,
+				'data' => array(
+					'save_1' => '',
+					'Frame' => array('id' => $data['frame_id']),
+					'Block' => array('id' => $data['block_id']),
+					'CircularNoticeContent' => array(
+						'id' => 1,
+						'circular_notice_setting_key' => 'circular_notice_setting_1',
+						'subject' => 'Lorem ipsum dolor sit amet',
+						'content' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
+						'reply_type' => '2',
+						'is_room_target' => 1,
+						'publish_start' => '2016-01-02 00:00',
+						'publish_end' => '2016-01-01 00:00',
+						'use_reply_deadline' => '1',
+						'reply_deadline' => '2016-06-28 00:00'
+					),
+					'CircularNoticeChoices' => array(
+						0 => array(
+								'CircularNoticeChoice' => array(
+										'id' => '',
+										'weight' => '1',
+										'value' => 'aaa',
+								),
+						),
+						1 => array(
+								'CircularNoticeChoice' => array(
+										'id' => '',
+										'weight' => '2',
+										'value' => 'bbb',
+								),
+						),
+					),
+					'CircularNoticeTargetUser' => array(
+							0 => array('user_id' => 1),
 					),
 				),
 				'assert' => array('method' => 'assertNotEmpty'),
@@ -256,143 +381,12 @@ class CircularNoticesControllerEditTest extends NetCommonsControllerTestCase {
  * @param array $assert テストの期待値
  * @param string|null $exception Exception
  * @param string $return testActionの実行後の結果
- * @dataProvider dataProviderEditPost
- * @return void
- */
-	public function testEditPost($urlOptions, $data, $assert, $exception = null, $return = 'view') {
-		//ログイン
-		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
-		//テスト実施
-		$this->_testPostAction('post', $data, Hash::merge(array('action' => 'edit'), $urlOptions), $exception, $return);
-		//ログアウト
-		TestAuthGeneral::logout($this);
-	}
-
-/**
- * editアクションFalseテスト
- *
- * ### 戻り値
- *  - urlOptions: URLオプション
- *  - assert: テストの期待値
- *  - exception: Exception
- *  - return: testActionの実行後の結果
- *
- * @return array
- */
-	public function dataProviderEditPostFalse() {
-		$data = $this->__getData();
-		//テストデータ
-		return array(
-				array(
-						'urlOptions' => $data,
-						'data' => array(
-								'save_1' => '',
-								'Frame' => array('id' => $data['frame_id']),
-								'Block' => array('id' => $data['block_id']),
-								'CircularNoticeContent' => array(
-										'id' => '',
-										'reply_type' => '1',
-										'is_room_target' => '',
-										'publish_start' => '',
-										'publish_end' => '',
-										'use_reply_deadline' => 0,
-										'reply_deadline' => ''
-								),
-								'CircularNoticeTargetUser' => array(
-										0 => array('user_id' => 1),
-								),
-						),
-						'assert' => array('method' => 'assertNotEmpty'),
-				),
-				array(
-						'urlOptions' => $data,
-						'data' => array(
-								'save_1' => '',
-								'Frame' => array('id' => $data['frame_id']),
-								'Block' => array('id' => $data['block_id']),
-								'CircularNoticeContent' => array(
-										'id' => 1,
-										'circular_notice_setting_key' => 'circular_notice_setting_1',
-										'subject' => 'Lorem ipsum dolor sit amet',
-										'content' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
-										'reply_type' => '2',
-										'is_room_target' => 1,
-										'publish_start' => '2016-01-02 00:00',
-										'publish_end' => '2016-01-01 00:00',
-										'use_reply_deadline' => '1',
-										'reply_deadline' => '2016-06-28 00:00'
-								),
-								'CircularNoticeChoices' => array(
-										0 => array(
-												'CircularNoticeChoice' => array(
-														'id' => '',
-														'weight' => '1',
-														'value' => 'aaa',
-												),
-										),
-										1 => array(
-												'CircularNoticeChoice' => array(
-														'id' => '',
-														'weight' => '2',
-														'value' => 'bbb',
-												),
-										),
-								),
-								'CircularNoticeTargetUser' => array(
-										0 => array('user_id' => 1),
-								),
-						),
-						'assert' => array('method' => 'assertNotEmpty'),
-				),
-				array(
-						'urlOptions' => $data,
-						'data' => array(
-								'save_1' => '',
-								'Frame' => array('id' => $data['frame_id']),
-								'Block' => array('id' => $data['block_id']),
-								'CircularNoticeContent' => array(
-										'id' => 1,
-										'circular_notice_setting_key' => 'circular_notice_setting_1',
-										'subject' => 'Lorem ipsum dolor sit amet',
-										'content' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
-										'reply_type' => '3',
-										'is_room_target' => 1,
-										'publish_start' => '2016-01-01 00:00',
-										'publish_end' => '2016-12-01 00:00',
-										'use_reply_deadline' => '0',
-								),
-								'CircularNoticeChoices' => array(
-										0 => array(
-												'CircularNoticeChoice' => array(
-														'id' => '',
-														'weight' => '1',
-														'value' => 'aaa',
-												),
-										),
-								),
-								'CircularNoticeTargetUser' => array(
-										0 => array('user_id' => 1),
-								),
-						),
-						'assert' => array('method' => 'assertNotEmpty'),
-				),
-		);
-	}
-
-/**
- * editアクションのPOSTテスト
- *
- * @param array $urlOptions URLオプション
- * @param array $data POSTデータ
- * @param array $assert テストの期待値
- * @param string|null $exception Exception
- * @param string $return testActionの実行後の結果
  * @dataProvider dataProviderEditPostFalse
  * @return void
  */
 	public function testEditPostFalse($urlOptions, $data, $assert, $exception = null, $return = 'view') {
 		//ログイン
-		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
+		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_GENERAL_USER);
 		//テスト実施
 		$this->_testPostAction('post', $data, Hash::merge(array('action' => 'edit'), $urlOptions), $exception, $return);
 		//ログアウト

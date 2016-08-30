@@ -132,6 +132,15 @@ class CircularNoticesControllerViewTest extends NetCommonsControllerTestCase {
 			'urlOptions' => Hash::insert($data, 'key', 'circular_notice_content_12'),
 			'assert' => array('method' => 'assertNotEmpty'),
 		);
+		$results[9] = array(
+			'urlOptions' => Hash::insert($data, 'key', 'circular_notice_content_13'),
+			'assert' => null,
+			'exception' => 'BadRequestException'
+		);
+		$results[10] = array(
+			'urlOptions' => Hash::insert($data, 'key', 'circular_notice_content_14'),
+			'assert' => array('method' => 'assertNotEmpty'),
+		);
 
 		return $results;
 	}
@@ -163,13 +172,46 @@ class CircularNoticesControllerViewTest extends NetCommonsControllerTestCase {
 	}
 
 /**
+ * viewアクションのテスト(作成権限のみ)用DataProvider
+ *
+ * ### 戻り値
+ *  - urlOptions: URLオプション
+ *  - assert: テストの期待値
+ *  - exception: Exception
+ *  - return: testActionの実行後の結果
+ *
+ * @return array
+ */
+	public function dataProviderViewAnswer() {
+		$data = $this->__getData();
+
+		//テストデータ
+		$results = array();
+
+		$results[0] = array(
+			'urlOptions' => Hash::insert($data, 'frame_id', ''),
+			'assert' => null,
+		);
+		$results[1] = array(
+			'urlOptions' => Hash::insert($data, 'key', 'circular_notice_content_2'),
+			'assert' => array('method' => 'assertNotEmpty'),
+		);
+		$results[2] = array(
+			'urlOptions' => Hash::insert($data, 'key', 'circular_notice_content_3'),
+			'assert' => array('method' => 'assertNotEmpty'),
+		);
+
+		return $results;
+	}
+
+/**
  * viewアクションのテスト(作成権限のみ)
  *
  * @param array $urlOptions URLオプション
  * @param array $assert テストの期待値
  * @param string|null $exception Exception
  * @param string $return testActionの実行後の結果
- * @dataProvider dataProviderView
+ * @dataProvider dataProviderViewAnswer
  * @return void
  */
 	public function testViewAnswer($urlOptions, $assert, $exception = null, $return = 'view') {

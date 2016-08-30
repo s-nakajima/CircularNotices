@@ -228,7 +228,25 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 					'message' => sprintf(__d('net_commons', 'Please input %s.'),
 							__d('circular_notices', 'Choice')),
 				),
-			)
+			),
+			'is_room_target' => array(
+				'inList' => array(
+					'rule' => array('inList', array(
+						1,
+						0,
+					)),
+					'message' => __d('net_commons', 'Invalid request.'),
+				),
+			),
+			'use_reply_deadline' => array(
+				'inList' => array(
+					'rule' => array('inList', array(
+						1,
+						0,
+					)),
+					'message' => __d('net_commons', 'Invalid request.'),
+				),
+			),
 		);
 
 		return $validate;

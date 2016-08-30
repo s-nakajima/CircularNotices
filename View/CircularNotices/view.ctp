@@ -29,9 +29,7 @@
 	<div class="pull-left">
 		<?php echo $this->LinkButton->toList(); ?>
 	</div>
-	<?php if (Current::permission('content_creatable')
-			&& ($circularNoticeContent['created_user'] == Current::read('User.id')
-				|| Current::read('Permission.content_editable.role_key') === Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR)) : ?>
+	<?php if ($this->Workflow->canEdit('CircularNotices.CircularNoticeContent', array('CircularNoticeContent' => $circularNoticeContent))) : ?>
 		<div class="pull-right">
 			<?php echo $this->Button->editLink('',
 				array(
@@ -84,7 +82,7 @@
 				</div>
 				<div class="circular-notice-created-user">
 					<?php echo __d('circular_notices', 'Created User Title'); ?>
-					<?php echo $this->NetCommonsHtml->handleLink(array('User' => Current::read('User')), array('avatar' => true), array(), 'User'); ?><br />
+					<?php echo $this->NetCommonsHtml->handleLink($createdUser, array('avatar' => true), array(), 'User'); ?><br />
 				</div>
 			</div>
 			<!-- 閲覧状況・回答状況 -->
