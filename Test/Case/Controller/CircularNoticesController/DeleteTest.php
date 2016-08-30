@@ -89,7 +89,7 @@ class CircularNoticesControllerDeleteTest extends NetCommonsControllerTestCase {
 		$results[0] = array(
 			'urlOptions' => Hash::insert($data, 'frame_id', 6),
 			'assert' => null,
-			'exception' => 'BadRequestException'
+			'exception' => 'MethodNotAllowedException'
 		);
 
 		return $results;
@@ -143,6 +143,12 @@ class CircularNoticesControllerDeleteTest extends NetCommonsControllerTestCase {
 			'data' => array(),
 			'assert' => array('method' => 'assertNotEmpty'),
 		);
+		$results[1] = array(
+			'urlOptions' => Hash::insert($data, 'key', 'circular_notice_content_2'),
+			'data' => array(),
+			'assert' => array('method' => 'assertNotEmpty'),
+			'exception' => 'BadRequestException'
+		);
 
 		return $results;
 	}
@@ -158,9 +164,9 @@ class CircularNoticesControllerDeleteTest extends NetCommonsControllerTestCase {
  * @dataProvider dataProviderDeletePost
  * @return void
  */
-	public function testDeletePost($urlOptions, $data, $assert, $exception = null, $return = 'view') {
+	public function testDeletePostDeletable($urlOptions, $data, $assert, $exception = null, $return = 'view') {
 		//ログイン
-		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR);
+		TestAuthGeneral::login($this, Role::ROOM_ROLE_KEY_GENERAL_USER);
 
 		//テスト実施
 		$this->_testPostAction('delete', $data, Hash::merge(array('action' => 'delete'), $urlOptions), $exception, $return);

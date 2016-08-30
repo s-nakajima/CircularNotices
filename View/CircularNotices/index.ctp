@@ -60,8 +60,7 @@
 					<?php if (
 						($circularNoticeContent['CircularNoticeContent']['content_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_IN_DRAFT
 							|| $circularNoticeContent['CircularNoticeContent']['content_status'] == CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_STATUS_RESERVED)
-						&& $circularNoticeContent['CircularNoticeContent']['created_user'] != Current::read('User.id')
-						&& Current::read('Permission.content_editable.role_key') !== Role::ROOM_ROLE_KEY_ROOM_ADMINISTRATOR
+						&& !$this->Workflow->canEdit('CircularNotices.CircularNoticeContent', $circularNoticeContent)
 					) : ?>
 						<?php echo h($circularNoticeContent['CircularNoticeContent']['subject']); ?><br />
 					<?php else : ?>

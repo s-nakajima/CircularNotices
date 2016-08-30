@@ -14,7 +14,7 @@
 	<div>
 		<?php echo $this->NetCommonsForm->label(
 			'CircularNoticeTargetUser.period',
-			__d('circular_notices', 'Period') . $this->element('NetCommons.required')
+			__d('circular_notices', 'Period')
 		); ?>
 	</div>
 	<div>

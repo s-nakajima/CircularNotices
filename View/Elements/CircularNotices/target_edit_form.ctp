@@ -31,6 +31,7 @@
 			'outer' => false,
 		));
 		?>
+		<?php echo $this->NetCommonsForm->error('CircularNoticeContent.is_room_target'); ?>
 		<?php echo $this->NetCommonsForm->error('CircularNoticeTargetUser.user_id'); ?>
 	</div>
 	<!-- グループ選択 -->

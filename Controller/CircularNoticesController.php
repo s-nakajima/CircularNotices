@@ -183,6 +183,11 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 			// ログイン者の回答を取得して整形
 			$myTargetUser = array('CircularNoticeTargetUser' => $content['MyCircularNoticeTargetUser']);
+		} else {
+			// 回覧先に含まれておらず編集権限がなければ参照不可
+			if ($this->CircularNoticeContent->canEditWorkflowContent($content) === false) {
+				return $this->throwBadRequest();
+			}
 		}
 
 		// 回覧の閲覧件数／回答件数を取得
@@ -220,6 +225,10 @@ class CircularNoticesController extends CircularNoticesAppController {
 			// 新着データを既読にする
 			$this->CircularNoticeContent->saveTopicUserStatus($content);
 		}
+
+		// コンテンツ作成者情報をセット
+		$createdUser = $this->User->getUser($content['CircularNoticeContent']['created_user']);
+		$this->set('createdUser', $createdUser);
 
 		$results = Hash::merge(
 			$counts,
@@ -320,7 +329,12 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$this->helpers[] = 'Users.UserSearch';
 		$key = $this->request->params['key'];
 
-		if (! $content = $this->CircularNoticeContent->getCircularNoticeContent($key, $userId)) {
+		$content = $this->CircularNoticeContent->getCircularNoticeContent($key, $userId);
+		if (! $content) {
+			return $this->throwBadRequest();
+		}
+
+		if ($this->CircularNoticeContent->canEditWorkflowContent($content) === false) {
 			return $this->throwBadRequest();
 		}
 
@@ -393,11 +407,17 @@ class CircularNoticesController extends CircularNoticesAppController {
  * @return void
  */
 	public function delete() {
+		$this->request->allowMethod('post', 'delete');
+		$userId = Current::read('User.id');
 		$contentKey = $this->request->params['key'];
 
 		$this->CircularNotice->initCircularNotice($this);
 
-		if (! $this->request->is('delete')) {
+		// 権限チェック
+		// ※回覧板の場合は承認ワークフローがなく、編集可能であれば削除を許可
+		$content = $this->CircularNoticeContent->getCircularNoticeContent($contentKey, $userId);
+		//if ($this->CircularNoticeContent->canDeleteWorkflowContent($content) === false) {
+		if ($this->CircularNoticeContent->canEditWorkflowContent($content) === false) {
 			return $this->throwBadRequest();
 		}
 
@@ -549,17 +569,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT) {
 			$data['CircularNoticeChoices'] = array();
 		}
-
-		if (!empty($this->data['CircularNoticeContent']['is_room_target'])) {
-			$data['CircularNoticeContent']['is_room_target'] = true;
-		} else {
-			$data['CircularNoticeContent']['is_room_target'] = false;
-		}
-
-		if ($this->data['CircularNoticeContent']['use_reply_deadline'] !== '1') {
-			$data['CircularNoticeContent']['reply_deadline'] = null;
-		}
-
 		return $data;
 	}
 }
