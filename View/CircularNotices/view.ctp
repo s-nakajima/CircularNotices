@@ -60,15 +60,22 @@
 		<div class="clearfix">
 			<div class="pull-left">
 				<div class="circular-notice-publish-period">
-					<?php echo __d('circular_notices', 'Circular Content Period Title'); ?>
-					<?php echo $this->CircularNotice->displayDate($circularNoticeContent['publish_start']); ?>
-					<?php echo __d('circular_notices', 'Till'); ?>
-					<?php echo $this->CircularNotice->displayDate($circularNoticeContent['publish_end']); ?><br />
+					<?php echo __d('circular_notices', 'Circular Content Period Title');?>
+					<?php 
+					if (! $circularNoticeContent['publish_start']
+							&& ! $circularNoticeContent['publish_end']) {
+						echo __d('circular_notices', 'Unset');
+					} else {
+						echo $this->CircularNotice->displayDate($circularNoticeContent['publish_start']);
+						echo __d('circular_notices', 'Till');
+						echo $this->CircularNotice->displayDate($circularNoticeContent['publish_end']);
+					}
+					?><br />
 				</div>
 				<div class="circular-notice-answer-deadline">
 					<?php echo __d('circular_notices', 'Circular Content Deadline Title'); ?>
 					<?php
-						$replyDeadline = __d('circular_notices', 'Not Date Set');
+						$replyDeadline = __d('circular_notices', 'Unset');
 						if (!empty($circularNoticeContent['reply_deadline'])):
 							$replyDeadline = $this->CircularNotice->displayDate($circularNoticeContent['reply_deadline']);
 						endif;

@@ -290,6 +290,8 @@ class CircularNoticesController extends CircularNoticesAppController {
 					$this->request->data['selectUsers'][] = $this->User->getUser($userId);
 				}
 			}
+			// 回覧開始日にDEFAULT値として現在日持を設定
+			$content['CircularNoticeContent']['publish_start'] = date('Y-m-d H:i:s');
 		}
 
 		$results = Hash::merge(

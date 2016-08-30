@@ -127,10 +127,17 @@
 							<!-- 回覧期間 -->
 							<div class="circular-notice-attr-font">
 								<div class="circular-notice-publish-period">
-									<?php echo __d('circular_notices', 'Circular Content Period Title'); ?>
-									<?php echo $this->CircularNotice->displayDate($circularNoticeContent['CircularNoticeContent']['publish_start']); ?>
-									<?php echo __d('circular_notices', 'Till'); ?>
-									<?php echo $this->CircularNotice->displayDate($circularNoticeContent['CircularNoticeContent']['publish_end']); ?>
+									<?php echo __d('circular_notices', 'Circular Content Period Title');?>
+									<?php 
+									if (! $circularNoticeContent['CircularNoticeContent']['publish_start']
+											&& ! $circularNoticeContent['CircularNoticeContent']['publish_end']) {
+										echo __d('circular_notices', 'Unset');
+									} else {
+										echo $this->CircularNotice->displayDate($circularNoticeContent['CircularNoticeContent']['publish_start']);
+										echo __d('circular_notices', 'Till');
+										echo $this->CircularNotice->displayDate($circularNoticeContent['CircularNoticeContent']['publish_end']);
+									}
+									?>
 								</div>
 
 								<!-- 作成者 -->

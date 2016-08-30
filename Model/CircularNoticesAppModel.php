@@ -51,7 +51,7 @@ class CircularNoticesAppModel extends AppModel {
 		$min = $params['from'];
 		$max = $params['to'];
 
-		if ($checkValue >= $min && $checkValue <= $max) {
+		if ((empty($min) || $checkValue >= $min) && (empty($max) || $checkValue <= $max)) {
 			return true;
 		}
 		return false;
