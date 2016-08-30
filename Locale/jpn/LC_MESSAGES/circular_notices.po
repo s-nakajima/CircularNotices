@@ -238,11 +238,11 @@ msgstr "、"
 msgid "Division bar"
 msgstr "/"
 
-msgid "Not Date Set"
-msgstr "--:--"
-
 msgid "Answerd."
 msgstr "回答しました。"
+
+msgid "Unset"
+msgstr "未設定"
 
 # メール関連
 msgid "MailSetting.mail_fixed_phrase_body.popover"

@@ -122,71 +122,52 @@ class CircularNoticeContent extends CircularNoticesAppModel {
  * @see Model::save()
  */
 	public function beforeValidate($options = array()) {
-		$this->validate = Hash::merge($this->validate, array(
-			'subject' => array(
-				'notBlank' => array(
-					'rule' => array('notBlank'),
-					'message' => sprintf(__d('net_commons', 'Please input %s.'),
-						__d('circular_notices', 'Subject')),
-				),
-			),
-			'content' => array(
-				'notBlank' => array(
-					'rule' => array('notBlank'),
-					'message' => sprintf(__d('net_commons', 'Please input %s.'),
-						__d('circular_notices', 'Content')),
-				),
-			),
-			'reply_type' => array(
-				'inList' => array(
-					'rule' => array('inList', array(
-						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT,
-						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION,
-						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION,
-					)),
-					'message' => __d('net_commons', 'Invalid request.'),
-				),
-				'notEmptyChoices' => array(
-					'rule' => array('validateNotEmptyChoices'),
-					'message' => sprintf(__d('net_commons', 'Please input %s.'),
-						__d('circular_notices', 'Choice')),
-				),
-			),
-			'publish_start' => array(
-				'notBlank' => array(
-					'rule' => array('notBlank'),
-					'message' => sprintf(__d('net_commons', 'Please input %s.'),
+		$this->validate = Hash::merge($this->validate, $this->_getDefaultValidate());
+		if ($this->data['CircularNoticeContent']['publish_start']) {
+			$this->validate = Hash::merge($this->validate, array(
+				'publish_start' => array(
+					'notBlank' => array(
+						'rule' => array('notBlank'),
+						'message' => sprintf(__d('net_commons', 'Please input %s.'),
 						__d('circular_notices', 'Period')),
-				),
-				'datetime' => array(
-					'rule' => array('datetime'),
-					'message' => __d('net_commons', 'Invalid request.'),
-				),
-			),
-			'publish_end' => array(
-				'notBlank' => array(
-					'rule' => array('notBlank'),
-					'message' => sprintf(__d('net_commons', 'Please input %s.'),
-						__d('circular_notices', 'Period')),
-				),
-				'datetime' => array(
-					'rule' => array('datetime'),
-					'message' => __d('net_commons', 'Invalid request.'),
-				),
-				'fromTo' => array(
-					'rule' => array('validateDatetimeFromTo',
-						array('from' => $this->data['CircularNoticeContent']['publish_start'])),
-					'message' => __d('net_commons', 'Invalid request.'),
+					),
+					'datetime' => array(
+						'rule' => array('datetime'),
+						'message' => __d('net_commons', 'Invalid request.'),
+					),
 				)
-			),
-			'use_reply_deadline' => array(
-				'boolean' => array(
-					'rule' => array('boolean'),
-					'message' => __d('net_commons', 'Pleas input boolean.'),
-				),
-			),
-		));
-
+			));
+		}
+		if ($this->data['CircularNoticeContent']['publish_end']) {
+			$this->validate = Hash::merge($this->validate, array(
+				'publish_end' => array(
+					'notBlank' => array(
+						'rule' => array('notBlank'),
+						'message' => sprintf(__d('net_commons', 'Please input %s.'),
+								__d('circular_notices', 'Period')),
+					),
+					'datetime' => array(
+						'rule' => array('datetime'),
+						'message' => __d('net_commons', 'Invalid request.'),
+					),
+					'fromTo' => array(
+						'rule' => array('validateDatetimeFromTo',
+								array('from' => $this->data['CircularNoticeContent']['publish_start'])),
+						'message' => __d('net_commons', 'Invalid request.'),
+					)
+				)
+			));
+		}
+		if ($this->data['CircularNoticeContent']['use_reply_deadline']) {
+			$this->validate = Hash::merge($this->validate, array(
+				'use_reply_deadline' => array(
+					'boolean' => array(
+						'rule' => array('boolean'),
+						'message' => __d('net_commons', 'Pleas input boolean.'),
+					)
+				)
+			));
+		}
 		if ($this->data['CircularNoticeContent']['use_reply_deadline']) {
 			$this->validate = Hash::merge($this->validate, array(
 				'reply_deadline' => array(
@@ -206,10 +187,51 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 						)),
 						'message' => __d('circular_notices', 'Please input between circular period.'),
 					)
-				),
+				)
 			));
 		}
 		return parent::beforeValidate($options);
+	}
+
+/**
+ * 基本バリデートルール取得
+ *
+ * @return array
+ */
+	protected function _getDefaultValidate() {
+		$validate = array(
+			'subject' => array(
+				'notBlank' => array(
+					'rule' => array('notBlank'),
+					'message' => sprintf(__d('net_commons', 'Please input %s.'),
+							__d('circular_notices', 'Subject')),
+				),
+			),
+			'content' => array(
+				'notBlank' => array(
+					'rule' => array('notBlank'),
+					'message' => sprintf(__d('net_commons', 'Please input %s.'),
+							__d('circular_notices', 'Content')),
+				),
+			),
+			'reply_type' => array(
+				'inList' => array(
+					'rule' => array('inList', array(
+						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_TEXT,
+						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_SELECTION,
+						CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION,
+					)),
+					'message' => __d('net_commons', 'Invalid request.'),
+				),
+				'notEmptyChoices' => array(
+					'rule' => array('validateNotEmptyChoices'),
+					'message' => sprintf(__d('net_commons', 'Please input %s.'),
+							__d('circular_notices', 'Choice')),
+				),
+			)
+		);
+
+		return $validate;
 	}
 
 /**
