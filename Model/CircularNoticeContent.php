@@ -49,6 +49,9 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 				'answer_period_end' => 'CircularNoticeContent.reply_deadline',
 				'path' => '/:plugin_key/:plugin_key/view/:block_id/:content_key',
 			),
+			'data' => array(
+				'is_no_member_allow' => '0'
+			),
 			'is_workflow' => false
 		),
 		'Wysiwyg.Wysiwyg' => array(
