@@ -41,7 +41,7 @@ class CircularNoticeHelper extends AppHelper {
 			$dateYear = date('Y', strtotime($date));
 			$nowYear = date('Y', strtotime($nowUserDatetime));
 			if ($dateYear === $nowYear) {
-				$format = 'm/d';
+				$format = 'Y/m/d H:i';
 			}
 
 			$displayDate = $this->Date->dateFormat($date, $format);
