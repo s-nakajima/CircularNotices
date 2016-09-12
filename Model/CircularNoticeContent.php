@@ -420,6 +420,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			if (isset($data['CircularNoticeTargetUser'])) {
 				$users = $data['CircularNoticeTargetUser'];
 			}
+			$data = $this->__checkUseReplyDeadline($data);
 
 			// ルームに所属する全ユーザが対象の場合、ルームの参加者を取得
 			if ($data['CircularNoticeContent']['is_room_target']) {
@@ -491,6 +492,21 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			$this->rollback();
 			CakeLog::error($ex);
 			throw $ex;
+		}
+
+		return $data;
+	}
+
+/**
+ * Check Use Reply Deadline
+ *
+ * @param array $data input data
+ * @return array $data
+ */
+	private function __checkUseReplyDeadline($data) {
+		// 回答期限を設定していない場合初期化する
+		if (! $data['CircularNoticeContent']['use_reply_deadline']) {
+			$data['CircularNoticeContent']['reply_deadline'] = '';
 		}
 
 		return $data;
