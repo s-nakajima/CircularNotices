@@ -199,7 +199,7 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$targetUsers = $this->Paginator->paginate('CircularNoticeTargetUser');
 
 		// 回答を集計
-		$answersSummary = $this->CircularNoticeContent->getAnswerSummary($contentId);
+		$answersSummary = $this->CircularNoticeTargetUser->getAnswerSummary($contentId);
 
 		// 回答エラー時は入力値を保持
 		if (isset($this->viewVars['circularNoticeDatas'])) {

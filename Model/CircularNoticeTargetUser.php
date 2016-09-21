@@ -396,4 +396,31 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		$this->validates();
 		return $this->validationErrors ? false : true;
 	}
+
+/**
+ * Get summary of answer.
+ *
+ * @param int $contentId circular_notice_content.id
+ * @return array
+ */
+	public function getAnswerSummary($contentId) {
+		$answerSummary = array();
+
+		$targetUsers = $this->getCircularNoticeTargetUsers($contentId);
+		foreach ($targetUsers as $targetUser) {
+			$selectionValues = $targetUser['CircularNoticeTargetUser']['reply_selection_value'];
+			if ($selectionValues) {
+				$answers = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $selectionValues);
+				foreach ($answers as $answer) {
+					if (! isset($answerSummary[$answer])) {
+						$answerSummary[$answer] = 1;
+					} else {
+						$answerSummary[$answer]++;
+					}
+				}
+			}
+		}
+
+		return $answerSummary;
+	}
 }

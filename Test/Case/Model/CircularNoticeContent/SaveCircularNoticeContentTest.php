@@ -194,4 +194,31 @@ class CircularNoticeContentSaveCircularNoticeContentTest extends NetCommonsModel
 		$result = $thisModelMock->$methodName($data);
 		$this->assertFalse($result);
 	}
+
+/**
+ * SaveCircularNoticeGroupOnlyMailの例外テスト
+ *
+ * @return void
+ */
+	public function testSaveCircularNoticeGroupOnlyMail() {
+		$model = $this->_modelName;
+		$methodName = $this->_methodName;
+		$data['CircularNoticeContent'] = (new CircularNoticeContentFixture())->records[6];
+		$data['CircularNoticeContent']['publish_start'] = date('Y-m-d H:i:s', strtotime('+3 minute'));
+		$data['CircularNoticeTargetUsers'][0]['CircularNoticeTargetUser'] = (new CircularNoticeTargetUserFixture())->records[0];
+		$data['CircularNoticeChoices'][0]['CircularNoticeChoice'] = (new CircularNoticeChoiceFixture())->records[0];
+
+		$expectedContent = array(
+				'CircularNoticeContent' => (new CircularNoticeContentFixture())->records[6],
+		);
+		// 例外を発生させるためのモック
+		$thisModelMock = $this->getMockForModel('CircularNotices.' . $model, ['save']);
+		$thisModelMock->expects($this->any())
+				->method('save')
+				->will($this->returnValue($expectedContent));
+		//テスト実施
+		$this->_mockForReturnFalse($model, 'CircularNoticeTargetUser', 'replaceCircularNoticeTargetUsers');
+		$result = $thisModelMock->$methodName($data);
+		$this->assertFalse($result);
+	}
 }
