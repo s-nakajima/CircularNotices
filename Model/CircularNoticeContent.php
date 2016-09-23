@@ -510,9 +510,12 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 				Hash::extract($data, 'CircularNoticeTargetUsers.{n}.CircularNoticeTargetUser.user_id');
 		$this->setSetting(MailQueueBehavior::MAIL_QUEUE_SETTING_USER_IDS, $mailSendUserIdArr);
 		if ($reminder) {
-			// リマインダーメールとの重複を防ぐためグループ配信のみにする
+			// 投稿メールのOFF
 			$this->setSetting(MailQueueBehavior::MAIL_QUEUE_SETTING_IS_MAIL_SEND_POST, 0);
 		}
+		// グループ配信
+		$this->setSetting(MailQueueBehavior::MAIL_QUEUE_SETTING_WORKFLOW_TYPE,
+			MailQueueBehavior::MAIL_QUEUE_WORKFLOW_TYPE_GROUP_ONLY);
 
 		return $data;
 	}
