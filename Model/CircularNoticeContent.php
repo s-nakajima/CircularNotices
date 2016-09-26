@@ -470,11 +470,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			}
 
 			// メール処理
-			$sendTimes = array($data['CircularNoticeContent']['publish_start']);
-			$this->setSendTimeReminder($sendTimes);
-			$mailSendUserIdArr =
-				Hash::extract($data, 'CircularNoticeTargetUsers.{n}.CircularNoticeTargetUser.user_id');
-			$this->setSetting(MailQueueBehavior::MAIL_QUEUE_SETTING_USER_IDS, $mailSendUserIdArr);
+			$this->__sendCircularNoticeContentMail($data);
 
 			// CircularNoticeContentを保存
 			if (! $content = $this->save(null, false)) {
@@ -496,6 +492,30 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			CakeLog::error($ex);
 			throw $ex;
 		}
+
+		return $data;
+	}
+
+/**
+ * Send Circular Notice Content Mail
+ *
+ * @param array $data array data
+ * @return array $data array data
+ */
+	private function __sendCircularNoticeContentMail($data) {
+		// メール処理
+		$sendTimes = array($data['CircularNoticeContent']['publish_start']);
+		$reminder = $this->setSendTimeReminder($sendTimes);
+		$mailSendUserIdArr =
+				Hash::extract($data, 'CircularNoticeTargetUsers.{n}.CircularNoticeTargetUser.user_id');
+		$this->setSetting(MailQueueBehavior::MAIL_QUEUE_SETTING_USER_IDS, $mailSendUserIdArr);
+		if ($reminder) {
+			// 投稿メールのOFF
+			$this->setSetting(MailQueueBehavior::MAIL_QUEUE_SETTING_IS_MAIL_SEND_POST, 0);
+		}
+		// グループ配信
+		$this->setSetting(MailQueueBehavior::MAIL_QUEUE_SETTING_WORKFLOW_TYPE,
+			MailQueueBehavior::MAIL_QUEUE_WORKFLOW_TYPE_GROUP_ONLY);
 
 		return $data;
 	}
@@ -593,33 +613,6 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 		}
 
 		return true;
-	}
-
-/**
- * Get summary of answer.
- *
- * @param int $contentId circular_notice_content.id
- * @return array
- */
-	public function getAnswerSummary($contentId) {
-		$answerSummary = array();
-
-		$targetUsers = $this->CircularNoticeTargetUser->getCircularNoticeTargetUsers($contentId);
-		foreach ($targetUsers as $targetUser) {
-			$selectionValues = $targetUser['CircularNoticeTargetUser']['reply_selection_value'];
-			if ($selectionValues) {
-				$answers = explode(CircularNoticeComponent::SELECTION_VALUES_DELIMITER, $selectionValues);
-				foreach ($answers as $answer) {
-					if (! isset($answerSummary[$answer])) {
-						$answerSummary[$answer] = 1;
-					} else {
-						$answerSummary[$answer]++;
-					}
-				}
-			}
-		}
-
-		return $answerSummary;
 	}
 
 /**

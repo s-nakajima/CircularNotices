@@ -16,9 +16,9 @@ App::uses('WorkflowControllerEditTest', 'Workflow.TestSuite');
  * CircularNoticeContent::getAnswerSummary()のテスト
  *
  * @author Masaki Goto <go8ogle@gmail.com>
- * @package NetCommons\CircularNotices\Test\Case\Model\CircularNoticeContent
+ * @package NetCommons\CircularNotices\Test\Case\Model\CircularNoticeTargetUser
  */
-class CircularNoticeContentGetAnswerSummaryTest extends NetCommonsGetTest {
+class CircularNoticeTargetUserGetAnswerSummaryTest extends NetCommonsGetTest {
 
 /**
  * Fixtures
@@ -45,7 +45,7 @@ class CircularNoticeContentGetAnswerSummaryTest extends NetCommonsGetTest {
  *
  * @var string
  */
-	protected $_modelName = 'CircularNoticeContent';
+	protected $_modelName = 'CircularNoticeTargetUser';
 
 /**
  * Method name
