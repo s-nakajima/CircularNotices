@@ -132,7 +132,7 @@ class CircularNoticeFrameSettingSetCircularNoticeFrameSettingTest extends NetCom
 			array(
 				'id' => '19',
 				'language_id' => '2',
-				'room_id' => '5',
+				'room_id' => '6',
 				'box_id' => 33,
 				'plugin_key' => 'circular_notices',
 				'block_id' => null,

@@ -15,7 +15,7 @@
  * @author Masaki Goto <go8ogle@gmail.com>
  * @package NetCommons\CircularNotices\Test\Fixture
  */
-class TestCircularNoticeTargetUserBehaviorValidatesModelFixture extends CakeTestFixture {
+class TestCircularNoticeTargetUserBehaviorValidateFixture extends CakeTestFixture {
 
 /**
  * Fields

@@ -17,7 +17,7 @@ App::uses('AppModel', 'Model');
  * @author Masaki Goto <go8ogle@gmail.com>
  * @package NetCommons\CircularNotices\Test\test_app\Plugin\TestCircularNotices\Model
  */
-class TestCircularNoticeTargetUserBehaviorValidatesModel extends AppModel {
+class TestCircularNoticeTargetUserBehaviorValidate extends AppModel {
 
 /**
  * 使用ビヘイビア

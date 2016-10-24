@@ -159,7 +159,7 @@ class CircularNoticeSettingSetCircularNoticeSettingTest extends NetCommonsModelT
 			array(
 				'id' => '19',
 				'language_id' => '2',
-				'room_id' => '5',
+				'room_id' => '6',
 				'box_id' => 2,
 				'plugin_key' => 'circular_notices',
 				'block_id' => 33,
@@ -179,7 +179,7 @@ class CircularNoticeSettingSetCircularNoticeSettingTest extends NetCommonsModelT
 			array(
 				'id' => '33',
 				'language_id' => '2',
-				'room_id' => '1',
+				'room_id' => '2',
 				'plugin_key' => 'circular_notices',
 				'key' => 'false_key',
 				'name' => 'Block name 5',
@@ -220,7 +220,7 @@ class CircularNoticeSettingSetCircularNoticeSettingTest extends NetCommonsModelT
 			array(
 				'id' => '34',
 				'language_id' => '2',
-				'room_id' => '15',
+				'room_id' => '16',
 				'plugin_key' => 'circular_notices',
 				'key' => '',
 				'name' => 'Block name 5',
@@ -263,7 +263,7 @@ class CircularNoticeSettingSetCircularNoticeSettingTest extends NetCommonsModelT
 			array(
 				'id' => '20',
 				'language_id' => '2',
-				'room_id' => '5',
+				'room_id' => '6',
 				'box_id' => 2,
 				'plugin_key' => 'circular_notices',
 				'block_id' => null,
