@@ -10,7 +10,7 @@
  */
 
 App::uses('NetCommonsModelTestCase', 'NetCommons.TestSuite');
-App::uses('TestCircularNoticeTargetUserBehaviorValidatesModelFixture', 'CircularNotices.Test/Fixture');
+App::uses('TestCircularNoticeTargetUserBehaviorValidateFixture', 'CircularNotices.Test/Fixture');
 App::uses('WorkflowComponent', 'Workflow.Controller/Component');
 
 /**
@@ -27,7 +27,7 @@ class CircularNoticeTargetUserBehaviorValidatesTest extends NetCommonsModelTestC
  * @var array
  */
 	public $fixtures = array(
-		'plugin.circular_notices.test_circular_notice_target_user_behavior_validates_model',
+		'plugin.circular_notices.test_circular_notice_target_user_behavior_validate',
 		'plugin.circular_notices.circular_notice_content',
 		'plugin.circular_notices.circular_notice_target_user',
 	);
@@ -49,7 +49,7 @@ class CircularNoticeTargetUserBehaviorValidatesTest extends NetCommonsModelTestC
 
 		//テストプラグインのロード
 		NetCommonsCakeTestCase::loadTestPlugin($this, 'CircularNotices', 'TestCircularNotices');
-		$this->TestModel = ClassRegistry::init('TestCircularNotices.TestCircularNoticeTargetUserBehaviorValidatesModel');
+		$this->TestModel = ClassRegistry::init('TestCircularNotices.TestCircularNoticeTargetUserBehaviorValidate');
 	}
 
 /**
@@ -60,7 +60,7 @@ class CircularNoticeTargetUserBehaviorValidatesTest extends NetCommonsModelTestC
 	public function testValidate() {
 		//テストデータ
 		$data = array(
-			'TestCircularNoticeTargetUserBehaviorValidatesModel' => (new TestCircularNoticeTargetUserBehaviorValidatesModelFixture())->records[0],
+			'TestCircularNoticeTargetUserBehaviorValidate' => (new TestCircularNoticeTargetUserBehaviorValidateFixture())->records[0],
 			'CircularNoticeContent' => (new CircularNoticeContentFixture())->records[0],
 		);
 
@@ -90,7 +90,7 @@ class CircularNoticeTargetUserBehaviorValidatesTest extends NetCommonsModelTestC
 	public function testIsRoomTargetedFlagOn() {
 		//テストデータ
 		$data = array(
-			'TestCircularNoticeTargetUserBehaviorValidatesModel' => (new TestCircularNoticeTargetUserBehaviorValidatesModelFixture())->records[0],
+			'TestCircularNoticeTargetUserBehaviorValidate' => (new TestCircularNoticeTargetUserBehaviorValidateFixture())->records[0],
 			'CircularNoticeContent' => (new CircularNoticeContentFixture())->records[1],
 		);
 
@@ -109,14 +109,14 @@ class CircularNoticeTargetUserBehaviorValidatesTest extends NetCommonsModelTestC
 	public function testValidationError() {
 		//テストデータ
 		$data = array(
-			'TestCircularNoticeTargetUserBehaviorValidatesModel' => (new TestCircularNoticeTargetUserBehaviorValidatesModelFixture())->records[0],
+			'TestCircularNoticeTargetUserBehaviorValidate' => (new TestCircularNoticeTargetUserBehaviorValidateFixture())->records[0],
 			'CircularNoticeContent' => (new CircularNoticeContentFixture())->records[0],
 			'CircularNoticeTargetUser' => array(
 				0 => array('user_id' => 'error_data')
 			)
 		);
 
-		$choicesMock = $this->getMockForModel('TestCircularNotices.' . 'TestCircularNoticeTargetUserBehaviorValidatesModel', ['validates']);
+		$choicesMock = $this->getMockForModel('TestCircularNotices.' . 'TestCircularNoticeTargetUserBehaviorValidate', ['validates']);
 		$choicesMock->expects($this->any())
 			->method('validates')
 			->will($this->returnValue(true));
