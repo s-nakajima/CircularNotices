@@ -32,7 +32,7 @@ class ChangePublish extends CakeMigration {
 		'up' => array(
 			'alter_field' => array(
 				'circular_notice_contents' => array(
-					'publish_start' => array('type' => 'datetime', 'null' => true, 'default' => null, 'comment' => 'opend period (from)  | 回覧期間（開始日時） |  | '),
+					'publish_start' => array('type' => 'datetime', 'null' => true, 'default' => null, 'comment' => '回覧期間（開始日時）'),
 					'publish_end' => array('type' => 'datetime', 'null' => true, 'default' => null, 'comment' => 'opend period (to)  | 回覧期間（終了日時） |  | '),
 				),
 			),
@@ -40,7 +40,7 @@ class ChangePublish extends CakeMigration {
 		'down' => array(
 			'alter_field' => array(
 				'circular_notice_contents' => array(
-					'publish_start' => array('type' => 'datetime', 'null' => false, 'default' => null, 'comment' => 'opend period (from)  | 回覧期間（開始日時） |  | '),
+					'publish_start' => array('type' => 'datetime', 'null' => false, 'default' => null, 'comment' => '回覧期間（開始日時）'),
 					'publish_end' => array('type' => 'datetime', 'null' => false, 'default' => null, 'comment' => 'opend period (to)  | 回覧期間（終了日時） |  | '),
 				),
 			),
