@@ -88,12 +88,13 @@ class CircularNoticeSettingGetLinkedBlockByFrameTest extends NetCommonsGetTest {
  *
  * @return void
  */
-	public function testGetLinkedBlockbyFrameFalse() {
+	public function testGetLinkedBlockByFrameFalse() {
 		$model = $this->_modelName;
 		$methodName = $this->_methodName;
 
 		//データ生成
-		$frame = null;
+		$frame['Frame']['room_id'] = 'aaa';
+		$frame['Frame']['plugin_key'] = '';
 
 		//テスト実施
 		$result = $this->$model->$methodName($frame);

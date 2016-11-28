@@ -91,7 +91,7 @@ class CircularNoticeSettingSetCircularNoticeSettingTest extends NetCommonsModelT
 		$model = $this->_modelName;
 		$methodName = $this->_methodName;
 
-		$frameId = 15;
+		$frameId = 16;
 
 		// 例外を発生させるためのモック
 		$settingMock = $this->getMockForModel('CircularNotices.' . $model, ['getLinkedBlockByFrame']);
@@ -114,7 +114,7 @@ class CircularNoticeSettingSetCircularNoticeSettingTest extends NetCommonsModelT
 		$model = $this->_modelName;
 		$methodName = $this->_methodName;
 
-		$frameId = 15;
+		$frameId = 16;
 
 		// 例外を発生させるためのモック
 		$settingMock = $this->getMockForModel('CircularNotices.' . $model, ['findByBlockKey']);
@@ -193,7 +193,7 @@ class CircularNoticeSettingSetCircularNoticeSettingTest extends NetCommonsModelT
 			)
 		);
 
-		$frameId = 19;
+		$frameId = 20;
 
 		$settingMock = $this->getMockForModel('CircularNotices.' . $model, ['save']);
 		$settingMock->expects($this->any())
