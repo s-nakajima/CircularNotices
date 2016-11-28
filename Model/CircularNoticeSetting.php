@@ -156,7 +156,7 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 			//));
 			//$block = $this->Block->saveByFrameId($frameId, $block);
 			$block = $this->Block->save(array(
-				'language_id' => $frame['Frame']['language_id'],
+				//'language_id' => $frame['Frame']['language_id'],
 				'room_id' => $frame['Frame']['room_id'] ? $frame['Frame']['room_id'] : 0,
 				'plugin_key' => $frame['Frame']['plugin_key'],
 			));
