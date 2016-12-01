@@ -1,0 +1,286 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: CircularNotices/Controller/CircularNoticesAnswerController.php:107
+msgid "Answerd."
+msgstr ""
+
+#: CircularNotices/Controller/CircularNoticesController.php:122
+#: CircularNotices/Test/Case/View/Elements/CircularNotices/SelectSortTest.php:75
+msgid "Change Sort Order to Reply Deadline"
+msgstr ""
+
+#: CircularNotices/Controller/CircularNoticesController.php:475
+#: CircularNotices/View/CircularNotices/view.ctp:350
+#: CircularNotices/View/Elements/CircularNotices/status_label.ctp:42
+msgid "Unread"
+msgstr ""
+
+#: CircularNotices/Controller/CircularNoticesController.php:480
+#: CircularNotices/View/CircularNotices/view.ctp:356
+#: CircularNotices/View/Elements/CircularNotices/select_reply_status.ctp:27
+msgid "Unreply"
+msgstr ""
+
+#: CircularNotices/Controller/CircularNoticesController.php:494
+msgid "download error"
+msgstr ""
+
+#: CircularNotices/Controller/CircularNoticesController.php:527
+#: CircularNotices/View/CircularNotices/view.ctp:345
+msgid "Answer separator"
+msgstr ""
+
+#: CircularNotices/Controller/CircularNoticesController.php:547
+msgid "Setting of password is required always to download answers."
+msgstr ""
+
+#: CircularNotices/Controller/Component/CircularNoticeComponent.php:200
+#: CircularNotices/View/CircularNotices/view.ctp:305
+msgid "Target User"
+msgstr ""
+
+#: CircularNotices/Controller/Component/CircularNoticeComponent.php:201
+#: CircularNotices/View/CircularNotices/view.ctp:308
+msgid "Read Datetime"
+msgstr ""
+
+#: CircularNotices/Controller/Component/CircularNoticeComponent.php:202
+#: CircularNotices/View/CircularNotices/view.ctp:311
+msgid "Reply Datetime"
+msgstr ""
+
+#: CircularNotices/Controller/Component/CircularNoticeComponent.php:203
+#: CircularNotices/View/CircularNotices/view.ctp:231;324
+msgid "Answer"
+msgstr ""
+
+#: CircularNotices/Model/CircularNoticeContent.php:135;150
+#: CircularNotices/View/Elements/CircularNotices/circular_period_edit_form.ctp:17
+msgid "Period"
+msgstr ""
+
+#: CircularNotices/Model/CircularNoticeContent.php:180
+#: CircularNotices/View/Elements/CircularNotices/circular_deadline_edit_form.ctp:20
+msgid "Reply Deadline"
+msgstr ""
+
+#: CircularNotices/Model/CircularNoticeContent.php:191
+msgid "Please input between circular period."
+msgstr ""
+
+#: CircularNotices/Model/CircularNoticeContent.php:210
+#: CircularNotices/View/Elements/CircularNotices/subject_edit_form.ctp:19
+msgid "Subject"
+msgstr ""
+
+#: CircularNotices/Model/CircularNoticeContent.php:217
+#: CircularNotices/View/Elements/CircularNotices/content_edit_form.ctp:15
+msgid "Content"
+msgstr ""
+
+#: CircularNotices/Model/CircularNoticeContent.php:232
+msgid "Choice"
+msgstr ""
+
+#: CircularNotices/Model/CircularNoticeTargetUser.php:320
+#: CircularNotices/View/CircularNotices/view.ctp:159
+msgid "Answer Title"
+msgstr ""
+
+#: CircularNotices/Model/Behavior/CircularNoticeTargetUserBehavior.php:51
+#: CircularNotices/Test/Case/Model/CircularNoticeContent/ValidateTest.php:98
+msgid "Select user"
+msgstr ""
+
+#: CircularNotices/View/CircularNoticeMailSettings/edit.ctp:20
+msgid "MailSetting.mail_fixed_phrase_body.popover"
+msgstr ""
+
+#: CircularNotices/View/CircularNotices/index.ctp:106
+#: CircularNotices/View/CircularNotices/view.ctp:90
+msgid "Read Count Title"
+msgstr ""
+
+#: CircularNotices/View/CircularNotices/index.ctp:110;119
+#: CircularNotices/View/CircularNotices/view.ctp:94;103
+msgid "Division bar"
+msgstr ""
+
+#: CircularNotices/View/CircularNotices/index.ctp:115
+#: CircularNotices/View/CircularNotices/view.ctp:99
+msgid "Reply Count Title"
+msgstr ""
+
+#: CircularNotices/View/CircularNotices/index.ctp:129
+#: CircularNotices/View/CircularNotices/view.ctp:61
+msgid "Circular Content Period Title"
+msgstr ""
+
+#: CircularNotices/View/CircularNotices/index.ctp:133
+#: CircularNotices/View/CircularNotices/view.ctp:65;76
+msgid "Unset"
+msgstr ""
+
+#: CircularNotices/View/CircularNotices/index.ctp:136
+#: CircularNotices/View/CircularNotices/view.ctp:68
+msgid "Till"
+msgstr ""
+
+#: CircularNotices/View/CircularNotices/index.ctp:144
+#: CircularNotices/View/CircularNotices/view.ctp:84
+msgid "Created User Title"
+msgstr ""
+
+#: CircularNotices/View/CircularNotices/index.ctp:157
+msgid "Circular Content Data Not Found"
+msgstr ""
+
+#: CircularNotices/View/CircularNotices/view.ctp:74
+msgid "Circular Content Deadline Title"
+msgstr ""
+
+#: CircularNotices/View/CircularNotices/view.ctp:119
+msgid "Choices Title"
+msgstr ""
+
+#: CircularNotices/View/CircularNotices/view.ctp:128
+msgid "Selected Count"
+msgstr ""
+
+#: CircularNotices/View/CircularNotices/view.ctp:233
+msgid "Change Answer"
+msgstr ""
+
+#: CircularNotices/View/CircularNotices/view.ctp:252;257
+msgid "Show Other Users"
+msgstr ""
+
+#: CircularNotices/View/CircularNotices/view.ctp:261;266
+msgid "Close Other Users"
+msgstr ""
+
+#: CircularNotices/View/CircularNotices/view.ctp:279
+msgid "Download"
+msgstr ""
+
+#: CircularNotices/View/CircularNotices/view.ctp:290
+msgid "Other Users Csv"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNoticeBlockRolePermissions/edit_form.ctp:27
+msgid "Content creatable roles"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNoticeFrameSettings/edit_form.ctp:18
+msgid "Show contents per page"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNoticeFrameSettings/edit_form.ctp:20;21
+msgid "%d items"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNotices/choice_edit_form.ctp:36
+msgid "No choices"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNotices/circular_deadline_edit_form.ctp:25
+msgid "No Deadline"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNotices/circular_deadline_edit_form.ctp:26
+msgid "Set Deadline"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNotices/delete_form.ctp:26
+msgid "Circulation"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNotices/reply_type_edit_form.ctp:17
+msgid "Reply Type"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNotices/select_content_status.ctp:23
+msgid "Display All Contents"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNotices/select_content_status.ctp:31
+msgid "Display Draft During Contents"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNotices/select_content_status.ctp:35
+msgid "Display Reserved Contents"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNotices/select_content_status.ctp:42
+msgid "Display Open Contents"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNotices/select_content_status.ctp:46
+msgid "Display Fixed Contents"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNotices/select_content_status.ctp:50
+msgid "Display Closed Contents"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNotices/select_reply_status.ctp:23
+msgid "Display All Reply Status"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNotices/select_reply_status.ctp:31
+msgid "Display Replied Contents"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNotices/status_label.ctp:26
+msgid "Reserved"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNotices/status_label.ctp:30
+msgid "Open"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNotices/status_label.ctp:34
+msgid "Fixed"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNotices/status_label.ctp:38
+msgid "Closed"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNotices/status_label.ctp:46
+msgid "Read Yet"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNotices/status_label.ctp:50
+msgid "Replied"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNotices/target_edit_form.ctp:19
+msgid "Circular Target"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNotices/target_edit_form.ctp:25
+msgid "All Members Belings to this Room"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNotices/target_edit_form.ctp:26
+msgid "Individually User Selected"
+msgstr ""
+
+#: CircularNotices/View/Elements/CircularNotices/target_edit_form.ctp:40
+msgid "Circulation Destination User Selection"
+msgstr ""
+
