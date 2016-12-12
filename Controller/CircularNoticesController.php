@@ -263,9 +263,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 			$data = $this->__parseRequestForSave();
 			$data['CircularNoticeContent']['status'] = $this->Workflow->parseStatus();
 
-			// set language_id
-			$data['CircularNoticeContent']['language_id'] = Current::read('Language.id');
-
 			if ($circularContent = $this->CircularNoticeContent->saveCircularNoticeContent($data)) {
 				$url = NetCommonsUrl::actionUrl(array(
 					'controller' => $this->params['controller'],
@@ -346,9 +343,6 @@ class CircularNoticesController extends CircularNoticesAppController {
 
 			$data['CircularNoticeContent']['key'] = $key;	// keyをここでセット
 			$data['CircularNoticeContent']['public_type'] = $content['CircularNoticeContent']['public_type'];
-
-			// set language_id
-			$data['CircularNoticeContent']['language_id'] = Current::read('Language.id');
 
 			$data['oldCircularNoticeContentId'] = $data['CircularNoticeContent']['id'];
 			unset($data['CircularNoticeContent']['id']);

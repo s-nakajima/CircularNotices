@@ -76,13 +76,14 @@ class CircularNoticesSchema extends CakeSchema {
 		'circular_notice_setting_key' => array('type' => 'string', 'null' => false, 'default' => null, 'key' => 'index', 'collate' => 'utf8_general_ci', 'comment' => '回覧板キー', 'charset' => 'utf8'),
 		'title_icon' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'language_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
+		'is_origin' => array('type' => 'boolean', 'null' => false, 'default' => '1', 'comment' => 'オリジナルかどうか'),
+		'is_translation' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'comment' => '翻訳したかどうか'),
 		'is_active' => array('type' => 'boolean', 'null' => false, 'default' => '0'),
 		'is_latest' => array('type' => 'boolean', 'null' => true, 'default' => null),
 		'subject' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '件名', 'charset' => 'utf8'),
 		'content' => array('type' => 'text', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '本文', 'charset' => 'utf8'),
 		'reply_type' => array('type' => 'integer', 'null' => false, 'default' => '1', 'length' => 1, 'unsigned' => false, 'comment' => '回答方式  1:記述式、2:択一式、3:複数選択'),
 		'is_room_target' => array('type' => 'boolean', 'null' => true, 'default' => null, 'comment' => 'ルーム対象回覧フラグ'),
-		'target_groups' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '回覧対象グループ', 'charset' => 'utf8'),
 		'public_type' => array('type' => 'integer', 'null' => false, 'default' => '1', 'length' => 4, 'unsigned' => false),
 		'publish_start' => array('type' => 'datetime', 'null' => true, 'default' => null, 'comment' => '回覧期間（開始日時）'),
 		'publish_end' => array('type' => 'datetime', 'null' => true, 'default' => null, 'comment' => 'opend period (to)  | 回覧期間（終了日時） |  | '),
@@ -162,8 +163,8 @@ class CircularNoticesSchema extends CakeSchema {
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null, 'comment' => '更新日時'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
-			'circular_notice_content_id' => array('column' => array('circular_notice_content_id', 'is_read'), 'unique' => 0),
-			'circular_notice_content_id_2' => array('column' => array('circular_notice_content_id', 'user_id'), 'unique' => 0)
+			'circular_notice_content_id_2' => array('column' => array('circular_notice_content_id', 'user_id'), 'unique' => 0),
+			'circular_notice_content_id' => array('column' => array('circular_notice_content_id', 'is_read'), 'unique' => 0)
 		),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
