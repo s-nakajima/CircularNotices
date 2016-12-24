@@ -15,33 +15,6 @@
 class CircularNoticeTargetUserFixture extends CakeTestFixture {
 
 /**
- * Fields
- *
- * @var array
- */
-	public $fields = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary', 'comment' => 'ID'),
-		'user_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'index', 'comment' => '回覧先'),
-		'circular_notice_content_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'index', 'comment' => '回覧ID'),
-		'is_read' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'comment' => '閲覧フラグ  0:未読、1:既読'),
-		'read_datetime' => array('type' => 'datetime', 'null' => true, 'default' => null, 'comment' => '閲覧日時'),
-		'is_reply' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'comment' => '回答フラグ  0:未回答、1:回答'),
-		'reply_datetime' => array('type' => 'datetime', 'null' => true, 'default' => null, 'comment' => 'reply datetime | 回答日時 |  | '),
-		'reply_text_value' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '回覧回答（記述式）', 'charset' => 'utf8'),
-		'reply_selection_value' => array('type' => 'text', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '回覧回答（択一、複数選択）', 'charset' => 'utf8'),
-		'created_user' => array('type' => 'integer', 'null' => true, 'default' => '0', 'comment' => '作成者'),
-		'created' => array('type' => 'datetime', 'null' => true, 'default' => null, 'comment' => '作成日時'),
-		'modified_user' => array('type' => 'integer', 'null' => true, 'default' => '0', 'comment' => '更新者'),
-		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null, 'comment' => '更新日時'),
-		'indexes' => array(
-			'PRIMARY' => array('column' => 'id', 'unique' => 1),
-			'fk_circular_notice_target_users_circular_notice_contents1_idx' => array('column' => 'circular_notice_content_id', 'unique' => 0),
-			'fk_circular_notice_target_users_users1' => array('column' => 'user_id', 'unique' => 0)
-		),
-		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
-	);
-
-/**
  * Records
  *
  * @var array
@@ -283,4 +256,16 @@ class CircularNoticeTargetUserFixture extends CakeTestFixture {
 			'modified' => '2015-03-09 09:25:24'
 		),
 	);
+
+/**
+ * Initialize the fixture.
+ *
+ * @return void
+ */
+	public function init() {
+		require_once App::pluginPath('CircularNotices') . 'Config' . DS . 'Schema' . DS . 'schema.php';
+		$this->fields = (new CircularNoticesSchema())->tables[Inflector::tableize($this->name)];
+		parent::init();
+	}
+
 }

@@ -57,7 +57,7 @@ class CircularNoticesAppControllerBeforeFilterTest extends NetCommonsControllerT
 		$results = array();
 		$results[1] = array(
 			'urlOptions' => array(
-				'frame_id' => 13,
+				'frame_id' => 14,
 			),
 			'assert' => array(
 				'method' => 'assertEmpty',

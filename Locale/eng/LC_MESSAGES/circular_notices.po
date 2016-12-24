@@ -41,7 +41,7 @@ msgstr ""
 #: CircularNotices/Controller/CircularNoticesController.php:527
 #: CircularNotices/View/CircularNotices/view.ctp:345
 msgid "Answer separator"
-msgstr ""
+msgstr ", "
 
 #: CircularNotices/Controller/CircularNoticesController.php:547
 msgid "Setting of password is required always to download answers."
@@ -98,7 +98,7 @@ msgstr ""
 #: CircularNotices/Model/CircularNoticeTargetUser.php:320
 #: CircularNotices/View/CircularNotices/view.ctp:159
 msgid "Answer Title"
-msgstr ""
+msgstr "Answer: "
 
 #: CircularNotices/Model/Behavior/CircularNoticeTargetUserBehavior.php:51
 #: CircularNotices/Test/Case/Model/CircularNoticeContent/ValidateTest.php:98
@@ -112,22 +112,22 @@ msgstr ""
 #: CircularNotices/View/CircularNotices/index.ctp:106
 #: CircularNotices/View/CircularNotices/view.ctp:90
 msgid "Read Count Title"
-msgstr ""
+msgstr "Read Count: "
 
 #: CircularNotices/View/CircularNotices/index.ctp:110;119
 #: CircularNotices/View/CircularNotices/view.ctp:94;103
 msgid "Division bar"
-msgstr ""
+msgstr "/"
 
 #: CircularNotices/View/CircularNotices/index.ctp:115
 #: CircularNotices/View/CircularNotices/view.ctp:99
 msgid "Reply Count Title"
-msgstr ""
+msgstr "Reply Count: "
 
 #: CircularNotices/View/CircularNotices/index.ctp:129
 #: CircularNotices/View/CircularNotices/view.ctp:61
 msgid "Circular Content Period Title"
-msgstr ""
+msgstr "Circular Content Period: "
 
 #: CircularNotices/View/CircularNotices/index.ctp:133
 #: CircularNotices/View/CircularNotices/view.ctp:65;76
@@ -137,12 +137,12 @@ msgstr ""
 #: CircularNotices/View/CircularNotices/index.ctp:136
 #: CircularNotices/View/CircularNotices/view.ctp:68
 msgid "Till"
-msgstr ""
+msgstr " - "
 
 #: CircularNotices/View/CircularNotices/index.ctp:144
 #: CircularNotices/View/CircularNotices/view.ctp:84
 msgid "Created User Title"
-msgstr ""
+msgstr "Created User: "
 
 #: CircularNotices/View/CircularNotices/index.ctp:157
 msgid "Circular Content Data Not Found"
@@ -150,15 +150,15 @@ msgstr ""
 
 #: CircularNotices/View/CircularNotices/view.ctp:74
 msgid "Circular Content Deadline Title"
-msgstr ""
+msgstr "Circular Content Deadline: "
 
 #: CircularNotices/View/CircularNotices/view.ctp:119
 msgid "Choices Title"
-msgstr ""
+msgstr "Choices: "
 
 #: CircularNotices/View/CircularNotices/view.ctp:128
 msgid "Selected Count"
-msgstr ""
+msgstr "(Selected Count: %d)"
 
 #: CircularNotices/View/CircularNotices/view.ctp:233
 msgid "Change Answer"

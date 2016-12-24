@@ -1,6 +1,6 @@
 <?php
 /**
- * CircularNoticeSetting::getLinkedBlockbyFrame()のテスト
+ * CircularNoticeSetting::getLinkedBlockByFrame()のテスト
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Masaki Goto <go8ogle@gmail.com>
@@ -12,12 +12,12 @@
 App::uses('NetCommonsGetTest', 'NetCommons.TestSuite');
 
 /**
- * CircularNoticeSetting::getLinkedBlockbyFrame()のテスト
+ * CircularNoticeSetting::getLinkedBlockByFrame()のテスト
  *
  * @author Masaki Goto <go8ogle@gmail.com>
  * @package NetCommons\CircularNotices\Test\Case\Model\CircularNoticeSetting
  */
-class CircularNoticeSettingGetLinkedBlockbyFrameTest extends NetCommonsGetTest {
+class CircularNoticeSettingGetLinkedBlockByFrameTest extends NetCommonsGetTest {
 
 /**
  * Fixtures
@@ -53,14 +53,14 @@ class CircularNoticeSettingGetLinkedBlockbyFrameTest extends NetCommonsGetTest {
  *
  * @var string
  */
-	protected $_methodName = 'getLinkedBlockbyFrame';
+	protected $_methodName = 'getLinkedBlockByFrame';
 
 /**
- * getLinkedBlockbyFrame()のテスト
+ * getLinkedBlockByFrame()のテスト
  *
  * @return void
  */
-	public function testGetLinkedBlockbyFrame() {
+	public function testGetLinkedBlockByFrame() {
 		$model = $this->_modelName;
 		$methodName = $this->_methodName;
 
@@ -84,16 +84,17 @@ class CircularNoticeSettingGetLinkedBlockbyFrameTest extends NetCommonsGetTest {
 	}
 
 /**
- * getLinkedBlockbyFrame()のテスト
+ * getLinkedBlockByFrame()のテスト
  *
  * @return void
  */
-	public function testGetLinkedBlockbyFrameFalse() {
+	public function testGetLinkedBlockByFrameFalse() {
 		$model = $this->_modelName;
 		$methodName = $this->_methodName;
 
 		//データ生成
-		$frame = null;
+		$frame['Frame']['room_id'] = 'aaa';
+		$frame['Frame']['plugin_key'] = '';
 
 		//テスト実施
 		$result = $this->$model->$methodName($frame);

@@ -11,239 +11,324 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.7.5\n"
-"Language: ja\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-# 回覧一覧画面の表示コンテンツ絞り込みに使用
-msgid "Display All Contents"
-msgstr "全てのステータス"
-
-# 回覧一覧画面の表示コンテンツ絞り込みに使用
-msgid "Display All Reply Status"
-msgstr "全ての回答状況"
-
-# 回覧一覧画面の表示コンテンツ絞り込みに使用
-msgid "Display Draft During Contents"
-msgstr "一時保存"
-
-# 回覧一覧画面の表示コンテンツ絞り込みに使用
-msgid "Display Reserved Contents"
-msgstr "公開前"
-
-# 回覧一覧画面の表示コンテンツ絞り込みに使用
-msgid "Display Open Contents"
-msgstr "回覧中"
-
-# 回覧一覧画面の表示コンテンツ絞り込みに使用
-msgid "Display Fixed Contents"
-msgstr "回答受付終了"
-
-# 回覧一覧画面の表示コンテンツ絞り込みに使用
-msgid "Display Closed Contents"
-msgstr "回覧終了"
-
-# 回覧一覧画面の表示コンテンツ絞り込みに使用
-msgid "Display Replied Contents"
-msgstr "回答済"
+#: CircularNotices/Controller/CircularNoticesAnswerController.php:107
+msgid "Answerd."
+msgstr "回答しました。"
 
 # 回覧一覧画面の表示順変更に使用
+#: CircularNotices/Controller/CircularNoticesController.php:122
+#: CircularNotices/Test/Case/View/Elements/CircularNotices/SelectSortTest.php:75
 msgid "Change Sort Order to Reply Deadline"
 msgstr "回答期限順"
 
-# 回覧一覧画面で使用
-msgid "Circular Content Data Not Found"
-msgstr "回覧がありません。"
-
-# 回覧一覧画面で使用
-msgid "Circular Content Period Title"
-msgstr "回覧期間："
-
-# 回覧一覧画面で使用
-msgid "Read Count Title"
-msgstr "閲覧状況："
-
-# 回覧一覧画面で使用
-msgid "Reply Count Title"
-msgstr "回答状況："
-
-# 回覧詳細画面で使用
-msgid "Circular Content Deadline Title"
-msgstr "回答期限："
-
-# ステータス（公開前）
-msgid "Reserved"
-msgstr "公開前"
-
-# ステータス（回覧中）
-msgid "Open"
-msgstr "回覧中"
-
-# ステータス（回覧受付終了）
-msgid "Fixed"
-msgstr "回答受付終了"
-
-# ステータス（回覧終了）
-msgid "Closed"
-msgstr "回覧終了"
-
 # ステータス（未読）
+#: CircularNotices/Controller/CircularNoticesController.php:475
+#: CircularNotices/View/CircularNotices/view.ctp:350
+#: CircularNotices/View/Elements/CircularNotices/status_label.ctp:42
 msgid "Unread"
 msgstr "未読"
 
-# ステータス（既読）
-msgid "Read Yet"
-msgstr "既読"
+# 参照画面で使用
+#: CircularNotices/Controller/CircularNoticesController.php:480
+#: CircularNotices/View/CircularNotices/view.ctp:356
+#: CircularNotices/View/Elements/CircularNotices/select_reply_status.ctp:27
+msgid "Unreply"
+msgstr "未回答"
 
-# ステータス（回答済）
-msgid "Replied"
-msgstr "回答済"
+#: CircularNotices/Controller/CircularNoticesController.php:494
+msgid "download error"
+msgstr ""
 
-# 登録（編集）画面で使用
-msgid "Subject"
-msgstr "タイトル"
-
-# 登録（編集）画面で使用
-msgid "Content"
-msgstr "回覧内容"
-
-# 登録（編集）画面で使用
-msgid "Reply Type"
-msgstr "回答方式"
-
-# 登録（編集）画面で使用
-msgid "Circular Target"
-msgstr "回覧先"
-
-# 登録（編集）画面で使用
-msgid "All Members Belings to this Room"
-msgstr "ルームに参加している全会員"
-
-# 登録（編集）画面で使用
-msgid "Period"
-msgstr "回覧期間"
-
-# 登録（編集）画面で使用
-msgid "Choice"
-msgstr "選択肢"
-
-# 登録（編集）画面で使用
-msgid "Reply Deadline"
-msgstr "回答期限"
-
-# 登録（編集）画面で使用
-msgid "Till"
-msgstr "～"
-
-# 登録（編集）画面で使用
-msgid "No Deadline"
-msgstr "設定しない"
-
-# 登録（編集）画面で使用
-msgid "Set Deadline"
-msgstr "設定する"
+#: CircularNotices/Controller/CircularNoticesController.php:527
+#: CircularNotices/View/CircularNotices/view.ctp:345
+msgid "Answer separator"
+msgstr "、"
 
 # 参照画面で使用
-msgid "Created User Title"
-msgstr "作成者： "
+#: CircularNotices/Controller/CircularNoticesController.php:547
+msgid "Setting of password is required always to download answers."
+msgstr "回答データをダウンロードする場合は必ず圧縮パスワードの設定が必要です。"
 
 # 参照画面で使用
-msgid "Choices Title"
-msgstr "選択肢： "
-
-# 参照画面で使用
-msgid "Selected Count"
-msgstr "（回答数： %d ）"
-
-# 参照画面で使用
-msgid "Answer Title"
-msgstr "回答： "
-
-# 参照画面で使用
-msgid "Change Answer"
-msgstr "回答修正"
-
-# 参照画面で使用
+#: CircularNotices/Controller/Component/CircularNoticeComponent.php:200
+#: CircularNotices/View/CircularNotices/view.ctp:305
 msgid "Target User"
 msgstr "回覧先"
 
 # 参照画面で使用
+#: CircularNotices/Controller/Component/CircularNoticeComponent.php:201
+#: CircularNotices/View/CircularNotices/view.ctp:308
 msgid "Read Datetime"
 msgstr "閲覧日時"
 
 # 参照画面で使用
+#: CircularNotices/Controller/Component/CircularNoticeComponent.php:202
+#: CircularNotices/View/CircularNotices/view.ctp:311
 msgid "Reply Datetime"
 msgstr "回答日時"
 
 # 参照画面で使用
+#: CircularNotices/Controller/Component/CircularNoticeComponent.php:203
+#: CircularNotices/View/CircularNotices/view.ctp:231;324
 msgid "Answer"
 msgstr "回答"
 
-# 参照画面で使用
-msgid "Unreply"
-msgstr "未回答"
+# 登録（編集）画面で使用
+#: CircularNotices/Model/CircularNoticeContent.php:135;150
+#: CircularNotices/View/Elements/CircularNotices/circular_period_edit_form.ctp:17
+msgid "Period"
+msgstr "回覧期間"
+
+# 登録（編集）画面で使用
+#: CircularNotices/Model/CircularNoticeContent.php:180
+#: CircularNotices/View/Elements/CircularNotices/circular_deadline_edit_form.ctp:20
+msgid "Reply Deadline"
+msgstr "回答期限"
+
+#: CircularNotices/Model/CircularNoticeContent.php:191
+msgid "Please input between circular period."
+msgstr "回覧期間の範囲内で入力してください。"
+
+# 登録（編集）画面で使用
+#: CircularNotices/Model/CircularNoticeContent.php:210
+#: CircularNotices/View/Elements/CircularNotices/subject_edit_form.ctp:19
+msgid "Subject"
+msgstr "タイトル"
+
+# 登録（編集）画面で使用
+#: CircularNotices/Model/CircularNoticeContent.php:217
+#: CircularNotices/View/Elements/CircularNotices/content_edit_form.ctp:15
+msgid "Content"
+msgstr "回覧内容"
+
+# 登録（編集）画面で使用
+#: CircularNotices/Model/CircularNoticeContent.php:232
+msgid "Choice"
+msgstr "選択肢"
 
 # 参照画面で使用
+#: CircularNotices/Model/CircularNoticeTargetUser.php:320
+#: CircularNotices/View/CircularNotices/view.ctp:159
+msgid "Answer Title"
+msgstr "回答： "
+
+#: CircularNotices/Model/Behavior/CircularNoticeTargetUserBehavior.php:51
+#: CircularNotices/Test/Case/Model/CircularNoticeContent/ValidateTest.php:98
+msgid "Select user"
+msgstr "回覧先を選択してください。"
+
+# メール関連
+#: CircularNotices/View/CircularNoticeMailSettings/edit.ctp:20
+msgid "MailSetting.mail_fixed_phrase_body.popover"
+msgstr "{X-SITE_NAME} : サイト名<br />{X-PLUGIN_NAME} : プラグイン名<br />{X-ROOM} : ルーム名<br />{X-SUBJECT} : 回覧タイトル<br />{X-USER} : 投稿者<br />{X-TO_DATE} : 投稿日時<br />{X-BODY} : 回覧内容<br />{X-URL} : 登録内容のURL"
+
+# 回覧一覧画面で使用
+#: CircularNotices/View/CircularNotices/index.ctp:106
+#: CircularNotices/View/CircularNotices/view.ctp:90
+msgid "Read Count Title"
+msgstr "閲覧状況："
+
+#: CircularNotices/View/CircularNotices/index.ctp:110;119
+#: CircularNotices/View/CircularNotices/view.ctp:94;103
+msgid "Division bar"
+msgstr "/"
+
+# 回覧一覧画面で使用
+#: CircularNotices/View/CircularNotices/index.ctp:115
+#: CircularNotices/View/CircularNotices/view.ctp:99
+msgid "Reply Count Title"
+msgstr "回答状況："
+
+# 回覧一覧画面で使用
+#: CircularNotices/View/CircularNotices/index.ctp:129
+#: CircularNotices/View/CircularNotices/view.ctp:61
+msgid "Circular Content Period Title"
+msgstr "回覧期間："
+
+#: CircularNotices/View/CircularNotices/index.ctp:133
+#: CircularNotices/View/CircularNotices/view.ctp:65;76
+msgid "Unset"
+msgstr "未設定"
+
+# 登録（編集）画面で使用
+#: CircularNotices/View/CircularNotices/index.ctp:136
+#: CircularNotices/View/CircularNotices/view.ctp:68
+msgid "Till"
+msgstr "～"
+
+# 参照画面で使用
+#: CircularNotices/View/CircularNotices/index.ctp:144
+#: CircularNotices/View/CircularNotices/view.ctp:84
+msgid "Created User Title"
+msgstr "作成者： "
+
+# 回覧一覧画面で使用
+#: CircularNotices/View/CircularNotices/index.ctp:157
+msgid "Circular Content Data Not Found"
+msgstr "回覧がありません。"
+
+# 回覧詳細画面で使用
+#: CircularNotices/View/CircularNotices/view.ctp:74
+msgid "Circular Content Deadline Title"
+msgstr "回答期限："
+
+# 参照画面で使用
+#: CircularNotices/View/CircularNotices/view.ctp:119
+msgid "Choices Title"
+msgstr "選択肢： "
+
+# 参照画面で使用
+#: CircularNotices/View/CircularNotices/view.ctp:128
+msgid "Selected Count"
+msgstr "（回答数： %d ）"
+
+# 参照画面で使用
+#: CircularNotices/View/CircularNotices/view.ctp:233
+msgid "Change Answer"
+msgstr "回答修正"
+
+# 参照画面で使用
+#: CircularNotices/View/CircularNotices/view.ctp:252;257
 msgid "Show Other Users"
 msgstr "回覧先一覧"
 
 # 参照画面で使用
+#: CircularNotices/View/CircularNotices/view.ctp:261;266
 msgid "Close Other Users"
 msgstr "回覧先と回答を閉じる"
 
+#: CircularNotices/View/CircularNotices/view.ctp:279
+msgid "Download"
+msgstr ""
+
 # 参照画面で使用
+#: CircularNotices/View/CircularNotices/view.ctp:290
 msgid "Other Users Csv"
 msgstr "回覧先CSV"
 
-# 参照画面で使用
-msgid "Setting of password is required always to download answers."
-msgstr "回答データをダウンロードする場合は必ず圧縮パスワードの設定が必要です。"
-
-# 表示方法変更画面で使用
-msgid "Show contents per page"
-msgstr "1ページに表示する回覧数"
-
-#: Plugins/CircularNotices/Model/CircularNoticeFrameSetting.php:
-#: Plugins/CircularNotices/Model/CircularNoticeTargetUser.php:
-msgid "%d items"
-msgstr "%d 件"
-
-#: Plugins/CircularNotices/View/Elements/CircularNotices/choice_edit_form.ctp:
-msgid "No choices"
-msgstr "選択肢が設定されていません"
-
+#: CircularNotices/View/Elements/CircularNoticeBlockRolePermissions/edit_form.ctp:27
 msgid "Content creatable roles"
 msgstr "回覧を投稿できる権限"
 
-msgid "Select user"
-msgstr "回覧先を選択してください。"
+# 表示方法変更画面で使用
+#: CircularNotices/View/Elements/CircularNoticeFrameSettings/edit_form.ctp:18
+msgid "Show contents per page"
+msgstr "1ページに表示する回覧数"
 
-msgid "Please input between circular period."
-msgstr "回覧期間の範囲内で入力してください。"
+#: CircularNotices/View/Elements/CircularNoticeFrameSettings/edit_form.ctp:20;21
+msgid "%d items"
+msgstr "%d 件"
 
-#: Plugins/CircularNotices/View/Elements/CircularNotices/delete_form.ctp:
+#: CircularNotices/View/Elements/CircularNotices/choice_edit_form.ctp:36
+msgid "No choices"
+msgstr "選択肢が設定されていません"
+
+# 登録（編集）画面で使用
+#: CircularNotices/View/Elements/CircularNotices/circular_deadline_edit_form.ctp:25
+msgid "No Deadline"
+msgstr "設定しない"
+
+# 登録（編集）画面で使用
+#: CircularNotices/View/Elements/CircularNotices/circular_deadline_edit_form.ctp:26
+msgid "Set Deadline"
+msgstr "設定する"
+
+#: CircularNotices/View/Elements/CircularNotices/delete_form.ctp:26
 msgid "Circulation"
 msgstr "回覧"
 
-#: Plugins/CircularNotices/View/Elements/CircularNotices/target_edit_form.ctp:
+# 登録（編集）画面で使用
+#: CircularNotices/View/Elements/CircularNotices/reply_type_edit_form.ctp:17
+msgid "Reply Type"
+msgstr "回答方式"
+
+# 回覧一覧画面の表示コンテンツ絞り込みに使用
+#: CircularNotices/View/Elements/CircularNotices/select_content_status.ctp:23
+msgid "Display All Contents"
+msgstr "全てのステータス"
+
+# 回覧一覧画面の表示コンテンツ絞り込みに使用
+#: CircularNotices/View/Elements/CircularNotices/select_content_status.ctp:31
+msgid "Display Draft During Contents"
+msgstr "一時保存"
+
+# 回覧一覧画面の表示コンテンツ絞り込みに使用
+#: CircularNotices/View/Elements/CircularNotices/select_content_status.ctp:35
+msgid "Display Reserved Contents"
+msgstr "公開前"
+
+# 回覧一覧画面の表示コンテンツ絞り込みに使用
+#: CircularNotices/View/Elements/CircularNotices/select_content_status.ctp:42
+msgid "Display Open Contents"
+msgstr "回覧中"
+
+# 回覧一覧画面の表示コンテンツ絞り込みに使用
+#: CircularNotices/View/Elements/CircularNotices/select_content_status.ctp:46
+msgid "Display Fixed Contents"
+msgstr "回答受付終了"
+
+# 回覧一覧画面の表示コンテンツ絞り込みに使用
+#: CircularNotices/View/Elements/CircularNotices/select_content_status.ctp:50
+msgid "Display Closed Contents"
+msgstr "回覧終了"
+
+# 回覧一覧画面の表示コンテンツ絞り込みに使用
+#: CircularNotices/View/Elements/CircularNotices/select_reply_status.ctp:23
+msgid "Display All Reply Status"
+msgstr "全ての回答状況"
+
+# 回覧一覧画面の表示コンテンツ絞り込みに使用
+#: CircularNotices/View/Elements/CircularNotices/select_reply_status.ctp:31
+msgid "Display Replied Contents"
+msgstr "回答済"
+
+# ステータス（公開前）
+#: CircularNotices/View/Elements/CircularNotices/status_label.ctp:26
+msgid "Reserved"
+msgstr "公開前"
+
+# ステータス（回覧中）
+#: CircularNotices/View/Elements/CircularNotices/status_label.ctp:30
+msgid "Open"
+msgstr "回覧中"
+
+# ステータス（回覧受付終了）
+#: CircularNotices/View/Elements/CircularNotices/status_label.ctp:34
+msgid "Fixed"
+msgstr "回答受付終了"
+
+# ステータス（回覧終了）
+#: CircularNotices/View/Elements/CircularNotices/status_label.ctp:38
+msgid "Closed"
+msgstr "回覧終了"
+
+# ステータス（既読）
+#: CircularNotices/View/Elements/CircularNotices/status_label.ctp:46
+msgid "Read Yet"
+msgstr "既読"
+
+# ステータス（回答済）
+#: CircularNotices/View/Elements/CircularNotices/status_label.ctp:50
+msgid "Replied"
+msgstr "回答済"
+
+# 登録（編集）画面で使用
+#: CircularNotices/View/Elements/CircularNotices/target_edit_form.ctp:19
+msgid "Circular Target"
+msgstr "回覧先"
+
+# 登録（編集）画面で使用
+#: CircularNotices/View/Elements/CircularNotices/target_edit_form.ctp:25
+msgid "All Members Belings to this Room"
+msgstr "ルームに参加している全会員"
+
+#: CircularNotices/View/Elements/CircularNotices/target_edit_form.ctp:26
 msgid "Individually User Selected"
 msgstr "個別に選択"
 
+#: CircularNotices/View/Elements/CircularNotices/target_edit_form.ctp:40
 msgid "Circulation Destination User Selection"
 msgstr "回覧先ユーザ選択"
 
-msgid "Answer separator"
-msgstr "、"
-
-msgid "Division bar"
-msgstr "/"
-
-msgid "Answerd."
-msgstr "回答しました。"
-
-msgid "Unset"
-msgstr "未設定"
-
-# メール関連
-msgid "MailSetting.mail_fixed_phrase_body.popover"
-msgstr "{X-SITE_NAME} : サイト名<br />{X-PLUGIN_NAME} : プラグイン名<br />{X-ROOM} : ルーム名<br />{X-SUBJECT} : 回覧タイトル<br />{X-USER} : 投稿者<br />{X-TO_DATE} : 投稿日時<br />{X-BODY} : 回覧内容<br />{X-URL} : 登録内容のURL"

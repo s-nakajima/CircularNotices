@@ -48,7 +48,7 @@
 			)); ?>
 
 				<div class="panel-body">
-	
+
 					<?php echo $this->NetCommonsForm->hidden('Frame.id', array(
 						'value' => Current::read('Frame.id')
 					)); ?>
@@ -59,6 +59,10 @@
 
 					<?php echo $this->NetCommonsForm->hidden('CircularNoticeContent.id', array(
 						'value' => isset($circularNoticeContent['id']) ? $circularNoticeContent['id'] : null,
+					)); ?>
+
+					<?php echo $this->NetCommonsForm->hidden('CircularNoticeContent.language_id', array(
+						'value' => isset($circularNoticeContent['language_id']) ? $circularNoticeContent['language_id'] : Current::read('Language.id'),
 					)); ?>
 
 					<?php
@@ -75,7 +79,7 @@
 					<?php echo $this->element('CircularNotices/subject_edit_form'); ?>
 
 					<?php echo $this->element('CircularNotices/content_edit_form'); ?>
-	
+
 					<?php echo $this->element('CircularNotices/reply_type_edit_form'); ?>
 
 					<?php echo $this->element('CircularNotices/target_edit_form'); ?>
@@ -89,9 +93,9 @@
 				<div class="panel-footer text-center">
 					<?php echo $this->Button->cancelAndSaveAndSaveTemp(); ?>
 				</div>
-	
+
 			<?php echo $this->NetCommonsForm->end(); ?>
-	
+
 			<?php if ($this->request->params['action'] === 'edit') : ?>
 				<div class="panel-footer text-right">
 					<?php echo $this->element('CircularNotices/delete_form'); ?>

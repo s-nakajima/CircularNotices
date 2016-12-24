@@ -60,7 +60,7 @@ class Initialize extends CakeMigration {
 					'opened_period_to' => array('type' => 'datetime', 'null' => false, 'default' => null, 'comment' => 'opend period (to)  | 回覧期間（終了日時） |  | '),
 					'reply_deadline_set_flag' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'comment' => '回答期限設定フラグ  0:unset , 1:set'),
 					'reply_deadline' => array('type' => 'datetime', 'null' => true, 'default' => null, 'comment' => '回答期限'),
-					'status' => array('type' => 'integer', 'null' => false, 'default' => '3', 'length' => 1, 'comment' => '公開状況  1:公開中3:下書き中'),
+					'status' => array('type' => 'integer', 'null' => false, 'default' => '3', 'length' => 1, 'comment' => '公開状況  1:公開中、3:下書き中'),
 					'is_auto_translated' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'comment' => 'translation type. 0:original , 1:auto translation | 翻訳タイプ  0:オリジナル、1:自動翻訳 |  | '),
 					'translation_engine' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => 'translation engine | 翻訳エンジン |  | ', 'charset' => 'utf8'),
 					'created_user' => array('type' => 'integer', 'null' => true, 'default' => '0', 'comment' => '作成者'),

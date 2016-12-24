@@ -34,7 +34,9 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 	public $actsAs = array(
 		'NetCommons.OriginalKey',
 		'CircularNotices.CircularNoticeTargetUser',
-		'Workflow.Workflow',
+		'Workflow.Workflow' => array(
+			'isM17n' => false
+		),
 		'Mails.MailQueue' => array(
 			'embedTags' => array(
 				'X-SUBJECT' => 'CircularNoticeContent.subject',
@@ -56,6 +58,10 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 		),
 		'Wysiwyg.Wysiwyg' => array(
 			'fields' => array('content'),
+		),
+		//多言語
+		'M17n.M17n' => array(
+			'keyField' => false,
 		),
 	);
 

@@ -93,7 +93,7 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 			if (! isset($frame['Frame']['block_id'])) {
 				// フレームとブロックが紐付いていない
 				// フレームと同じルームに紐付いている回覧板ブロックを取得
-				if (! $block = $this->getLinkedBlockbyFrame($frame)) {
+				if (! $block = $this->getLinkedBlockByFrame($frame)) {
 					return false;
 				}
 				Current::$current['Block'] = $block['Block'];
@@ -134,7 +134,7 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
  * @param mixed $frame frames
  * @return mixed
  */
-	public function getLinkedBlockbyFrame($frame) {
+	public function getLinkedBlockByFrame($frame) {
 		$this->loadModels([
 			'Frame' => 'Frames.Frame',
 			'Block' => 'Blocks.Block',
@@ -154,10 +154,14 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
 			//	'room_id' => $frame['Frame']['room_id'] ? $frame['Frame']['room_id'] : 0,
 			//	'plugin_key' => 'circular_notices',
 			//));
-			//$block = $this->Block->saveByFrameId($frameId, $block);
+			//$block = $this->Block->saveByFrameId($frameId, $block);]
+			if ($frame['Frame']['room_id']) {
+				$roomId = $frame['Frame']['room_id'];
+			} else {
+				$roomId = 0;
+			}
 			$block = $this->Block->save(array(
-				'language_id' => $frame['Frame']['language_id'],
-				'room_id' => $frame['Frame']['room_id'] ? $frame['Frame']['room_id'] : 0,
+				'room_id' => $roomId,
 				'plugin_key' => $frame['Frame']['plugin_key'],
 			));
 			//if (!$block) {
