@@ -53,6 +53,7 @@ class PluginRecords extends NetCommonsMigration {
 				'default_setting_action' => 'circular_notice_frame_settings/edit',
 				'display_topics' => 1,
 				'display_search' => 1,
+				'is_m17n' => false,
 			),
 			//英語
 			array(
@@ -65,6 +66,7 @@ class PluginRecords extends NetCommonsMigration {
 				'default_setting_action' => 'circular_notice_frame_settings/edit',
 				'display_topics' => 1,
 				'display_search' => 1,
+				'is_m17n' => false,
 			),
 		),
 		'PluginsRole' => array(
