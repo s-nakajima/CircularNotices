@@ -143,7 +143,7 @@ class Initialize extends CakeMigration {
 				'circular_notice_contents' => array(
 					'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary', 'comment' => 'ID'),
 					'reply_type' => array('type' => 'integer', 'null' => false, 'default' => '1', 'length' => 1, 'unsigned' => false, 'comment' => '回答方式  1:記述式、2:択一式、3:複数選択'),
-					'status' => array('type' => 'integer', 'null' => false, 'default' => '3', 'length' => 4, 'unsigned' => false, 'comment' => '公開状況  1:公開中3:下書き中'),
+					'status' => array('type' => 'integer', 'null' => false, 'default' => '3', 'length' => 4, 'unsigned' => false, 'comment' => '公開状況  1:公開中、3:下書き中'),
 					'created_user' => array('type' => 'integer', 'null' => true, 'default' => '0', 'unsigned' => false, 'comment' => '作成者'),
 					'modified_user' => array('type' => 'integer', 'null' => true, 'default' => '0', 'unsigned' => false, 'comment' => '更新者'),
 				),
@@ -230,7 +230,7 @@ class Initialize extends CakeMigration {
 				'circular_notice_contents' => array(
 					'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary', 'comment' => 'ID'),
 					'reply_type' => array('type' => 'integer', 'null' => false, 'default' => '1', 'length' => 1, 'comment' => '回答方式  1:記述式、2:択一式、3:複数選択'),
-					'status' => array('type' => 'integer', 'null' => false, 'default' => '3', 'length' => 1, 'comment' => '公開状況  1:公開中3:下書き中'),
+					'status' => array('type' => 'integer', 'null' => false, 'default' => '3', 'length' => 1, 'comment' => '公開状況  1:公開中、3:下書き中'),
 					'created_user' => array('type' => 'integer', 'null' => true, 'default' => '0', 'comment' => '作成者'),
 					'modified_user' => array('type' => 'integer', 'null' => true, 'default' => '0', 'comment' => '更新者'),
 				),
