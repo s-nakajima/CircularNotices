@@ -16,6 +16,7 @@ App::uses('CircularNoticesAppController', 'CircularNotices.Controller');
  *
  * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
  * @package NetCommons\CircularNotices\Controller
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class CircularNoticesController extends CircularNoticesAppController {
 
@@ -162,6 +163,7 @@ class CircularNoticesController extends CircularNoticesAppController {
  * view action
  *
  * @return void
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 	public function view() {
 		$userId = Current::read('User.id');
@@ -199,7 +201,13 @@ class CircularNoticesController extends CircularNoticesAppController {
 		$targetUsers = $this->Paginator->paginate('CircularNoticeTargetUser');
 
 		// 回答を集計
-		$answersSummary = $this->CircularNoticeTargetUser->getAnswerSummary($contentId);
+		// (1)targetuserからユーザIDを取得し、新規配列userIdsに格納
+		// (2)getAnswerSummaryの引数にuserIdsを追加
+		$userIds = array();
+		foreach ($targetUsers as $targetUser) {
+			array_push($userIds, $targetUser['CircularNoticeTargetUser']['user_id']);
+		}
+		$answersSummary = $this->CircularNoticeTargetUser->getAnswerSummary($contentId, $userIds);
 
 		// 回答エラー時は入力値を保持
 		if (isset($this->viewVars['circularNoticeDatas'])) {

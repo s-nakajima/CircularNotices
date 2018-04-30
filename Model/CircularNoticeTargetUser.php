@@ -182,11 +182,13 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
  * Get circular notice target users
  *
  * @param int $contentId circular_notice_target_users.circular_notice_content_id
+ * @param array $userIds ユーザID配列
  * @return array
  */
-	public function getCircularNoticeTargetUsers($contentId) {
+	public function getCircularNoticeTargetUsers($contentId, $userIds) {
 		$conditions = array(
 			'CircularNoticeTargetUser.circular_notice_content_id' => $contentId,
+			'CircularNoticeTargetUser.user_id' => $userIds,
 		);
 
 		return $this->find('all', array(
@@ -401,12 +403,13 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
  * Get summary of answer.
  *
  * @param int $contentId circular_notice_content.id
+ * @param array $userIds ユーザID配列
  * @return array
  */
-	public function getAnswerSummary($contentId) {
+	public function getAnswerSummary($contentId, $userIds) {
 		$answerSummary = array();
 
-		$targetUsers = $this->getCircularNoticeTargetUsers($contentId);
+		$targetUsers = $this->getCircularNoticeTargetUsers($contentId, $userIds);
 		foreach ($targetUsers as $targetUser) {
 			$selectionValues = $targetUser['CircularNoticeTargetUser']['reply_selection_value'];
 			if ($selectionValues) {
