@@ -67,7 +67,7 @@ class CircularNoticeTargetUserGetAnswerSummaryTest extends NetCommonsGetTest {
 		$contentId = 1;
 
 		//テスト実施
-		$result = $this->$model->$methodName($contentId);
+		$result = $this->$model->$methodName($contentId, ['4', '1', '2']);
 
 		//チェック
 		$this->assertNotEmpty($result);

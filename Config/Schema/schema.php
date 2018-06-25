@@ -165,7 +165,8 @@ class CircularNoticesSchema extends CakeSchema {
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
 			'circular_notice_content_id_2' => array('column' => array('circular_notice_content_id', 'user_id'), 'unique' => 0),
-			'circular_notice_content_id' => array('column' => array('circular_notice_content_id', 'is_read'), 'unique' => 0)
+			'circular_notice_content_id' => array('column' => array('circular_notice_content_id', 'is_read'), 'unique' => 0),
+			'circular_notice_content_id_3' => array('column' => array('circular_notice_content_id', 'id'), 'unique' => 0)
 		),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
