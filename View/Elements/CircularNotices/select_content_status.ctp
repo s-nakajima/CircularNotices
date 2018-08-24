@@ -11,7 +11,7 @@
 
 $params = $this->params['named'];
 $params['page'] = 1;
-$url = Hash::merge(array(
+$url = array_merge(array(
 	'controller' => 'circular_notices',
 	'action' => 'index'),
 	$params);
@@ -55,7 +55,6 @@ $options = array_merge_recursive($options, array(
 
 <span class="btn-group">
 	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-<!--		--><?php //echo h($options['CircularNoticeContents.status_' . $currentStatus]['label']); ?>
 		<?php echo h($options['CircularNoticeContents.content_status_' . $contentStatus]['label']); ?>
 		<span class="caret"></span>
 	</button>
@@ -63,7 +62,7 @@ $options = array_merge_recursive($options, array(
 		<?php foreach ($options as $key => $status) : ?>
 			<li>
 				<?php echo $this->NetCommonsHtml->link($status['label'],
-					Hash::merge($url, array('content_status' => $status['content_status']))
+					array_merge($url, array('content_status' => $status['content_status']))
 				); ?>
 			</li>
 		<?php endforeach; ?>

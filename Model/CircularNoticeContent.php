@@ -23,6 +23,9 @@ App::uses('WorkflowComponent', 'Workflow.Controller/Component');
  *
  * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
  * @package NetCommons\CircularNotices\Model
+ *
+ * 速度改善の修正に伴って発生したため抑制
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class CircularNoticeContent extends CircularNoticesAppModel {
 
@@ -131,9 +134,9 @@ class CircularNoticeContent extends CircularNoticesAppModel {
  * @see Model::save()
  */
 	public function beforeValidate($options = array()) {
-		$this->validate = Hash::merge($this->validate, $this->_getDefaultValidate());
+		$this->validate = array_merge($this->validate, $this->_getDefaultValidate());
 		if ($this->data['CircularNoticeContent']['publish_start']) {
-			$this->validate = Hash::merge($this->validate, array(
+			$this->validate = array_merge($this->validate, array(
 				'publish_start' => array(
 					'notBlank' => array(
 						'rule' => array('notBlank'),
@@ -148,7 +151,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			));
 		}
 		if ($this->data['CircularNoticeContent']['publish_end']) {
-			$this->validate = Hash::merge($this->validate, array(
+			$this->validate = array_merge($this->validate, array(
 				'publish_end' => array(
 					'notBlank' => array(
 						'rule' => array('notBlank'),
@@ -168,7 +171,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			));
 		}
 		if ($this->data['CircularNoticeContent']['use_reply_deadline']) {
-			$this->validate = Hash::merge($this->validate, array(
+			$this->validate = array_merge($this->validate, array(
 				'use_reply_deadline' => array(
 					'boolean' => array(
 						'rule' => array('boolean'),
@@ -178,7 +181,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			));
 		}
 		if ($this->data['CircularNoticeContent']['use_reply_deadline']) {
-			$this->validate = Hash::merge($this->validate, array(
+			$this->validate = array_merge($this->validate, array(
 				'reply_deadline' => array(
 					'notBlank' => array(
 						'rule' => array('notBlank'),
@@ -413,6 +416,10 @@ class CircularNoticeContent extends CircularNoticesAppModel {
  * @param array $data input data
  * @return bool
  * @throws InternalErrorException
+ *
+ * 速度改善の修正に伴って発生したため抑制
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 	public function saveCircularNoticeContent($data) {
 		// 必要なモデル読み込み
@@ -439,37 +446,39 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 				$rolesRoomsUsers = $this->RolesRoomsUser->getRolesRoomsUsers(array(
 					'Room.id' => Current::read('Room.id')
 				));
-				$targetUsers = Hash::extract($rolesRoomsUsers, '{n}.RolesRoomsUser.user_id');
-				$users = $targetUsers;
-				// 取得したUserでデータを差し替え
-				$targetUsers = array();
-				foreach ($users as $userId) {
-					$targetUsers[] = array(
-						'CircularNoticeTargetUser' => array(
-							'id' => null,
-							'user_id' => $userId,
-						)
-					);
-				}
-			} else {
-				//新着データのユーザIDセット
-				$this->setTopicUsers(Hash::extract($users, '{n}.user_id'));
 
-				$targetUsers = Hash::map($users, '{n}.user_id', function ($value) {
-					return array(
-						'CircularNoticeTargetUser' => array(
-							'id' => null,
-							'user_id' => $value,
-					));
-				});
+				$userIdArr = [];
+				foreach ($rolesRoomsUsers as $rolesRoomsUser) {
+					$userIdArr[] = $rolesRoomsUser['RolesRoomsUser']['user_id'];
+				}
+
+			} else {
+				$userIdArr = [];
+				if (isset($users)) {
+					foreach ($users as $user) {
+						$userIdArr[] = $user['user_id'];
+					}
+				}
+
+				//新着データのユーザIDセット
+				$this->setTopicUsers($userIdArr);
 			}
-			$data['CircularNoticeTargetUsers'] = $targetUsers;
+
+			$data['CircularNoticeTargetUsers'] = [];
+			foreach ($userIdArr as $userId) {
+				$data['CircularNoticeTargetUsers'][] = [
+					'CircularNoticeTargetUser' => [
+						'id' => null,
+						'user_id' => $userId,
+					]
+				];
+			}
 
 			// データセット＋検証
 			$this->validateCircularNoticeContent($data);
 			if (! $this->CircularNoticeChoice->validateCircularChoices($data)) {
 				$this->validationErrors =
-					Hash::merge($this->validationErrors, $this->CircularNoticeChoice->validationErrors);
+					array_merge($this->validationErrors, $this->CircularNoticeChoice->validationErrors);
 			}
 			if ($this->validationErrors) {
 				return false;
@@ -512,9 +521,13 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 		// メール処理
 		$sendTimes = array($data['CircularNoticeContent']['publish_start']);
 		$reminder = $this->setSendTimeReminder($sendTimes);
-		$mailSendUserIdArr =
-				Hash::extract($data, 'CircularNoticeTargetUsers.{n}.CircularNoticeTargetUser.user_id');
+
+		$mailSendUserIdArr = [];
+		foreach ($data['CircularNoticeTargetUsers'] as $item) {
+			$mailSendUserIdArr[] = $item['CircularNoticeTargetUser']['user_id'];
+		}
 		$this->setSetting(MailQueueBehavior::MAIL_QUEUE_SETTING_USER_IDS, $mailSendUserIdArr);
+
 		if ($reminder) {
 			// 投稿メールのOFF
 			$this->setSetting(MailQueueBehavior::MAIL_QUEUE_SETTING_IS_MAIL_SEND_POST, 0);
