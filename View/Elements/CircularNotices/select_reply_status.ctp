@@ -11,7 +11,7 @@
 
 $params = $this->params['named'];
 $params['page'] = 1;
-$url = Hash::merge(array(
+$url = array_merge(array(
 	'controller' => 'circular_notices',
 	'action' => 'index'),
 	$params);
@@ -43,7 +43,7 @@ $options = array(
 		<?php foreach ($options as $key => $status) : ?>
 			<li>
 				<?php echo $this->NetCommonsHtml->link($status['label'],
-					Hash::merge($url, array('reply_status' => $status['reply_status']))
+					array_merge($url, array('reply_status' => $status['reply_status']))
 				); ?>
 			</li>
 		<?php endforeach; ?>

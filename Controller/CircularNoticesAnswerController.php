@@ -87,11 +87,14 @@ class CircularNoticesAnswerController extends CircularNoticesAppController {
 				}
 			}
 
-			$data = Hash::merge(
-				$this->params['data'],
-				['CircularNoticeTargetUser' => ['is_reply' => true, 'reply_datetime' => date('Y-m-d H:i:s'),
-					'reply_text_value' => $replyTextValue, 'reply_selection_value' => $replySelectionValue]]
-			);
+			$data = array_merge($this->params['data'], [
+				'CircularNoticeTargetUser' => [
+					'is_reply' => true,
+					'reply_datetime' => date('Y-m-d H:i:s'),
+					'reply_text_value' => $replyTextValue,
+					'reply_selection_value' => $replySelectionValue
+				]
+			]);
 
 			if ($this->CircularNoticeTargetUser->saveCircularNoticeTargetUser($data)) {
 				//新着データを回答済みにする

@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-$url = NetCommonsUrl::actionUrlAsArray(Hash::merge(array(
+$url = NetCommonsUrl::actionUrlAsArray(array_merge(array(
 	'plugin' => 'circular_notices',
 	'controller' => 'circular_notices',
 	'action' => 'index',

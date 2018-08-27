@@ -17,6 +17,11 @@ App::uses('CircularNoticesAppController', 'CircularNotices.Controller');
  * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
  * @package NetCommons\CircularNotices\Controller
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ *
+ * @property NetCommonsComponent $NetCommons
+ * @property CircularNoticeComponent $CircularNotice
+ * @property CircularNoticeContent $CircularNoticeContent
+ * @property CircularNoticeTargetUser $CircularNoticeTargetUser
  */
 class CircularNoticesController extends CircularNoticesAppController {
 
@@ -84,6 +89,10 @@ class CircularNoticesController extends CircularNoticesAppController {
  * index action
  *
  * @return void
+ * 
+ * 速度改善の修正に伴って発生したため抑制
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 	public function index() {
 		if (! $this->CircularNotice->initCircularNotice($this)) {
@@ -127,8 +136,12 @@ class CircularNoticesController extends CircularNoticesAppController {
 		);
 		$this->set('sortOptions', $sortOptions);
 
-		$currentSort = Hash::get($this->params['named'], 'sort', 'CircularNoticeContent.modified');
-		$currentDirection = Hash::get($this->params['named'], 'direction', 'desc');
+		$currentSort = isset($this->params['named']['sort'])
+			? $this->params['named']['sort']
+			: 'CircularNoticeContent.modified';
+		$currentDirection = isset($this->params['named']['sort'])
+			? $this->params['named']['direction']
+			: 'desc';
 		if (! isset($sortOptions[$currentSort . '.' . $currentDirection])) {
 			$currentSort = 'CircularNoticeContent.modified';
 			$currentDirection = 'desc';
@@ -235,13 +248,14 @@ class CircularNoticesController extends CircularNoticesAppController {
 		}
 
 		// コンテンツ作成者情報をセット
-		$createdUser = $this->User->getUser($content['CircularNoticeContent']['created_user']);
+		$createdUser = ['User' => $content['User']];
 		$this->set('createdUser', $createdUser);
 
-		$results = Hash::merge(
-			$counts,
-			['myAnswer' => $myTargetUser,
-				'answersSummary' => $answersSummary]
+		$results = array_merge(
+			$counts, [
+				'myAnswer' => $myTargetUser,
+				'answersSummary' => $answersSummary,
+			]
 		);
 		$this->set('circularNoticeContent', $content['CircularNoticeContent']);
 		$this->set('circularNoticeChoice', $content['CircularNoticeChoice']);
@@ -283,11 +297,19 @@ class CircularNoticesController extends CircularNoticesAppController {
 				return;
 			} else {
 				// 回答の選択肢を保持
-				$content['CircularNoticeChoice'] = Hash::extract($data,
-					'CircularNoticeChoices.{n}.CircularNoticeChoice');
+				$content['CircularNoticeChoice'] = [];
+				if (isset($data['CircularNoticeChoices'])) {
+					foreach ($data['CircularNoticeChoices'] as $circularNoticeChoice) {
+						$content['CircularNoticeChoice'][] = $circularNoticeChoice['CircularNoticeChoice'];
+					}
+				}
 
 				// ユーザ選択状態を保持
-				$this->CircularNotice->setSelectUsers($this);
+				$this->request->data['selectUsers'] = [];
+				if (isset($this->request->data['CircularNoticeTargetUser'])) {
+					$this->request->data['selectUsers'] =
+						$this->CircularNotice->getSelectUsers($this->request->data['CircularNoticeTargetUser']);
+				}
 			}
 			$this->NetCommons->handleValidationError($this->CircularNoticeContent->validationErrors);
 
@@ -298,19 +320,17 @@ class CircularNoticesController extends CircularNoticesAppController {
 			if (!isset($data['CircularNoticeContent']['is_room_target'])
 					|| $data['CircularNoticeContent']['is_room_target']) {
 				// 自分自身を取得
-				$selectUsers = array(Current::read('User.id'));
-				$this->request->data['selectUsers'] = array();
-				foreach ($selectUsers as $userId) {
-					$this->request->data['selectUsers'][] = $this->User->getUser($userId);
-				}
+				$this->request->data['selectUsers'] =
+					$this->CircularNotice->getSelectUsers([['user_id' => Current::read('User.id')]]);
 			}
 			// 回覧開始日にDEFAULT値として現在日持を設定
 			$content['CircularNoticeContent']['publish_start'] = date('Y-m-d H:i:s');
 		}
 
-		$results = Hash::merge(
-			$content, $data,
-			['contentStatus' => null]
+		$results = array_merge(
+			$content, $data, [
+				'contentStatus' => null
+			]
 		);
 		$results = $this->NetCommonsTime->toUserDatetimeArray(
 			$results,
@@ -367,30 +387,37 @@ class CircularNoticesController extends CircularNoticesAppController {
 				return;
 			} else {
 				// 回答の選択肢を保持
-				$content['CircularNoticeChoice'] = Hash::extract($data,
-					'CircularNoticeChoices.{n}.CircularNoticeChoice');
+				$content['CircularNoticeChoice'] = [];
+				if (isset($data['CircularNoticeChoices'])) {
+					foreach ($data['CircularNoticeChoices'] as $circularNoticeChoice) {
+						$content['CircularNoticeChoice'][] = $circularNoticeChoice['CircularNoticeChoice'];
+					}
+				}
 
 				// ユーザ選択状態を保持
-				$this->CircularNotice->setSelectUsers($this);
+				$this->request->data['selectUsers'] = [];
+				if (isset($this->request->data['CircularNoticeTargetUser'])) {
+					$this->request->data['selectUsers'] =
+						$this->CircularNotice->getSelectUsers($this->request->data['CircularNoticeTargetUser']);
+				}
 			}
 			$this->NetCommons->handleValidationError($this->CircularNoticeContent->validationErrors);
 
 		} else {
 			if ($content['CircularNoticeContent']['is_room_target']) {
 				// 自分自身を取得
-				$selectUsers = array(Current::read('User.id'));
+				$targetUsers = [['user_id' => Current::read('User.id')]];
 			} else {
-				$selectUsers = Hash::extract($content['CircularNoticeTargetUser'], '{n}.user_id');
+				$targetUsers = $content['CircularNoticeTargetUser'];
 			}
-			$this->request->data['selectUsers'] = array();
-			foreach ($selectUsers as $userId) {
-				$this->request->data['selectUsers'][] = $this->User->getUser($userId);
-			}
+			$this->request->data['selectUsers'] =
+				$this->CircularNotice->getSelectUsers($targetUsers);
 		}
 
-		$results = Hash::merge(
-			$content, $data,
-			['contentStatus' => $content['CircularNoticeContent']['status']]
+		$results = array_merge(
+			$content, $data, [
+				'contentStatus' => $content['CircularNoticeContent']['status']
+			]
 		);
 		$results = $this->NetCommonsTime->toUserDatetimeArray(
 			$results,

@@ -38,8 +38,7 @@ class CircularNoticeSetting extends CircularNoticesAppModel {
  * @see Model::save()
  */
 	public function beforeValidate($options = array()) {
-		$this->validate = Hash::merge($this->validate, array(
-		));
+		$this->validate = array_merge($this->validate, []);
 		return parent::beforeValidate($options);
 	}
 
