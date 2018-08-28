@@ -44,25 +44,31 @@ class CircularNoticeTargetUserBehavior extends ModelBehavior {
 				$model->data['CircularNoticeTargetUser'] = array();
 			}
 			$model->CircularNoticeTargetUser->set($model->data['CircularNoticeTargetUser']);
+
 			// ユーザ選択チェック
-			$targetUsers = Hash::extract($model->data['CircularNoticeTargetUser'], '{n}.user_id');
+			$targetUsers = [];
+			foreach ($model->data['CircularNoticeTargetUser'] as $datum) {
+				$targetUsers[] = $datum['user_id'];
+			}
 			if (! $model->CircularNoticeTargetUser->isUserSelected($targetUsers)) {
 				$model->CircularNoticeTargetUser->validationErrors['user_id'] =
 					sprintf(__d('circular_notices', 'Select user'));
 				$model->validationErrors =
-					Hash::merge($model->validationErrors, $model->CircularNoticeTargetUser->validationErrors);
+					array_merge($model->validationErrors, $model->CircularNoticeTargetUser->validationErrors);
 				return false;
 			}
+
 			if (! $model->CircularNoticeTargetUser->validates()) {
 				$model->validationErrors =
-					Hash::merge($model->validationErrors, $model->CircularNoticeTargetUser->validationErrors);
+					array_merge($model->validationErrors, $model->CircularNoticeTargetUser->validationErrors);
 				return false;
 			}
+
 			if (! $model->User->existsUser($targetUsers)) {
 				$model->CircularNoticeTargetUser->validationErrors['user_id'][] =
 					sprintf(__d('net_commons', 'Failed on validation errors. Please check the input data.'));
 				$model->validationErrors =
-					Hash::merge($model->validationErrors, $model->CircularNoticeTargetUser->validationErrors);
+					array_merge($model->validationErrors, $model->CircularNoticeTargetUser->validationErrors);
 				return false;
 			}
 		}

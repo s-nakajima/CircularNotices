@@ -151,6 +151,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 
 		// 回覧先件数を取得
 		$targetCount = $this->find('count', array(
+			'recursive' => -1,
 			'conditions' => $conditions,
 		));
 
@@ -161,6 +162,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 
 		// 閲覧済件数を取得
 		$readCount = $this->find('count', array(
+			'recursive' => -1,
 			'conditions' => $conditions,
 		));
 
@@ -171,6 +173,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 
 		// 回答済件数を取得
 		$replyCount = $this->find('count', array(
+			'recursive' => -1,
 			'conditions' => $conditions,
 		));
 
@@ -348,21 +351,32 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
  * @param array $data input data
  * @return bool
  * @throws InternalErrorException
+ *
+ * 速度改善の修正に伴って発生したため抑制
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 	public function replaceCircularNoticeTargetUsers($data) {
 		$contentId = $data['CircularNoticeContent']['id'];
-		$oldContentId =
-			isset($data['oldCircularNoticeContentId']) ? $data['oldCircularNoticeContentId'] : 0;
+		$oldContentId = isset($data['oldCircularNoticeContentId'])
+			? $data['oldCircularNoticeContentId']
+			: 0;
 
 		// 編集時に既に回答済みの情報を保持する
 		$existingTargetUsers = $this->find('all', array(
 			'recursive' => -1,
-			'fields' => array('user_id', 'is_read', 'read_datetime', 'is_reply',
-				'reply_datetime', 'reply_text_value', 'reply_selection_value'),
+			'fields' => array(
+				'user_id', 'is_read', 'read_datetime', 'is_reply',
+				'reply_datetime', 'reply_text_value', 'reply_selection_value'
+			),
 			'conditions' => array('circular_notice_content_id' => $oldContentId)
 		));
-		$existingTargetUsers =
-			Hash::combine($existingTargetUsers, '{n}.CircularNoticeTargetUser.user_id', '{n}');
+
+		$tmp = [];
+		foreach ($existingTargetUsers as $existingTargetUser) {
+			$existingTargetUser = $existingTargetUser['CircularNoticeTargetUser'];
+			$tmp[$existingTargetUser['user_id']] = $existingTargetUser;
+		}
+		$existingTargetUsers = $tmp;
 
 		// 1件ずつ保存
 		if (isset($data['CircularNoticeTargetUsers']) && count($data['CircularNoticeTargetUsers']) > 0) {
@@ -370,7 +384,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 				$targetUser['CircularNoticeTargetUser']['circular_notice_content_id'] = $contentId;
 				if (isset($existingTargetUsers[$targetUser['CircularNoticeTargetUser']['user_id']])
 						&& strtotime($data['CircularNoticeContent']['publish_start']) < strtotime('now')) {
-					$targetUser = Hash::merge($targetUser,
+					$targetUser = array_merge($targetUser,
 						$existingTargetUsers[$targetUser['CircularNoticeTargetUser']['user_id']]);
 					$targetUser['CircularNoticeTargetUser']['reply_text_value'] = '';		// NC2の仕様を踏襲
 					$targetUser['CircularNoticeTargetUser']['reply_selection_value'] = '';	// NC2の仕様を踏襲

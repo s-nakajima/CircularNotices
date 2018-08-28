@@ -99,7 +99,7 @@ class CircularNoticeContentSaveCircularNoticeContentTest extends NetCommonsModel
 		$model = $this->_modelName;
 		$methodName = $this->_methodName;
 		$data['CircularNoticeContent'] = (new CircularNoticeContentFixture())->records[8];
-		$data['CircularNoticeTargetUser'] = (new CircularNoticeTargetUserFixture())->records[0];
+		$data['CircularNoticeTargetUser'] = (new CircularNoticeTargetUserFixture())->records;
 		$data['CircularNoticeChoices'] = [(new CircularNoticeChoiceFixture())->records[0]];
 		//テスト実施
 		$result = $this->$model->$methodName($data);

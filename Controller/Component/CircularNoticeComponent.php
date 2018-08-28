@@ -18,6 +18,7 @@ App::uses('WorkflowBehavior', 'Workflow.Model/Behavior');
  *
  * @author Hirohisa Kuwata <Kuwata.Hirohisa@withone.co.jp>
  * @package NetCommons\CircularNotices\Controller\Component
+ * @property User $User
  */
 class CircularNoticeComponent extends Component {
 
@@ -218,25 +219,34 @@ class CircularNoticeComponent extends Component {
 
 /**
  * 選択済みユーザを設定
- * 
- * @param Controller $controller コントローラ
- * @return {void}
+ *
+ * @param array $targetUsers 対象ユーザ情報
+ * @return array
  */
-	public function setSelectUsers(Controller $controller) {
-		$controller->request->data['selectUsers'] = array();
-		if (isset($controller->request->data['CircularNoticeTargetUser'])) {
-			$selectUsers =
-				Hash::extract($controller->request->data['CircularNoticeTargetUser'], '{n}.user_id');
-			foreach ($selectUsers as $userId) {
-				$user = $controller->User->getUser($userId);
-				$controller->request->data['selectUsers'][] = $user;
+	public function getSelectUsers($targetUsers) {
+		$users = [];
+		if (! empty($targetUsers)) {
+			$userIdArr = [];
+			foreach ($targetUsers as $targetUser) {
+				$userIdArr[] = $targetUser['user_id'];
 			}
+
+			// 不要なイベントを発生させないためにBehaviorを除去
+			$this->controller->User->Behaviors->unload('Files.Attachment');
+			$users = $this->controller->User->find('all', [
+				'recursive' => -1,
+				'fields' => ['User.id', 'User.handlename'],
+				'conditions' => [
+					$this->controller->User->alias . '.id' => $userIdArr
+				],
+			]);
 		}
+		return $users;
 	}
 
 /**
  * エラー内容を保持
- * 
+ *
  * @param Controller $controller コントローラー
  * @return void
  */
