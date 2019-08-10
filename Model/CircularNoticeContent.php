@@ -276,8 +276,7 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 			$this->data['CircularNoticeContent']['reply_type'] ==
 			CircularNoticeComponent::CIRCULAR_NOTICE_CONTENT_REPLY_TYPE_MULTIPLE_SELECTION
 		) {
-			if (! isset($this->data['CircularNoticeChoices']) ||
-				count($this->data['CircularNoticeChoices']) == 0) {
+			if (empty($this->data['CircularNoticeChoices'])) {
 				return false;
 			}
 		}
