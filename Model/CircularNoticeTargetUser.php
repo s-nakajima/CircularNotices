@@ -82,7 +82,8 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 		'User' => array(
 			'className' => 'Users.User',
 			'foreignKey' => 'user_id',
-			'conditions' => '',
+			'conditions' => ['status' => UserAttributeChoice::STATUS_CODE_ACTIVE],
+			'type' => 'inner',
 			'fields' => '',
 			'order' => ''
 		),
@@ -151,7 +152,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 
 		// 回覧先件数を取得
 		$targetCount = $this->find('count', array(
-			'recursive' => -1,
+			'recursive' => 1,
 			'conditions' => $conditions,
 		));
 
@@ -162,7 +163,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 
 		// 閲覧済件数を取得
 		$readCount = $this->find('count', array(
-			'recursive' => -1,
+			'recursive' => 1,
 			'conditions' => $conditions,
 		));
 
@@ -173,7 +174,7 @@ class CircularNoticeTargetUser extends CircularNoticesAppModel {
 
 		// 回答済件数を取得
 		$replyCount = $this->find('count', array(
-			'recursive' => -1,
+			'recursive' => 1,
 			'conditions' => $conditions,
 		));
 
