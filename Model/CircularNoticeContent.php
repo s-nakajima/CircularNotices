@@ -443,7 +443,8 @@ class CircularNoticeContent extends CircularNoticesAppModel {
 					'RolesRoomsUser' => 'Rooms.RolesRoomsUser',
 				]);
 				$rolesRoomsUsers = $this->RolesRoomsUser->getRolesRoomsUsers(array(
-					'Room.id' => Current::read('Room.id')
+					'Room.id' => Current::read('Room.id'),
+					'User.status' => UserAttributeChoice::STATUS_CODE_ACTIVE
 				));
 
 				$userIdArr = [];
